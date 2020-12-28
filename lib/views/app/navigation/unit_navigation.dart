@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
 import 'package:flutter_geen/views/pages/about/person_center_page.dart';
+import 'package:flutter_geen/views/pages/search/serach_page.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_geen/app/res/cons.dart';
@@ -174,7 +175,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
               controller: _controller,
               children: <Widget>[
                 HomePage(),
-                IndexPages(),
+                SearchPage(),
                 ImConversationListPage(memberId: id,),
                 MinePage(),
 
