@@ -1,0 +1,137 @@
+name: flutter_geen
+description: A new Flutter application.
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.1.0+1
+
+environment:
+  sdk: ">=2.3.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^3.2.0
+  equatable: ^1.0.3
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.2
+  sqflite: ^1.2.1 #数据库
+  toggle_rotate: ^0.0.5
+  flutter_star: ^0.1.2 # 星星组件
+  shared_preferences: ^0.5.6+3 # xml 固化
+  url_launcher: ^5.4.2 # url
+  share: ^0.6.3+6
+  intl: ^0.16.1
+  path_provider: ^1.6.11
+  connectivity: ^0.4.8+6 #网络状态
+  flutter_spinkit: ^4.1.2+1 #loading
+  flutter_markdown: ^0.4.4 #markdown
+  dio: ^3.0.9 #dio
+  flutter_webview_plugin: ^0.3.11
+  cached_network_image: ^2.3.3
+  photo_view: ^0.10.3
+  pull_to_refresh: ^1.6.3
+  flt_im_plugin:
+    git:
+      url: https://github.com/coscx/lat.git
+  flutter_plugin_android_lifecycle: ^1.0.2
+  badges: ^1.1.0
+  video_player: ^1.0.1
+  video_thumbnail: ^0.2.4
+  flutter_plugin_record: ^0.3.4
+  audioplayers: ^0.17.0
+  permission_handler: '^4.4.0+hotfix.2'
+  image_picker: ^0.6.7+14
+  vibration: ^1.7.2
+  flutter_audio_recorder: ^0.5.5
+  flui: 0.9.2
+  flutter_record: ^0.3.5 #录音、播放(播放的地址作者写死了，不支持http)
+  fluttertoast: ^7.1.4
+  flutter_local_notifications: ^3.0.2
+  flutter_swiper: ^1.1.6
+  timeline_list: ^0.0.5
+  flare_flutter: ^2.0.6
+  jpush_flutter: 0.6.1
+  fluwx: ^2.4.2
+  getwidget: ^1.2.4
+  flutter_screenutil: ^4.0.0
+  jverify: 0.6.22
+  flutter_easyrefresh: ^2.1.7
+  flutter_svg: ^0.18.1
+  modal_bottom_sheet: ^1.0.0+1
+  flutter_gifimage: ^1.0.0
+  frefresh: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/default/
+    - assets/images/face/
+    - assets/images/figure/
+    - assets/images/icon/
+    - assets/images/main_page/
+    - assets/images/splash/
+    - assets/images/head_icon/
+    - assets/images/widgets/
+    - assets/packages/
+    - assets/packages/images/
+  #  - assets/data/widget.json
+    - assets/flutter.db
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #  - images/a_dot_burr.jpeg
+  #  - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts: # 配置字体，可配置多个，支持ttf和otf,ttc等字体资源
+    - family: IndieFlower #字体名
+      fonts:
+        - asset: assets/fonts/IndieFlower-Regular.ttf
+    - family: BalooBhai2 #字体名
+      fonts:
+        - asset: assets/fonts/BalooBhai2-Regular.ttf
+    - family: Inconsolata #字体名
+      fonts:
+        - asset: assets/fonts/Inconsolata-Regular.ttf
+    - family: Neucha #字体名
+      fonts:
+        - asset: assets/fonts/Neucha-Regular.ttf
+    - family: ComicNeue #字体名
+      fonts:
+        - asset: assets/fonts/ComicNeue-Regular.ttf
+    - family: TolyIcon
+      fonts:
+        - asset: assets/iconfont/iconfont.ttf
