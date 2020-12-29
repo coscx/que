@@ -104,18 +104,37 @@ class _SearchPageState extends State<SearchPage> {
           MultiChipFilter<int>(
             data: [1, 2, 3, 4, 5],
             avatarBuilder: (_, index) =>
-                CircleAvatar(child: Text((index + 1).toString())),
-            labelBuilder: (_, selected) => Icon(
+                CircleAvatar(child: _buildTxt(index)),
+            labelBuilder: (_, selected) =>Container(
+              child:
+                Icon(
               Icons.star,
               color: selected ? Colors.blue : Colors.grey,
               size: 18,
-            ),
+            )),
             onChange: _doSelectStart,
           ),
           Divider()
         ],
       );
-
+Widget _buildTxt(int index) {
+  if (index == 0){
+    return Text("M");
+  }
+  if (index == 1){
+    return Text("P");
+  }
+  if (index == 2){
+    return Text("C");
+  }
+  if (index == 3){
+    return Text("B");
+  }
+  if (index == 4){
+    return Text("A");
+  }
+   return Text("");
+}
   Widget _buildBodyByState(BuildContext context,SearchState state) {
     if (state is SearchStateNoSearch)
       return SliverToBoxAdapter(child: NotSearchPage(),);

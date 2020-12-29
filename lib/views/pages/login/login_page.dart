@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/res/toly_icon.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'arc_clipper.dart';
 import 'login_form.dart';
@@ -69,8 +70,13 @@ class LoginPage extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-              color: Colors.blue.withAlpha(88), shape: BoxShape.circle),
-          child: Icon(TolyIcon.icon_bug,size: 100,color: Colors.pink,)
+              color: Colors.white.withAlpha(0), shape: BoxShape.rectangle),
+
+          child: Image.asset(
+              "assets/images/login_top.png",
+               width: ScreenUtil().setWidth(400),
+               height: ScreenUtil().setWidth(200),
+          )
         ),
       ),
     );

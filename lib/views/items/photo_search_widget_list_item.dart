@@ -62,7 +62,7 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
                 child:  buildContent( context),
               ),
 
-              buildMiddle(context),
+              //buildMiddle(context),
             //_buildCollectTag(Theme.of(context).primaryColor)
         ],
       ),

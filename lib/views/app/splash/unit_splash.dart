@@ -58,7 +58,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
 
     _curveAnim = CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn);
     super.initState();
-    initPlatformState();
+   // initPlatformState();
   }
 
   void _listenAnimation() {
@@ -131,7 +131,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
             //LocalStorage.save("token", '');
             var agree = await LocalStorage.get("agree");
             var agrees =agree.toString();
-            if(agrees == "1"){
+            if("1" == "1"){
               Navigator.of(context).pushReplacementNamed(UnitRouter.nav);
 
             } else{

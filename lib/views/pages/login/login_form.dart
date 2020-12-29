@@ -7,6 +7,8 @@ import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/blocs/login/login_bloc.dart';
 import 'package:flutter_geen/blocs/login/login_event.dart';
+import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LoginFrom extends StatefulWidget {
   @override
@@ -54,9 +56,9 @@ class _LoginFromState extends State<LoginFrom> {
       Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text("登录",style: TextStyle(fontSize: 25),),
+        Text("ERP系统",style: TextStyle(fontSize: 25),),
         SizedBox(height: 5,),
-        Text("请使用手机号登录",style: TextStyle(color: Colors.grey),),
+        Text("登录",style: TextStyle(color: Colors.grey),),
         SizedBox(height:20,),
         buildUsernameInput(),
         Stack(
@@ -77,13 +79,18 @@ class _LoginFromState extends State<LoginFrom> {
               style: TextStyle(color: Color(0xff444444), fontSize: 14),
             ),
             Spacer(),
+            GestureDetector(
+              onTap: (){
+                _register(context);
+              },
+              child:
             Text(
               "如何注册?",
               style: TextStyle(
                   color: Colors.blue,
                   fontSize: 14,
                   decoration: TextDecoration.underline),
-            )
+            ))
           ],
         ),
         _buildBtn(state),
@@ -105,7 +112,26 @@ class _LoginFromState extends State<LoginFrom> {
 
   }
 
-
+  _register(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (ctx) => Dialog(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Container(
+            width: 50,
+            child: DeleteCategoryDialog(
+              title: '注册功能暂未开放',
+              content: '请联系主管申请注册',
+              onSubmit: () {
+                //BlocProvider.of<HomeBloc>(context).add(EventResetCheckUser(photo,1));
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+        ));
+  }
   void _doLogIn() {
 
     print('---用户名:${_usernameController.text}------密码：${_passwordController.text}---');
@@ -247,7 +273,10 @@ class _LoginFromState extends State<LoginFrom> {
             ],
           ),
         ),
-        Icon(TolyIcon.icon_kafei,color: Colors.black, size: 30,)
+        SvgPicture.asset(
+          "assets/packages/images/login_wechat.svg",
+          //color: Colors.green,
+        )
       ],
     );
   }

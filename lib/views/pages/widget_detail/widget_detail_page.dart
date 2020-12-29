@@ -1,5 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_geen/components/imageview/image_preview_page.dart';
+import 'package:flutter_geen/components/imageview/image_preview_view.dart';
+import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/res/toly_icon.dart';
@@ -248,18 +253,68 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
       list.add( Column(
       children:<Widget> [
-        Container(
-          margin: EdgeInsets.all(10),
-          width: 110,
-          height: 200,
-          child: Image(
-            image: FadeInImage.assetNetwork(
-              placeholder:'assets/images/ic_launcher.png',
-              image:e['imagepath'],
-            ).image,
+          Stack(
+          children: <Widget>[
+          Container(
+          child: Stack(
+          children: <Widget>[
+
+            Column(
+              children:<Widget> [
+              GestureDetector(
+               onTap: () {
+                 ImagePreview.preview(
+                     context,
+                     images: List.generate(1, (index) {
+                   return ImageOptions(
+                     url: e['imagepath'],
+                     tag: e['imagepath'],
+                   );
+                 }),
+                 );
+               }
+               ,
+                child: Container(
+                child: CachedNetworkImage(imageUrl: e['imagepath'],
+                width: 80,
+                height: 150,
+                  ),
+                )
+
+              )
+
+
+
+            ],
+
           ),
 
+        ],
+
+      ),
+      padding: const EdgeInsets.all(2),
+      decoration:const BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+    ),
+
+    Positioned(
+        top: 5,
+        right: 5,
+        child:
+        FeedbackWidget(
+        onPressed: () {
+            _deletePhoto(context,e);
+        },
+        child: const Icon(
+            CupertinoIcons.delete_solid,
+            color: Colors.red,
+        ),
         )
+        ),
+      ]
+      )
 
       ],
 
@@ -278,7 +333,26 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
 }
-
+_deletePhoto(BuildContext context,Map<String,dynamic> img) {
+  showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: Container(
+          width: 50,
+          child: DeleteCategoryDialog(
+            title: '删除图片',
+            content: '是否确定继续执行?',
+            onSubmit: () {
+              //BlocProvider.of<HomeBloc>(context).add(EventDelImg(img,1));
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+      ));
+}
 class WidgetDetailTitle extends StatelessWidget {
   final WidgetModel model;
   final Map<String,dynamic> usertail;
