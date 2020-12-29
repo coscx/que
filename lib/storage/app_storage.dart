@@ -60,7 +60,7 @@ class AppStorage {
       List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(dbPath).writeAsBytes(bytes, flush: true);
-      print("==== debug ===== assets ======拷贝完成====");
+      //print("==== debug ===== assets ======拷贝完成====");
       return await openDatabase(dbPath, readOnly: false);
     }
 
@@ -70,7 +70,7 @@ class AppStorage {
       List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(dbPath).writeAsBytes(bytes, flush: true);
-      print("==== release ===== assets ======拷贝完成====");
+      //print("==== release ===== assets ======拷贝完成====");
     } else {
       print("========= 数据库 ======已存在====");
     }

@@ -74,7 +74,6 @@ class UnitRouter {
       case widget_detail:
         return Right2LeftRouter(
             child: WidgetDetailPage(
-          model: settings.arguments,
         ));
       case search:
         return Right2LeftRouter(child: SearchPage());

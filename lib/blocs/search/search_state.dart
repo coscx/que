@@ -17,15 +17,14 @@ class SearchStateLoading extends SearchState {}//加载中
 class SearchStateError extends SearchState {}//异常
 
 class SearchStateSuccess extends SearchState {//有结果
-  final List<WidgetModel> result;//搜索结果
   final List<dynamic>  photos ;
-  const SearchStateSuccess(this.result,this.photos);
+  const SearchStateSuccess(this.photos);
   @override
-  List<Object> get props => [ result,photos];
+  List<Object> get props => [ photos];
 
   @override
   String toString() {
-    return 'WidgetsLoaded{widgets: $result}';
+    return 'WidgetsLoaded{widgets: }';
   }
 }
 class CheckUserSuccesses extends SearchState {

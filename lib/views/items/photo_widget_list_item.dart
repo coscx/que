@@ -56,16 +56,17 @@ class PhotoWidgetListItem extends StatelessWidget {
             children: [
               FeedbackWidget(
                 onPressed: () {
-                  BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(data,photo));
+                  BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
                   Navigator.pushNamed(context, UnitRouter.widget_detail, arguments: data);
                 },
                 child:  buildContent( context),
               ),
 
               //buildMiddle(context),
-            //_buildCollectTag(Theme.of(context).primaryColor)
+
         ],
       ),
+          _buildCollectTag(Theme.of(context).primaryColor)
     ]
       )
     );

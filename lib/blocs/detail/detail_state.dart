@@ -15,18 +15,16 @@ abstract class DetailState extends Equatable {
 }
 
 class DetailWithData extends DetailState {
-  final WidgetModel widgetModel;
-  final List<WidgetModel> links;
-  final List<NodeModel> nodes;
+
   final Map<String,dynamic>  userdetails ;
-  const DetailWithData({this.widgetModel, this.nodes,this.links,this.userdetails});
+  const DetailWithData({this.userdetails});
 
   @override
-  List<Object> get props => [widgetModel,links,nodes,userdetails];
+  List<Object> get props => [userdetails];
 
   @override
   String toString() {
-    return 'DetailWithData{widget: $widgetModel, nodes: $nodes}';
+    return 'DetailWithData{widget: }';
   }
 
 }

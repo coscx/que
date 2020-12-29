@@ -455,7 +455,7 @@ class _HomePageState extends State<HomePage>
   }
 
   _toDetailPage(WidgetModel model,Map<String,dynamic> photo) {
-    BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(model,photo));
+    BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
     Navigator.pushNamed(context, UnitRouter.widget_detail, arguments: model);
   }
 

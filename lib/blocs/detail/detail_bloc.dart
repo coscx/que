@@ -20,7 +20,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   @override
   Stream<DetailState> mapEventToState(DetailEvent event) async* {
     if (event is FetchWidgetDetail) {
-      yield* _mapLoadWidgetToState(event.widgetModel,event.photo);
+      yield* _mapLoadWidgetToState(event.photo);
     }
     if(event is ResetDetailState){
       yield DetailLoading();
@@ -28,21 +28,20 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   }
 
   Stream<DetailState> _mapLoadWidgetToState(
-      WidgetModel widgetModel, Map<String,dynamic> photo) async* {
+      Map<String,dynamic> photo) async* {
     yield DetailLoading();
     try {
-      final nodes = await this.repository.loadNode(widgetModel);
-      final links = await this.repository.loadWidget(widgetModel.links);
+
       var result= await IssuesApi.getUserDetail(photo['memberId'].toString());
       if  (result['code']==200){
 
       } else{
 
       }
-      if(nodes.isEmpty){
+      if(result['data'].isEmpty){
         yield DetailEmpty();
       }else{
-        yield DetailWithData(widgetModel: widgetModel, nodes: nodes,links: links,userdetails: result['data']);
+        yield DetailWithData(userdetails: result['data']);
       }
 
     } catch (_) {

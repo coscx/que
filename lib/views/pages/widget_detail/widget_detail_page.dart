@@ -18,32 +18,30 @@ import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/pages/widget_detail/category_end_drawer.dart';
 import 'package:flutter_geen/app/router.dart';
 class WidgetDetailPage extends StatefulWidget {
-  final WidgetModel model;
 
-  WidgetDetailPage({this.model});
+
+  WidgetDetailPage();
 
   @override
   _WidgetDetailPageState createState() => _WidgetDetailPageState();
 }
 
 class _WidgetDetailPageState extends State<WidgetDetailPage> {
-  List<WidgetModel> _modelStack = [];
   String memberId ;
   @override
   void initState() {
-    _modelStack.add(widget.model);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: CategoryEndDrawer(widget: _modelStack.last),
+      endDrawer: CategoryEndDrawer(),
       appBar: AppBar(
         title: Text("用户详情"),
         actions: <Widget>[
           _buildToHome(),
-          _buildCollectButton(_modelStack.last, context),
+          _buildCollectButton(context),
         ],
       ),
       body: Builder(builder: _buildContent),
@@ -71,7 +69,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           ),
           onTap: () => Navigator.of(ctx).pop()));
 
-  Widget _buildCollectButton(WidgetModel model, BuildContext context) {
+  Widget _buildCollectButton( BuildContext context) {
     //监听 CollectBloc 伺机弹出toast
     return BlocListener<DetailBloc, DetailState>(
         listener: (ctx, st) {
@@ -94,9 +92,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               builder: (_, s) => Padding(
                     padding: const EdgeInsets.only(right: 20.0),
                     child: Icon(
-                      s.widgets.contains(model)
-                          ? TolyIcon.icon_star_ok
-                          : TolyIcon.icon_star_add,
+                          TolyIcon.icon_star_ok,
                       size: 25,
                     ),
                   )),
@@ -124,20 +120,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   Future<bool> _whenPop(BuildContext context) async {
     if (Scaffold.of(context).isEndDrawerOpen) return true;
 
-    _modelStack.removeLast();
-    if (_modelStack.length > 0) {
-      setState(() {
-        Map<String,dynamic> photo;
-        BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(_modelStack.last,photo));
-      });
-      return false;
-    } else {
       return true;
-    }
+
   }
 
   Widget _buildDetail(BuildContext context, DetailState state) {
-    print('build---${state.runtimeType}---');
+    //print('build---${state.runtimeType}---');
     if (state is DetailWithData) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,10 +223,9 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return Container();
   }
   Widget _buildTitle(BuildContext context, DetailState state) {
-    print('build---${state.runtimeType}---');
+    //print('build---${state.runtimeType}---');
     if (state is DetailWithData) {
       return WidgetDetailTitle(
-        model: _modelStack.last,
         usertail: state.userdetails,
 
       );
@@ -354,9 +341,8 @@ _deletePhoto(BuildContext context,Map<String,dynamic> img) {
       ));
 }
 class WidgetDetailTitle extends StatelessWidget {
-  final WidgetModel model;
   final Map<String,dynamic> usertail;
-  WidgetDetailTitle({this.model,this.usertail});
+  WidgetDetailTitle({this.usertail});
 
   @override
   Widget build(BuildContext context) {
@@ -366,8 +352,8 @@ class WidgetDetailTitle extends StatelessWidget {
       children: <Widget>[
         Row(
           children: <Widget>[
-            _buildLeft(model,usertail),
-            _buildRight(model,usertail),
+            _buildLeft(usertail),
+            _buildRight(usertail),
           ],
         ),
         Divider(),
@@ -377,7 +363,7 @@ class WidgetDetailTitle extends StatelessWidget {
 
   final List<int> colors = Cons.tabColors;
 
-  Widget _buildLeft(WidgetModel model,Map<String,dynamic> usertail) => Expanded(
+  Widget _buildLeft(Map<String,dynamic> usertail) => Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -404,7 +390,7 @@ class WidgetDetailTitle extends StatelessWidget {
         ),
       );
 
-  Widget _buildRight(WidgetModel model,Map<String,dynamic> usertail) => Column(
+  Widget _buildRight(Map<String,dynamic> usertail) => Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
@@ -415,16 +401,14 @@ class WidgetDetailTitle extends StatelessWidget {
                   tag: "hero_widget_image_${usertail['user']['memberId'].toString()}",
                   child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
-                      child: model.image == null
-                          ? Image.asset('assets/images/caver.webp')
-                          : Image(image: FadeInImage.assetNetwork(
+                      child: Image(image: FadeInImage.assetNetwork(
                         placeholder:'assets/images/ic_launcher.png',
                         image:usertail['user']['img'],
                       ).image))),
             ),
           ),
           StarScore(
-            score: model.lever,
+            score: 0,
             star: Star(size: 15, fillColor: Colors.blue),
           )
         ],

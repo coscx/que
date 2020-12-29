@@ -9,6 +9,7 @@ import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/items/photo_search_widget_list_item.dart';
 import 'package:flutter_geen/views/items/photo_widget_list_item.dart';
 import 'package:flutter_geen/views/items/techno_widget_list_item.dart';
+import 'package:flutter_geen/views/pages/home/home_page.dart';
 import 'package:flutter_geen/views/pages/search/app_search_bar.dart';
 import 'package:flutter_geen/views/pages/search/error_page.dart';
 import 'package:flutter_geen/views/common/loading_page.dart';
@@ -35,7 +36,9 @@ class _SearchPageState extends State<SearchPage> {
           BlocProvider.of<SearchBloc>(context).add(EventTextChanged(args: SearchArgs()));
           return true;
         },
-        child: CustomScrollView(
+        child: ScrollConfiguration(
+        behavior: DyBehaviorNull(),
+    child:CustomScrollView(
           slivers: <Widget>[
               _buildSliverAppBar(),
             SliverToBoxAdapter(child: _buildStarFilter()),
@@ -61,7 +64,7 @@ class _SearchPageState extends State<SearchPage> {
           child:BlocBuilder<SearchBloc, SearchState>(builder:_buildBodyByState)
         )
           ],
-        ),
+        )),
       ),
     );
   }
@@ -117,24 +120,24 @@ class _SearchPageState extends State<SearchPage> {
           Divider()
         ],
       );
-Widget _buildTxt(int index) {
-  if (index == 0){
-    return Text("M");
-  }
-  if (index == 1){
-    return Text("P");
-  }
-  if (index == 2){
-    return Text("C");
-  }
-  if (index == 3){
-    return Text("B");
-  }
-  if (index == 4){
-    return Text("A");
-  }
-   return Text("");
-}
+    Widget _buildTxt(int index) {
+      if (index == 0){
+        return Text("M");
+      }
+      if (index == 1){
+        return Text("P");
+      }
+      if (index == 2){
+        return Text("C");
+      }
+      if (index == 3){
+        return Text("B");
+      }
+      if (index == 4){
+        return Text("A");
+      }
+       return Text("");
+    }
   Widget _buildBodyByState(BuildContext context,SearchState state) {
     if (state is SearchStateNoSearch)
       return SliverToBoxAdapter(child: NotSearchPage(),);
@@ -143,12 +146,12 @@ Widget _buildTxt(int index) {
     if (state is SearchStateError)
       return SliverToBoxAdapter(child: ErrorPage());
     if (state is SearchStateSuccess)
-      return _buildSliverList(state.result,state.photos);
+      return _buildSliverList(state.photos);
 
     if (state is CheckUserSuccesses)
-      return _buildSliverList(state.widgets,state.photos);
+      return _buildSliverList(state.photos);
     if (state is DelImgSuccesses)
-      return _buildSliverList(state.widgets,state.photos);
+      return _buildSliverList(state.photos);
 
 
     if (state is SearchStateEmpty)
@@ -156,12 +159,12 @@ Widget _buildTxt(int index) {
     return NotSearchPage();
   }
 
-  Widget _buildSliverList(List<WidgetModel> models , List<dynamic>  photos) => SliverList(
+  Widget _buildSliverList( List<dynamic>  photos) => SliverList(
         delegate: SliverChildBuilderDelegate(
             (_, int index) => Container(
                 child: InkWell(
                     //onTap: () => _toDetailPage(models[0],photos[index]),
-                    child:  PhotoSearchWidgetListItem(isClip: false, data: models[0],photo: photos[index],)
+                    child:  PhotoSearchWidgetListItem(isClip: false,photo: photos[index],)
                 )),
             childCount: photos.length),
       );
@@ -177,7 +180,7 @@ Widget _buildTxt(int index) {
 
   _toDetailPage(WidgetModel model,Map<String,dynamic>  photos) {
    //Map<String,dynamic> photo;
-    BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(model,photos));
+    BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photos));
     Navigator.pushNamed(context, UnitRouter.widget_detail,arguments: model);
   }
 }

@@ -12,16 +12,15 @@ abstract class DetailEvent extends Equatable {
 
 
 class FetchWidgetDetail extends DetailEvent {
-  final WidgetModel widgetModel;
   final Map<String,dynamic> photo;
-  const FetchWidgetDetail(this.widgetModel,this.photo);
+  const FetchWidgetDetail(this.photo);
 
   @override
-  List<Object> get props => [widgetModel];
+  List<Object> get props => [];
 
   @override
   String toString() {
-    return 'FetchWidgetDetail{widgetModel: $widgetModel}';
+    return 'FetchWidgetDetail{widgetModel: }';
   }
 }
 

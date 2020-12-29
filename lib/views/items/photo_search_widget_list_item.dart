@@ -20,13 +20,12 @@ import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
 class PhotoSearchWidgetListItem extends StatelessWidget {
-  final WidgetModel data;
   final bool hasTopHole;
   final bool hasBottomHole;
   final bool isClip;
   final Map<String,dynamic>  photo;
   PhotoSearchWidgetListItem(
-      {this.data,
+      {
       this.hasTopHole = true,
       this.hasBottomHole = false,
       this.isClip = true,
@@ -56,8 +55,8 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
             children: [
               FeedbackWidget(
                 onPressed: () {
-                  BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(data,photo));
-                  Navigator.pushNamed(context, UnitRouter.widget_detail, arguments: data);
+                  BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
+                  Navigator.pushNamed(context, UnitRouter.widget_detail);
                 },
                 child:  buildContent( context),
               ),
@@ -399,7 +398,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
     );
   }
   Widget buildContent(BuildContext context) => Container(
-        color: Color(colors[data.family.index]).withAlpha(66),
+        color: Colors.white10.withAlpha(66),
         height: 95,
         padding: const EdgeInsets.only(top: 10, left: 0, right: 10, bottom: 5),
         child: Row(
@@ -423,8 +422,8 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
 
   Widget buildLeading() => Padding(
         padding: const EdgeInsets.all(0.0),
-        child: Hero(
-          tag: "hero_widget_image_${photo['memberId'].toString()}",
+        child: Container(
+          //tag: "hero_widget_image_${photo['memberId'].toString()}",
           child: photo['img'] == null
               ? Material(
                   color: Colors.transparent,
@@ -445,7 +444,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       );
 
   Color get invColor {
-    return Color(colors[data.family.index]);
+    return Colors.black12;
   }
 
   Widget _buildCollectTag(Color color) {
@@ -453,7 +452,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         top: 0,
         right: 40,
         child: BlocBuilder<CollectBloc, CollectState>(builder: (_, s) {
-          bool show = s.widgets.contains(data);
+          bool show = true;
           return Opacity(
             opacity: show ? 1.0 : 0.0,
             child: SizedOverflowBox(

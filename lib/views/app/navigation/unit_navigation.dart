@@ -120,7 +120,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     }
 
     jpush.setup(
-      appKey: "334db8731c1e38a9c7c3f512", //你自己应用的 AppKey
+      appKey: "45799e66ba2208c6a816ff74", //你自己应用的 AppKey
       channel: "theChannel",
       production: false,
       debug: true,

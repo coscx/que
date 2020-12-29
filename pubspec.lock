@@ -174,7 +174,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: cec3f44665e72fb18d0b68f78d610ad07b50a9ed
+      resolved-ref: "7d9da2053a65569aafa29000746a9d0f447ece99"
       url: "https://github.com/coscx/lat.git"
     source: git
     version: "1.0.0"
@@ -410,13 +410,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.1"
-  jverify:
-    dependency: "direct main"
-    description:
-      name: jverify
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.6.22"
   markdown:
     dependency: transitive
     description:
