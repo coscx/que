@@ -74,7 +74,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return BlocListener<DetailBloc, DetailState>(
         listener: (ctx, st) {
           if (st is DetailWithData){
-            Map<String,dynamic> user=st.props.elementAt(3);
+            Map<String,dynamic> user=st.props.elementAt(0);
             memberId= user['user']['memberId'].toString();
           }
 
