@@ -26,7 +26,7 @@ import 'package:flutter_geen/views/pages/data/info.dart';
 import 'package:flutter_geen/views/pages/home/home_drawer.dart';
 import 'package:flutter_geen/views/pages/index/index_page.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
-import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -43,7 +43,6 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
   //List<Conversion> conversions = [];
   String debugLable = 'Unknown';
   FltImPlugin im = FltImPlugin();
-  JPush jpush = new JPush();
   static String tfSender = "";
 
   @override
@@ -84,58 +83,15 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
 
 
     initPlatformState();
-
+    FlutterNfcReader.onTagDiscovered().listen((onData) {
+      print(onData.id);
+      print(onData.content);
+    });
 
   }
 // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;
-
-    try {
-      jpush.addEventHandler(
-          onReceiveNotification: (Map<String, dynamic> message) async {
-            print("flutter onReceiveNotification: $message");
-            setState(() {
-               debugLable = "flutter onReceiveNotification: $message";
-            });
-          }, onOpenNotification: (Map<String, dynamic> message) async {
-        print("flutter onOpenNotification: $message");
-        setState(() {
-          debugLable = "flutter onOpenNotification: $message";
-        });
-      }, onReceiveMessage: (Map<String, dynamic> message) async {
-        print("flutter onReceiveMessage: $message");
-        setState(() {
-          debugLable = "flutter onReceiveMessage: $message";
-        });
-      }, onReceiveNotificationAuthorization:
-          (Map<String, dynamic> message) async {
-        print("flutter onReceiveNotificationAuthorization: $message");
-        setState(() {
-          debugLable = "flutter onReceiveNotificationAuthorization: $message";
-        });
-      });
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    jpush.setup(
-      appKey: "45799e66ba2208c6a816ff74", //你自己应用的 AppKey
-      channel: "theChannel",
-      production: false,
-      debug: true,
-    );
-    jpush.applyPushAuthority(
-        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
-
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    jpush.getRegistrationID().then((rid) {
-      print("flutter get registration id : $rid");
-      setState(() {
-        debugLable = "flutter getRegistrationID: $rid";
-      });
-    });
-
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.

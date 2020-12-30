@@ -9,7 +9,6 @@ import 'package:flutter_geen/views/pages/about/version_info.dart';
 import 'package:flutter_geen/views/pages/category/category_detail.dart';
 import 'package:flutter_geen/views/pages/category/collect_page.dart';
 import 'package:flutter_geen/views/pages/chat/chat_page.dart';
-import 'package:flutter_geen/views/pages/chat/conversation.dart';
 import 'package:flutter_geen/views/pages/chat/conversation_list.dart';
 import 'package:flutter_geen/views/pages/data/brower.dart';
 import 'package:flutter_geen/views/pages/data/card.dart';
@@ -109,7 +108,6 @@ class UnitRouter {
       case about_me:
         return Right2LeftRouter(child: AboutMePage());
       case to_chat:
-        return Right2LeftRouter(child: ImConversationPage());
         return Right2LeftRouter(child: AboutMePage());
       case to_chats:
         return Right2LeftRouter(child: ChatsPage(model: settings.arguments,));

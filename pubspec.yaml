@@ -60,7 +60,7 @@ dependencies:
   flutter_swiper: ^1.1.6
   timeline_list: ^0.0.5
   flare_flutter: ^2.0.6
-  jpush_flutter: 0.6.1
+  umeng_analytics_push: ^1.2.5
   fluwx: ^2.4.2
   getwidget: ^1.2.4
   flutter_screenutil: ^4.0.0
@@ -71,6 +71,7 @@ dependencies:
   frefresh: ^1.1.0
   refresh_loadmore: ^1.1.0
   fbutton: ^2.0.1
+  flutter_nfc_reader: ^0.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

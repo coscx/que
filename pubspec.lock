@@ -267,6 +267,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.4.4"
+  flutter_nfc_reader:
+    dependency: "direct main"
+    description:
+      name: flutter_nfc_reader
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.0"
   flutter_page_indicator:
     dependency: transitive
     description:
@@ -395,7 +402,7 @@ packages:
       name: image_picker
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.6.7+14"
+    version: "0.6.7+17"
   image_picker_platform_interface:
     dependency: transitive
     description:
@@ -410,13 +417,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.16.1"
-  jpush_flutter:
-    dependency: "direct main"
-    description:
-      name: jpush_flutter
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.6.1"
   json_annotation:
     dependency: transitive
     description:
@@ -744,6 +744,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.3.0-nullsafety.3"
+  umeng_analytics_push:
+    dependency: "direct main"
+    description:
+      name: umeng_analytics_push
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.2.05"
   url_launcher:
     dependency: "direct main"
     description:
