@@ -87,13 +87,8 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                       height: 150,
                       ),
                       )
-
                 )
-
-
-
                   ],
-
                 ),
 
               ],
@@ -149,8 +144,6 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
             runSpacing: 0, //交叉轴上子控件之间的间距
             children: [
               ...list
-
-
             ],
 
           )

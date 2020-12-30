@@ -24,6 +24,7 @@ class GlobalState extends Equatable {
 
   /// [indexPhotoPage] 首页照片审核图
   final int indexPhotoPage;
+  final int indexSearchPage;
   final int currentPhotoMode;
   /// [headNum] 首页照片审核图
   final List<String> headNum;
@@ -42,6 +43,7 @@ class GlobalState extends Equatable {
     this.itemStyleIndex = 0,
     this.showPerformanceOverlay = false,
     this.indexPhotoPage =1,
+    this.indexSearchPage = 1,
     this.headNum,
     this.sex=1,
     this.currentPhotoMode=1,
@@ -61,6 +63,7 @@ class GlobalState extends Equatable {
         itemStyleIndex,
         showPerformanceOverlay,
         indexPhotoPage,
+        indexSearchPage,
         headNum,
         sex,
         currentPhotoMode,
@@ -80,6 +83,7 @@ class GlobalState extends Equatable {
     int itemStyleIndex,
     bool showPerformanceOverlay,
     int  indexPhotoPage,
+    int  indexSearchPage,
     List<String> headNum,
     int sex,
     int currentPhotoMode,
@@ -97,6 +101,7 @@ class GlobalState extends Equatable {
         itemStyleIndex: itemStyleIndex ?? this.itemStyleIndex,
         showPerformanceOverlay: showPerformanceOverlay ?? this.showPerformanceOverlay,
         indexPhotoPage:  indexPhotoPage ?? this.indexPhotoPage,
+          indexSearchPage : indexSearchPage ?? this.indexSearchPage ,
           headNum:headNum??this.headNum,
           sex:sex??this.sex,
           currentPhotoMode:currentPhotoMode??this.currentPhotoMode,
@@ -111,6 +116,6 @@ class GlobalState extends Equatable {
 
   @override
   String toString() {
-    return 'GlobalState{fontFamily: $fontFamily, themeColor: $themeColor, showBackGround: $showBackGround, codeStyleIndex: $codeStyleIndex, itemStyleIndex: $itemStyleIndex, showPerformanceOverlay: $showPerformanceOverlay}, indexPhotoPage: $indexPhotoPage}, headNum: $headNum, sex: $sex,currentPhotoMode:$currentPhotoMode},memberId:$memberId}';
+    return 'GlobalState{fontFamily: $fontFamily, themeColor: $themeColor, showBackGround: $showBackGround, codeStyleIndex: $codeStyleIndex, itemStyleIndex: $itemStyleIndex, showPerformanceOverlay: $showPerformanceOverlay, indexPhotoPage: $indexPhotoPage, headNum: $headNum, sex: $sex,currentPhotoMode:$currentPhotoMode,memberId:$memberId}';
   }
 }

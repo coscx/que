@@ -29,6 +29,15 @@ class IssuesApi {
 
     return datas;
   }
+  static Future<Map<String,dynamic>> searchPhoto( String keyWord, String page, ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    var data={'keywords':keyWord,'pages':page,'token':token,};
+    Response<dynamic> rep = await dio.post('/admin/service/photoflu.html',queryParameters:data );
+    var datas = json.decode(rep.data);
+
+    return datas;
+  }
   static Future<Map<String,dynamic>> delPhoto( String imgId, ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
@@ -81,15 +90,7 @@ class IssuesApi {
 
     return datas;
   }
-  static Future<Map<String,dynamic>> searchPhoto( String keyWord, String page) async {
-    var ss = await LocalStorage.get("token");
-    var token =ss.toString();
-    var data={'keywords':keyWord,'pages':page,'token':token};
-    Response<dynamic> rep = await dio.post('/admin/service/photoflu.html',queryParameters:data );
-    var datas = json.decode(rep.data);
 
-    return datas;
-  }
   static Future<Map<String,dynamic>> getTimeLine( String memberId) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();

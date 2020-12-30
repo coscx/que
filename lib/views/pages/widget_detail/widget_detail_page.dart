@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
+import 'package:flutter_geen/views/dialogs/comment.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
@@ -85,8 +86,9 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         child: FeedbackWidget(
 
           onPressed: () {
-            BlocProvider.of<TimeBloc>(context).add(EventGetTimeLine(memberId??"12221"));
-            Navigator.pushNamed(context, UnitRouter.time_line, arguments: memberId);
+            //BlocProvider.of<TimeBloc>(context).add(EventGetTimeLine(memberId??"12221"));
+            //Navigator.pushNamed(context, UnitRouter.time_line, arguments: memberId);
+            _comment(context);
           } ,
           child: BlocBuilder<CollectBloc, CollectState>(
               builder: (_, s) => Padding(
@@ -320,6 +322,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
 }
+
+_comment(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (ctx) => CommentDialog()
+
+  );
+}
+
+
 _deletePhoto(BuildContext context,Map<String,dynamic> img) {
   showDialog(
       context: context,

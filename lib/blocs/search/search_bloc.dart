@@ -145,8 +145,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
 
 
+    if (event is EventLoadMoreUser) {
+      String word =state.props.elementAt(1);
+      var data =event.user010;
+      yield   SearchStateSuccess(data,word);
 
+    }
+    if (event is EventClearPage) {
 
+      yield   SearchStateSuccess([],'');
+
+    }
     if (event is EventTextChanged) {
 
       if (event.args.name.isEmpty&&event.args.stars.every((e)=>e==-1)) {
@@ -154,10 +163,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       } else {
         yield SearchStateLoading();
         try {
-          var args= event.args;
-          //final results = await repository.searchWidgets(event.args);
-          final results = await this.repository.loadWidgets(Convert.toFamily(6));
-          //var newUserBond=results.reversed.toList();
+          String word =event.args.name;
           var key=event.args.name;
           if (key==null){
             key="";
@@ -176,7 +182,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           if(result['data']['photo_list'].length==0){
             yield SearchStateEmpty();
           }else{
-            yield   SearchStateSuccess(result['data']['photo_list']);
+            yield   SearchStateSuccess(result['data']['photo_list'],word);
           }
 
           print('mapEventToState');

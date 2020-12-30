@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/app/res/toly_icon.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
@@ -15,7 +16,8 @@ import 'package:flutter_geen/views/pages/search/error_page.dart';
 import 'package:flutter_geen/views/common/loading_page.dart';
 import 'package:flutter_geen/views/pages/search/not_search_page.dart';
 import 'package:flutter_geen/components/permanent/multi_chip_filter.dart';
-
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:refresh_loadmore/refresh_loadmore.dart';
 import 'empty_page.dart';
 
 
@@ -26,63 +28,101 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   var _scaffoldkey = new GlobalKey<ScaffoldState>();
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldkey,
+      key: _scaffoldkey,
       body: WillPopScope(
         onWillPop: () async {
           //返回时 情空搜索
           BlocProvider.of<SearchBloc>(context).add(EventTextChanged(args: SearchArgs()));
+          BlocProvider.of<SearchBloc>(context).add(EventClearPage());
+          BlocProvider.of<GlobalBloc>(context).add(EventSearchPhotoPage(0));
           return true;
         },
         child: ScrollConfiguration(
-        behavior: DyBehaviorNull(),
-    child:CustomScrollView(
-          slivers: <Widget>[
-              _buildSliverAppBar(),
-            SliverToBoxAdapter(child: _buildStarFilter()),
-        BlocListener<SearchBloc, SearchState>(
-          listener: (ctx, state) {
-            if (state is CheckUserSuccesses) {
+            behavior: DyBehaviorNull(),
+            child:
+              SmartRefresher(
+                enablePullDown: false,
+                enablePullUp: true,
+                header: DYrefreshHeader(),
+                footer: DYrefreshFooter(),
+                controller: _refreshController,
+                onLoading: () async {
+                    List<dynamic> oldUsers = BlocProvider.of<SearchBloc>(context).state.props.elementAt(0);
+                    String word =BlocProvider.of<SearchBloc>(context).state.props.elementAt(1);
+                    var currentPage =BlocProvider.of<GlobalBloc>(context).state.indexSearchPage;
+                    BlocProvider.of<GlobalBloc>(context).add(EventSearchPhotoPage(currentPage));
+                    var result= await IssuesApi.searchPhoto(word, (++currentPage).toString());
+                    if  (result['code']==200){
+
+                    } else{
+
+                    }
+                    List<dynamic> newUsers =[];
+                    oldUsers.forEach((element) {
+                      newUsers.add(element);
+                    });
+                    newUsers.addAll(result['data']['photo_list']);
+                    BlocProvider.of<SearchBloc>(context).add(EventLoadMoreUser(newUsers));
+                    _refreshController.loadComplete();
+
+                },
 
 
-              _scaffoldkey.currentState.showSnackBar(SnackBar(
-                content: Text('审核成功'+state.Reason),
-                backgroundColor: Colors.green,
-              ));
 
-            }
-            if (state is DelImgSuccesses) {
-              _scaffoldkey.currentState.showSnackBar(SnackBar(
-                content: Text('删除成功'),
-                backgroundColor: Colors.blue,
-              ));
 
-            }
-          },
-          child:BlocBuilder<SearchBloc, SearchState>(builder:_buildBodyByState)
-        )
-          ],
-        )),
+
+
+                child:
+
+    CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              shrinkWrap: true,
+              slivers: <Widget>[
+                _buildSliverAppBar(),
+                SliverToBoxAdapter(child: _buildStarFilter()),
+                BlocListener<SearchBloc, SearchState>(
+                    listener: (ctx, state) {
+                      if (state is CheckUserSuccesses) {
+                        _scaffoldkey.currentState.showSnackBar(SnackBar(
+                          content: Text('审核成功' + state.Reason),
+                          backgroundColor: Colors.green,
+                        ));
+                      }
+                      if (state is DelImgSuccesses) {
+                        _scaffoldkey.currentState.showSnackBar(SnackBar(
+                          content: Text('删除成功'),
+                          backgroundColor: Colors.blue,
+                        ));
+                      }
+                    },
+                    child: BlocBuilder<SearchBloc, SearchState>(
+                        builder: _buildBodyByState)
+                )
+              ],
+            ))),
       ),
     );
   }
 
   Widget _buildSliverAppBar() {
     return SliverAppBar(
-            pinned: true,
-            title: AppSearchBar(),
-            actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 15.0),
-                child: Icon(TolyIcon.icon_sound),
-              )
-            ],
-          );
+      pinned: true,
+      title: AppSearchBar(),
+      actions: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 15.0),
+          child: Icon(TolyIcon.icon_sound),
+        )
+      ],
+    );
   }
 
-  Widget _buildStarFilter() => Column(
+  Widget _buildStarFilter() =>
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
@@ -98,7 +138,9 @@ class _SearchPageState extends State<SearchPage> {
                 Text(
                   '用户查询',
                   style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme
+                          .of(context)
+                          .primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
               ],
@@ -108,37 +150,40 @@ class _SearchPageState extends State<SearchPage> {
             data: [1, 2, 3, 4, 5],
             avatarBuilder: (_, index) =>
                 CircleAvatar(child: _buildTxt(index)),
-            labelBuilder: (_, selected) =>Container(
-              child:
-                Icon(
-              Icons.star,
-              color: selected ? Colors.blue : Colors.grey,
-              size: 18,
-            )),
+            labelBuilder: (_, selected) =>
+                Container(
+                    child:
+                    Icon(
+                      Icons.star,
+                      color: selected ? Colors.blue : Colors.grey,
+                      size: 18,
+                    )),
             onChange: _doSelectStart,
           ),
           Divider()
         ],
       );
-    Widget _buildTxt(int index) {
-      if (index == 0){
-        return Text("M");
-      }
-      if (index == 1){
-        return Text("P");
-      }
-      if (index == 2){
-        return Text("C");
-      }
-      if (index == 3){
-        return Text("B");
-      }
-      if (index == 4){
-        return Text("A");
-      }
-       return Text("");
+
+  Widget _buildTxt(int index) {
+    if (index == 0) {
+      return Text("M");
     }
-  Widget _buildBodyByState(BuildContext context,SearchState state) {
+    if (index == 1) {
+      return Text("P");
+    }
+    if (index == 2) {
+      return Text("C");
+    }
+    if (index == 3) {
+      return Text("B");
+    }
+    if (index == 4) {
+      return Text("A");
+    }
+    return Text("");
+  }
+
+  Widget _buildBodyByState(BuildContext context, SearchState state) {
     if (state is SearchStateNoSearch)
       return SliverToBoxAdapter(child: NotSearchPage(),);
     if (state is SearchStateLoading)
@@ -156,18 +201,24 @@ class _SearchPageState extends State<SearchPage> {
 
     if (state is SearchStateEmpty)
       return SliverToBoxAdapter(child: EmptyPage());
-    return NotSearchPage();
+    return SliverToBoxAdapter(child: NotSearchPage(),);
   }
 
-  Widget _buildSliverList( List<dynamic>  photos) => SliverList(
+  Widget _buildSliverList(List<dynamic> photos) {
+    return   SliverList(
         delegate: SliverChildBuilderDelegate(
-            (_, int index) => Container(
-                child: InkWell(
-                    //onTap: () => _toDetailPage(models[0],photos[index]),
-                    child:  PhotoSearchWidgetListItem(isClip: false,photo: photos[index],)
-                )),
+                (_, int index) =>
+                Container(
+                    child: InkWell(
+                      //onTap: () => _toDetailPage(models[0],photos[index]),
+                        child: PhotoSearchWidgetListItem(
+                          isClip: false, photo: photos[index],)
+                    )),
             childCount: photos.length),
-      );
+
+
+    );
+}
 
   _doSelectStart(List<int> select) {
     List<int> temp = select.map((e)=>e+1).toList();

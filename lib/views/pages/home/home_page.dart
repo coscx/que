@@ -207,17 +207,17 @@ class _HomePageState extends State<HomePage>
                   )),
               onSelected: (e) {
                 print(e);
-                if (e == '待审') {
+                if (e == '全部') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                   BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1));
                 }
-                if (e == '已审') {
+                if (e == '我的') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                   BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2));
                 }
-                if (e == '隐藏') {
+                if (e == '星源') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(4));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                   BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,4));
@@ -236,9 +236,9 @@ class _HomePageState extends State<HomePage>
   }
   List<PopupMenuItem<String>> buildItems() {
     final map = {
-      "待审": Icons.zoom_in,
-      "已审": Icons.check,
-      "隐藏": Icons.app_blocking,
+      "全部": Icons.zoom_in,
+      "我的": Icons.check,
+      "星源": Icons.app_blocking,
     };
     return map.keys
         .toList()
@@ -261,27 +261,27 @@ class _HomePageState extends State<HomePage>
     if(state.currentPhotoMode==1){
      return SizedBox(
         width: 50,
-        child: Text("待审核"),
+        child: Text("全部"),
       );
 
     }
     if(state.currentPhotoMode==2){
       return SizedBox(
         width: 50,
-        child: Text("已审核"),
+        child: Text("我的"),
       );
 
     }
     if(state.currentPhotoMode==4){
       return SizedBox(
         width: 50,
-        child: Text("已隐藏"),
+        child: Text("星源"),
       );
 
     }
     return SizedBox(
       width: 50,
-      child: Text("待审核"),
+      child: Text("全部"),
     );
   }
   Widget _buildPersistentHeader(List<String> num) => SliverPersistentHeader(

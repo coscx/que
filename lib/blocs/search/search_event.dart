@@ -16,7 +16,9 @@ class EventCheckUsers extends SearchEvent {
   EventCheckUsers(this.user,this.status);
 
 }
+class EventClearPage extends SearchEvent {
 
+}
 class EventDelImgs extends SearchEvent {
   final Map<String,dynamic> user;
   final int status;
@@ -28,4 +30,9 @@ class EventResetCheckUsers extends SearchEvent {
   final int status;
   EventResetCheckUsers(this.user,this.status);
 
+}
+
+class EventLoadMoreUser extends SearchEvent {
+  final List<dynamic> user010;
+  EventLoadMoreUser(this.user010);
 }

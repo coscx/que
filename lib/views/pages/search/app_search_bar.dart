@@ -39,6 +39,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
           onSubmitted: (str) {//提交后
             BlocProvider.of<SearchBloc>(context)
                 .add(EventTextChanged(args:SearchArgs(name: str,stars: [1,2,3,4,5])));
+            BlocProvider.of<GlobalBloc>(context).add(EventSearchPhotoPage(0));
             FocusScope.of(context).requestFocus(FocusNode()); //收起键盘
 //            _controller.clear();
           },

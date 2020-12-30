@@ -18,9 +18,10 @@ class SearchStateError extends SearchState {}//异常
 
 class SearchStateSuccess extends SearchState {//有结果
   final List<dynamic>  photos ;
-  const SearchStateSuccess(this.photos);
+  final String word ;
+  const SearchStateSuccess(this.photos,this.word);
   @override
-  List<Object> get props => [ photos];
+  List<Object> get props => [ photos,word];
 
   @override
   String toString() {

@@ -69,7 +69,8 @@ dependencies:
   modal_bottom_sheet: ^1.0.0+1
   flutter_gifimage: ^1.0.0
   frefresh: ^1.1.0
-
+  refresh_loadmore: ^1.1.0
+  fbutton: ^2.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

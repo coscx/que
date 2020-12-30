@@ -141,6 +141,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.2.0-nullsafety.1"
+  fbutton:
+    dependency: "direct main"
+    description:
+      name: fbutton
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1"
+  fcontrol:
+    dependency: transitive
+    description:
+      name: fcontrol
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
   ffi:
     dependency: transitive
     description:
@@ -578,6 +592,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.6.3"
+  refresh_loadmore:
+    dependency: "direct main"
+    description:
+      name: refresh_loadmore
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.1"
   rxdart:
     dependency: transitive
     description:
