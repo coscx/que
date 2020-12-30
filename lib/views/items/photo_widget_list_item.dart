@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_geen/app/res/style/shape/techno_shape.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/res/style/shape/coupon_shape_border.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PhotoWidgetListItem extends StatelessWidget {
   final WidgetModel data;
   final bool hasTopHole;
@@ -41,6 +43,10 @@ class PhotoWidgetListItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
       child: Stack(
         children: <Widget>[
+      Material(
+      color: Theme.of(context).primaryColor.withAlpha(66),
+        shape: true ? TechnoShapeBorder(color: Theme.of(context).primaryColor.withAlpha(100)) : null,
+        child:
           isClip
               ? ClipPath(
                   clipper: ShapeBorderClipper(
@@ -52,7 +58,10 @@ class PhotoWidgetListItem extends StatelessWidget {
                           lineRate: 0.20)),
                   child: buildContent( context),
                 )
-              : Column(
+              : Container(
+            padding:  EdgeInsets.only(top: 10.h,bottom: 10.h,left: 10.w,right: 10.w),
+              child:
+              Column(
             children: [
               FeedbackWidget(
                 onPressed: () {
@@ -65,7 +74,9 @@ class PhotoWidgetListItem extends StatelessWidget {
               //buildMiddle(context),
 
         ],
-      ),
+      ))
+
+          ),
           _buildCollectTag(Theme.of(context).primaryColor)
     ]
       )
@@ -460,7 +471,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
     );
   }
   Widget buildContent(BuildContext context) => Container(
-        color: Color(colors[data.family.index]).withAlpha(66),
+        color: Colors.lightBlue.withAlpha(0),
         height: 95,
         padding: const EdgeInsets.only(top: 4, left: 0, right: 10, bottom: 10),
         child: Row(

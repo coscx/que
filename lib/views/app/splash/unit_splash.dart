@@ -155,7 +155,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
           duration: const Duration(milliseconds: 600),
           opacity: _animEnd ? 1.0 : 0.0,
           child: Text(
-            '鹊桥门店管理系统',
+            '鹊桥ERP管理系统',
             style: shadowStyle,
           )),
     );
