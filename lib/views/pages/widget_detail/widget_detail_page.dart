@@ -17,7 +17,11 @@ import 'package:flutter_geen/components/project/widget_node_panel.dart';
 import 'package:flutter_geen/model/node_model.dart';
 import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/pages/widget_detail/category_end_drawer.dart';
+import 'package:flutter_geen/views/items/tag.dart';
 import 'package:flutter_geen/app/router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_geen/views/items/CustomsExpansionPanelList.dart';
+import 'package:flutter_geen/views/pages/home/home_page.dart';
 class WidgetDetailPage extends StatefulWidget {
 
 
@@ -72,7 +76,9 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
   Widget _buildContent(BuildContext context) => WillPopScope(
       onWillPop: () => _whenPop(context),
-      child: SingleChildScrollView(
+      child: ScrollConfiguration(
+          behavior: DyBehaviorNull(),
+          child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -80,7 +86,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             BlocBuilder<DetailBloc, DetailState>(builder: _buildDetail)
           ],
         ),
-      ));
+      )));
 
   Widget _buildToHome() => Builder(
       builder: (ctx) => GestureDetector(
@@ -139,7 +145,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   }
 
   final List<int> colors = Cons.tabColors;
-
+  int _position = 0;
 
 
   Future<bool> _whenPop(BuildContext context) async {
@@ -157,8 +163,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.only(left: 15, right: 5),
+               Padding(
+                padding: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 5.h),
                 child: Icon(
                   Icons.photo,
                   color: Colors.blue,
@@ -176,12 +182,24 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           ),
           Divider(),
           //_buildNodes(state.nodes, state.widgetModel.name)
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "滑动次数 (39次 A:39)",
-            code: "待完善",
-            show: Container(),
-          ),
+          Container(
+
+              margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 5.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+
+                    CustomsExpansionPanelList()
+                    //_item(context),
+
+
+
+                  ],
+                ),
+
+
+            ),
+
 
 
         ],
@@ -189,15 +207,177 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     }
     return Container();
   }
+
+
+
   Widget _buildTitle(BuildContext context, DetailState state) {
     //print('build---${state.runtimeType}---');
     if (state is DetailWithData) {
+      return header(state.userdetails);
       return WidgetDetailTitle(
         usertail: state.userdetails,
 
       );
     }
     return Container();
+  }
+  Widget _item(BuildContext context) {
+    bool isDark = false;
+
+    return  Container(
+      width: double.infinity,
+      height: 80.h,
+      child:  Material(
+          color:  Colors.white ,
+          child: InkWell(
+            onTap: (){},
+            child: Container(
+                margin: EdgeInsets.only(left: 10.w, right: 20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.account_circle_outlined,
+                          size: 18,
+                          color: Colors.black54,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 15.w),
+                          child: Text(
+                            "姓名",
+                            style: TextStyle(fontSize: 15.0, color: Colors.grey),
+                          ),
+                        )
+                      ]),
+                  //Visibility是控制子组件隐藏/可见的组件
+                  Visibility(
+                    visible: true,
+                    child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(right: 10.w),
+                            child: Row(children: <Widget>[
+                              Visibility(
+                                  visible: true,
+                                  child: Text(
+                                    "李忆如",
+                                    style: TextStyle(
+                                        fontSize: 15.0, color: Colors.grey),
+                                  )),
+                              Visibility(
+                                  visible: false,
+                                  child: CircleAvatar(
+                                    backgroundImage: AssetImage("rightImageUri"),
+                                  ))
+                            ]),
+                          ),
+
+                          Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            size: 15,
+                            color: Colors.black54,
+                          )
+
+                        ]),
+                  )
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+  avatar(String url) {
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 2,
+          color: Colors.white,
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(30)),
+      ),
+      child: CircleAvatar(
+        child: ClipOval(
+          child: Image.network(
+            url,
+            fit: BoxFit.cover,
+            width: 60,
+            height: 60,
+          ),
+        ),
+        backgroundColor: Colors.white,
+      ),
+    );
+  }
+
+  header(Map<String,dynamic> user) {
+    return Container(
+      height: 120.h,
+      margin: EdgeInsets.only(top: 8.h,bottom: 20.h,left: 8.w),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(left: 10.w, right: 10.w),
+            child: avatar("https://img.bosszhipin.com/beijin/mcs/useravatar/20171211/4d147d8bb3e2a3478e20b50ad614f4d02062e3aec7ce2519b427d24a3f300d68_s.jpg"),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                 Container(
+                 margin: EdgeInsets.fromLTRB(10.w, 10.h, 5.w, 0.h),
+                 child:
+                 Text(
+                  user['user']['userName'],
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  )),
+                  Container(
+                      color: Colors.black12,
+                      padding: EdgeInsets.fromLTRB(5.w, 0.h, 5.w, 0.h),
+                      margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
+                      alignment: Alignment.centerLeft,
+                      height: 24.h,
+                      child: Text(
+                        user['user']['age'].toString(),
+                        style: TextStyle(color: Colors.black, fontSize: 8),
+                      ))
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                   Tag(
+                      color: Colors.black12,
+                      borderColor: Colors.black12,
+                      borderWidth: 0,
+                      margin: EdgeInsets.fromLTRB(10.w, 10.h, 5.w, 0.h),
+                      height: 40.h,
+                      text: Text(
+                        user['user']['addressed'].toString(),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                      ),
+
+                  )
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
   Widget _buildLinkTo(BuildContext context, Map<String,dynamic> userdetail) {
 
@@ -210,6 +390,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           Stack(
           children: <Widget>[
           Container(
+            margin: EdgeInsets.fromLTRB(13.w, 0.h, 0.w, 10.h),
           child: Stack(
           children: <Widget>[
 
@@ -229,9 +410,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                }
                ,
                 child: Container(
+                  margin: EdgeInsets.fromLTRB(2.w, 20.h, 2.w, 0.h),
                 child: CachedNetworkImage(imageUrl: e['imagepath'],
-                width: 80,
-                height: 150,
+                width: 160.w,
+                height: 300.h,
                   ),
                 )
 
@@ -246,16 +428,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         ],
 
       ),
-      padding: const EdgeInsets.all(2),
+      padding:  EdgeInsets.all(4.w),
       decoration:const BoxDecoration(
-      color: Colors.white,
+      color: Colors.red,
       borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
     ),
 
     Positioned(
-        top: 5,
-        right: 5,
+        top: 0.h,
+        right: 0.w,
         child:
         FeedbackWidget(
         onPressed: () {
@@ -263,7 +445,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         },
         child: const Icon(
             CupertinoIcons.delete_solid,
-            color: Colors.red,
+            color: Colors.white,
         ),
         )
         ),
