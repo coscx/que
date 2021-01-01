@@ -15,15 +15,15 @@ class CommentDialog extends Dialog  {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            width: 400.w,
-            height: 1000.h,
+            width: 600.w,
+            height: 600.h,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
             child: OverflowBox(
               alignment: Alignment.bottomCenter,
-              maxHeight: 1000.h,
+              maxHeight: 600.h,
               child: Stack(
                 alignment: AlignmentDirectional.topCenter,
                 children: <Widget>[
@@ -49,7 +49,7 @@ class CommentDialog extends Dialog  {
                     padding: EdgeInsets.only(
                       left: 30.w,
                       right: 30.w,
-                      top: 230.h,
+                      top: 80.h,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -62,8 +62,8 @@ class CommentDialog extends Dialog  {
                           child: TextField(
                             controller: _Controller,
                             style: TextStyle(color: Colors.blue),
-                            minLines: 5,
-                            maxLines: 5,
+                            minLines: 10,
+                            maxLines: 10,
                             cursorColor: Colors.green,
                             cursorRadius: Radius.circular(3.w),
                             cursorWidth: 5.w,

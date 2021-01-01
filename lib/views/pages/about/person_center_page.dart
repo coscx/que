@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -173,6 +174,8 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                   ),
                 ),
 
+
+
                 Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
@@ -187,7 +190,11 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                             SizedBox(
                               width: ScreenUtil().setWidth(10),
                             ),
-                            Container(
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.pushNamed(context, UnitRouter.create_user_page);
+                              },
+                                child: Container(
                               padding: const EdgeInsets.only(
                                   top: 15.0,
                                   bottom: 15.0,
@@ -207,7 +214,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                 ),
 
                               ]),
-                            ),
+                            )),
 
 
                             Container(

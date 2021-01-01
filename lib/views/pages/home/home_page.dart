@@ -106,40 +106,44 @@ class _HomePageState extends State<HomePage>
     },
     child:BlocBuilder<HomeBloc, HomeState>(builder: (ctx, state) {
       return Stack(
-        children: <Widget>[
+            children: <Widget>[
 
-          BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
+              BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
 
-          ScrollConfiguration(
-          behavior: DyBehaviorNull(),
-          child:
-              SmartRefresher(
-                enablePullDown: true,
-                enablePullUp: true,
-                header: DYrefreshHeader(),
-                footer: DYrefreshFooter(),
-                controller: _refreshController,
-                onRefresh: _onRefresh,
-                onLoading: _onLoading,
-                child:  CustomScrollView(
-                  physics: BouncingScrollPhysics(),
-                  slivers: <Widget>[
-                    BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
-                     SliverToBoxAdapter(
-                    child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
+              ScrollConfiguration(
+                  behavior: DyBehaviorNull(),
+                  child:
+                  SmartRefresher(
+                    enablePullDown: true,
+                    enablePullUp: true,
+                    header: DYrefreshHeader(),
+                    footer: DYrefreshFooter(),
+                    controller: _refreshController,
+                    onRefresh: _onRefresh,
+                    onLoading: _onLoading,
+                    child:  CustomScrollView(
+                      physics: BouncingScrollPhysics(),
+                      slivers: <Widget>[
+                        Container(
+                          child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
+                        ),
+                        SliverToBoxAdapter(
+                          child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
 
 
+                        ),
+
+
+                        _buildContent(ctx, state),
+                      ],
                     ),
+                  )
+              ),
+
+            ],
+          );
 
 
-                    _buildContent(ctx, state),
-                  ],
-                ),
-              )
-          ),
-
-        ],
-      );
     }
     )
         )
@@ -508,21 +512,24 @@ class DYrefreshHeader extends StatelessWidget {
           valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
         ),
       ),
-      complete: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            Icons.insert_emoticon,
-            color: Colors.blue,
-          ),
-          Container(
-            width: 15.0,
-          ),
-          Text(
-            '更新好啦~',
-            style: TextStyle(color: Colors.blue),
-          )
-        ],
+      complete: Container(
+
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Icons.insert_emoticon,
+              color: Colors.blue,
+            ),
+            Container(
+              width: 15.0,
+            ),
+            Text(
+              '更新好啦~',
+              style: TextStyle(color: Colors.blue),
+            )
+          ],
+        ),
       ),
       idleIcon: Icon(
         Icons.favorite,
