@@ -29,7 +29,7 @@ import 'package:flutter_geen/views/pages/home/home_page.dart';
 import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
+import 'package:flutter_geen/views/dialogs/comment.dart';
 /// 说明: 主题结构 左右滑页 + 底部导航栏
 
 class UnitNavigation extends StatefulWidget {
@@ -86,6 +86,9 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     FlutterNfcReader.onTagDiscovered().listen((onData) {
       print(onData.id);
       print(onData.content);
+      BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(onData.id));
+      _comment(context);
+
     });
 
   }
@@ -111,7 +114,15 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
   Widget build(BuildContext context) {
 
 
-    return BlocBuilder<HomeBloc, HomeState>(
+    return BlocListener<HomeBloc, HomeState>(
+    listener: (ctx, state) {
+
+          if (state is GetCreditIdSuccess) {
+
+          }
+
+    },
+    child:BlocBuilder<HomeBloc, HomeState>(
       builder: (_, state) {
 
         final Color color =  BlocProvider.of<HomeBloc>(context).activeHomeColor;
@@ -143,8 +154,16 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
               itemData: Cons.ICONS_MAP,
               onItemClick: _onTapNav));
       },
+    ));
+  }
+  _comment(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (ctx) => CommentDialog()
+
     );
   }
+
   login({void Function() success}) async {
     if (tfSender == null || tfSender.length == 0) {
       print('发送用户id 必须填写');

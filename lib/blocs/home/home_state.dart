@@ -93,3 +93,21 @@ class DelImgSuccess extends HomeState {
     return 'WidgetsLoaded{widgets: $widgets}';
   }
 }
+
+class GetCreditIdSuccess extends HomeState {
+  final List<WidgetModel> widgets;
+  final WidgetFamily activeFamily;
+  final List<dynamic>  photos ;
+  final int photoCurrentPage ;
+
+  const GetCreditIdSuccess(
+      {this.activeFamily, this.widgets = const [],this.photos,this.photoCurrentPage});
+
+  @override
+  List<Object> get props => [activeFamily, widgets,photos];
+
+  @override
+  String toString() {
+    return 'WidgetsLoaded{widgets: $widgets}';
+  }
+}

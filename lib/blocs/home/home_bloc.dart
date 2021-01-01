@@ -148,7 +148,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
 
     }
+    if (event is EventGetCreditId) {
 
+
+      try {
+
+        yield DelImgSuccess(widgets: state.props.elementAt(1), activeFamily: state.props.elementAt(0),photos: state.props.elementAt(2));
+      } catch (err) {
+        print(err);
+        yield WidgetsLoadFailed();
+      }
+
+    }
     if (event is EventLoadMore) {
        var data =event.user01;
       yield WidgetsLoaded(widgets: state.props.elementAt(1), activeFamily: state.props.elementAt(0),photos: data);

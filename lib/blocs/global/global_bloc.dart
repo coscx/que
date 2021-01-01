@@ -111,6 +111,10 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
       var memberId = event.memberId;
       yield state.copyWith(memberId: memberId);
     }
+    if (event is EventSetCreditId) {
+      var creditId = event.creditId;
+      yield state.copyWith(creditId: creditId);
+    }
     if (event is EventSetIndexMode) {
       var mode = event.mode;
       yield state.copyWith(currentPhotoMode: mode);

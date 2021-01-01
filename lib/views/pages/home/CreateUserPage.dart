@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_geen/blocs/global/global_bloc.dart';
+import 'package:flutter_geen/blocs/global/global_state.dart';
 import 'package:flutter_geen/views/items/horizontal_pickers.dart';
 import 'package:flutter_geen/views/pages/utils/dynamaicTheme.dart';
 import 'package:flutter_geen/views/pages/utils/enums.dart';
@@ -30,9 +34,32 @@ class _CreateUserPageState extends State<CreateUserPage> {
 
   String activityLevelValue = 'Moderately Active';
   String goalValue = 'Loose Weight';
-
+  FocusNode _textFieldNode = FocusNode();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _usernameController = TextEditingController(text: '');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //_textFieldNode.addListener(_focusNodeListener); // 初始化一个listener
+  }
+  Future<Null> _focusNodeListener() async {
+    if (_textFieldNode.hasFocus) {
+      Future.delayed(Duration(milliseconds: 5), () {
+        setState(() {
+          _textFieldNode.unfocus();
+
+        });
+      });
+    }
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _textFieldNode.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -62,10 +89,16 @@ class _CreateUserPageState extends State<CreateUserPage> {
             ),
           ),
 
-          Expanded(
+    Expanded(
             child: ScrollConfiguration(
           behavior: DyBehaviorNull(),
-          child:ListView(
+          child: GestureDetector(
+              onTap: (){
+                _textFieldNode.unfocus();
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
+              },
+              child:ListView(
+            shrinkWrap: true,
               padding: EdgeInsets.all(0),
               children: <Widget>[
                 Container(
@@ -82,29 +115,31 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 child: MyContainerTile(
                                   child: Column(
                                     children: <Widget>[
-                                      Container(
-                                          child: Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child:  TextField(
-                                                  autofocus: false,
-                                                  style: TextStyle(color: Colors.black, fontSize: 17),
-                                                  controller: _usernameController,
-                                                  keyboardType: TextInputType.number,
-                                                  decoration: InputDecoration(
-                                                      labelText: "姓名",
-                                                      labelStyle: TextStyle(color: Colors.green),
-                                                      hintText: "请输入...",
-                                                      enabledBorder: const OutlineInputBorder(
-                                                        borderSide:
-                                                        const BorderSide(color: Colors.green, width: 1),
-                                                      ),
-                                                      border: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(5.0)
-                                                      )
-                                                  )
-                                              )
-                                          )
-                                      ),
+                                      BlocBuilder<GlobalBloc, GlobalState>(builder: _buildCredit),
+                                    Container(
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child:  TextField(
+                                            focusNode:_textFieldNode ,
+                                            autofocus: false,
+                                            style: TextStyle(color: Colors.black, fontSize: 17),
+                                            controller: _usernameController,
+                                            keyboardType: TextInputType.text,
+                                            decoration: InputDecoration(
+                                            labelText: "姓名",
+                                            labelStyle: TextStyle(color: Colors.blue),
+                                            hintText: "请输入...",
+                                            enabledBorder: const OutlineInputBorder(
+                                            borderSide:
+                                            const BorderSide(color: Colors.blue, width: 1),
+                                            ),
+                                            border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(5.0)
+                                            )
+                                            )
+                                        )
+                                      )
+                                    ),
                                       Row(
                                         children: <Widget>[
                                           Expanded(
@@ -487,8 +522,9 @@ class _CreateUserPageState extends State<CreateUserPage> {
                   ),
                 ),
               ],
-            )
+              )
             ),
+            )
           ),
         ],
       ),
@@ -537,6 +573,34 @@ String _buildDegree(String value){
       return Goal.gainWeight;
     else
       return null;
+  }
+  Widget _buildCredit(BuildContext context, GlobalState state) {
+
+    return  Container(
+        child: Padding(
+            padding: const EdgeInsets.all(8),
+            child:  TextField(
+                autofocus: false,
+                readOnly: true,
+                style: TextStyle(color: Colors.black, fontSize: 17),
+                controller: TextEditingController.fromValue(TextEditingValue(
+                    text: '${state.creditId == null ? "" : state.creditId}')),
+                keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                    labelText: state.creditId ==""?"身份Id未录入,请使用NFC录入":"录入成功",
+                    labelStyle: TextStyle(color: state.creditId ==""?Colors.red:Colors.green),
+                    hintText: "身份Id未录入,请使用NFC录入",
+                    enabledBorder:  OutlineInputBorder(
+                      borderSide:
+                       BorderSide(color: state.creditId ==""?Colors.red:Colors.green, width: 1),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)
+                    )
+                )
+            )
+        )
+    );
   }
   Widget _item(BuildContext context) {
     bool isDark = false;

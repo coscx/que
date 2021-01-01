@@ -51,6 +51,11 @@ class EventFresh extends HomeEvent {
   final int mode;
   EventFresh(this.sex,this.mode);
 }
+class EventGetCreditId extends HomeEvent {
+
+  final String CreditIds;
+  EventGetCreditId(this.CreditIds);
+}
 class EventLoadMore extends HomeEvent {
   final List<dynamic> user01;
   EventLoadMore(this.user01);

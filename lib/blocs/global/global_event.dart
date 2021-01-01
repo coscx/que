@@ -110,6 +110,14 @@ class EventSetMemberId extends GlobalEvent {
   @override
   List<Object> get props => [memberId];
 }
+class EventSetCreditId extends GlobalEvent {
+  final String creditId;
+
+  const EventSetCreditId(this.creditId);
+
+  @override
+  List<Object> get props => [creditId];
+}
 class EventSetBar1 extends GlobalEvent {
   final int memberId;
 

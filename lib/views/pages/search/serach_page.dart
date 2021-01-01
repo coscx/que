@@ -19,7 +19,7 @@ import 'package:flutter_geen/components/permanent/multi_chip_filter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:refresh_loadmore/refresh_loadmore.dart';
 import 'empty_page.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -39,31 +39,28 @@ class _SearchPageState extends State<SearchPage> {
     ),
     child:Scaffold(
       key: _scaffoldkey,
-      appBar: AppBar(
+      appBar:  AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.crop_free,
-            color: Color(0xFF787878),
-          ),
-          onPressed: () {
-
-           // scanQRCode();
-          },
-        ),
-        title: AppSearchBar(),
+        elevation: 0, //去掉Appbar底部阴影
+        leadingWidth: 250.w,
+        leading: Container(
+        padding: EdgeInsets.only(left: 30.w,top: 30.w,bottom: 0),
+        child:Text("用户搜索",
+                style:TextStyle(
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.w900,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 22.0,
+                  decoration: TextDecoration.none,
+                  color: Colors.black,
+                )
+        )),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.message,
-              color: Color(0xFF595959),
-            ),
-            onPressed: () {},
-          ),
+
         ],
       ),
-      body: WillPopScope(
+      body:
+      WillPopScope(
         onWillPop: () async {
           //返回时 情空搜索
           BlocProvider.of<SearchBloc>(context).add(EventTextChanged(args: SearchArgs()));
@@ -100,19 +97,13 @@ class _SearchPageState extends State<SearchPage> {
                     _refreshController.loadComplete();
 
                 },
-
-
-
-
-
-
                 child:
 
-    CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              shrinkWrap: true,
-              slivers: <Widget>[
-                //_buildSliverAppBar(),
+              CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                slivers: <Widget>[
+                _buildSliverAppBar(),
                 SliverToBoxAdapter(child: _buildStarFilter()),
                 BlocListener<SearchBloc, SearchState>(
                     listener: (ctx, state) {
@@ -140,11 +131,15 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _buildSliverAppBar() {
     return SliverAppBar(
+      backgroundColor: Colors.white,
       pinned: true,
-      title: AppSearchBar(),
+      leadingWidth: 50.w,
+      title: Container(
+        padding: EdgeInsets.only(left: 0.w,top: 0.w),
+    child:AppSearchBar()),
       actions: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(right: 15.0),
+          padding:  EdgeInsets.only(right: 5.w,),
           child: Icon(TolyIcon.icon_sound),
         )
       ],
@@ -166,7 +161,7 @@ class _SearchPageState extends State<SearchPage> {
                   color: Colors.orange,
                 ),
                 Text(
-                  '用户查询',
+                  '筛选',
                   style: TextStyle(
                       color: Theme
                           .of(context)
