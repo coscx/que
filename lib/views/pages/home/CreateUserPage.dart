@@ -362,7 +362,23 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                           });
                                         },
                                       )),
-                                      //SizedBox(height: 12)
+
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+                                      _item(context),
+
+
+
                                     ],
                                   ),
                                 ),
@@ -458,6 +474,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                           }).toList(),
                                         ),
                                       ),
+
+
                                     ],
                                   ),
                                 ),
@@ -520,5 +538,72 @@ String _buildDegree(String value){
       return Goal.gainWeight;
     else
       return null;
+  }
+  Widget _item(BuildContext context) {
+    bool isDark = false;
+
+    return  Container(
+      width: double.infinity,
+      height: 80.h,
+      child:  Material(
+          color:  Colors.white ,
+          child: InkWell(
+            onTap: (){},
+            child: Container(
+              margin: EdgeInsets.only(left: 10.w, right: 20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.account_circle_outlined,
+                          size: 18,
+                          color: Colors.black54,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 15.w),
+                          child: Text(
+                            "姓名",
+                            style: TextStyle(fontSize: 15.0, color: Colors.grey),
+                          ),
+                        )
+                      ]),
+                  //Visibility是控制子组件隐藏/可见的组件
+                  Visibility(
+                    visible: true,
+                    child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(right: 10.w),
+                            child: Row(children: <Widget>[
+                              Visibility(
+                                  visible: true,
+                                  child: Text(
+                                    "李忆如",
+                                    style: TextStyle(
+                                        fontSize: 15.0, color: Colors.grey),
+                                  )),
+                              Visibility(
+                                  visible: false,
+                                  child: CircleAvatar(
+                                    backgroundImage: AssetImage("rightImageUri"),
+                                  ))
+                            ]),
+                          ),
+
+                              Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                size: 15,
+                                color: Colors.black54,
+                              )
+
+                        ]),
+                  )
+                ],
+              ),
+            ),
+          )),
+    );
   }
 }
