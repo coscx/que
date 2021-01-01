@@ -62,7 +62,6 @@ class _CreateUserPageState extends State<CreateUserPage> {
             ),
           ),
 
-
           Expanded(
             child: ScrollConfiguration(
           behavior: DyBehaviorNull(),

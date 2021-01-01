@@ -31,8 +31,38 @@ class _SearchPageState extends State<SearchPage> {
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Theme(
+        data: ThemeData(
+        appBarTheme: AppBarTheme.of(context).copyWith(
+      brightness: Brightness.light,
+    ),
+    ),
+    child:Scaffold(
       key: _scaffoldkey,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.crop_free,
+            color: Color(0xFF787878),
+          ),
+          onPressed: () {
+
+           // scanQRCode();
+          },
+        ),
+        title: AppSearchBar(),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.message,
+              color: Color(0xFF595959),
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: WillPopScope(
         onWillPop: () async {
           //返回时 情空搜索
@@ -82,7 +112,7 @@ class _SearchPageState extends State<SearchPage> {
               physics: const AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
               slivers: <Widget>[
-                _buildSliverAppBar(),
+                //_buildSliverAppBar(),
                 SliverToBoxAdapter(child: _buildStarFilter()),
                 BlocListener<SearchBloc, SearchState>(
                     listener: (ctx, state) {
@@ -105,7 +135,7 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ))),
       ),
-    );
+    ));
   }
 
   Widget _buildSliverAppBar() {

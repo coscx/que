@@ -14,7 +14,7 @@ class FlutterGeen extends StatelessWidget {
     return BlocBuilder<GlobalBloc, GlobalState>(builder: (_, state) {
       return ScreenUtilInit(
           designSize: Size(750, 1334),
-      allowFontScaling: false,
+      allowFontScaling: true,
       child:MaterialApp(
 //            debugShowMaterialGrid: true,
             showPerformanceOverlay: state.showPerformanceOverlay,

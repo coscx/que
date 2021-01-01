@@ -45,26 +45,25 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     _factor=0;
     _controller =
         AnimationController(duration: Duration(milliseconds: 1000), vsync: this)
-          ..addListener(_listenAnimation)
-          ..addStatusListener(_listenStatus)
-          ..forward();
+          ..addStatusListener(_listenStatus)..forward();
 
     _curveAnim = CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn);
-    super.initState();
+
    // initPlatformState();
   }
 
-  void _listenAnimation() {
-    setState(() {
-      return _factor = _curveAnim.value;
-    });
-  }
 
+  @override
+   void dispose() {
+     _controller.dispose();
+     super.dispose();
+  }
 
   void _listenStatus(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
@@ -124,7 +123,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
             width: winW,
             height: winH,
             child: CustomPaint(
-              painter: UnitPainter(factor: _factor),
+              painter: UnitPainter(repaint: _curveAnim),
             ),
           ),
           _buildText(winH, winW),

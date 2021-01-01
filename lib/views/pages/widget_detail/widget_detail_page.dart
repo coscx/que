@@ -36,17 +36,38 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Theme(
+        data: ThemeData(
+        appBarTheme: AppBarTheme.of(context).copyWith(
+      brightness: Brightness.light,
+    ),
+    ),
+    child:Scaffold(
       endDrawer: CategoryEndDrawer(),
       appBar: AppBar(
-        title: Text("用户详情"),
+        backgroundColor: Colors.white,
+        elevation: 0, //去掉Appbar底部阴影
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text("用户详情",
+            style:TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.w900,
+              fontStyle: FontStyle.italic,
+              fontSize: 22.0,
+              decoration: TextDecoration.none,
+              color: Colors.black,
+            )
+        ),
         actions: <Widget>[
           _buildToHome(),
           _buildCollectButton(context),
         ],
       ),
       body: Builder(builder: _buildContent),
-    );
+    ));
   }
 
   Widget _buildContent(BuildContext context) => WillPopScope(
@@ -66,7 +87,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           onLongPress: () => Scaffold.of(ctx).openEndDrawer(),
           child: Padding(
             padding: const EdgeInsets.all(15.0),
-            child: Icon(Icons.home),
+            child: Icon(Icons.home,
+            color: Colors.black,),
           ),
           onTap: () => Navigator.of(ctx).pop()));
 
@@ -95,6 +117,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                     padding: const EdgeInsets.only(right: 20.0),
                     child: Icon(
                           TolyIcon.icon_star_ok,
+                      color: Colors.black,
                       size: 25,
                     ),
                   )),
@@ -159,65 +182,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             code: "待完善",
             show: Container(),
           ),
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "滑动过他的 (39人 A:39)",
-            code: "待完善",
-            show: Container(),
-          ),
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "配对人数 (39人 A:39)",
-            code: "待完善",
-            show: Container(),
-          ),
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "TA喜欢的 (39人 A:39)",
-            code: "待完善",
-            show: Container(),
-          ),
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "喜欢TA的 (39人 A:39)",
-            code: "待完善",
-            show: Container(),
-          ),
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "AI照片 (39张 A:39)",
-            code: "待完善",
-            show: Container(),
-          )
-          ,
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "被投诉记录 (39次 A:39)",
-            code: "待完善",
-            show: Container(),
-          )
-          ,
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "解除配对 (39次 A:39)",
-            code: "待完善",
-            show: Container(),
-          )
-          ,
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "TA的定位",
-            code: "待完善",
-            show: Container(),
-          )
-          ,
-          WidgetNodePanel(
-            codeFamily: 'Inconsolata',
-            text: "订单记录",
-            code: "待完善",
-            show: Container(),
-          )
-          ,
+
 
         ],
       );
