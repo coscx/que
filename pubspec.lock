@@ -127,6 +127,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.9"
+  direct_select_flutter:
+    dependency: "direct main"
+    description:
+      name: direct_select_flutter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.7"
   equatable:
     dependency: "direct main"
     description:
@@ -599,6 +606,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.6.3"
+  rect_getter:
+    dependency: transitive
+    description:
+      name: rect_getter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.0"
   refresh_loadmore:
     dependency: "direct main"
     description:

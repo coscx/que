@@ -73,6 +73,7 @@ dependencies:
   fbutton: ^2.0.1
   flutter_nfc_reader: ^0.1.0
   font_awesome_flutter: ^8.11.0
+  direct_select_flutter: ^1.0.7
 dev_dependencies:
   flutter_test:
     sdk: flutter

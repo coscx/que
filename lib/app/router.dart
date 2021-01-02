@@ -23,7 +23,7 @@ import 'package:flutter_geen/views/pages/setting/font_setting.dart';
 import 'package:flutter_geen/views/pages/setting/item_style_setting.dart';
 import 'package:flutter_geen/views/pages/setting/theme_color_setting.dart';
 import 'package:flutter_geen/views/pages/home/CreateUserPage.dart';
-
+import 'package:flutter_geen/views/items/select.dart';
 import 'package:flutter_geen/views/pages/widget_detail/widget_detail_page.dart';
 
 import 'package:flutter_geen/views/pages/setting/setting_page.dart';
@@ -68,6 +68,7 @@ class UnitRouter {
   static const String login_phone = 'LoginPhone';
   static const String person_page ='PersonCenterPage';
   static const String create_user_page ='CreateUserPage';
+  static const String select_page ='SelectPage';
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       //根据名称跳转相应页面
@@ -77,6 +78,8 @@ class UnitRouter {
         ));
       case search:
         return Right2LeftRouter(child: SearchPage());
+      case select_page:
+        return Right2LeftRouter(child: SelectPage(title: "ttt",));
       case collect:
         return Right2LeftRouter(child: CollectPage());
       case nav:
