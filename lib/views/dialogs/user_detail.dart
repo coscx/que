@@ -16,14 +16,14 @@ class UserDetailDialog extends Dialog  {
         children: <Widget>[
           Container(
             width: 600.w,
-            height: 600.h,
+            height: 650.h,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(6.w)),
             ),
             child: OverflowBox(
               alignment: Alignment.bottomCenter,
-              maxHeight: 600.h,
+              maxHeight: 650.h,
               child: Stack(
                 alignment: AlignmentDirectional.topCenter,
                 children: <Widget>[
@@ -60,14 +60,14 @@ class UserDetailDialog extends Dialog  {
                         ),
 
                          Container(
-                            width: 600.w,
-                            height: 300.h,
+                            width: 700.w,
+                            height: 350.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(3.w)),
                               image: new DecorationImage(
                                 image: Image.asset(
                                   "assets/images/credit.png",
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fitWidth,
                                   //width: 520.w,
                                   //height: 600.h,
                                   //: 240,
