@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:flutter_geen/views/dialogs/user_detail.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -243,7 +243,14 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                               ]),
                             )),
 
-                            Container(
+                    GestureDetector(
+                      onTap: (){
+                        //Navigator.pushNamed(context, UnitRouter.select_page);
+                        _userDetail(context);
+
+
+                      },
+                      child:Container(
                               padding: const EdgeInsets.only(
                                   top: 10.0,
                                   bottom: 10.0,
@@ -263,7 +270,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                 ),
 
                               ]),
-                            ),
+                            )),
 
                             Container(
                               padding: const EdgeInsets.only(
@@ -359,7 +366,16 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
     )
     );
   }
+
+  _userDetail(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (ctx) => UserDetailDialog()
+
+    );
+  }
 }
+
 class ContactItem extends StatelessWidget {
   ContactItem({Key key, this.count, this.title, this.onPressed})
       : super(key: key);
