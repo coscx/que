@@ -61,7 +61,7 @@ class UserDetailDialog extends Dialog  {
 
                          Container(
                             width: 700.w,
-                            height: 310.h,
+                            height: 330.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(3.w)),
                               image: new DecorationImage(
