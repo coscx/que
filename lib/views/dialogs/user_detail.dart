@@ -46,10 +46,10 @@ class UserDetailDialog extends Dialog  {
                       ),
                     ),
                   ),
-                  Padding(
+                  Container(
                     padding: EdgeInsets.only(
-                      left: 20.w,
-                      right: 20.w,
+                      left: 0.w,
+                      right: 0.w,
                       top: 80.h,
                     ),
                     child: Column(
@@ -60,10 +60,10 @@ class UserDetailDialog extends Dialog  {
                         ),
 
                          Container(
-                            width: 480.w,
+                            width: 600.w,
                             height: 300.h,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(30.w)),
+                              borderRadius: BorderRadius.all(Radius.circular(3.w)),
                               image: new DecorationImage(
                                 image: Image.asset(
                                   "assets/images/credit.png",
@@ -77,11 +77,9 @@ class UserDetailDialog extends Dialog  {
                             ),
                             child:  Stack(
                                 children: <Widget>[
-
-
                                   Positioned(
                                     top: 45.h,
-                                    left: 117.w,
+                                    left: 140.w,
                                     child:Text("王永",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
@@ -89,35 +87,35 @@ class UserDetailDialog extends Dialog  {
 
                                   Positioned(
                                     top: 80.h,
-                                    left: 122.w,
+                                    left: 142.w,
                                     child:Text("女",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
                                     top: 80.h,
-                                    left: 230.w,
+                                    left: 245.w,
                                     child:Text("汉",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
                                     top: 118.h,
-                                    left: 122.w,
+                                    left: 142.w,
                                     child:Text("1988",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
                                     top: 118.h,
-                                    left: 207.w,
+                                    left: 227.w,
                                     child:Text("6",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
                                     top: 118.h,
-                                    left: 250.w,
+                                    left: 270.w,
                                     child:Text("18",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
@@ -125,7 +123,7 @@ class UserDetailDialog extends Dialog  {
 
                                   Positioned(
                                       top: 150.h,
-                                      left: 120.w,
+                                      left: 140.w,
                                       child:
                                       Container(
                                         width: 230.w,
@@ -139,7 +137,7 @@ class UserDetailDialog extends Dialog  {
 
                                   Positioned(
                                     top: 245.h,
-                                    left: 175.w,
+                                    left: 195.w,
                                     child:Text("371327198611235566",
                                         style: TextStyle(
                                             color: Colors.black,
@@ -151,7 +149,7 @@ class UserDetailDialog extends Dialog  {
                                   ),
                                   Positioned(
                                     top: 210.h,
-                                    left: 75.w,
+                                    left: 95.w,
                                     child:Text("会员到期:2021-12-25 15:20:30",
                                         style: TextStyle(
                                           color: Colors.black,
@@ -163,7 +161,7 @@ class UserDetailDialog extends Dialog  {
                                   ),
                                   Positioned(
                                     top: 20.h,
-                                    left: 349.w,
+                                    left: 368.w,
                                     child: Container(
                                       decoration: new BoxDecoration(
                                         //背景
@@ -187,7 +185,7 @@ class UserDetailDialog extends Dialog  {
 
                                   Positioned(
                                     top: 0.h,
-                                    left: 316.w,
+                                    left: 346.w,
                                     child: Container(
                                       decoration: new BoxDecoration(
                                         //背景
