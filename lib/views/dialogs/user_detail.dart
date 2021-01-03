@@ -127,7 +127,7 @@ class UserDetailDialog extends Dialog  {
                                       child:
                                       Container(
                                         width: 230.w,
-                                        height: 100.h,
+                                        height: 98.h,
                                         child: Container(
                                             child:Text("江苏省苏州市虎丘区枫桥街道康佳花园96号",
                                                 maxLines: 2,
@@ -136,7 +136,7 @@ class UserDetailDialog extends Dialog  {
                                   ),
 
                                   Positioned(
-                                    top: 269.h,
+                                    top: 271.h,
                                     left: 205.w,
                                     child:Text("371327198611235566",
                                         style: TextStyle(
@@ -160,8 +160,8 @@ class UserDetailDialog extends Dialog  {
 
                                   ),
                                   Positioned(
-                                    top: 20.h,
-                                    left: 378.w,
+                                    top: 35.h,
+                                    left: 398.w,
                                     child: Container(
                                       decoration: new BoxDecoration(
                                         //背景
@@ -184,8 +184,8 @@ class UserDetailDialog extends Dialog  {
                                   ),
 
                                   Positioned(
-                                    top: 0.h,
-                                    left: 346.w,
+                                    top: 20.h,
+                                    left: 373.w,
                                     child: Container(
                                       decoration: new BoxDecoration(
                                         //背景
@@ -217,7 +217,7 @@ class UserDetailDialog extends Dialog  {
 
 
                         Padding(
-                          padding: EdgeInsets.only(top: 20.h, bottom: 15.h),
+                          padding: EdgeInsets.only(top: 20.h, bottom: 15.h,left: 50.h,right: 50.h),
                           child: RaisedButton(
                             elevation: 0,
                             shape: RoundedRectangleBorder(
