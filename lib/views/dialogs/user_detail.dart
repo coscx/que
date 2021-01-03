@@ -15,7 +15,7 @@ class UserDetailDialog extends Dialog  {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            width: 600.w,
+            width: 650.w,
             height: 650.h,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -61,7 +61,7 @@ class UserDetailDialog extends Dialog  {
 
                          Container(
                             width: 700.w,
-                            height: 330.h,
+                            height: 310.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(3.w)),
                               image: new DecorationImage(
@@ -191,7 +191,7 @@ class UserDetailDialog extends Dialog  {
                                         //背景
                                         color: Colors.transparent,
                                         //设置四周圆角 角度
-                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                        borderRadius: BorderRadius.all(Radius.circular(10.w)),
                                       ),
                                       child: ClipRRect	(
                                         borderRadius: BorderRadius.all(Radius.circular(2.0)),
