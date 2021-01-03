@@ -81,7 +81,7 @@ class UserDetailDialog extends Dialog  {
 
                                   Positioned(
                                     top: 45.h,
-                                    left: 120.w,
+                                    left: 117.w,
                                     child:Text("王永",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
@@ -89,7 +89,7 @@ class UserDetailDialog extends Dialog  {
 
                                   Positioned(
                                     top: 80.h,
-                                    left: 125.w,
+                                    left: 122.w,
                                     child:Text("女",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
@@ -103,21 +103,21 @@ class UserDetailDialog extends Dialog  {
                                   ),
                                   Positioned(
                                     top: 118.h,
-                                    left: 125.w,
+                                    left: 122.w,
                                     child:Text("1988",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
                                     top: 118.h,
-                                    left: 210.w,
+                                    left: 207.w,
                                     child:Text("6",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
                                     top: 118.h,
-                                    left: 253.w,
+                                    left: 250.w,
                                     child:Text("18",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
@@ -163,7 +163,7 @@ class UserDetailDialog extends Dialog  {
                                   ),
                                   Positioned(
                                     top: 20.h,
-                                    left: 345.w,
+                                    left: 349.w,
                                     child: Container(
                                       decoration: new BoxDecoration(
                                         //背景
