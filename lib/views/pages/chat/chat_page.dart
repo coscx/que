@@ -1035,11 +1035,13 @@ class ChatsState extends State<ChatsPage> {
     String nowTime = DateUtil.getDateStrByMs(new DateTime.now().millisecondsSinceEpoch, format: DateFormat.ZH_MONTH_DAY_HOUR_MINUTE);
     //当前消息的时间,yyyy-MM-dd HH:mm
     String indexTime = DateUtil.getDateStrByMs(timestamp*1000, format: DateFormat.ZH_YEAR_MONTH_DAY_HOUR_MINUTE);
-
-    if (DateUtil.formatDateTime1(indexTime, DateFormat.YEAR) != DateUtil.formatDateTime1(nowTime, DateFormat.YEAR)) {
+    String nowTime1 = DateUtil.getDateStrByMs(new DateTime.now().millisecondsSinceEpoch, format: DateFormat.ZH_NORMAL);
+    //当前消息的时间,yyyy-MM-dd HH:mm
+    String indexTime1 = DateUtil.getDateStrByMs(timestamp*1000, format: DateFormat.ZH_NORMAL);
+    if (DateUtil.formatDateTime1(indexTime1, DateFormat.YEAR) != DateUtil.formatDateTime1(nowTime1, DateFormat.YEAR)) {
       //对比年份,不同年份，直接显示yyyy-MM-dd HH:mm
-      showTime = indexTime;
-    } else if (DateUtil.formatDateTime1(indexTime, DateFormat.ZH_YEAR_MONTH) != DateUtil.formatDateTime1(nowTime, DateFormat.ZH_YEAR_MONTH)) {
+      showTime = indexTime1;
+    } else if (DateUtil.formatDateTime1(indexTime1, DateFormat.ZH_YEAR_MONTH) != DateUtil.formatDateTime1(nowTime1, DateFormat.ZH_YEAR_MONTH)) {
       //年份相同，对比年月,不同月或不同日，直接显示MM-dd HH:mm
       if ((timestamp*1000)> nows ){
         showTime=""+DateUtil.formatDateTime1(indexTime, DateFormat.ZH_HOUR_MINUTE).substring( "MM月dd日 ".length,);
@@ -1053,10 +1055,7 @@ class ChatsState extends State<ChatsPage> {
         showTime = DateUtil.formatDateTime1(indexTime, DateFormat.ZH_MONTH_DAY_HOUR_MINUTE);
       }
 
-    } else if (DateUtil.formatDateTime1(indexTime, DateFormat.ZH_MONTH_DAY) != DateUtil.formatDateTime1(nowTime, DateFormat.ZH_MONTH_DAY)) {
-      //年份相同，对比年月,不同月或不同日，直接显示MM-dd HH:mm
-      showTime = DateUtil.formatDateTime1(indexTime, DateFormat.ZH_MONTH_DAY_HOUR_MINUTE);
-    } else {
+    }  else {
       //否则HH:mm
       showTime = DateUtil.formatDateTime1(indexTime, DateFormat.ZH_HOUR_MINUTE);
     }
