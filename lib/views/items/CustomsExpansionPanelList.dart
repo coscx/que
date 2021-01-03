@@ -156,7 +156,7 @@ class _CustomsExpansionPanelListState extends State<CustomsExpansionPanelList> {
                             children: <Widget>[
 
                               Container(
-                                margin: EdgeInsets.only(left: 250.w),
+                                margin: EdgeInsets.only(left: 220.w),
                                 child: Text(
                                   "添加日期：",
                                   style: TextStyle(fontSize: 15.0, color: Colors.grey),

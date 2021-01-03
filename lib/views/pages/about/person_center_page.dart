@@ -178,28 +178,28 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
 
                 Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(10.w),
                         color: Colors.white,
                         boxShadow: [BoxShadow(color: Color(0x19000000), offset: Offset(0.5, 0.5),  blurRadius: 1.5, spreadRadius: 1.5),  BoxShadow(color: Colors.white)],
                     ),
-                    margin: EdgeInsets.fromLTRB(30,20,30,0),
+                    margin: EdgeInsets.fromLTRB(30.w,20.h,30.w,0),
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(10.w),
                         child: Row(
                           children: <Widget>[
                             SizedBox(
-                              width: ScreenUtil().setWidth(10),
+                              width: ScreenUtil().setWidth(10.w),
                             ),
                             GestureDetector(
                               onTap: (){
                                 Navigator.pushNamed(context, UnitRouter.create_user_page);
                               },
                                 child: Container(
-                              padding: const EdgeInsets.only(
-                                  top: 15.0,
-                                  bottom: 15.0,
-                                  left: 20,
-                                  right: 20
+                              padding:  EdgeInsets.only(
+                                  top: 15.h,
+                                  bottom: 15.h,
+                                  left: 60.w,
+                                  right: 20.w
                               ),
                               child:  Column(children: <Widget>[
                                 Container(
@@ -222,11 +222,11 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                             Navigator.pushNamed(context, UnitRouter.select_page);
                           },
                           child:Container(
-                              padding: const EdgeInsets.only(
-                                  top: 10.0,
-                                  bottom: 10.0,
-                                  left: 20,
-                                  right: 20
+                              padding:  EdgeInsets.only(
+                                  top: 10.h,
+                                  bottom: 10.h,
+                                  left: 60.w,
+                                  right: 20.w
                               ),
                               child:  Column(children: <Widget>[
                                 Container(
@@ -251,11 +251,11 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
 
                       },
                       child:Container(
-                              padding: const EdgeInsets.only(
-                                  top: 10.0,
-                                  bottom: 10.0,
-                                  left: 20,
-                                  right: 20
+                              padding:  EdgeInsets.only(
+                                  top: 10.h,
+                                  bottom: 10.h,
+                                  left: 60.w,
+                                  right: 20.w
                               ),
                               child:  Column(children: <Widget>[
                                 Container(
@@ -273,11 +273,11 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                             )),
 
                             Container(
-                              padding: const EdgeInsets.only(
-                                  top: 10.0,
-                                  bottom: 10.0,
-                                  left: 20,
-                                  right: 20
+                              padding:  EdgeInsets.only(
+                                  top: 10.h,
+                                  bottom: 10.h,
+                                  left: 60.w,
+                                  right: 20.w
                               ),
                               child:  Column(children: <Widget>[
                                 Container(

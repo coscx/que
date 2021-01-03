@@ -40,7 +40,7 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
   bool get isFirst => _crossFadeState == CrossFadeState.showFirst;
 
   Color get themeColor => Theme.of(context).primaryColor;
-
+  bool  show =false ;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,11 +52,16 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
           SizedBox(
             height: 1,
           ),
-          _buildCode(context),
+          //_buildCode(context),
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 0),
-            child: widget.show,
+            child:   Visibility(
+                visible:show,
+                replacement:Text('data'),
+                maintainState:true,
+                child:widget.show),
           ),
+
           //_buildNodeInfo(),
           Divider(),
         ],
@@ -148,6 +153,7 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
     setState(() {
       _crossFadeState =
           !isFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond;
+          show =!show;
     });
   }
 }

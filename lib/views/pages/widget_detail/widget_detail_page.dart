@@ -183,15 +183,37 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           Divider(),
           //_buildNodes(state.nodes, state.widgetModel.name)
           Container(
-
-              margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 5.h),
+              margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
 
-                    CustomsExpansionPanelList()
+                    //CustomsExpansionPanelList()
                     //_item(context),
+                    WidgetNodePanel(
+                        codeFamily: 'Inconsolata',
+                        text: "接待信息",
+                        code: "",
+                        show: Container(
+                          width: 500,
+                          // height: 300,
+                          child:
+                          Wrap(
+                              alignment: WrapAlignment.start,
+                              direction: Axis.horizontal,
+                              spacing: 0,
+                              runSpacing: 0,
+                              children: <Widget>[
+                                _item(context),
+                                _item(context),
 
+
+
+                              ]
+                          ),
+
+                        )
+                    ),
 
 
                   ],
@@ -225,10 +247,14 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     bool isDark = false;
 
     return  Container(
+      padding:  EdgeInsets.only(
+        top: 10.h,
+        bottom: 0
+      ),
       width: double.infinity,
       height: 80.h,
       child:  Material(
-          color:  Colors.white ,
+          color:  Colors.transparent ,
           child: InkWell(
             onTap: (){},
             child: Container(
@@ -243,13 +269,24 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           size: 18,
                           color: Colors.black54,
                         ),
+
                         Container(
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             "姓名",
                             style: TextStyle(fontSize: 15.0, color: Colors.grey),
                           ),
-                        )
+                        ),
+                        SizedBox(
+                          width: ScreenUtil().setWidth(10),
+                        ),
+                        Visibility(
+                            visible: true,
+                            child: Text(
+                              "用户已接待，有意愿继续服务",
+                              style: TextStyle(
+                                  fontSize: 12.0, color: Colors.black),
+                            )),
                       ]),
                   //Visibility是控制子组件隐藏/可见的组件
                   Visibility(
@@ -259,13 +296,20 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           Container(
                             margin: EdgeInsets.only(right: 10.w),
                             child: Row(children: <Widget>[
+
+                              SizedBox(
+                                width: ScreenUtil().setWidth(10),
+                              ),
                               Visibility(
                                   visible: true,
                                   child: Text(
-                                    "李忆如",
+                                    "2021-01-12 15:35:30",
                                     style: TextStyle(
-                                        fontSize: 15.0, color: Colors.grey),
+                                        fontSize: 7.0, color: Colors.grey),
                                   )),
+
+
+
                               Visibility(
                                   visible: false,
                                   child: CircleAvatar(

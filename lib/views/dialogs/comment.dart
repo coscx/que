@@ -16,14 +16,14 @@ class CommentDialog extends Dialog  {
         children: <Widget>[
           Container(
             width: 600.w,
-            height: 600.h,
+            height: 700.h,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
             child: OverflowBox(
               alignment: Alignment.bottomCenter,
-              maxHeight: 600.h,
+              maxHeight: 700.h,
               child: Stack(
                 alignment: AlignmentDirectional.topCenter,
                 children: <Widget>[
@@ -40,7 +40,7 @@ class CommentDialog extends Dialog  {
                     right: 30.h,
                     child: GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: Image.asset('assets/images/more.png',
+                      child: Image.asset('assets/images/btn_close_black.png',
                         width: 30.w,
                       ),
                     ),
@@ -78,7 +78,7 @@ class CommentDialog extends Dialog  {
                           ,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 20.h, bottom: 15.h),
+                          padding: EdgeInsets.only(top: 40.h, bottom: 15.h),
                           child: RaisedButton(
                             elevation: 0,
                             shape: RoundedRectangleBorder(
