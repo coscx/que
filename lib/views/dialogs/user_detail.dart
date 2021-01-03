@@ -19,7 +19,7 @@ class UserDetailDialog extends Dialog  {
             height: 600.h,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(6)),
+              borderRadius: BorderRadius.all(Radius.circular(6.w)),
             ),
             child: OverflowBox(
               alignment: Alignment.bottomCenter,
@@ -48,8 +48,8 @@ class UserDetailDialog extends Dialog  {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      left: 30.w,
-                      right: 30.w,
+                      left: 20.w,
+                      right: 20.w,
                       top: 80.h,
                     ),
                     child: Column(
@@ -63,74 +63,69 @@ class UserDetailDialog extends Dialog  {
                             width: 480.w,
                             height: 300.h,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 2,
-                                color: Colors.white,
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                              borderRadius: BorderRadius.all(Radius.circular(30.w)),
+                              image: new DecorationImage(
+                                image: Image.asset(
+                                  "assets/images/credit.png",
+                                  fit: BoxFit.cover,
+                                  //width: 520.w,
+                                  //height: 600.h,
+                                  //: 240,
+                                ).image,
 
+                              ),
                             ),
                             child:  Stack(
                                 children: <Widget>[
 
-                                  Container(
-                                  child: ClipRRect	(
-                                    child: Image.asset(
-                                      "assets/images/credit.png",
-                                      //fit: BoxFit.cover,
-                                      //width: 60,
-                                      //: 240,
-                                    ),
-                                  ),
-                                  color: Colors.white,
-                                ),
+
                                   Positioned(
-                                    top: 42.h,
-                                    left: 100.w,
+                                    top: 45.h,
+                                    left: 120.w,
                                     child:Text("王永",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
 
                                   Positioned(
-                                    top: 75.h,
-                                    left: 100.w,
+                                    top: 80.h,
+                                    left: 125.w,
                                     child:Text("女",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
-                                    top: 75.h,
-                                    left: 210.w,
+                                    top: 80.h,
+                                    left: 230.w,
                                     child:Text("汉",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
-                                    top: 112.h,
-                                    left: 100.w,
+                                    top: 118.h,
+                                    left: 125.w,
                                     child:Text("1988",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
-                                    top: 112.h,
-                                    left: 188.w,
+                                    top: 118.h,
+                                    left: 210.w,
                                     child:Text("6",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
                                   Positioned(
-                                    top: 112.h,
-                                    left: 238.w,
+                                    top: 118.h,
+                                    left: 253.w,
                                     child:Text("18",
                                         style: TextStyle(color: Colors.black, fontSize: 12)),
 
                                   ),
 
                                   Positioned(
-                                      top: 140.h,
-                                      left: 100.w,
+                                      top: 150.h,
+                                      left: 120.w,
                                       child:
                                       Container(
                                         width: 230.w,
@@ -138,13 +133,13 @@ class UserDetailDialog extends Dialog  {
                                         child: Container(
                                             child:Text("江苏省苏州市虎丘区枫桥街道康佳花园96号",
                                                 maxLines: 2,
-                                                style: TextStyle(color: Colors.black, fontSize: 12))),
+                                                style: TextStyle(color: Colors.black, fontSize: 11))),
                                       )
                                   ),
 
                                   Positioned(
-                                    top: 231.h,
-                                    left: 150.w,
+                                    top: 245.h,
+                                    left: 175.w,
                                     child:Text("371327198611235566",
                                         style: TextStyle(
                                             color: Colors.black,
@@ -155,12 +150,12 @@ class UserDetailDialog extends Dialog  {
 
                                   ),
                                   Positioned(
-                                    top: 198.h,
-                                    left: 40.w,
+                                    top: 210.h,
+                                    left: 75.w,
                                     child:Text("会员到期:2021-12-25 15:20:30",
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 12,
+                                          fontSize: 11,
                                           fontWeight: FontWeight.w100,
                                           letterSpacing: 0.w,
                                         )),
@@ -174,10 +169,10 @@ class UserDetailDialog extends Dialog  {
                                         //背景
                                         color: Colors.transparent,
                                         //设置四周圆角 角度
-                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                        //borderRadius: BorderRadius.all(Radius.circular(10.w)),
                                       ),
                                       child: ClipRRect	(
-                                        borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                                        borderRadius: BorderRadius.all(Radius.circular(2.w)),
                                         child: Image.network(
                                           "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1848508249,613692992&fm=26&gp=0.jpg",
                                           fit: BoxFit.cover,
