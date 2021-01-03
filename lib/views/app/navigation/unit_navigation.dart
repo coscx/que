@@ -30,6 +30,7 @@ import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_geen/views/dialogs/comment.dart';
+import 'package:flutter_geen/views/dialogs/user_detail.dart';
 /// 说明: 主题结构 左右滑页 + 底部导航栏
 
 class UnitNavigation extends StatefulWidget {
@@ -87,7 +88,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
       print(onData.id);
       print(onData.content);
       BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(onData.id));
-      _comment(context);
+      _userDetail(context);
 
     });
 
@@ -163,7 +164,13 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
 
     );
   }
+  _userDetail(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (ctx) => UserDetailDialog()
 
+    );
+  }
   login({void Function() success}) async {
     if (tfSender == null || tfSender.length == 0) {
       print('发送用户id 必须填写');
