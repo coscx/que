@@ -37,6 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
        LocalStorage.save("fresh_token", result['data']['token']['fresh_token']);
        LocalStorage.save("memberId", result['data']['user']['id'].toString());
        LocalStorage.save("im_token", result['data']['im_token'].toString());
+       IssuesApi.httpHeaders['authorization']="Bearer "+result['data']['token']['access_token'];
        yield LoginSuccess();
      } else{
        yield LoginFailed(reason: result['message']);

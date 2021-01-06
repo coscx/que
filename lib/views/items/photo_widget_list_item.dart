@@ -496,18 +496,18 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   Widget buildLeading() => Padding(
         padding: const EdgeInsets.all(0.0),
         child: Hero(
-          tag: "hero_widget_image_${photo['memberId'].toString()}",
+          tag: "hero_widget_image_${photo['uuid'].toString()}",
           child: photo['img'] == null
               ? Material(
                   color: Colors.transparent,
                   child: CircleText(
-                    text: photo['userName'],
+                    text: photo['name'],
                     size: 60,
                     color: invColor,
                   ),
                 )
               : Container(
-            child: CachedNetworkImage(imageUrl: photo['img'],
+            child: CachedNetworkImage(imageUrl: photo['head_img'],
               width: 55.0,
               height: 100.0,
             ),
@@ -547,7 +547,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         children: <Widget>[
           const SizedBox(width: 1),
           Expanded(
-            child: Text(photo['userName']+" "+photo['tel']+" "+(photo['sex']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+(photo['device']==1?"安卓 ":"苹果 "),
+            child: Text(photo['name']+" "+photo['mobile']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+(photo['status']==1?"B ":"C "),
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     fontSize: 14,
@@ -571,7 +571,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       child: Container(
         child: Text(
           //尾部摘要
-          "型号: "+photo['machine']+"版本: "+photo['version']+" "+photo['addressed'] +" "+(photo['isAi']==1?"已认证":"未认证") +" 会员:" +photo['endtime'],
+          "房: "+photo['has_house'].toString()+"套 车: "+photo['has_car'].toString()+"辆 " +(photo['marriage']==1?"已婚":"未婚") +" 生日:" +photo['birthday'].toString(),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontSize: 14, shadows: [

@@ -47,7 +47,7 @@ class GlobalState extends Equatable {
     this.indexSearchPage = 1,
     this.headNum,
     this.sex=1,
-    this.currentPhotoMode=1,
+    this.currentPhotoMode=0,
     this.memberId="0",
     this.bar1 =0,
     this.bar2 =0,

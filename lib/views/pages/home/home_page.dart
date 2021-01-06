@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage>
     oldUsers.forEach((element) {
       newUsers.add(element);
     });
-    newUsers.addAll(result['data']['photo_list']);
+    newUsers.addAll(result['data']['data']);
     BlocProvider.of<HomeBloc>(context).add(EventLoadMore(newUsers));
     _refreshController.loadComplete();
   }
@@ -212,9 +212,9 @@ class _HomePageState extends State<HomePage>
               onSelected: (e) {
                 print(e);
                 if (e == '全部') {
-                  BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
+                  BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0));
                 }
                 if (e == '我的') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
@@ -222,9 +222,9 @@ class _HomePageState extends State<HomePage>
                   BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2));
                 }
                 if (e == '星源') {
-                  BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(4));
+                  BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,4));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1));
                 }
               },
               onCanceled: () => print('onCanceled'),
@@ -262,7 +262,7 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget buildHeadTxt(BuildContext context, GlobalState state) {
-    if(state.currentPhotoMode==1){
+    if(state.currentPhotoMode==0){
      return SizedBox(
         width: 50,
         child: Text("全部"),
@@ -276,7 +276,7 @@ class _HomePageState extends State<HomePage>
       );
 
     }
-    if(state.currentPhotoMode==4){
+    if(state.currentPhotoMode==1){
       return SizedBox(
         width: 50,
         child: Text("星源"),

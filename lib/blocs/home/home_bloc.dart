@@ -176,7 +176,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         }
         final widgets = await this.repository.loadWidgets(state.props.elementAt(0),);
-        yield WidgetsLoaded(widgets: widgets, activeFamily: state.props.elementAt(0),photos: result['data']['photo_list']);
+        yield WidgetsLoaded(widgets: widgets, activeFamily: state.props.elementAt(0),photos: result['data']['data']);
 
       } catch (err) {
         print(err);
@@ -191,7 +191,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     yield WidgetsLoading();
     try {
 
-      var result= await IssuesApi.getPhoto('', '1','1','1');
+      var result= await IssuesApi.getPhoto('', '1','1','0');
       if  (result['code']==200){
 
 
@@ -199,7 +199,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       }
       final widgets = await this.repository.loadWidgets(family);
-      yield WidgetsLoaded(widgets: widgets, activeFamily: family,photos: result['data']['photo_list']);
+      yield WidgetsLoaded(widgets: widgets, activeFamily: family,photos: result['data']['data']);
 
     } catch (err) {
       print(err);

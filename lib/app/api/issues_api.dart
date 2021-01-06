@@ -7,14 +7,14 @@ import 'package:flutter_geen/model/github/repository.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
 
 
-const kBaseUrl = 'http://ctx.gugu2019.com';
+const kBaseUrl = 'https://ctx.gugu2019.com';
 
 class IssuesApi {
   /// 自定义Header
   static Map<String, dynamic> httpHeaders = {
     'Accept': 'application/json,*/*',
     'Content-Type': 'application/json',
-    'token': ""
+    'authorization': ""
   };
   static Dio dio = Dio(BaseOptions(baseUrl: kBaseUrl,headers: httpHeaders));
 
@@ -31,13 +31,13 @@ class IssuesApi {
     }
 
   }
-  static Future<Map<String,dynamic>> getPhoto( String keyWord, String page,String sex,String mode ) async {
+  static Future<Map<String,dynamic>> getPhoto( String keyWord, String page,String sex,String is_passive ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    var data={'keywords':keyWord,'pages':page,'token':token,'sexc':sex,'sel':mode};
-    Response<dynamic> rep = await dio.post('/admin/service/photoflu.html',queryParameters:data );
-    var datas = json.decode(rep.data);
-
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'keywords':keyWord,'currentPage':page,'status':"all",'is_passive':is_passive,"store_id":1,"pageSize":20,'gender':sex};
+    Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
+    var datas = (rep.data);
     return datas;
   }
   static Future<Map<String,dynamic>> searchPhoto( String keyWord, String page, ) async {
