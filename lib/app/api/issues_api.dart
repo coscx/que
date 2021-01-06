@@ -7,18 +7,29 @@ import 'package:flutter_geen/model/github/repository.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
 
 
-const kBaseUrl = 'http://as.gugu2019.com';
+const kBaseUrl = 'http://ctx.gugu2019.com';
 
 class IssuesApi {
-  static Dio dio = Dio(BaseOptions(baseUrl: kBaseUrl));
+  /// 自定义Header
+  static Map<String, dynamic> httpHeaders = {
+    'Accept': 'application/json,*/*',
+    'Content-Type': 'application/json',
+    'token': ""
+  };
+  static Dio dio = Dio(BaseOptions(baseUrl: kBaseUrl,headers: httpHeaders));
 
   static Future<Map<String,dynamic>> login( String username, String password) async {
-
     var data={'username':username,'password':password};
-    Response<dynamic> rep = await dio.post('/admin/auth/applogin.html',queryParameters:data );
-     var datas = json.decode(rep.data);
+    Response<dynamic> rep;
+    try {
+       rep = await dio.post('/api/v1/auth/login', queryParameters: data);
+       //var datas = json.decode(rep.data);
+       return rep.data;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
 
-    return datas;
   }
   static Future<Map<String,dynamic>> getPhoto( String keyWord, String page,String sex,String mode ) async {
     var ss = await LocalStorage.get("token");

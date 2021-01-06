@@ -33,12 +33,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
      var result= await IssuesApi.login(event.username, event.password);
      if  (result['code']==200){
 
-       LocalStorage.save("token", result['msg']['token']);
-       LocalStorage.save("memberId", result['msg']['id'].toString());
-       LocalStorage.save("im_token", result['msg']['im_token'].toString());
+       LocalStorage.save("token", result['data']['token']['access_token']);
+       LocalStorage.save("fresh_token", result['data']['token']['fresh_token']);
+       LocalStorage.save("memberId", result['data']['user']['id'].toString());
+       LocalStorage.save("im_token", result['data']['im_token'].toString());
        yield LoginSuccess();
      } else{
-       yield LoginFailed(reason: result['msg']);
+       yield LoginFailed(reason: result['message']);
      }
     }
     if (event is EventLoginFailed) {
