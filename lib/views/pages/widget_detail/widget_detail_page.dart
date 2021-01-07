@@ -10,6 +10,7 @@ import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/views/dialogs/comment.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+import 'package:flutter_geen/views/pages/utils/object_util.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/res/toly_icon.dart';
@@ -31,6 +32,8 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_geen/views/pages/utils/dialog_util.dart';
 class WidgetDetailPage extends StatefulWidget {
 
 
@@ -191,7 +194,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     Toasts.toast(
       ctx,
       msg,
-      duration: Duration(milliseconds: collected ? 1500 : 600),
+      duration: Duration(milliseconds:  3000 ),
       action: collected
           ? SnackBarAction(
               textColor: Colors.white,
@@ -1085,6 +1088,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                ),
              ),
              onTap: () async {
+               _getPermission(context);
                List<Asset> images = List<Asset>();
                List<Asset> resultList = List<Asset>();
                String error = 'No Error Dectected';
@@ -1125,7 +1129,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                    }
                  } on DioError catch(e){
                    var dd=e.response.data;
-                   _showToast(context,dd['message'],false);
+                   EasyLoading.showSuccess(dd['message']);
+                   //_showToast(context,dd['message'],false);
                  }
                  EasyLoading.dismiss();
                }
@@ -1142,7 +1147,26 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
 }
+_getPermission(BuildContext context) {
+  //请求读写权限
+  ObjectUtil.getPermissions([
+    PermissionGroup.storage,
+    PermissionGroup.camera,
 
+  ]).then((res) {
+    if (res[PermissionGroup.storage] == PermissionStatus.denied ||
+        res[PermissionGroup.storage] == PermissionStatus.unknown) {
+      //用户拒绝，禁用，或者不可用
+      DialogUtil.showBaseDialog( context, '获取不到权限，APP不能正常使用',
+          right: '去设置', left: '取消', rightClick: (res) {
+            PermissionHandler().openAppSettings();
+          });
+    } else if (res[PermissionGroup.storage] == PermissionStatus.granted) {
+    } else if (res[PermissionGroup.storage] == PermissionStatus.restricted) {
+      //用户同意IOS的回调
+    }
+  });
+}
 _loading(){
   Timer _timer;
   double _progress;
@@ -1183,7 +1207,7 @@ _showBottom(BuildContext context,String text){
                 Container(
                   child: Text(
                     text,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     style: TextStyle(fontSize: 16,fontWeight: FontWeight.w900),
                   ),
                 )
