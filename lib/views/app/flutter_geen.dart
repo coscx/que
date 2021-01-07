@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/views/app/splash/unit_splash.dart';
@@ -29,6 +30,7 @@ class FlutterGeen extends StatelessWidget {
               fontFamily: state.fontFamily,
             ),
             home: UnitSplash(),
+            builder: EasyLoading.init(),
       ));
     });
   }

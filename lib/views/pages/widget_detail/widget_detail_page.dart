@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flui/flui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/views/dialogs/comment.dart';
@@ -22,9 +26,11 @@ import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/views/items/CustomsExpansionPanelList.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:flutter_geen/views/pages/utils/loading.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'dart:typed_data';
+import 'package:dio/dio.dart';
 class WidgetDetailPage extends StatefulWidget {
 
 
@@ -127,9 +133,21 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                 for(int i = 0; i < images.length; i++) {
                    // 获取 ByteData
                    ByteData byteData = await images[i].getByteData();
-                   var resultConnectList= await IssuesApi.uploadPhoto("1",byteData);
-                   print(resultConnectList['data']);
-                   var result= await IssuesApi.editCustomer("","1",resultConnectList['data']);
+                   try {
+                      var resultConnectList= await IssuesApi.uploadPhoto("1",byteData);
+                      // print(resultConnectList['data']);
+
+                     var result= await IssuesApi.editCustomer("","1",resultConnectList['data']);
+                     if(result['code']==200){
+                       _showToast(ctx,result['message'],true);
+                     }else{
+                       _showToast(ctx,result['message'],true);
+                     }
+                   } on DioError catch(e){
+                     var dd=e.response.data;
+                     _showToast(ctx,dd['message'],true);
+                   }
+
 
 
                 }
@@ -477,6 +495,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         ],
       );
     }
+
+    if(state is DetailLoading){
+
+    }
     return Container();
   }
 
@@ -782,7 +804,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       child:  Material(
           color:  Colors.transparent ,
           child: InkWell(
-            onTap: (){},
+            onTap: (){
+              _showBottom(context,content);
+
+              },
             child: Container(
                 margin: EdgeInsets.only(left: 10.w, right: 20.w),
               child: Column(
@@ -975,7 +1000,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           Stack(
           children: <Widget>[
           Container(
-            margin: EdgeInsets.fromLTRB(13.w, 0.h, 0.w, 10.h),
+            margin: EdgeInsets.fromLTRB(13.w, 25.h, 0.w, 10.h),
           child: Stack(
           children: <Widget>[
 
@@ -995,10 +1020,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                }
                ,
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(2.w, 20.h, 2.w, 0.h),
+                  margin: EdgeInsets.fromLTRB(2.w, 0.h, 2.w, 0.h),
                 child: CachedNetworkImage(imageUrl: e,
-                width: 160.w,
-                height: 300.h,
+                width: 140.w,
+                height: 240.h,
                   ),
                 )
 
@@ -1021,7 +1046,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     ),
 
     Positioned(
-        top: 0.h,
+        top: 25.h,
         right: 0.w,
         child:
         FeedbackWidget(
@@ -1048,9 +1073,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
      list.add(
          GestureDetector(
              child: Padding(
-               padding: const EdgeInsets.all(15.0),
-               child: Icon(Icons.home,
-                 color: Colors.black,),
+               padding:  EdgeInsets.only(left: 35.w),
+               child: Container(
+                   child:
+                   Image.asset(
+                       "assets/images/add.png",
+                     width: 160.w,
+                     height: 300.h,
+
+                   )
+               ),
              ),
              onTap: () async {
                List<Asset> images = List<Asset>();
@@ -1079,12 +1111,23 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                // 上传照片时一张一张上传
                for(int i = 0; i < images.length; i++) {
                  // 获取 ByteData
+                 _loading();
                  ByteData byteData = await images[i].getByteData();
-                 var resultConnectList= await IssuesApi.uploadPhoto("1",byteData);
-                 print(resultConnectList['data']);
-                 var result= await IssuesApi.editCustomer(userdetail['info']['uuid'],"1",resultConnectList['data']);
-                 print(result['message']);
+                 try {
+                   var resultConnectList= await IssuesApi.uploadPhoto("1",byteData);
+                   // print(resultConnectList['data']);
 
+                   var result= await IssuesApi.editCustomer(userdetail['info']['uuid'],"1",resultConnectList['data']);
+                   if(result['code']==200){
+                     _showToast(context,result['message'],false);
+                   }else{
+                     _showToast(context,result['message'],false);
+                   }
+                 } on DioError catch(e){
+                   var dd=e.response.data;
+                   _showToast(context,dd['message'],false);
+                 }
+                 EasyLoading.dismiss();
                }
              }
 
@@ -1100,6 +1143,24 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   }
 }
 
+_loading(){
+  Timer _timer;
+  double _progress;
+  _progress = 0;
+  _timer?.cancel();
+  _timer = Timer.periodic(const Duration(milliseconds: 100),
+          (Timer timer) {
+                EasyLoading.showProgress(_progress,
+                    status: '${(_progress * 100).toStringAsFixed(0)}%');
+                _progress += 0.03;
+
+                if (_progress >= 1) {
+                  _timer?.cancel();
+                  EasyLoading.dismiss();
+                }
+        });
+}
+
 _comment(BuildContext context) {
   showDialog(
       context: context,
@@ -1108,7 +1169,39 @@ _comment(BuildContext context) {
   );
 }
 
+_showBottom(BuildContext context,String text){
+  showFLBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return FLCupertinoActionSheet(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
 
+                Container(
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16,fontWeight: FontWeight.w900),
+                  ),
+                )
+              ],
+            ),
+          ),
+          cancelButton: CupertinoActionSheetAction(
+            child: const Text('关闭'),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context, 'Cancel');
+            },
+          ),
+        );
+      }).then((value) {
+    //print(value);
+  });
+}
 _deletePhoto(BuildContext context,String img) {
   showDialog(
       context: context,
@@ -1202,4 +1295,9 @@ class WidgetDetailTitle extends StatelessWidget {
           )
         ],
       );
+
+
+
+
+
 }

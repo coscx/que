@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class Toasts {
   static toast(BuildContext context, String msg,
-      {duration = const Duration(milliseconds: 600),SnackBarAction action}) {
+      {duration = const Duration(milliseconds: 2500),SnackBarAction action}) {
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(msg),
       duration: duration,
       action: action,
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.redAccent,
     ));
   }
 }
