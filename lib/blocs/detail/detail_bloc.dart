@@ -32,19 +32,27 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     yield DetailLoading();
     try {
 
-      var result= await IssuesApi.getUserDetail(photo['memberId'].toString());
+      var result= await IssuesApi.getUserDetail(photo['uuid'].toString());
       if  (result['code']==200){
 
       } else{
 
       }
+
+      var resultConnectList= await IssuesApi.getConnectList(photo['uuid'].toString(),"1");
+      if  (resultConnectList['code']==200){
+
+      } else{
+
+      }
+
       if(result['data'].isEmpty){
         yield DetailEmpty();
       }else{
-        yield DetailWithData(userdetails: result['data']);
+        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data']);
       }
 
-    } catch (_) {
+    } catch (e) {
       yield DetailFailed();
     }
   }

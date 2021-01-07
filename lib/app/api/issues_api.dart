@@ -1,12 +1,11 @@
 import 'dart:convert';
-
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_geen/model/github/issue_comment.dart';
 import 'package:flutter_geen/model/github/issue.dart';
 import 'package:flutter_geen/model/github/repository.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
-
-
+import 'package:http_parser/http_parser.dart';
 const kBaseUrl = 'https://ctx.gugu2019.com';
 
 class IssuesApi {
@@ -37,6 +36,51 @@ class IssuesApi {
     dio.options.headers['authorization']="Bearer "+token;
     var data={'keywords':keyWord,'currentPage':page,'status':"all",'is_passive':is_passive,"store_id":1,"pageSize":20,'gender':sex};
     Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
+    var datas = (rep.data);
+    return datas;
+  }
+  static Future<Map<String,dynamic>> editCustomer(String uuid, String type, String url ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'type':type,'file_url':url};
+    try {
+    Response<dynamic> rep = await dio.post('/api/v1/customer/editCustomer/'+uuid,queryParameters:data );
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+  static Future<Map<String,dynamic>> getConnectList( String uuid, String page ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'customer_uuid':uuid,'currentPage':page,"pageSize":20};
+    Response<dynamic> rep = await dio.get('/api/v1/customer/connectList',queryParameters:data );
+    var datas = (rep.data);
+    return datas;
+  }
+  static Future<Map<String,dynamic>> uploadPhoto(  String type, ByteData byteData) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    String url = '';
+    List<int> imageData = byteData.buffer.asUint8List();
+    MultipartFile multipartFile = MultipartFile.fromBytes(
+      imageData,
+      // 文件名
+      filename: 'some-file-name.jpg',
+      // 文件类型
+      contentType: MediaType("image", "jpg"),
+    );
+    FormData formData = FormData.fromMap({
+      // 后端接口的参数名称
+      "resource": multipartFile
+    });
+    Map<String, dynamic> params = Map();
+    params['type']=type;
+    // 使用 dio 上传图片
+    Response<dynamic> rep = await dio.post('/api/v1/customer/uploadPic',data:formData,queryParameters:params );
     var datas = (rep.data);
     return datas;
   }
@@ -95,11 +139,11 @@ class IssuesApi {
   static Future<Map<String,dynamic>> getUserDetail( String memberId) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    var data={'id':memberId,'token':token};
-    Response<dynamic> rep = await dio.post('/admin/user/userdetailflu.html',queryParameters:data );
-    var datas = json.decode(rep.data);
-
-    return datas;
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={};
+    Response<dynamic> rep = await dio.get('/api/v1/customer/detail/'+memberId );
+    //var datas = json.decode(rep.data);
+    return rep.data;
   }
 
   static Future<Map<String,dynamic>> getTimeLine( String memberId) async {

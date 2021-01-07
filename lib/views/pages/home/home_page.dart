@@ -12,7 +12,7 @@ import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_geen/components/permanent/overlay_tool_wrapper.dart';
-
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/common/empty_page.dart';
 import 'package:flutter_geen/views/items/home_item_support.dart';
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage>
   // 下拉刷新
   void _onRefresh() async {
     BlocProvider.of<GlobalBloc>(context).add(EventResetIndexPhotoPage());
-    BlocProvider.of<GlobalBloc>(context).add((EventSetIndexNum()));
+    //BlocProvider.of<GlobalBloc>(context).add((EventSetIndexNum()));
     var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
     BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode));
@@ -84,7 +84,38 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
+    return Theme(
+        data: ThemeData(
+        appBarTheme: AppBarTheme.of(context).copyWith(
+      brightness: Brightness.light,
+    ),
+    ),
+    child:Scaffold(
+        appBar: AppBar(
+          title: const Text('客户管理',style: TextStyle(color: Colors.black, fontSize: 25,fontWeight: FontWeight.bold)),
+          //leading:const Text('Demo',style: TextStyle(color: Colors.black, fontSize: 15)),
+          backgroundColor: Colors.white,
+          elevation: 0, //去掉Appbar底部阴影
+          actions:<Widget> [
+
+            // Container(
+            //   height: 20,
+            //   width: 20,
+            //   child: IconButton(
+            //     padding: EdgeInsets.zero,
+            //     icon: Icon(
+            //       Icons.add_circle_outline,
+            //       size: 24.0,
+            //       color: Colors.black,
+            //     ),
+            //     onPressed: null,
+            //   ),
+            // ),
+            SizedBox(
+              width: 40,
+            )
+          ],
+        ),
         body:  BlocListener<HomeBloc, HomeState>(
         listener: (ctx, state) {
       if (state is CheckUserSuccess) {
@@ -124,9 +155,9 @@ class _HomePageState extends State<HomePage>
                     child:  CustomScrollView(
                       physics: BouncingScrollPhysics(),
                       slivers: <Widget>[
-                        Container(
-                          child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
-                        ),
+                        // Container(
+                        //   child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
+                        // ),
                         SliverToBoxAdapter(
                           child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
 
@@ -147,7 +178,7 @@ class _HomePageState extends State<HomePage>
     }
     )
         )
-    );
+    ));
   }
   void _onValueChanged(int value) {
     BlocProvider.of<GlobalBloc>(context).add(EventSetIndexSex(value));

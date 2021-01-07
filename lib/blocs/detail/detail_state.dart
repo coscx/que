@@ -17,10 +17,11 @@ abstract class DetailState extends Equatable {
 class DetailWithData extends DetailState {
 
   final Map<String,dynamic>  userdetails ;
-  const DetailWithData({this.userdetails});
+  final Map<String,dynamic>  connectList ;
+  const DetailWithData({this.userdetails,this.connectList});
 
   @override
-  List<Object> get props => [userdetails];
+  List<Object> get props => [userdetails,connectList];
 
   @override
   String toString() {

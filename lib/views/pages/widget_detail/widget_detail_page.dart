@@ -22,6 +22,9 @@ import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/views/items/CustomsExpansionPanelList.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:flutter_geen/app/api/issues_api.dart';
+import 'dart:typed_data';
 class WidgetDetailPage extends StatefulWidget {
 
 
@@ -96,15 +99,51 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             child: Icon(Icons.home,
             color: Colors.black,),
           ),
-          onTap: () => Navigator.of(ctx).pop()));
+          onTap: () async {
+                List<Asset> images = List<Asset>();
+                List<Asset> resultList = List<Asset>();
+                String error = 'No Error Dectected';
+                //Navigator.of(ctx).pop();
+                try {
+                  resultList = await MultiImagePicker.pickImages(
+                    // 选择图片的最大数量
+                    maxImages: 1,
+                    // 是否支持拍照
+                    enableCamera: true,
+                    materialOptions: MaterialOptions(
+                      // 显示所有照片，值为 false 时显示相册
+                        startInAllView: true,
+                        allViewTitle: '所有照片',
+                        actionBarColor: '#2196F3',
+                        textOnNothingSelected: '没有选择照片'
+                    ),
+                  );
+                } on Exception catch (e) {
+                  e.toString();
+                }
+                if (!mounted) return;
+                images = (resultList == null) ? [] : resultList;
+                // 上传照片时一张一张上传
+                for(int i = 0; i < images.length; i++) {
+                   // 获取 ByteData
+                   ByteData byteData = await images[i].getByteData();
+                   var resultConnectList= await IssuesApi.uploadPhoto("1",byteData);
+                   print(resultConnectList['data']);
+                   var result= await IssuesApi.editCustomer("","1",resultConnectList['data']);
+
+
+                }
+              }
+
+          ));
 
   Widget _buildCollectButton( BuildContext context) {
     //监听 CollectBloc 伺机弹出toast
     return BlocListener<DetailBloc, DetailState>(
         listener: (ctx, st) {
           if (st is DetailWithData){
-            Map<String,dynamic> user=st.props.elementAt(0);
-            memberId= user['user']['memberId'].toString();
+            //Map<String,dynamic> user=st.props.elementAt(0);
+            //memberId= user['user']['memberId'].toString();
           }
 
          // bool collected = st.widgets.contains(model);
@@ -154,33 +193,247 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       return true;
 
   }
-
+  List<Widget> _listViewConnectList(List<dynamic>connectList ){
+    return connectList.map((e) =>
+    _item(context,e['username'],e['connect_time'],e['connect_message'],e['subscribe_time'],e['connect_status'].toString(),e['connect_type'].toString())
+    ).toList();
+  }
   Widget _buildDetail(BuildContext context, DetailState state) {
     //print('build---${state.runtimeType}---');
     if (state is DetailWithData) {
+      var info = state.userdetails['info'];
+      List<dynamic> connectList = state.connectList['data'];
+      List<Widget> list = _listViewConnectList(connectList);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-               Padding(
-                padding: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 5.h),
-                child: Icon(
-                  Icons.photo,
-                  color: Colors.blue,
+          Container(
+            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+
+                //CustomsExpansionPanelList()
+                //_item(context),
+                WidgetNodePanel(
+                    codeFamily: 'Inconsolata',
+                    text: "基础资料",
+                    code: "",
+                    show: Container(
+                      width: 500,
+                      // height: 300,
+                      child:
+                      Wrap(
+                          alignment: WrapAlignment.start,
+                          direction: Axis.horizontal,
+                          spacing: 0,
+                          runSpacing: 0,
+                          children: <Widget>[
+                            _item_detail(context,Colors.black,Icons.format_list_numbered,"编号",info['code'].toString(),false),
+                            _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true),
+                            _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true),
+                            _item_detail(context,Colors.black,Icons.contact_page_outlined,"年龄",info['age']==0?"-":info['age'].toString()+"岁",false),
+                            _item_detail(context,Colors.black,Icons.broken_image_outlined,"生日",info['birthday'].toString()+"("+info['chinese_zodiac']+"-"+info['zodiac']+")",true),
+                            _item_detail(context,Colors.red,Icons.settings_backup_restore_outlined,"八字",info['bazi'].toString(),false),
+                            _item_detail(context,Colors.orange,Icons.whatshot,"五行",info['wuxing'].toString(),false),
+                            _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place'].toString(),true),
+                            _item_detail(context,Colors.black,Icons.house_outlined,"居住",info['location_place'].toString(),true),
+                            _item_detail(context,Colors.black,Icons.point_of_sale,"销售",info['sale_user'].toString(),false),
+                            _item_detail(context,Colors.black,Icons.gamepad_outlined,"民族",info['nation']==1?"汉族":"其他",true),
+                            _item_detail(context,Colors.black,Icons.height,"身高",info['height']==0?"-":info['height'].toString(),true),
+                            _item_detail(context,Colors.black,Icons.line_weight,"体重",info['weight']==0?"-":info['weight'].toString(),true),
+                            _item_detail(context,Colors.black,Icons.design_services_outlined,"服务",info['serve_user'].toString(),false),
+                            _item_detail(context,Colors.black,Icons.integration_instructions_outlined,"兴趣",info['interest'].toString(),true),
+                            _item_detail(context,Colors.black,Icons.blur_on_outlined,"血型",info['blood_type']==0?"-":info['blood_type'].toString(),true),
+                            _item_detail(context,Colors.black,Icons.developer_mode,"择偶",info['demands'].toString(),true),
+                            _item_detail(context,Colors.black,Icons.bookmarks_outlined,"备注",info['remark'].toString(),true),
+
+                          ]
+                      ),
+
+                    )
                 ),
-              ),
-              const Text(
-                '用户图片',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ],
+
+
+              ],
+            ),
+
+
           ),
-          _buildLinkTo(
-            context,
-            state.userdetails,
+
+          Container(
+            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+
+                //CustomsExpansionPanelList()
+                //_item(context),
+                WidgetNodePanel(
+                    codeFamily: 'Inconsolata',
+                    text: "学历工作及资产",
+                    code: "",
+                    show: Container(
+                      width: 500,
+                      // height: 300,
+                      child:
+                      Wrap(
+                          alignment: WrapAlignment.start,
+                          direction: Axis.horizontal,
+                          spacing: 0,
+                          runSpacing: 0,
+                          children: <Widget>[
+                            _item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":info['education'].toString(),false),
+                            _item_detail_gradute(context,Colors.black,Icons.school,"毕业院校",info['school'].toString()==""?"-":info['school'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.tab,"所学专业",info['major']==""?"-":info['major'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":info['work'].toString()+"",false),
+                            _item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":info['work_job'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),false),
+                            _item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":info['work_overtime'].toString(),false),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":info['income'].toString(),true),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.house_outlined,"是否有房",info['has_house']==0?"-":info['has_house'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.copyright_rounded,"房贷情况",info['loan_record']==0?"-":info['loan_record'].toString(),false),
+                            _item_detail_gradute(context,Colors.black,Icons.car_rental,"是否有车",info['has_car']==0?"-":info['has_car'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.wb_auto_outlined,"车辆档次",info['car_type']==0?"-":info['car_type'].toString(),true),
+
+                          ]
+                      ),
+
+                    )
+                ),
+
+
+              ],
+            ),
+
+
           ),
-          Divider(),
+
+          Container(
+            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+
+                //CustomsExpansionPanelList()
+                //_item(context),
+                WidgetNodePanel(
+                    codeFamily: 'Inconsolata',
+                    text: "婚姻及父母家庭",
+                    code: "",
+                    show: Container(
+                      width: 500,
+                      // height: 300,
+                      child:
+                      Wrap(
+                          alignment: WrapAlignment.start,
+                          direction: Axis.horizontal,
+                          spacing: 0,
+                          runSpacing: 0,
+                          children: <Widget>[
+                            _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",info['marriage']==0?"-":info['marriage'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.child_care,"子女信息",info['has_child']==0?"-":info['has_child'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.mark_chat_read_outlined,"子女备注",info['child_remark']==""?"-":info['child_remark'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.looks_one_outlined,"独生子女",info['only_child']==0?"-":info['only_child'].toString()+"",true),
+                            _item_detail_gradute(context,Colors.black,Icons.watch_later_outlined,"父母状况",info['parents']==0?"-":info['parents'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.attribution_rounded,"父亲职业",info['father_work']==""?"-":info['father_work'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.sports_motorsports_outlined,"母亲职业",info['mother_work']==""?"-":info['mother_work'].toString(),true),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on,"父母收入",info['parents_income']==""?"-":info['parents_income'].toString(),true),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.nine_k,"父母社保",info['parents_insurance']==0?"-":info['parents_insurance'].toString(),true),
+
+                          ]
+                      ),
+
+                    )
+                ),
+
+
+              ],
+            ),
+
+
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+
+                //CustomsExpansionPanelList()
+                //_item(context),
+                WidgetNodePanel(
+                    codeFamily: 'Inconsolata',
+                    text: "用户画像相关",
+                    code: "",
+                    show: Container(
+                      width: 500,
+                      // height: 300,
+                      child:
+                      Wrap(
+                          alignment: WrapAlignment.start,
+                          direction: Axis.horizontal,
+                          spacing: 0,
+                          runSpacing: 0,
+                          children: <Widget>[
+                            _item_detail_gradute(context,Colors.redAccent,Icons.fastfood,"宗教信仰",info['faith']==0?"-":info['faith'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.smoking_rooms,"是否吸烟",info['smoke']==0?"-":info['smoke'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.wine_bar,"是否喝酒",info['drinkwine']==""?"-":info['drinkwine'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.nightlife,"生活作息",info['live_rest']==0?"-":info['live_rest'].toString()+"",true),
+                            _item_detail_gradute(context,Colors.black,Icons.child_friendly_outlined,"生育欲望",info['want_child']==0?"-":info['want_child'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.margin,"结婚预期",info['marry_time']==""?"-":info['marry_time'].toString(),true),
+
+                          ]
+                      ),
+
+                    )
+                ),
+
+
+              ],
+            ),
+
+
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+
+                //CustomsExpansionPanelList()
+                //_item(context),
+                WidgetNodePanel(
+                    codeFamily: 'Inconsolata',
+                    text: "用户图片",
+                    code: "",
+                    show: Container(
+                      width: 500,
+                      // height: 300,
+                      child:
+                      Wrap(
+                          alignment: WrapAlignment.start,
+                          direction: Axis.horizontal,
+                          spacing: 0,
+                          runSpacing: 0,
+                          children: <Widget>[
+                            _buildLinkTo(
+                              context,
+                              state.userdetails,
+                            ),
+
+                          ]
+                      ),
+
+                    )
+                ),
+
+
+              ],
+            ),
+
+
+          ),
+
           //_buildNodes(state.nodes, state.widgetModel.name)
           Container(
               margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
@@ -192,7 +445,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                     //_item(context),
                     WidgetNodePanel(
                         codeFamily: 'Inconsolata',
-                        text: "接待信息",
+                        text: "客户沟通记录",
                         code: "",
                         show: Container(
                           width: 500,
@@ -204,10 +457,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               spacing: 0,
                               runSpacing: 0,
                               children: <Widget>[
-                                _item(context),
-                                _item(context),
-
-
+                                ...list
 
                               ]
                           ),
@@ -243,13 +493,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     }
     return Container();
   }
-  Widget _item(BuildContext context) {
+  Widget _item_photo(BuildContext context) {
     bool isDark = false;
 
     return  Container(
       padding:  EdgeInsets.only(
-        top: 10.h,
-        bottom: 0
+          top: 10.h,
+          bottom: 0
       ),
       width: double.infinity,
       height: 80.h,
@@ -258,7 +508,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           child: InkWell(
             onTap: (){},
             child: Container(
-                margin: EdgeInsets.only(left: 10.w, right: 20.w),
+              margin: EdgeInsets.only(left: 10.w, right: 20.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -332,6 +582,297 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           )),
     );
   }
+
+  Widget _item_detail(BuildContext context,Color color,IconData icon,String name ,String answer,bool show) {
+    bool isDark = false;
+
+    return  Container(
+      padding:  EdgeInsets.only(
+          top: 10.h,
+          bottom: 0
+      ),
+      width: double.infinity,
+      height: 80.h,
+      child:  Material(
+          color:  Colors.transparent ,
+          child: InkWell(
+            onTap: (){},
+            child: Container(
+              margin: EdgeInsets.only(left: 10.w, right: 20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                      children: <Widget>[
+                        Icon(
+                          icon,
+                          size: 18,
+                          color: Colors.black54,
+                        ),
+
+                        Container(
+                          margin: EdgeInsets.only(left: 15.w),
+                          child: Text(
+                            name,
+                            style: TextStyle(fontSize: 15.0, color: Colors.grey),
+                          ),
+                        ),
+                        SizedBox(
+                          width: ScreenUtil().setWidth(10),
+                        ),
+                        Visibility(
+                            visible: true,
+                            child: Container(
+                              width: 530.w,
+                              child: Text(
+                                answer,
+                                maxLines: 2,
+                                style: TextStyle(
+                                    fontSize: 14.0, color: color),
+                              ),
+                            )),
+                      ]),
+                  //Visibility是控制子组件隐藏/可见的组件
+                  Visibility(
+                    visible: show,
+                    child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(right: 10.w),
+                            child: Row(children: <Widget>[
+
+                              SizedBox(
+                                width: ScreenUtil().setWidth(10),
+                              ),
+                              Visibility(
+                                  visible: false,
+                                  child: Text(
+                                    "2021-01-12 15:35:30",
+                                    style: TextStyle(
+                                        fontSize: 7.0, color: Colors.grey),
+                                  )),
+
+
+
+                              Visibility(
+                                  visible: false,
+                                  child: CircleAvatar(
+                                    backgroundImage: AssetImage("rightImageUri"),
+                                  ))
+                            ]),
+                          ),
+
+                          Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            size: 15,
+                            color: Colors.black54,
+                          )
+
+                        ]),
+                  )
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+  Widget _item_detail_gradute(BuildContext context,Color color,IconData icon,String name ,String answer,bool show) {
+    bool isDark = false;
+
+    return  Container(
+      padding:  EdgeInsets.only(
+          top: 10.h,
+          bottom: 0
+      ),
+      width: double.infinity,
+      height: 80.h,
+      child:  Material(
+          color:  Colors.transparent ,
+          child: InkWell(
+            onTap: (){},
+            child: Container(
+              margin: EdgeInsets.only(left: 10.w, right: 20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                      children: <Widget>[
+                        Icon(
+                          icon,
+                          size: 18,
+                          color: Colors.black54,
+                        ),
+
+                        Container(
+                          margin: EdgeInsets.only(left: 15.w),
+                          child: Text(
+                            name,
+                            style: TextStyle(fontSize: 15.0, color: Colors.grey),
+                          ),
+                        ),
+                        SizedBox(
+                          width: ScreenUtil().setWidth(10),
+                        ),
+                        Visibility(
+                            visible: true,
+                            child: Container(
+                              width: 470.w,
+                              child: Text(
+                                answer,
+                                maxLines: 2,
+                                style: TextStyle(
+                                    fontSize: 14.0, color: color),
+                              ),
+                            )),
+                      ]),
+                  //Visibility是控制子组件隐藏/可见的组件
+                  Visibility(
+                    visible: show,
+                    child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(right: 10.w),
+                            child: Row(children: <Widget>[
+
+                              SizedBox(
+                                width: ScreenUtil().setWidth(10),
+                              ),
+                              Visibility(
+                                  visible: false,
+                                  child: Text(
+                                    "2021-01-12 15:35:30",
+                                    style: TextStyle(
+                                        fontSize: 7.0, color: Colors.grey),
+                                  )),
+
+
+
+                              Visibility(
+                                  visible: false,
+                                  child: CircleAvatar(
+                                    backgroundImage: AssetImage("rightImageUri"),
+                                  ))
+                            ]),
+                          ),
+
+                          Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            size: 15,
+                            color: Colors.black54,
+                          )
+
+                        ]),
+                  )
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+  Widget _item(BuildContext context,String name ,String connectTime,String content,String subscribeTime,String connectStatus,String connectType) {
+    bool isDark = false;
+
+    return  Container(
+      padding:  EdgeInsets.only(
+        top: 10.h,
+        bottom: 0
+      ),
+      width: double.infinity,
+      //height: 180.h,
+      child:  Material(
+          color:  Colors.transparent ,
+          child: InkWell(
+            onTap: (){},
+            child: Container(
+                margin: EdgeInsets.only(left: 10.w, right: 20.w),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.account_circle_outlined,
+                              size: 18,
+                              color: Colors.black54,
+                            ),
+
+                            Container(
+                              margin: EdgeInsets.only(left: 15.w),
+                              child: Text(
+                                name==null?"":name,
+                                style: TextStyle(fontSize: 15.0, color: Colors.black54),
+                              ),
+                            ),
+                            SizedBox(
+                              width: ScreenUtil().setWidth(10),
+                            ),
+                            Visibility(
+                                visible: true,
+                                child: Container(
+                                  width: 460.w,
+                                  child: Text(
+                                   content,
+                                    maxLines: 4,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 12.0, color: Colors.black,fontWeight: FontWeight.w900),
+                                  ),
+                                )),
+                          ]),
+                      //Visibility是控制子组件隐藏/可见的组件
+                      Visibility(
+                        visible: true,
+                        child: Row(
+                            children: <Widget>[
+
+
+                              Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                size: 15,
+                                color: Colors.black54,
+                              )
+
+                            ]),
+                      )
+                    ],
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.only(left: 10.w,top: 10.h),
+                    child: Row(children: <Widget>[
+
+                      SizedBox(
+                        width: ScreenUtil().setWidth(10),
+                      ),
+                      Visibility(
+                          visible: true,
+                          child: Text(
+                            "沟通时间:"+connectTime,
+                            style: TextStyle(
+                                fontSize: 12.0, color: Colors.black54),
+                          )),
+                      SizedBox(
+                        width: ScreenUtil().setWidth(20),
+                      ),
+
+                        Visibility(
+                          visible: true,
+                          child: Text(
+                            "预约时间:"+subscribeTime,
+                            style: TextStyle(
+                                fontSize: 12.0, color: Colors.black54),
+                          )),
+                    ]),
+                  ),
+
+                ],
+              ),
+            ),
+          )),
+    );
+  }
   avatar(String url) {
     return Container(
       width: 60,
@@ -379,7 +920,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                  margin: EdgeInsets.fromLTRB(10.w, 10.h, 5.w, 0.h),
                  child:
                  Text(
-                  user['user']['userName'],
+                  user['info']['name'],
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -393,7 +934,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       alignment: Alignment.centerLeft,
                       height: 24.h,
                       child: Text(
-                        user['user']['age'].toString(),
+                        user['info']['age'].toString(),
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))
                 ],
@@ -407,7 +948,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       margin: EdgeInsets.fromLTRB(10.w, 10.h, 5.w, 0.h),
                       height: 40.h,
                       text: Text(
-                        user['user']['addressed'].toString(),
+                        user['info']['native_place'].toString(),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
@@ -425,7 +966,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   }
   Widget _buildLinkTo(BuildContext context, Map<String,dynamic> userdetail) {
 
-    List<dynamic> imgList =userdetail['images'];
+    List<dynamic> imgList =userdetail['pic'];
     List<Widget> list = [];
     imgList.map((e) => {
 
@@ -446,8 +987,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                      context,
                      images: List.generate(1, (index) {
                    return ImageOptions(
-                     url: e['imagepath'],
-                     tag: e['imagepath'],
+                     url: e,
+                     tag: e,
                    );
                  }),
                  );
@@ -455,7 +996,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                ,
                 child: Container(
                   margin: EdgeInsets.fromLTRB(2.w, 20.h, 2.w, 0.h),
-                child: CachedNetworkImage(imageUrl: e['imagepath'],
+                child: CachedNetworkImage(imageUrl: e,
                 width: 160.w,
                 height: 300.h,
                   ),
@@ -504,7 +1045,52 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
 
     ).toList();
+     list.add(
+         GestureDetector(
+             child: Padding(
+               padding: const EdgeInsets.all(15.0),
+               child: Icon(Icons.home,
+                 color: Colors.black,),
+             ),
+             onTap: () async {
+               List<Asset> images = List<Asset>();
+               List<Asset> resultList = List<Asset>();
+               String error = 'No Error Dectected';
+               //Navigator.of(ctx).pop();
+               try {
+                 resultList = await MultiImagePicker.pickImages(
+                   // 选择图片的最大数量
+                   maxImages: 1,
+                   // 是否支持拍照
+                   enableCamera: true,
+                   materialOptions: MaterialOptions(
+                     // 显示所有照片，值为 false 时显示相册
+                       startInAllView: true,
+                       allViewTitle: '所有照片',
+                       actionBarColor: '#2196F3',
+                       textOnNothingSelected: '没有选择照片'
+                   ),
+                 );
+               } on Exception catch (e) {
+                 e.toString();
+               }
+               if (!mounted) return;
+               images = (resultList == null) ? [] : resultList;
+               // 上传照片时一张一张上传
+               for(int i = 0; i < images.length; i++) {
+                 // 获取 ByteData
+                 ByteData byteData = await images[i].getByteData();
+                 var resultConnectList= await IssuesApi.uploadPhoto("1",byteData);
+                 print(resultConnectList['data']);
+                 var result= await IssuesApi.editCustomer(userdetail['info']['uuid'],"1",resultConnectList['data']);
+                 print(result['message']);
 
+               }
+             }
+
+         )
+
+     );
 
     return Wrap(
       children: [
@@ -523,7 +1109,7 @@ _comment(BuildContext context) {
 }
 
 
-_deletePhoto(BuildContext context,Map<String,dynamic> img) {
+_deletePhoto(BuildContext context,String img) {
   showDialog(
       context: context,
       builder: (ctx) => Dialog(
