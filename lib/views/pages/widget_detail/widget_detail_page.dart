@@ -8,10 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
+import 'package:flutter_geen/components/permanent/circle.dart';
 import 'package:flutter_geen/views/dialogs/comment.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
-import 'package:flutter_geen/views/items/drop_menu_header.dart';
-import 'package:flutter_geen/views/items/drop_menu_leftWidget.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
@@ -21,15 +20,11 @@ import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_geen/components/permanent/panel.dart';
 import 'package:flutter_geen/components/project/widget_node_panel.dart';
-import 'package:flutter_geen/model/node_model.dart';
-import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/pages/widget_detail/category_end_drawer.dart';
 import 'package:flutter_geen/views/items/tag.dart';
-import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_geen/views/items/CustomsExpansionPanelList.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
-import 'package:flutter_geen/views/pages/utils/loading.dart';
+import 'package:flutter_geen/views/pages/utils/user_detail_array.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'dart:typed_data';
@@ -266,14 +261,14 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           spacing: 0,
                           runSpacing: 0,
                           children: <Widget>[
-                            _item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":info['education'].toString(),false),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":_getEduLevel(info['education']),false),
                             _item_detail_gradute(context,Colors.black,Icons.school,"毕业院校",info['school'].toString()==""?"-":info['school'].toString(),true),
                             _item_detail_gradute(context,Colors.black,Icons.tab,"所学专业",info['major']==""?"-":info['major'].toString(),true),
                             _item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":info['work'].toString()+"",false),
-                            _item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":info['work_job'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":_getWorkType(info['work_job']),true),
                             _item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),false),
-                            _item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":info['work_overtime'].toString(),false),
-                            _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":info['income'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":_getWorkOverTime(info['work_overtime']),false),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":_getIncome(info['income']),true),
                             _item_detail_gradute(context,Colors.redAccent,Icons.house_outlined,"是否有房",info['has_house']==0?"-":info['has_house'].toString(),true),
                             _item_detail_gradute(context,Colors.black,Icons.copyright_rounded,"房贷情况",info['loan_record']==0?"-":info['loan_record'].toString(),false),
                             _item_detail_gradute(context,Colors.black,Icons.car_rental,"是否有车",info['has_car']==0?"-":info['has_car'].toString(),true),
@@ -789,10 +784,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                     children: <Widget>[
                       Row(
                           children: <Widget>[
-                            Icon(
-                              Icons.account_circle_outlined,
-                              size: 18,
-                              color: Colors.black54,
+                            Circle(
+                              //connectType 沟通类型 1-线上沟通 2-到店沟通
+                              color: connectType=="1"?Colors.green:Colors.redAccent,
+                              radius: 5,
                             ),
 
                             Container(
@@ -904,7 +899,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(left: 10.w, right: 10.w),
-            child: avatar("https://img.bosszhipin.com/beijin/mcs/useravatar/20171211/4d147d8bb3e2a3478e20b50ad614f4d02062e3aec7ce2519b427d24a3f300d68_s.jpg"),
+            child: user['pic'].length> 0? avatar(user['pic'][0]) : avatar("https://img.bosszhipin.com/beijin/mcs/useravatar/20171211/4d147d8bb3e2a3478e20b50ad614f4d02062e3aec7ce2519b427d24a3f300d68_s.jpg"),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -1110,6 +1105,82 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
 }
+
+_getEduLevel(info) {
+
+  List<String> _EduLevel = [
+    "未知",
+    "高中及以下",
+    "大专",
+    "本科",
+    "硕士",
+    "博士及以上",
+    "国外留学",
+    "其他",
+
+  ];
+  try {
+    return _EduLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getWorkType(info) {
+
+  List<String> _WorkTypeLevel = [
+    "未知",
+    "企事业单位公务员",
+    "教育医疗",
+    "民营企业",
+    "私营业主",
+    "其他",
+
+  ];
+  try {
+    return _WorkTypeLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getWorkOverTime(info) {
+
+  List<String> _WorkOverTimeLevel = [
+    "未知",
+    "不加班",
+    "偶尔加班",
+    "经常加班",
+
+  ];
+  try {
+    return _WorkOverTimeLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getIncome(info) {
+
+  List<String> _IncomeLevel = [
+    "未知",
+    "5万及以下",
+    "5-10万",
+    "10-15万",
+    "15-20万",
+    "20-30万",
+    "30-50万",
+    "50-70万",
+    "70-100万",
+    "100万以上",
+  ];
+  try {
+    return _IncomeLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
 _getPermission(BuildContext context) {
   //请求读写权限
   ObjectUtil.getPermissions([
@@ -1187,6 +1258,7 @@ _showBottom(BuildContext context,String text){
     //print(value);
   });
 }
+
 _deletePhoto(BuildContext context,Map<String,dynamic> img,Map<String,dynamic> detail) {
   showDialog(
       context: context,
