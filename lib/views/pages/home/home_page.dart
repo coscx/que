@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,10 @@ import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_geen/components/permanent/overlay_tool_wrapper.dart';
+import 'package:flutter_geen/views/items/SearchParamModel.dart';
+import 'package:flutter_geen/views/items/drop_menu_header.dart';
+import 'package:flutter_geen/views/items/drop_menu_leftWidget.dart';
+import 'package:flutter_geen/views/items/drop_menu_rightWidget.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/common/empty_page.dart';
@@ -29,7 +34,24 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   RefreshController _refreshController = RefreshController(initialRefresh: false);
+  bool _showPop = false;
+  bool _showFilter = false;
+  bool _showSort = false;
+  bool _showRight =  false;
+  static List<SortModel> _leftWidgets = [
+    SortModel(name: "服务中", isSelected: true, code: "1"),
+    SortModel(name: "跟进中", isSelected: false, code: "2"),
+    SortModel(name: "已签约", isSelected: false, code: "3"),
+    SortModel(name: "即将过期", isSelected: false, code: "4"),
+  ];
+  SortModel _leftSelectedModel = _leftWidgets[0];
+  List<String> _dropDownHeaderItemStrings = [_leftWidgets[1].name, '筛选'];
 
+  void _showPopView() {
+    setState(() {
+      _showPop = (_showFilter || _showSort);
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -115,6 +137,27 @@ class _HomePageState extends State<HomePage>
               width: 40,
             )
           ],
+
+          bottom: DropMenuHeader(
+            items: [
+              ButtonModel(
+                  text: _dropDownHeaderItemStrings[1],
+                  onTap: (bool selected) {
+                    _showFilter = selected;
+                    _showSort = false;
+                    _showPopView();
+                  }),
+              ButtonModel(
+                  text: _leftSelectedModel.name,
+                  onTap: (bool selected) {
+                    _showSort = selected;
+                    _showFilter = false;
+                    _showPopView();
+                  }),
+
+            ],
+            height: 44,
+          ),
         ),
         body:  BlocListener<HomeBloc, HomeState>(
         listener: (ctx, state) {
@@ -170,7 +213,7 @@ class _HomePageState extends State<HomePage>
                     ),
                   )
               ),
-
+              buildPopView(),
             ],
           );
 
@@ -179,6 +222,68 @@ class _HomePageState extends State<HomePage>
     )
         )
     ));
+  }
+
+
+  Widget buildPopView() {
+    if (_showFilter) {
+      return FutureBuilder(
+        future: loadStudent(context),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return DropMenuRightWidget(
+              paramList: snapshot.data as SearchParamList,
+              clickCallBack:
+                  (SearchParamModel pressModel, ParamItemModel pressItem) {
+                print('${pressItem.name}');
+              },
+              sureFun: () {
+                print("sure click");
+                _showFilter = false;
+                _showSort = false;
+                _showPopView();
+              },
+              resetFun: () {
+                print("reset click");
+              },
+            );
+          } else {
+            return Text("");
+          }
+        },
+      );
+    } else if (_showSort) {
+      return DropMenuLeftWidget(
+        dataSource: _leftWidgets,
+        onSelected: (SortModel model) {
+          _leftSelectedModel = model;
+          print("select ${model.name}  ${model.code}");
+          setState(() {});
+        },
+      );
+    } else {
+      return SizedBox(
+        height: 0,
+      );
+    }
+  }
+  Future<String> _loadAStudentAsset(BuildContext context) async {
+    return await DefaultAssetBundle.of(context)
+        .loadString('assets/searchParam.json');
+  }
+  Future loadStudent(BuildContext context) async {
+    String jsonString = await _loadAStudentAsset(context);
+    final jsonResponse = json.decode(jsonString);
+    SearchParamList paramList = new SearchParamList.fromJson(jsonResponse);
+    for (SearchParamModel item in paramList.list) {
+      if (item.dateFlag == true) {
+        // item.itemList.add(new ParamItemModel(
+        //   name: "自定义时间",
+        //   code: "-1",
+        // ));
+      }
+    }
+    return paramList;
   }
   void _onValueChanged(int value) {
     BlocProvider.of<GlobalBloc>(context).add(EventSetIndexSex(value));
@@ -252,7 +357,7 @@ class _HomePageState extends State<HomePage>
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                   BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2));
                 }
-                if (e == '星源') {
+                if (e == '良缘') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                   BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1));
@@ -273,7 +378,7 @@ class _HomePageState extends State<HomePage>
     final map = {
       "全部": Icons.zoom_in,
       "我的": Icons.check,
-      "星源": Icons.app_blocking,
+      "良缘": Icons.app_blocking,
     };
     return map.keys
         .toList()
@@ -310,7 +415,7 @@ class _HomePageState extends State<HomePage>
     if(state.currentPhotoMode==1){
       return SizedBox(
         width: 50,
-        child: Text("星源"),
+        child: Text("良缘"),
       );
 
     }

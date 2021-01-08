@@ -10,6 +10,8 @@ import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/views/dialogs/comment.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+import 'package:flutter_geen/views/items/drop_menu_header.dart';
+import 'package:flutter_geen/views/items/drop_menu_leftWidget.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
@@ -45,6 +47,7 @@ class WidgetDetailPage extends StatefulWidget {
 
 class _WidgetDetailPageState extends State<WidgetDetailPage> {
   String memberId ;
+
   @override
   void initState() {
     super.initState();
@@ -81,6 +84,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           _buildToHome(),
           _buildCollectButton(context),
         ],
+
+
       ),
       body: Builder(builder: _buildContent),
     ));
@@ -109,51 +114,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             color: Colors.black,),
           ),
           onTap: () async {
-                List<Asset> images = List<Asset>();
-                List<Asset> resultList = List<Asset>();
-                String error = 'No Error Dectected';
-                //Navigator.of(ctx).pop();
-                try {
-                  resultList = await MultiImagePicker.pickImages(
-                    // 选择图片的最大数量
-                    maxImages: 1,
-                    // 是否支持拍照
-                    enableCamera: true,
-                    materialOptions: MaterialOptions(
-                      // 显示所有照片，值为 false 时显示相册
-                        startInAllView: true,
-                        allViewTitle: '所有照片',
-                        actionBarColor: '#2196F3',
-                        textOnNothingSelected: '没有选择照片'
-                    ),
-                  );
-                } on Exception catch (e) {
-                  e.toString();
-                }
-                if (!mounted) return;
-                images = (resultList == null) ? [] : resultList;
-                // 上传照片时一张一张上传
-                for(int i = 0; i < images.length; i++) {
-                   // 获取 ByteData
-                   ByteData byteData = await images[i].getByteData();
-                   try {
-                      var resultConnectList= await IssuesApi.uploadPhoto("1",byteData);
-                      // print(resultConnectList['data']);
-
-                     var result= await IssuesApi.editCustomer("","1",resultConnectList['data']);
-                     if(result['code']==200){
-                       _showToast(ctx,result['message'],true);
-                     }else{
-                       _showToast(ctx,result['message'],true);
-                     }
-                   } on DioError catch(e){
-                     var dd=e.response.data;
-                     _showToast(ctx,dd['message'],true);
-                   }
 
 
-
-                }
               }
 
           ));
@@ -194,7 +156,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     Toasts.toast(
       ctx,
       msg,
-      duration: Duration(milliseconds:  3000 ),
+      duration: Duration(milliseconds:  5000 ),
       action: collected
           ? SnackBarAction(
               textColor: Colors.white,
@@ -327,7 +289,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               ],
             ),
 
-
           ),
 
           Container(
@@ -371,8 +332,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
               ],
             ),
-
-
           ),
           Container(
             margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
@@ -502,7 +461,17 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     if(state is DetailLoading){
 
     }
-    return Container();
+    return Container(
+      child: Container(child:
+      Column(
+        children: [
+          SizedBox(
+            height: 0.h,
+          ),
+          Image.asset("assets/images/loadings.gif"),
+        ],
+      )),
+    );
   }
 
 
@@ -994,7 +963,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   }
   Widget _buildLinkTo(BuildContext context, Map<String,dynamic> userdetail) {
 
-    List<dynamic> imgList =userdetail['pic'];
+    List<dynamic> imgList =userdetail['pics'];
     List<Widget> list = [];
     imgList.map((e) => {
 
@@ -1006,7 +975,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             margin: EdgeInsets.fromLTRB(13.w, 25.h, 0.w, 10.h),
           child: Stack(
           children: <Widget>[
-
             Column(
               children:<Widget> [
               GestureDetector(
@@ -1015,24 +983,20 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                      context,
                      images: List.generate(1, (index) {
                    return ImageOptions(
-                     url: e,
-                     tag: e,
+                     url: e['file_url'],
+                     tag: e['file_url'],
                    );
                  }),
                  );
-               }
-               ,
+               },
                 child: Container(
                   margin: EdgeInsets.fromLTRB(2.w, 0.h, 2.w, 0.h),
-                child: CachedNetworkImage(imageUrl: e,
+                child: CachedNetworkImage(imageUrl: e['file_url'],
                 width: 140.w,
                 height: 240.h,
                   ),
                 )
-
               )
-
-
 
             ],
 
@@ -1054,7 +1018,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         child:
         FeedbackWidget(
         onPressed: () {
-            _deletePhoto(context,e);
+            _deletePhoto(context,e,userdetail);
         },
         child: const Icon(
             CupertinoIcons.delete_solid,
@@ -1064,14 +1028,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         ),
       ]
       )
-
       ],
-
     ))
 
     }
-
-
     ).toList();
      list.add(
          GestureDetector(
@@ -1088,7 +1048,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                ),
              ),
              onTap: () async {
-               _getPermission(context);
+               //_getPermission(context);
                List<Asset> images = List<Asset>();
                List<Asset> resultList = List<Asset>();
                String error = 'No Error Dectected';
@@ -1101,7 +1061,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                    enableCamera: true,
                    materialOptions: MaterialOptions(
                      // 显示所有照片，值为 false 时显示相册
-                       startInAllView: true,
+                       startInAllView: false,
                        allViewTitle: '所有照片',
                        actionBarColor: '#2196F3',
                        textOnNothingSelected: '没有选择照片'
@@ -1115,16 +1075,18 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                // 上传照片时一张一张上传
                for(int i = 0; i < images.length; i++) {
                  // 获取 ByteData
-                 _loading();
+
                  ByteData byteData = await images[i].getByteData();
                  try {
-                   var resultConnectList= await IssuesApi.uploadPhoto("1",byteData);
+                   var resultConnectList= await IssuesApi.uploadPhoto("1",byteData,_loading);
                    // print(resultConnectList['data']);
 
                    var result= await IssuesApi.editCustomer(userdetail['info']['uuid'],"1",resultConnectList['data']);
                    if(result['code']==200){
-                     _showToast(context,result['message'],false);
+                     BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(userdetail['info']));
+                     _showToast(context,"上传成功",false);
                    }else{
+
                      _showToast(context,result['message'],false);
                    }
                  } on DioError catch(e){
@@ -1132,6 +1094,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                    EasyLoading.showSuccess(dd['message']);
                    //_showToast(context,dd['message'],false);
                  }
+
                  EasyLoading.dismiss();
                }
              }
@@ -1167,22 +1130,15 @@ _getPermission(BuildContext context) {
     }
   });
 }
-_loading(){
-  Timer _timer;
-  double _progress;
-  _progress = 0;
-  _timer?.cancel();
-  _timer = Timer.periodic(const Duration(milliseconds: 100),
-          (Timer timer) {
-                EasyLoading.showProgress(_progress,
-                    status: '${(_progress * 100).toStringAsFixed(0)}%');
-                _progress += 0.03;
-
+_loading(int a, int b){
+                double _progress;
+                _progress = 0;
+                _progress = a / b;
+                EasyLoading.showProgress(_progress, status: '${(_progress * 100).toStringAsFixed(0)}%');
+                //_progress += 0.03;
                 if (_progress >= 1) {
-                  _timer?.cancel();
                   EasyLoading.dismiss();
                 }
-        });
 }
 
 _comment(BuildContext context) {
@@ -1199,7 +1155,12 @@ _showBottom(BuildContext context,String text){
       builder: (BuildContext context) {
         return FLCupertinoActionSheet(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            color: Colors.white,
+            constraints: BoxConstraints(
+              minHeight: 450.h,
+              // minWidth: double.infinity, // //宽度尽可能大
+            ),
+            padding:  EdgeInsets.only(left: 25.w, right: 25.w,top: 25.h),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -1226,7 +1187,7 @@ _showBottom(BuildContext context,String text){
     //print(value);
   });
 }
-_deletePhoto(BuildContext context,String img) {
+_deletePhoto(BuildContext context,Map<String,dynamic> img,Map<String,dynamic> detail) {
   showDialog(
       context: context,
       builder: (ctx) => Dialog(
@@ -1239,7 +1200,7 @@ _deletePhoto(BuildContext context,String img) {
             title: '删除图片',
             content: '是否确定继续执行?',
             onSubmit: () {
-              //BlocProvider.of<HomeBloc>(context).add(EventDelImg(img,1));
+              BlocProvider.of<DetailBloc>(context).add(EventDelDetailImg(img,detail['info']));
               Navigator.of(context).pop();
             },
           ),

@@ -28,3 +28,24 @@ class FetchWidgetDetail extends DetailEvent {
 class ResetDetailState extends DetailEvent {
 
 }
+
+class FreshDetailState extends DetailEvent {
+  final Map<String,dynamic> photo;
+  const FreshDetailState(this.photo);
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() {
+    return 'FetchWidgetDetail{widgetModel: }';
+  }
+}
+
+
+class EventDelDetailImg extends DetailEvent {
+  final Map<String,dynamic> img;
+  final Map<String,dynamic> user;
+  EventDelDetailImg(this.img,this.user);
+
+}

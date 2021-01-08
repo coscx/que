@@ -25,6 +25,57 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     if(event is ResetDetailState){
       yield DetailLoading();
     }
+    if(event is FreshDetailState){
+      var result= await IssuesApi.getUserDetail(event.photo['uuid'].toString());
+      if  (result['code']==200){
+
+      } else{
+
+      }
+
+      var resultConnectList= await IssuesApi.getConnectList(event.photo['uuid'].toString(),"1");
+      if  (resultConnectList['code']==200){
+
+      } else{
+
+      }
+
+      if(result['data'].isEmpty){
+        yield DetailEmpty();
+      }else{
+        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data']);
+      }
+    }
+
+    if(event is EventDelDetailImg){
+      var result1= await IssuesApi.delPhoto(event.img['id'].toString());
+      if  (result1['code']==200){
+            var result= await IssuesApi.getUserDetail(event.user['uuid'].toString());
+            if  (result['code']==200){
+
+            } else{
+
+            }
+
+            var resultConnectList= await IssuesApi.getConnectList(event.user['uuid'].toString(),"1");
+            if  (resultConnectList['code']==200){
+
+            } else{
+
+            }
+
+            if(result['data'].isEmpty){
+              yield DetailEmpty();
+            }else{
+              yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data']);
+            }
+      } else{
+
+      }
+
+
+    }
+
   }
 
   Stream<DetailState> _mapLoadWidgetToState(

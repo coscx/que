@@ -34,7 +34,7 @@ class OverlayToolWrapper extends StatefulWidget {
 class OverlayToolWrapperState extends State<OverlayToolWrapper>
     with SingleTickerProviderStateMixin {
   bool show = false;
-  Offset offset = Offset(200, 200);
+  Offset offset = Offset(100, 100);
 
   AnimationController _ctrl;
 
@@ -55,7 +55,7 @@ class OverlayToolWrapperState extends State<OverlayToolWrapper>
 
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       var px = MediaQuery.of(context).size.width - (outWidth);
-      var py = 160.0;
+      var py = 20.0;
       offset = Offset(px, py);
 
       _ctrl = AnimationController(

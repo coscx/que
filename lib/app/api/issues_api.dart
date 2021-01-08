@@ -40,12 +40,15 @@ class IssuesApi {
     return datas;
   }
   static Future<Map<String,dynamic>> editCustomer(String uuid, String type, String url ) async {
+    url="https://queqiaoerp.oss-cn-shanghai.aliyuncs.com/"+url;
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
-    var data={'type':type,'file_url':url};
+    var data={'resources':json.encode([{'type':type,'file_url':url}])};
     try {
     Response<dynamic> rep = await dio.post('/api/v1/customer/editCustomer/'+uuid,queryParameters:data );
+    var dd=rep.data;
+    return dd;
     } on DioError catch(e){
       var dd=e.response.data;
       return dd;
@@ -60,7 +63,7 @@ class IssuesApi {
     var datas = (rep.data);
     return datas;
   }
-  static Future<Map<String,dynamic>> uploadPhoto(  String type, ByteData byteData) async {
+  static Future<Map<String,dynamic>> uploadPhoto(  String type, ByteData byteData,Function fd) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
@@ -80,7 +83,7 @@ class IssuesApi {
     Map<String, dynamic> params = Map();
     params['type']=type;
     // 使用 dio 上传图片
-    Response<dynamic> rep = await dio.post('/api/v1/customer/uploadPic',data:formData,queryParameters:params );
+    Response<dynamic> rep = await dio.post('/api/v1/customer/uploadPic',data:formData,queryParameters:params,onSendProgress: fd );
     var datas = (rep.data);
     return datas;
   }
@@ -96,10 +99,10 @@ class IssuesApi {
   static Future<Map<String,dynamic>> delPhoto( String imgId, ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    var data={'imgId':imgId,'token':token};
-    Response<dynamic> rep = await dio.post('/admin/service/photodelflu.html',queryParameters:data );
-    var datas = json.decode(rep.data);
-
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'ids':imgId};
+    Response<dynamic> rep = await dio.post('/api/v1/customer/deleteResources',queryParameters:data );
+    var datas = (rep.data);
     return datas;
   }
   static Future<Map<String,dynamic>> getData( ) async {

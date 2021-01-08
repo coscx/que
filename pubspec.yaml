@@ -101,10 +101,12 @@ flutter:
     - assets/images/splash/
     - assets/images/head_icon/
     - assets/images/widgets/
+    - assets/images/dropMenu_images/
     - assets/packages/
     - assets/packages/images/
   #  - assets/data/widget.json
     - assets/flutter.db
+    - assets/searchParam.json
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

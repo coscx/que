@@ -498,18 +498,20 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         child: Hero(
           tag: "hero_widget_image_${photo['uuid'].toString()}",
           child: photo['img'] == null
-              ? Material(
+              ? Container(
+            width: 110.w,
+            height: 210.h,
                   color: Colors.transparent,
                   child: CircleText(
                     text: photo['name'],
-                    size: 60,
+                    size: 60.sp,
                     color: invColor,
                   ),
                 )
               : Container(
             child: CachedNetworkImage(imageUrl: photo['head_img'],
-              width: 55.0,
-              height: 100.0,
+              width: 100.w,
+              height: 200.h,
             ),
           )
           ,
