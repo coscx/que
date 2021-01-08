@@ -22,13 +22,12 @@ import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PhotoWidgetListItem extends StatelessWidget {
-  final WidgetModel data;
   final bool hasTopHole;
   final bool hasBottomHole;
   final bool isClip;
   final Map<String,dynamic>  photo;
   PhotoWidgetListItem(
-      {this.data,
+      {
       this.hasTopHole = true,
       this.hasBottomHole = false,
       this.isClip = true,
@@ -66,7 +65,7 @@ class PhotoWidgetListItem extends StatelessWidget {
               FeedbackWidget(
                 onPressed: () {
                   BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
-                  Navigator.pushNamed(context, UnitRouter.widget_detail, arguments: data);
+                  Navigator.pushNamed(context, UnitRouter.widget_detail);
                 },
                 child:  buildContent( context),
               ),
@@ -519,7 +518,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       );
 
   Color get invColor {
-    return Color(colors[data.family.index]);
+    return Colors.grey;
   }
 
   Widget _buildCollectTag(Color color) {
@@ -527,7 +526,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         top: 0,
         right: 40,
         child: BlocBuilder<CollectBloc, CollectState>(builder: (_, s) {
-          bool show = s.widgets.contains(data);
+          bool show = true;
           return Opacity(
             opacity: show ? 1.0 : 0.0,
             child: SizedOverflowBox(

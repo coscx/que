@@ -3,20 +3,28 @@
       "dateFlag": false,
       "itemList": [
         {
-          "code": "200",
+          "code": "2",
           "name": "A级"
         },
         {
-          "code": "800",
+          "code": "1",
           "name": "B级"
         },
         {
-          "code": "900",
+          "code": "0",
           "name": "C级"
+        },
+        {
+          "code": "20",
+          "name": "A级(已过期)"
+        },
+        {
+          "code": "-2",
+          "name": "A级(已退费)"
         }
       ],
       "multiFlag": false,
-      "paramCode": "orderStatus",
+      "paramCode": "customerLevel",
       "paramName": "客户级别",
       "dateSelectorType": 1,
       "defaultVal": ""

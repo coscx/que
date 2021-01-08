@@ -23,7 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Color get activeHomeColor {
 
     if (state is WidgetsLoaded) {
-      return Color(Cons.tabColors[(state as WidgetsLoaded).activeFamily.index]);
+      return Colors.grey;
     }
     return Color(Cons.tabColors[0]);
   }
@@ -73,7 +73,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
 
 
-        yield CheckUserSuccess(widgets: state.props.elementAt(1), activeFamily: state.props.elementAt(0),photos: newUsers,Reason:reason);
+        yield CheckUserSuccess(photos: newUsers,Reason:reason);
       } catch (err) {
         print(err);
         yield WidgetsLoadFailed();
@@ -106,7 +106,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
 
 
-        yield CheckUserSuccess(widgets: state.props.elementAt(1), activeFamily: state.props.elementAt(0),photos: newUsers,Reason:reason);
+        yield CheckUserSuccess(photos: newUsers,Reason:reason);
       } catch (err) {
         print(err);
         yield WidgetsLoadFailed();
@@ -141,7 +141,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         } else{
 
         }
-        yield DelImgSuccess(widgets: state.props.elementAt(1), activeFamily: state.props.elementAt(0),photos: newUsers);
+        yield DelImgSuccess(photos: newUsers);
       } catch (err) {
         print(err);
         yield WidgetsLoadFailed();
@@ -153,7 +153,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       try {
 
-        yield DelImgSuccess(widgets: state.props.elementAt(1), activeFamily: state.props.elementAt(0),photos: state.props.elementAt(2));
+        yield DelImgSuccess(photos: state.props.elementAt(2));
       } catch (err) {
         print(err);
         yield WidgetsLoadFailed();
@@ -162,7 +162,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
     if (event is EventLoadMore) {
        var data =event.user01;
-      yield WidgetsLoaded(widgets: state.props.elementAt(1), activeFamily: state.props.elementAt(0),photos: data);
+      yield WidgetsLoaded(photos: data);
 
     }
     if (event is EventFresh) {
@@ -175,8 +175,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         } else{
 
         }
-        final widgets = await this.repository.loadWidgets(state.props.elementAt(0),);
-        yield WidgetsLoaded(widgets: widgets, activeFamily: state.props.elementAt(0),photos: result['data']['data']);
+
+        yield WidgetsLoaded(photos: result['data']['data']);
 
       } catch (err) {
         print(err);
@@ -184,7 +184,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
 
     }
+    if (event is EventSearchErpUser) {
+      try {
 
+        var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search);
+        if  (result['code']==200){
+
+
+        } else{
+
+        }
+
+        yield WidgetsLoaded(photos: result['data']['data']);
+
+      } catch (err) {
+        print(err);
+        yield WidgetsLoadFailed();
+      }
+
+    }
   }
 
   Stream<HomeState> _mapLoadWidgetToState(WidgetFamily family) async* {
@@ -198,8 +216,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       } else{
 
       }
-      final widgets = await this.repository.loadWidgets(family);
-      yield WidgetsLoaded(widgets: widgets, activeFamily: family,photos: result['data']['data']);
+
+      yield WidgetsLoaded(photos: result['data']['data']);
 
     } catch (err) {
       print(err);

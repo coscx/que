@@ -6,6 +6,7 @@ import 'package:flutter_geen/model/github/issue.dart';
 import 'package:flutter_geen/model/github/repository.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:flutter_geen/views/items/SearchParamModel.dart';
 const kBaseUrl = 'https://ctx.gugu2019.com';
 
 class IssuesApi {
@@ -36,6 +37,29 @@ class IssuesApi {
     dio.options.headers['authorization']="Bearer "+token;
     var data={'keywords':keyWord,'currentPage':page,'status':"all",'is_passive':is_passive,"store_id":1,"pageSize":20,'gender':sex};
     Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
+    var datas = (rep.data);
+    return datas;
+  }
+
+  static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String is_passive,SearchParamList search ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    Map<String,dynamic> searchParm={};
+    search.list.map((e) {
+      if (e.paramCode=="customerLevel"){
+        searchParm['status'] = e.selected;
+      }
+    }).toList();
+    if(is_passive=="0") is_passive="all";
+
+    searchParm['gender'] = sex;
+    searchParm['is_passive'] = is_passive;
+    searchParm['store_id'] = 1;
+    searchParm['pageSize'] = 20;
+    searchParm['currentPage'] = page;
+    var data={'keywords':keyWord,'currentPage':page,'status':"all",'is_passive':is_passive,"store_id":1,"pageSize":20,'gender':sex};
+    Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:searchParm );
     var datas = (rep.data);
     return datas;
   }

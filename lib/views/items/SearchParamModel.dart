@@ -40,7 +40,7 @@ class SearchParamModel {
   bool dateFlag = false;//是否日期控件
   String paramName;//字段名称
   String defaultVal;//默认值
-  
+  String selected;
   SearchParamModel({
     this.itemList,
     this.dateSelectorType,

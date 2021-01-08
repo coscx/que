@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/enums.dart';
 import 'package:flutter_geen/storage/po/widget_po.dart';
 import 'package:flutter_geen/model/widget_model.dart';
-
+import 'package:flutter_geen/views/items/SearchParamModel.dart';
 
 
 abstract class HomeEvent extends Equatable {
@@ -19,7 +19,13 @@ class EventTabTap extends HomeEvent {
 
 }
 
+class EventSearchErpUser extends HomeEvent {
+  final SearchParamList search;
+  final int sex;
+  final int mode;
+  EventSearchErpUser(this.search,this.sex,this.mode);
 
+}
 class EventTabPhoto extends HomeEvent {
   final Map<String,dynamic> family;
 

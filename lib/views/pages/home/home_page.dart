@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage>
   ];
   SortModel _leftSelectedModel = _leftWidgets[0];
   List<String> _dropDownHeaderItemStrings = [_leftWidgets[1].name, '筛选'];
-
+  SearchParamList searchParamList;
   void _showPopView() {
     setState(() {
       _showPop = (_showFilter || _showSort);
@@ -231,13 +231,29 @@ class _HomePageState extends State<HomePage>
         future: loadStudent(context),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
+            SearchParamList tempSearchParamList;
+            if (searchParamList.list.length >0){
+              tempSearchParamList=searchParamList;
+            }else{
+              tempSearchParamList=snapshot.data as SearchParamList;
+            }
+
             return DropMenuRightWidget(
-              paramList: snapshot.data as SearchParamList,
+              paramList: tempSearchParamList,
               clickCallBack:
                   (SearchParamModel pressModel, ParamItemModel pressItem) {
+                     searchParamList.list.map((e) {
+                      if (e.paramCode==pressModel.paramCode){
+                        e.selected=pressItem.code;
+                        return e;
+                      }
+                    }).toList();
                 print('${pressItem.name}');
               },
               sureFun: () {
+                var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+                var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode));
                 print("sure click");
                 _showFilter = false;
                 _showSort = false;
@@ -288,7 +304,7 @@ class _HomePageState extends State<HomePage>
   void _onValueChanged(int value) {
     BlocProvider.of<GlobalBloc>(context).add(EventSetIndexSex(value));
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-    BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode));
+    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,value,mode,));
   }
 
   Widget _buildHead(BuildContext context, GlobalState state) {
@@ -460,12 +476,12 @@ class _HomePageState extends State<HomePage>
     }
 
     if (state is WidgetsLoaded) {
-      List<WidgetModel> items = state.widgets;
+
       List<dynamic>  photos=state.photos;
-      if (items.isEmpty) return EmptyPage();
+      if (photos.isEmpty) return EmptyPage();
       return photos.isNotEmpty?SliverList(
         delegate: SliverChildBuilderDelegate(
-            (_, int index) => _buildHomeItem(items[0],photos[index]),
+            (_, int index) => _buildHomeItem(photos[index]),
             childCount: photos.length),
       ):SliverToBoxAdapter(
           child:Center(child: Container(
@@ -522,7 +538,7 @@ class _HomePageState extends State<HomePage>
       if (items.isEmpty) return EmptyPage();
       return photos.isNotEmpty?SliverList(
         delegate: SliverChildBuilderDelegate(
-                (_, int index) => _buildHomeItem(items[index],photos[index]),
+                (_, int index) => _buildHomeItem(photos[index]),
             childCount: photos.length),
       ):SliverToBoxAdapter(
           child:Center(child: Container(
@@ -552,7 +568,7 @@ class _HomePageState extends State<HomePage>
       if (items.isEmpty) return EmptyPage();
       return photos.isNotEmpty?SliverList(
         delegate: SliverChildBuilderDelegate(
-                (_, int index) => _buildHomeItem(items[index],photos[index]),
+                (_, int index) => _buildHomeItem(photos[index]),
             childCount: photos.length),
       ):SliverToBoxAdapter(
           child:Center(child: Container(
@@ -581,13 +597,9 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildHomeItem(WidgetModel model,Map<String,dynamic> photo) =>
-      //BlocBuilder<GlobalBloc, GlobalState>(
-       // condition: (p, c) => (p.itemStyleIndex != c.itemStyleIndex),
-       // builder: (_, state) {
-           HomeItemSupport.get(model, 6 ,photo);
-       // },
-     // );
+  Widget _buildHomeItem(Map<String,dynamic> photo) =>
+
+           HomeItemSupport.get(null, 6 ,photo);
 
   _switchTab(int index, Color color) {
     BlocProvider.of<HomeBloc>(context)

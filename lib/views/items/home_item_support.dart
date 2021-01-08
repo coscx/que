@@ -32,7 +32,7 @@ class HomeItemSupport {
       case 5:
         return CouponWidgetListItem(isClip: false, data: model);
       case 6:
-        return PhotoWidgetListItem(isClip: false, data: model,photo: photo,);
+        return PhotoWidgetListItem(isClip: false, photo: photo,);
     }
     return TechnoWidgetListItem(data: model);
   }
