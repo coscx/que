@@ -232,10 +232,11 @@ class _HomePageState extends State<HomePage>
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             SearchParamList tempSearchParamList;
-            if (searchParamList.list.length >0){
+            if (searchParamList!=null && searchParamList.list.length >0){
               tempSearchParamList=searchParamList;
             }else{
               tempSearchParamList=snapshot.data as SearchParamList;
+              searchParamList =tempSearchParamList;
             }
 
             return DropMenuRightWidget(
@@ -304,7 +305,13 @@ class _HomePageState extends State<HomePage>
   void _onValueChanged(int value) {
     BlocProvider.of<GlobalBloc>(context).add(EventSetIndexSex(value));
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,value,mode,));
+
+    if(searchParamList ==null){
+      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,));
+    }else{
+      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,value,mode,));
+    }
+
   }
 
   Widget _buildHead(BuildContext context, GlobalState state) {
@@ -494,7 +501,7 @@ class _HomePageState extends State<HomePage>
             Container(
               padding:  EdgeInsets.only(top: 16.0),
               child:  Text(
-                "暂时没有需要审核的用户了，(""^ _ ^)/~┴┴",
+                "暂时没有用户了，(""^ _ ^)/~┴┴",
                 style:  TextStyle(
                   fontSize: 20,
                   color: Colors.orangeAccent,

@@ -572,7 +572,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       child: Container(
         child: Text(
           //尾部摘要
-          "房: "+photo['has_house'].toString()+"套 车: "+photo['has_car'].toString()+"辆 " +(photo['marriage']==2?"已婚":"未婚") +" 生日:" +photo['birthday'].toString(),
+          "房: "+photo['has_house'].toString()+"套 车: "+photo['has_car'].toString()+"辆 " +(photo['marriage']==2?"已婚":"未婚") +" 生日:" +(photo['birthday']==null ? "-":photo['birthday'].toString()),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontSize: 14, shadows: [
