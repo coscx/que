@@ -245,7 +245,12 @@ class _HomePageState extends State<HomePage>
                   (SearchParamModel pressModel, ParamItemModel pressItem) {
                      searchParamList.list.map((e) {
                       if (e.paramCode==pressModel.paramCode){
-                        e.selected=pressItem.code;
+                        if (pressItem.isSelected==true){
+                          e.selected="";
+                        }else{
+                          e.selected=pressItem.code;
+                        }
+
                         return e;
                       }
                     }).toList();
