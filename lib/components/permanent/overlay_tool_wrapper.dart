@@ -71,7 +71,7 @@ class OverlayToolWrapperState extends State<OverlayToolWrapper>
                   Positioned(
                     left: offset.dx,
                     top: offset.dy,
-                    child: _buildFloating(),
+                    child: Container()//_buildFloating(),
                   ),
                 ],
               ));

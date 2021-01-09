@@ -55,7 +55,8 @@ class EventFresh extends HomeEvent {
 
   final int sex;
   final int mode;
-  EventFresh(this.sex,this.mode);
+  final SearchParamList search;
+  EventFresh(this.sex,this.mode,this.search);
 }
 class EventGetCreditId extends HomeEvent {
 

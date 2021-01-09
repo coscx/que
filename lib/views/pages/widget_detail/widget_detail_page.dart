@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:city_pickers/city_pickers.dart';
+import 'package:city_pickers/modal/result.dart';
 import 'package:flui/flui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_geen/components/permanent/circle.dart';
 import 'package:flutter_geen/views/dialogs/comment.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
+import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/res/toly_icon.dart';
@@ -70,7 +73,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               fontFamily: "Quicksand",
               fontWeight: FontWeight.w900,
               fontStyle: FontStyle.italic,
-              fontSize: 22.0,
+              fontSize: 38.sp,
               decoration: TextDecoration.none,
               color: Colors.black,
             )
@@ -173,7 +176,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   }
   List<Widget> _listViewConnectList(List<dynamic>connectList ){
     return connectList.map((e) =>
-    _item(context,e['username'],e['connect_time'],e['connect_message'],e['subscribe_time'],e['connect_status'].toString(),e['connect_type'].toString())
+    _item(context,e['username'],e['connect_time']==null?"":e['connect_time'],e['connect_message'],e['subscribe_time']==null?"":e['subscribe_time'],e['connect_status'].toString(),e['connect_type'].toString())
     ).toList();
   }
   Widget _buildDetail(BuildContext context, DetailState state) {
@@ -207,24 +210,90 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           spacing: 0,
                           runSpacing: 0,
                           children: <Widget>[
-                            _item_detail(context,Colors.black,Icons.format_list_numbered,"编号",info['code'].toString(),false),
-                            _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true),
-                            _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true),
-                            _item_detail(context,Colors.black,Icons.contact_page_outlined,"年龄",info['age']==0?"-":info['age'].toString()+"岁",false),
-                            _item_detail(context,Colors.black,Icons.broken_image_outlined,"生日",info['birthday'].toString()+"("+info['chinese_zodiac']+"-"+info['zodiac']+")",true),
-                            _item_detail(context,Colors.red,Icons.settings_backup_restore_outlined,"八字",info['bazi'].toString(),false),
-                            _item_detail(context,Colors.orange,Icons.whatshot,"五行",info['wuxing'].toString(),false),
-                            _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place'].toString(),true),
-                            _item_detail(context,Colors.black,Icons.house_outlined,"居住",info['location_place'].toString(),true),
-                            _item_detail(context,Colors.black,Icons.point_of_sale,"销售",info['sale_user'].toString(),false),
-                            _item_detail(context,Colors.black,Icons.gamepad_outlined,"民族",info['nation']==1?"汉族":"其他",true),
-                            _item_detail(context,Colors.black,Icons.height,"身高",info['height']==0?"-":info['height'].toString(),true),
-                            _item_detail(context,Colors.black,Icons.line_weight,"体重",info['weight']==0?"-":info['weight'].toString(),true),
-                            _item_detail(context,Colors.black,Icons.design_services_outlined,"服务",info['serve_user'].toString(),false),
-                            _item_detail(context,Colors.black,Icons.integration_instructions_outlined,"兴趣",info['interest'].toString(),true),
-                            _item_detail(context,Colors.black,Icons.blur_on_outlined,"血型",info['blood_type']==0?"-":info['blood_type'].toString(),true),
-                            _item_detail(context,Colors.black,Icons.developer_mode,"择偶",info['demands'].toString(),true),
-                            _item_detail(context,Colors.black,Icons.bookmarks_outlined,"备注",info['remark'].toString(),true),
+                            GestureDetector(
+                                onTap: (){
+
+                                },child: _item_detail(context,Colors.black,Icons.format_list_numbered,"编号",info['code'].toString(),false)),
+                            GestureDetector(
+                                onTap: (){
+
+                                },child: _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true)),
+                              GestureDetector(
+                                  onTap: (){
+                                    showPickerArray(context,[["男生","女生"]],[2]);
+                                  },child:  _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true)),
+                            GestureDetector(
+                            onTap: (){
+
+                            },child: _item_detail(context,Colors.black,Icons.contact_page_outlined,"年龄",info['age']==0?"-":info['age'].toString()+"岁",false)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerDateTime(context);
+                            },child:  _item_detail(context,Colors.black,Icons.broken_image_outlined,"生日",info['birthday'].toString()+"("+info['chinese_zodiac']+"-"+info['zodiac']+")",true)),
+                            GestureDetector(
+                            onTap: (){
+
+                            },child:  _item_detail(context,Colors.red,Icons.settings_backup_restore_outlined,"八字",info['bazi'].toString(),false)),
+                            GestureDetector(
+                            onTap: (){
+
+                                  },child:  _item_detail(context,Colors.orange,Icons.whatshot,"五行",info['wuxing'].toString(),false)),
+                            GestureDetector(
+                            onTap: () async {
+                              Result result = await CityPickers.showCityPicker(
+                                  context: context,
+                                  locationCode: info['np_area_code'] =="" ? (info['np_city_code'] ==""? "320500":info['np_city_code'] ) :info['np_area_code'] ,
+                                  cancelWidget: Text("取消",style: TextStyle(color: Colors.black),),
+                                  confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
+                              );
+                              print(result);
+                            },child:  _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place'].toString(),true)),
+                            GestureDetector(
+                            onTap: () async {
+                              Result result = await CityPickers.showCityPicker(
+                                  context: context,
+                                  locationCode: '320505',
+                                  cancelWidget: Text("取消",style: TextStyle(color: Colors.black),),
+                                  confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
+                              );
+                              print(result);
+                            },child:  _item_detail(context,Colors.black,Icons.house_outlined,"居住",info['location_place'].toString(),true)),
+                            GestureDetector(
+                            onTap: (){
+
+                            },child:  _item_detail(context,Colors.black,Icons.point_of_sale,"销售",info['sale_user'].toString(),false)),
+                            GestureDetector(
+                            onTap: (){
+                            showPickerArray(context,[_nationLevel],info['nation']==0?[1]:[_getIndexOfList(_nationLevel,info['nation'].toString()+"")]);
+                            },child: _item_detail(context,Colors.black,Icons.gamepad_outlined,"民族",info['nation']==1?"汉族":"其他",true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_getHeightList()],info['height']==0?[70]:[_getIndexOfList(_getHeightList(),info['height'].toString()+" cm")]);
+                            },child:  _item_detail(context,Colors.black,Icons.height,"身高",info['height']==0?"-":info['height'].toString()+"cm",true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_getWeightList()],info['weight']==0?[35]:[_getIndexOfList(_getWeightList(),info['weight'].toString()+" kg")]);
+                            },child:  _item_detail(context,Colors.black,Icons.line_weight,"体重",info['weight']==0?"-":info['weight'].toString()+"kg",true)),
+                            GestureDetector(
+                            onTap: (){
+
+                            },child:  _item_detail(context,Colors.black,Icons.design_services_outlined,"服务",info['serve_user']==""?"-":info['serve_user'].toString(),false)),
+                            GestureDetector(
+                            onTap: (){
+
+                            },child:  _item_detail(context,Colors.black,Icons.integration_instructions_outlined,"兴趣",info['interest']==""?"-":info['interest'].toString(),true)),
+                            GestureDetector(
+                            onTap: (){
+                            showPickerArray(context,[_floodLevel],info['blood_type']==0?[3]:[info['blood_type']]);
+                            },child:  _item_detail(context,Colors.black,Icons.blur_on_outlined,"血型",info['blood_type']==0?"-":_getFloodLevel(info['blood_type']),true)),
+                            GestureDetector(
+                            onTap: (){
+
+                            },child:   _item_detail(context,Colors.black,Icons.developer_mode,"择偶",info['demands'].toString(),true)),
+                            GestureDetector(
+                            onTap: (){
+
+                            },child:    _item_detail(context,Colors.black,Icons.bookmarks_outlined,"备注",info['remark'].toString(),true)),
 
                           ]
                       ),
@@ -261,18 +330,18 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           spacing: 0,
                           runSpacing: 0,
                           children: <Widget>[
-                            _item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":_getEduLevel(info['education']),false),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":_getEduLevel(info['education']),true),
                             _item_detail_gradute(context,Colors.black,Icons.school,"毕业院校",info['school'].toString()==""?"-":info['school'].toString(),true),
                             _item_detail_gradute(context,Colors.black,Icons.tab,"所学专业",info['major']==""?"-":info['major'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":info['work'].toString()+"",false),
+                            _item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":info['work'].toString()+"",true),
                             _item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":_getWorkType(info['work_job']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),false),
-                            _item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":_getWorkOverTime(info['work_overtime']),false),
+                            _item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":_getWorkOverTime(info['work_overtime']),true),
                             _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":_getIncome(info['income']),true),
-                            _item_detail_gradute(context,Colors.redAccent,Icons.house_outlined,"是否有房",info['has_house']==0?"-":info['has_house'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.copyright_rounded,"房贷情况",info['loan_record']==0?"-":info['loan_record'].toString(),false),
-                            _item_detail_gradute(context,Colors.black,Icons.car_rental,"是否有车",info['has_car']==0?"-":info['has_car'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.wb_auto_outlined,"车辆档次",info['car_type']==0?"-":info['car_type'].toString(),true),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.house_outlined,"是否有房",info['has_house']==0?"-":_getHasHouse(info['has_house']),true),
+                            _item_detail_gradute(context,Colors.black,Icons.copyright_rounded,"房贷情况",info['loan_record']==0?"-":_getHouseFuture(info['loan_record']),true),
+                            _item_detail_gradute(context,Colors.black,Icons.car_rental,"是否有车",info['has_car']==0?"-":_getHasCar(info['has_car']),true),
+                            _item_detail_gradute(context,Colors.black,Icons.wb_auto_outlined,"车辆档次",info['car_type']==0?"-":_getCarLevel(info['car_type']),true),
 
                           ]
                       ),
@@ -308,15 +377,15 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           spacing: 0,
                           runSpacing: 0,
                           children: <Widget>[
-                            _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",info['marriage']==0?"-":info['marriage'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.child_care,"子女信息",info['has_child']==0?"-":info['has_child'].toString(),true),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",info['marriage']==0?"-":_getMarriageLevel(info['marriage']),true),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.child_care,"子女信息",info['has_child']==0?"-":_getChildLevel(info['has_child']),true),
                             _item_detail_gradute(context,Colors.black,Icons.mark_chat_read_outlined,"子女备注",info['child_remark']==""?"-":info['child_remark'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.looks_one_outlined,"独生子女",info['only_child']==0?"-":info['only_child'].toString()+"",true),
-                            _item_detail_gradute(context,Colors.black,Icons.watch_later_outlined,"父母状况",info['parents']==0?"-":info['parents'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.looks_one_outlined,"独生子女",info['only_child']==0?"-":_getOnlyChildLevel(info['only_child'])+"",true),
+                            _item_detail_gradute(context,Colors.black,Icons.watch_later_outlined,"父母状况",info['parents']==0?"-":_getParentLevel(info['parents']),true),
                             _item_detail_gradute(context,Colors.black,Icons.attribution_rounded,"父亲职业",info['father_work']==""?"-":info['father_work'].toString(),true),
                             _item_detail_gradute(context,Colors.black,Icons.sports_motorsports_outlined,"母亲职业",info['mother_work']==""?"-":info['mother_work'].toString(),true),
                             _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on,"父母收入",info['parents_income']==""?"-":info['parents_income'].toString(),true),
-                            _item_detail_gradute(context,Colors.redAccent,Icons.nine_k,"父母社保",info['parents_insurance']==0?"-":info['parents_insurance'].toString(),true),
+                            _item_detail_gradute(context,Colors.redAccent,Icons.nine_k,"父母社保",info['parents_insurance']==0?"-":_getParentProtectLevel(info['parents_insurance']),true),
 
                           ]
                       ),
@@ -350,12 +419,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           spacing: 0,
                           runSpacing: 0,
                           children: <Widget>[
-                            _item_detail_gradute(context,Colors.redAccent,Icons.fastfood,"宗教信仰",info['faith']==0?"-":info['faith'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.smoking_rooms,"是否吸烟",info['smoke']==0?"-":info['smoke'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.wine_bar,"是否喝酒",info['drinkwine']==""?"-":info['drinkwine'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.nightlife,"生活作息",info['live_rest']==0?"-":info['live_rest'].toString()+"",true),
-                            _item_detail_gradute(context,Colors.black,Icons.child_friendly_outlined,"生育欲望",info['want_child']==0?"-":info['want_child'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.margin,"结婚预期",info['marry_time']==""?"-":info['marry_time'].toString(),true),
+                            _item_detail_gradute(context,Colors.black,Icons.fastfood,"宗教信仰",info['faith']==0?"-":_getFaithLevel(info['faith']),true),
+                            _item_detail_gradute(context,Colors.black,Icons.smoking_rooms,"是否吸烟",info['smoke']==0?"-":_getSmokeLevel(info['smoke']),true),
+                            _item_detail_gradute(context,Colors.black,Icons.wine_bar,"是否喝酒",info['drinkwine']==""?"-":_getDrinkLevel(info['drinkwine']),true),
+                            _item_detail_gradute(context,Colors.black,Icons.nightlife,"生活作息",info['live_rest']==0?"-":_getLifeLevel(info['live_rest'])+"",true),
+                            _item_detail_gradute(context,Colors.black,Icons.child_friendly_outlined,"生育欲望",info['want_child']==0?"-":_getCreatLevel(info['want_child']),true),
+                            _item_detail_gradute(context,Colors.black,Icons.margin,"结婚预期",info['marry_time']==""?"-":_getMarriageDateLevel(info['marry_time']),true),
 
                           ]
                       ),
@@ -513,7 +582,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             "姓名",
-                            style: TextStyle(fontSize: 15.0, color: Colors.grey),
+                            style: TextStyle(fontSize: 30.sp, color: Colors.grey),
                           ),
                         ),
                         SizedBox(
@@ -524,7 +593,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             child: Text(
                               "用户已接待，有意愿继续服务",
                               style: TextStyle(
-                                  fontSize: 12.0, color: Colors.black),
+                                  fontSize: 12.sp, color: Colors.black),
                             )),
                       ]),
                   //Visibility是控制子组件隐藏/可见的组件
@@ -544,7 +613,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                   child: Text(
                                     "2021-01-12 15:35:30",
                                     style: TextStyle(
-                                        fontSize: 7.0, color: Colors.grey),
+                                        fontSize: 7.sp, color: Colors.grey),
                                   )),
 
 
@@ -581,13 +650,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           bottom: 0
       ),
       width: double.infinity,
-      height: 80.h,
+      //height: 80.h,
       child:  Material(
           color:  Colors.transparent ,
-          child: InkWell(
-            onTap: (){},
+          child: Container(
             child: Container(
-              margin: EdgeInsets.only(left: 10.w, right: 20.w),
+              margin: EdgeInsets.only(left: 10.w, right: 20.w,top: 10.h,bottom: 10.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -603,7 +671,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 15.0, color: Colors.grey),
+                            style: TextStyle(fontSize: 30.sp, color: Colors.grey),
                           ),
                         ),
                         SizedBox(
@@ -612,12 +680,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         Visibility(
                             visible: true,
                             child: Container(
-                              width: 530.w,
+                              width: 506.w,
                               child: Text(
                                 answer,
-                                maxLines: 2,
+                                maxLines: 20,
                                 style: TextStyle(
-                                    fontSize: 14.0, color: color),
+                                    fontSize: 28.sp, color: color),
                               ),
                             )),
                       ]),
@@ -638,7 +706,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                   child: Text(
                                     "2021-01-12 15:35:30",
                                     style: TextStyle(
-                                        fontSize: 7.0, color: Colors.grey),
+                                        fontSize: 14.sp, color: Colors.grey),
                                   )),
 
 
@@ -653,7 +721,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
                           Icon(
                             Icons.arrow_forward_ios_outlined,
-                            size: 15,
+                            size: 30.sp,
                             color: Colors.black54,
                           )
 
@@ -674,13 +742,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           bottom: 0
       ),
       width: double.infinity,
-      height: 80.h,
+      //height: 180.h,
       child:  Material(
           color:  Colors.transparent ,
           child: InkWell(
             onTap: (){},
             child: Container(
-              margin: EdgeInsets.only(left: 10.w, right: 20.w),
+              margin: EdgeInsets.only(left: 10.w, right: 20.w,top: 10.h,bottom: 10.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -696,7 +764,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 15.0, color: Colors.grey),
+                            style: TextStyle(fontSize: 30.sp, color: Colors.grey),
                           ),
                         ),
                         SizedBox(
@@ -705,12 +773,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         Visibility(
                             visible: true,
                             child: Container(
-                              width: 470.w,
+                              width: 427.w,
                               child: Text(
                                 answer,
-                                maxLines: 2,
+                                maxLines: 20,
                                 style: TextStyle(
-                                    fontSize: 14.0, color: color),
+                                    fontSize: 28.sp, color: color),
                               ),
                             )),
                       ]),
@@ -731,7 +799,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                   child: Text(
                                     "2021-01-12 15:35:30",
                                     style: TextStyle(
-                                        fontSize: 7.0, color: Colors.grey),
+                                        fontSize: 14.sp, color: Colors.grey),
                                   )),
 
 
@@ -746,7 +814,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
                           Icon(
                             Icons.arrow_forward_ios_outlined,
-                            size: 15,
+                            size: 30.sp,
                             color: Colors.black54,
                           )
 
@@ -794,7 +862,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               margin: EdgeInsets.only(left: 15.w),
                               child: Text(
                                 name==null?"":name,
-                                style: TextStyle(fontSize: 15.0, color: Colors.black54),
+                                style: TextStyle(fontSize: 30.sp, color: Colors.black54),
                               ),
                             ),
                             SizedBox(
@@ -809,7 +877,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                     maxLines: 4,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        fontSize: 12.0, color: Colors.black,fontWeight: FontWeight.w900),
+                                        fontSize: 25.sp, color: Colors.black,fontWeight: FontWeight.w900),
                                   ),
                                 )),
                           ]),
@@ -836,25 +904,25 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                     child: Row(children: <Widget>[
 
                       SizedBox(
-                        width: ScreenUtil().setWidth(10),
+                        width: ScreenUtil().setWidth(10.w),
                       ),
                       Visibility(
                           visible: true,
                           child: Text(
-                            "沟通时间:"+connectTime,
+                            "沟通时间:"+(connectTime==null?"":connectTime),
                             style: TextStyle(
-                                fontSize: 12.0, color: Colors.black54),
+                                fontSize: 20.sp, color: Colors.black54),
                           )),
                       SizedBox(
-                        width: ScreenUtil().setWidth(20),
+                        width: ScreenUtil().setWidth(10.w),
                       ),
 
                         Visibility(
                           visible: true,
                           child: Text(
-                            "预约时间:"+subscribeTime,
+                            "预约时间:"+(subscribeTime==null?"":subscribeTime),
                             style: TextStyle(
-                                fontSize: 12.0, color: Colors.black54),
+                                fontSize: 20.sp, color: Colors.black54),
                           )),
                     ]),
                   ),
@@ -866,27 +934,37 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
   avatar(String url) {
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 2,
-          color: Colors.white,
+    return Stack(
+      children: [
+        Container(
+          width: 150.w,
+          height: 150.h,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/radio_header_1.png"),
+                //fit: BoxFit.contain,
+              ),
+          ),
+          margin: EdgeInsets.only(left: 12.w),
+
         ),
-        borderRadius: BorderRadius.all(Radius.circular(30)),
-      ),
-      child: CircleAvatar(
-        child: ClipOval(
-          child: Image.network(
-            url,
-            fit: BoxFit.cover,
-            width: 60,
-            height: 60,
+        Container(
+          margin: EdgeInsets.only(left: 42.w,top: 22.h),
+
+          child: CircleAvatar(
+            radius:(45.w) ,
+            child: ClipOval(
+              child: Image.network(
+                url,
+                 fit: BoxFit.cover,
+                width: 90.w,
+                height: 90.h,
+              ),
+            ),
+            backgroundColor: Colors.white,
           ),
         ),
-        backgroundColor: Colors.white,
-      ),
+      ],
     );
   }
 
@@ -898,8 +976,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 10.w, right: 10.w),
-            child: user['pic'].length> 0? avatar(user['pic'][0]) : avatar("https://img.bosszhipin.com/beijin/mcs/useravatar/20171211/4d147d8bb3e2a3478e20b50ad614f4d02062e3aec7ce2519b427d24a3f300d68_s.jpg"),
+            padding: EdgeInsets.only(left: 0.w, right: 0.w),
+            child: user['pic'].length> 0? avatar(user['pic'][0]) :Image.asset("assets/packages/images/ic_user_none_round.png"),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -909,14 +987,14 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                  Container(
-                 margin: EdgeInsets.fromLTRB(10.w, 10.h, 5.w, 0.h),
+                 margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
                  child:
                  Text(
                   user['info']['name'],
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 32.sp,
                     ),
                   )),
                   Container(
@@ -927,7 +1005,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       height: 24.h,
                       child: Text(
                         user['info']['age'].toString(),
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: TextStyle(color: Colors.black, fontSize: 18.sp),
                       ))
                 ],
               ),
@@ -943,7 +1021,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         user['info']['native_place'].toString(),
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 12,
+                          fontSize: 24.sp,
                         ),
                       ),
 
@@ -1105,20 +1183,71 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
 }
+showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > select) {
+   Picker(
+      adapter: PickerDataAdapter<String>(pickerdata: pickerData, isArray: true),
+      hideHeader: true,
+      title: new Text("请选择"),
+      cancelText: "取消",
+      confirmText: "确定",
+       selecteds:select,
+     // columnPadding: EdgeInsets.only(top: 50.h,bottom: 50.h,left: 50.w,right: 50.w),
+       selectedTextStyle: TextStyle(
+         fontSize: 20,
+         color: Colors.redAccent,
+       ),
+      onConfirm: (Picker picker, List value) {
+        print(value.toString());
+        print(picker.getSelectedValues());
+      }
+  ).showDialog(context);
+}
+showPickerDateTime(BuildContext context) {
+   Picker(
+      adapter:  DateTimePickerAdapter(
+        type: PickerDateTimeType.kYMDHM,
+        isNumberMonth: true,
+        //strAMPM: const["上午", "下午"],
+        // yearSuffix: "年",
+        // monthSuffix: "月",
+        // daySuffix: "日",
+        value: DateTime.parse("1999-01-01 08:00:00"),
+        maxValue: DateTime.now(),
+        minuteInterval: 1,
+        minHour: 0,
+        maxHour: 23,
+        // twoDigitYear: true,
+      ),
+      title: new Text("选择时间"),
+       cancelText: "取消",
+       confirmText: "确定",
+       textAlign: TextAlign.center,
+      selectedTextStyle: TextStyle(color: Colors.blue),
+      delimiter: [
+        PickerDelimiter(column: 4, child: Container(
+          width: 16.0,
+          alignment: Alignment.center,
+          child: Text(':', style: TextStyle(fontWeight: FontWeight.bold)),
+          color: Colors.white,
+        ))
+      ],
+      footer: Container(
+        height: 50.0,
+        alignment: Alignment.center,
+        child: Text(''),
+      ),
+      onConfirm: (Picker picker, List value) {
+        print(picker.adapter.text);
+      },
+      onSelect: (Picker picker, int index, List<int> selecteds) {
 
+         var stateText = picker.adapter.toString();
+
+      }
+  ).showDialog(context);
+}
 _getEduLevel(info) {
 
-  List<String> _EduLevel = [
-    "未知",
-    "高中及以下",
-    "大专",
-    "本科",
-    "硕士",
-    "博士及以上",
-    "国外留学",
-    "其他",
-
-  ];
   try {
     return _EduLevel[info];
   } catch (e) {
@@ -1128,15 +1257,7 @@ _getEduLevel(info) {
 }
 _getWorkType(info) {
 
-  List<String> _WorkTypeLevel = [
-    "未知",
-    "企事业单位公务员",
-    "教育医疗",
-    "民营企业",
-    "私营业主",
-    "其他",
 
-  ];
   try {
     return _WorkTypeLevel[info];
   } catch (e) {
@@ -1146,13 +1267,7 @@ _getWorkType(info) {
 }
 _getWorkOverTime(info) {
 
-  List<String> _WorkOverTimeLevel = [
-    "未知",
-    "不加班",
-    "偶尔加班",
-    "经常加班",
 
-  ];
   try {
     return _WorkOverTimeLevel[info];
   } catch (e) {
@@ -1162,18 +1277,6 @@ _getWorkOverTime(info) {
 }
 _getIncome(info) {
 
-  List<String> _IncomeLevel = [
-    "未知",
-    "5万及以下",
-    "5-10万",
-    "10-15万",
-    "15-20万",
-    "20-30万",
-    "30-50万",
-    "50-70万",
-    "70-100万",
-    "100万以上",
-  ];
   try {
     return _IncomeLevel[info];
   } catch (e) {
@@ -1181,6 +1284,364 @@ _getIncome(info) {
   }
 
 }
+
+_getHasHouse(info) {
+
+
+  try {
+    return _hasHouseLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+
+_getHouseFuture(info) {
+
+
+  try {
+    return _houseFutureLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+
+_getHasCar(info) {
+
+
+  try {
+    return _hasCarLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getCarLevel(info) {
+
+
+  try {
+    return _carLevelLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+
+
+_getMarriageLevel(info) {
+
+
+  try {
+    return _marriageLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getChildLevel(info) {
+
+
+  try {
+    return _childLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getOnlyChildLevel(info) {
+
+
+  try {
+    return _onlyChildLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getParentLevel(info) {
+
+
+  try {
+    return _parentLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getParentProtectLevel(info) {
+
+
+  try {
+    return _parentProtectLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getFaithLevel(info) {
+
+
+  try {
+    return _faithLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+
+_getSmokeLevel(info) {
+
+
+  try {
+    return _smokeLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+
+_getDrinkLevel(info) {
+
+
+  try {
+    return _drinkLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getLifeLevel(info) {
+
+
+  try {
+    return _lifeLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+
+_getCreatLevel(info) {
+  try {
+    return _creatLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+
+_getMarriageDateLevel(info) {
+
+
+  try {
+    return _marriageDateLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getFloodLevel(info) {
+
+
+  try {
+    return _floodLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+int _getIndexOfList(List<String> orc,String input) {
+    var index =orc.indexOf(input);
+    return index;
+}
+List<String> _getAgeList() {
+
+  List<String> age =[] ;
+  for (var i = 14; i < 99; i++) {
+    age.add(i.toString()+" 岁");
+  }
+  return age;
+}
+List<String> _getWeightList() {
+
+  List<String> weight =[] ;
+  for (var i = 30; i < 200; i++) {
+    weight.add(i.toString()+" kg");
+  }
+  return weight;
+}
+List<String> _getHeightList() {
+
+  List<String> height=[] ;
+  for (var i = 100; i < 200; i++) {
+    height.add(i.toString()+" cm");
+  }
+  return height;
+}
+
+
+
+
+
+List<String> _nationLevel = [
+  "汉族","蒙古族","回族","藏族","维吾尔族","苗族","彝族","壮族","布依族","朝鲜族","满族","侗族","瑶族","白族","土家族",
+  "哈尼族","哈萨克族","傣族","黎族","傈僳族","佤族","畲族","高山族","拉祜族","水族","东乡族","纳西族","景颇族","柯尔克孜族",
+  "土族","达斡尔族","仫佬族","羌族","布朗族","撒拉族","毛南族","仡佬族","锡伯族","阿昌族","普米族","塔吉克族","怒族", "乌孜别克族",
+  "俄罗斯族","鄂温克族","德昂族","保安族","裕固族","京族","塔塔尔族","独龙族","鄂伦春族","赫哲族","门巴族","珞巴族","基诺族"
+];
+List<String> _floodLevel = [
+  "未知",
+  "A型",
+  "B型",
+  "O型",
+  "AB型",
+
+
+];
+List<String> _EduLevel = [
+  "未知",
+  "高中及以下",
+  "大专",
+  "本科",
+  "硕士",
+  "博士及以上",
+  "国外留学",
+  "其他",
+
+];
+List<String> _WorkTypeLevel = [
+  "未知",
+  "企事业单位公务员",
+  "教育医疗",
+  "民营企业",
+  "私营业主",
+  "其他",
+
+];
+List<String> _WorkOverTimeLevel = [
+  "未知",
+  "不加班",
+  "偶尔加班",
+  "经常加班",
+
+];
+List<String> _IncomeLevel = [
+  "未知",
+  "5万及以下",
+  "5-10万",
+  "10-15万",
+  "15-20万",
+  "20-30万",
+  "30-50万",
+  "50-70万",
+  "70-100万",
+  "100万以上",
+];
+List<String> _hasHouseLevel = [
+  "未知",
+  "无房",
+  "1套房",
+  "2套房",
+  "3套房及以上",
+  "其他",
+];
+List<String> _houseFutureLevel = [
+  "未知",
+  "无房贷",
+  "已还清",
+  "在还贷",
+
+];
+List<String> _hasCarLevel = [
+  "未知",
+  "有车",
+  "无车",
+];
+List<String> _carLevelLevel = [
+  "未知",
+  "无车产",
+  "5-10万车",
+  "10-20万车",
+  "20-30万车",
+  "30-50万车",
+  "50万以上车",
+];
+List<String> _marriageLevel = [
+  "未知",
+  "未婚",
+  "离异带孩",
+  "离异单身",
+  "离异未育",
+  "丧偶",
+];
+List<String> _childLevel = [
+  "未知",
+  "有",
+  "无",
+];
+List<String> _onlyChildLevel = [
+  "未知",
+  "有",
+  "无",
+];
+List<String> _parentLevel = [
+  "未知",
+  "父母同在",
+  "父歿母在",
+  "父在母歿",
+  "父母同歿",
+];
+List<String> _parentProtectLevel = [
+  "未知",
+  "父亲有医保",
+  "母亲有医保",
+  "父母均有医保",
+];
+List<String> _faithLevel = [
+  "未知",
+  "无信仰",
+  "基督教",
+  "天主教",
+  "佛教",
+  "道教",
+  "伊斯兰教",
+  "其他宗教",
+
+];
+List<String> _smokeLevel = [
+  "未知",
+  "不吸烟",
+  "偶尔吸烟",
+  "经常吸烟",
+  "有戒烟计划",
+];
+List<String> _drinkLevel = [
+  "未知",
+  "不喝酒",
+  "偶尔喝",
+  "应酬喝",
+  "经常喝",
+  "有戒酒计划",
+];
+List<String> _lifeLevel = [
+  "未知",
+  "很规律",
+  "经常熬夜",
+];
+List<String> _creatLevel = [
+  "未知",
+  "想要孩子",
+  "可以考虑",
+  "想要孩子",
+];
+List<String> _marriageDateLevel = [
+  "未知",
+  "半年内",
+  "一年内",
+  "2年内",
+  "还没想好",
+];
 _getPermission(BuildContext context) {
   //请求读写权限
   ObjectUtil.getPermissions([
@@ -1224,14 +1685,16 @@ _showBottom(BuildContext context,String text){
   showFLBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return FLCupertinoActionSheet(
+        return ScrollConfiguration(
+            behavior: DyBehaviorNull(),
+        child:FLCupertinoActionSheet(
           child: Container(
             color: Colors.white,
             constraints: BoxConstraints(
               minHeight: 450.h,
               // minWidth: double.infinity, // //宽度尽可能大
             ),
-            padding:  EdgeInsets.only(left: 25.w, right: 25.w,top: 25.h),
+            padding:  EdgeInsets.only(left: 25.w, right: 25.w,top: 25.h,bottom: 20.h),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -1240,7 +1703,7 @@ _showBottom(BuildContext context,String text){
                   child: Text(
                     text,
                     textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 16,fontWeight: FontWeight.w900),
+                    style: TextStyle(fontSize: 32.sp,fontWeight: FontWeight.w900),
                   ),
                 )
               ],
@@ -1253,7 +1716,7 @@ _showBottom(BuildContext context,String text){
               Navigator.pop(context, 'Cancel');
             },
           ),
-        );
+        ));
       }).then((value) {
     //print(value);
   });
@@ -1311,7 +1774,7 @@ class WidgetDetailTitle extends StatelessWidget {
               child: Text(
                 "用户名："  + usertail['user']['userName'],
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     color: Color(0xff1EBBFD),
                     fontWeight: FontWeight.bold),
               ),

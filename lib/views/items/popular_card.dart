@@ -32,13 +32,13 @@ class PopularCard extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             ImageCard(
-              imageSource: photo['img'],
+              imageSource: photo['head_img'],
             ),
 
             ContentCard(
-              title: photo['userName'],
-              location: photo['sex']==1?"男":"女",
-              description: photo['addressed'] ,
+              title: photo['name'],
+              location: photo['gender']==1?"男":"女",
+              description: photo['np_province_name'] +photo['np_city_name'],
             ),
           ],
         ),
@@ -128,9 +128,9 @@ class ImageCard extends StatelessWidget {
           bottomLeft: Radius.circular(15.w),
         ),
       ),
-      child: CachedNetworkImage(imageUrl: this.imageSource,
+      child: this.imageSource!=""?CachedNetworkImage(imageUrl: this.imageSource,
         fit: BoxFit.cover,
-      ),
+      ):Image.asset("assets/packages/images/ic_user_none_round.png"),
     );
   }
 }

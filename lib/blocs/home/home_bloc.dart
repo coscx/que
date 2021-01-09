@@ -168,7 +168,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is EventFresh) {
       try {
 
-        var result= await IssuesApi.getPhoto('', '1',event.sex.toString(),event.mode.toString());
+        var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search);
         if  (result['code']==200){
 
 

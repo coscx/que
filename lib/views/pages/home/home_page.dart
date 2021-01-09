@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage>
   ];
   SortModel _leftSelectedModel = _leftWidgets[0];
   List<String> _dropDownHeaderItemStrings = [_leftWidgets[1].name, '筛选'];
-  SearchParamList searchParamList;
+  SearchParamList searchParamList= SearchParamList(list: []);
   void _showPopView() {
     setState(() {
       _showPop = (_showFilter || _showSort);
@@ -76,19 +76,19 @@ class _HomePageState extends State<HomePage>
     //BlocProvider.of<GlobalBloc>(context).add((EventSetIndexNum()));
     var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-    BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode));
+    BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode,searchParamList));
     _refreshController.refreshCompleted();
   }
 
   // 上拉加载
   void _onLoading() async {
 
-    List<dynamic> oldUsers = BlocProvider.of<HomeBloc>(context).state.props.elementAt(2);
+    List<dynamic> oldUsers = BlocProvider.of<HomeBloc>(context).state.props.elementAt(0);
     var currentPage =BlocProvider.of<GlobalBloc>(context).state.indexPhotoPage;
     var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
     BlocProvider.of<GlobalBloc>(context).add(EventIndexPhotoPage(currentPage));
-    var result= await IssuesApi.getPhoto('', (++currentPage).toString(),sex.toString(),mode.toString());
+    var result= await IssuesApi.searchErpUser('', (++currentPage).toString(),sex.toString(),mode.toString(),searchParamList);
     if  (result['code']==200){
 
     } else{
@@ -312,7 +312,7 @@ class _HomePageState extends State<HomePage>
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
 
     if(searchParamList ==null){
-      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,));
+      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,searchParamList));
     }else{
       BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,value,mode,));
     }
@@ -378,17 +378,17 @@ class _HomePageState extends State<HomePage>
                 if (e == '全部') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList));
                 }
                 if (e == '我的') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList));
                 }
                 if (e == '良缘') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList));
                 }
               },
               onCanceled: () => print('onCanceled'),

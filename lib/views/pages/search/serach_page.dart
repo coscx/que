@@ -92,7 +92,7 @@ class _SearchPageState extends State<SearchPage> {
                     oldUsers.forEach((element) {
                       newUsers.add(element);
                     });
-                    newUsers.addAll(result['data']['photo_list']);
+                    newUsers.addAll(result['data']['data']);
                     BlocProvider.of<SearchBloc>(context).add(EventLoadMoreUser(newUsers));
                     _refreshController.loadComplete();
 

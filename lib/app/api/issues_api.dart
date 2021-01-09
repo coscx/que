@@ -35,7 +35,7 @@ class IssuesApi {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
-    var data={'keywords':keyWord,'currentPage':page,'status':"all",'is_passive':is_passive,"store_id":1,"pageSize":20,'gender':sex};
+    var data={'name':keyWord,'currentPage':page,'status':"all",'is_passive':is_passive,"store_id":1,"pageSize":20,'gender':sex};
     Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
     var datas = (rep.data);
     return datas;
@@ -114,10 +114,10 @@ class IssuesApi {
   static Future<Map<String,dynamic>> searchPhoto( String keyWord, String page, ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    var data={'keywords':keyWord,'pages':page,'token':token,};
-    Response<dynamic> rep = await dio.post('/admin/service/photoflu.html',queryParameters:data );
-    var datas = json.decode(rep.data);
-
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'name':keyWord,'currentPage':page,'status':"all",'is_passive':"all","store_id":1,"pageSize":20};
+    Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
+    var datas = (rep.data);
     return datas;
   }
   static Future<Map<String,dynamic>> delPhoto( String imgId, ) async {

@@ -179,10 +179,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           } else{
 
           }
-          if(result['data']['photo_list'].length==0){
+          if(result['data']['data'].length==0){
             yield SearchStateEmpty();
           }else{
-            yield   SearchStateSuccess(result['data']['photo_list'],word);
+            yield   SearchStateSuccess(result['data']['data'],word);
           }
 
           print('mapEventToState');

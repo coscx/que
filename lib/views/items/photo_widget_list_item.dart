@@ -498,13 +498,14 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
           tag: "hero_widget_image_${photo['uuid'].toString()}",
           child: photo['img'] == null
               ? Container(
-            width: 110.w,
-            height: 210.h,
+                  width: 110.w,
+                  height: 210.h,
                   color: Colors.transparent,
                   child: CircleText(
                     text: photo['name'],
-                    size: 60.sp,
+                    size: 50.sp,
                     color: invColor,
+                    shadowColor: Colors.transparent,
                   ),
                 )
               : Container(
@@ -518,7 +519,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       );
 
   Color get invColor {
-    return Colors.grey;
+    return Colors.blue;
   }
 
   Widget _buildCollectTag(Color color) {
@@ -548,7 +549,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         children: <Widget>[
           const SizedBox(width: 1),
           Expanded(
-            child: Text(photo['name']+" "+photo['mobile']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+(photo['status']==1?"B ":"C "),
+            child: Text(photo['name']+" "+photo['mobile']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+(photo['status']==0?"C":(photo['status']==1?"B":"A")),
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     fontSize: 14,
@@ -557,6 +558,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                       Shadow(color: Colors.white, offset: Offset(.3, .3))
                     ])),
           ),
+
           // StarScore(
           //   star: Star(emptyColor: Colors.white, size: 15, fillColor: invColor),
           //   score: data.lever,
