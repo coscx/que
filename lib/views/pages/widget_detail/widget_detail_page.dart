@@ -220,7 +220,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                 },child: _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true)),
                               GestureDetector(
                                   onTap: (){
-                                    showPickerArray(context,[["男生","女生"]],[2]);
+                                    showPickerArray(context,[["男生","女生"]],info['gender']==0?[1]:[_getIndexOfList(_sexLevel,info['gender'].toString())]);
                                   },child:  _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true)),
                             GestureDetector(
                             onTap: (){
@@ -333,7 +333,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             _item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":_getEduLevel(info['education']),true),
                             _item_detail_gradute(context,Colors.black,Icons.school,"毕业院校",info['school'].toString()==""?"-":info['school'].toString(),true),
                             _item_detail_gradute(context,Colors.black,Icons.tab,"所学专业",info['major']==""?"-":info['major'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":info['work'].toString()+"",true),
+                            _item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":_getCompanyLevel(info['work'])+"",true),
                             _item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":_getWorkType(info['work_job']),true),
                             _item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),true),
                             _item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":_getWorkOverTime(info['work_overtime']),true),
@@ -1451,6 +1451,27 @@ _getFloodLevel(info) {
   }
 
 }
+
+_getSexLevel(info) {
+
+
+  try {
+    return _sexLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
+_getCompanyLevel(info) {
+
+
+  try {
+    return _companyTypeLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
 int _getIndexOfList(List<String> orc,String input) {
     var index =orc.indexOf(input);
     return index;
@@ -1490,6 +1511,11 @@ List<String> _nationLevel = [
   "土族","达斡尔族","仫佬族","羌族","布朗族","撒拉族","毛南族","仡佬族","锡伯族","阿昌族","普米族","塔吉克族","怒族", "乌孜别克族",
   "俄罗斯族","鄂温克族","德昂族","保安族","裕固族","京族","塔塔尔族","独龙族","鄂伦春族","赫哲族","门巴族","珞巴族","基诺族"
 ];
+List<String> _sexLevel = [
+  "未知",
+  "男生",
+  "女生",
+];
 List<String> _floodLevel = [
   "未知",
   "A型",
@@ -1511,6 +1537,15 @@ List<String> _EduLevel = [
 
 ];
 List<String> _WorkTypeLevel = [
+  "未知",
+  "企事业单位公务员",
+  "教育医疗",
+  "民营企业",
+  "私营业主",
+  "其他",
+
+];
+List<String> _companyTypeLevel = [
   "未知",
   "企事业单位公务员",
   "教育医疗",

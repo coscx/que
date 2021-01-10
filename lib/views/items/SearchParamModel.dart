@@ -41,6 +41,7 @@ class SearchParamModel {
   String paramName;//字段名称
   String defaultVal;//默认值
   String selected;
+  String selectName;
   SearchParamModel({
     this.itemList,
     this.dateSelectorType,

@@ -493,25 +493,33 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       );
 
   Widget buildLeading() => Padding(
-        padding: const EdgeInsets.all(0.0),
+        padding:  EdgeInsets.only(top: 10.h),
         child: Hero(
           tag: "hero_widget_image_${photo['uuid'].toString()}",
-          child: photo['img'] == null
+          child: photo['head_img'] == ""
               ? Container(
-                  width: 110.w,
-                  height: 210.h,
+                  // width: 110.w,
+                  // height: 210.h,
                   color: Colors.transparent,
                   child: CircleText(
                     text: photo['name'],
-                    size: 50.sp,
+                    size: 140.sp,
                     color: invColor,
                     shadowColor: Colors.transparent,
                   ),
                 )
               : Container(
-            child: CachedNetworkImage(imageUrl: photo['head_img'],
-              width: 100.w,
-              height: 200.h,
+            child: CircleAvatar(
+              foregroundColor: Colors.white10,
+              radius:(60.w) ,
+              child: ClipOval(
+                child: CachedNetworkImage(imageUrl: photo['head_img'],
+                  fit: BoxFit.cover,
+                  width: 120.w,
+                  height: 120.h,
+
+                ),
+              ),
             ),
           )
           ,

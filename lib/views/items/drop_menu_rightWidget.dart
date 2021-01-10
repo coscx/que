@@ -1,14 +1,17 @@
+import 'package:cupertino_range_slider/cupertino_range_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
-
-typedef DropMenuRightCallback = void Function(
-    SearchParamModel model, ParamItemModel item);
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_geen/views/pages/home/home_page.dart';
+typedef DropMenuRightCallback = void Function(SearchParamModel model, ParamItemModel item);
+typedef SwitchCallback = void Function(bool swith,int a,int b);
 class DropMenuRightWidget extends StatefulWidget {
   final SearchParamList paramList;
   final DropMenuRightCallback clickCallBack;
   final VoidCallback resetFun;
   final VoidCallback sureFun;
+  final SwitchCallback clickSwith;
   String resultCount;
 
   DropMenuRightWidget({
@@ -17,6 +20,7 @@ class DropMenuRightWidget extends StatefulWidget {
     this.resetFun,
     this.sureFun,
     this.resultCount,
+    this.clickSwith,
   });
 
   @override
@@ -27,7 +31,9 @@ class DropMenuRightWidget extends StatefulWidget {
 }
 
 class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
-  
+  int minValue =15;
+  int maxValue=35;
+  bool _onOff=false;
   Widget buildButton(
     int modelIndex,
     int itemIndex,
@@ -151,13 +157,60 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              FlatButton(
-                  onPressed: null,
-                  child: Text(
-                    'select',
-                    style: TextStyle(
-                        fontSize: 14, color: Color(0xff4A90E2)),
-                  ))
+            CupertinoSwitch(
+            value: _onOff,
+            onChanged: (onOff) {
+            setState(() {
+            _onOff = onOff;
+            if(widget.clickSwith != null) {
+              widget.clickSwith(_onOff, minValue, maxValue);
+            }
+
+            });
+            },
+            activeColor: Colors.blue,
+            //trackColor: Colors.white10,
+            ),
+              Text(
+                minValue.toString()+"",
+                style:  TextStyle(
+                  fontSize: 20,
+                  color: Colors.orangeAccent,
+                ),
+              ),
+
+              Container(
+                width: 400.w,
+                child: CupertinoRangeSlider(
+                  minValue: minValue.roundToDouble(),
+                  maxValue: maxValue.roundToDouble(),
+                  min: 14.0,
+                  max: 70.0,
+                  onMinChanged: (minVal){
+                    setState(() {
+                      minValue = minVal.round();
+                    if(widget.clickSwith != null){
+                      widget.clickSwith(_onOff, minValue,maxValue);
+                    }
+                    });
+                  },
+                  onMaxChanged: (maxVal){
+                    setState(() {
+                      maxValue = maxVal.round();
+                      if(widget.clickSwith != null) {
+                        widget.clickSwith(_onOff, minValue, maxValue);
+                      }
+                    });
+                  },
+                ),
+              ),
+              Text(
+                maxValue.toString()+"",
+                style:  TextStyle(
+                  fontSize: 20,
+                  color: Colors.orangeAccent,
+                ),
+              ),
             ],
           ),
         ),
@@ -166,7 +219,12 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
   }
 
   Widget build(BuildContext context) {
-    return ListView(
+    return
+      ScrollConfiguration(
+        behavior: DyBehaviorNull(),
+    child:
+      ListView(
+        physics: const BouncingScrollPhysics(),
       children: [
         Container(
           color: Colors.white,
@@ -251,6 +309,6 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
           ),
         ),
       ],
-    );
+    ));
   }
 }

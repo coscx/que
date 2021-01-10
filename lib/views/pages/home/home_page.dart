@@ -23,7 +23,7 @@ import 'package:flutter_geen/views/common/empty_page.dart';
 import 'package:flutter_geen/views/items/home_item_support.dart';
 import 'package:flutter_geen/views/pages/home/toly_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'background.dart';
 
 class HomePage extends StatefulWidget {
@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage>
     ),
     child:Scaffold(
         appBar: AppBar(
-          title: const Text('客户管理',style: TextStyle(color: Colors.black, fontSize: 25,fontWeight: FontWeight.bold)),
+          title:  Text('客户管理',style: TextStyle(color: Colors.black, fontSize: 48.sp,fontWeight: FontWeight.bold)),
           //leading:const Text('Demo',style: TextStyle(color: Colors.black, fontSize: 15)),
           backgroundColor: Colors.white,
           elevation: 0, //去掉Appbar底部阴影
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage>
             //   ),
             // ),
             SizedBox(
-              width: 40,
+              width: 40.w,
             )
           ],
 
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage>
                   }),
 
             ],
-            height: 44,
+            height: 60.h,
           ),
         ),
         body:  BlocListener<HomeBloc, HomeState>(
@@ -184,47 +184,123 @@ class _HomePageState extends State<HomePage>
 
               BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
 
-              ScrollConfiguration(
-                  behavior: DyBehaviorNull(),
-                  child:
-                  SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: true,
-                    header: DYrefreshHeader(),
-                    footer: DYrefreshFooter(),
-                    controller: _refreshController,
-                    onRefresh: _onRefresh,
-                    onLoading: _onLoading,
-                    child:  CustomScrollView(
-                      physics: BouncingScrollPhysics(),
-                      slivers: <Widget>[
-                        // Container(
-                        //   child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
-                        // ),
-                        SliverToBoxAdapter(
-                          child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
+              Container(
+                //padding:  EdgeInsets.only(top: 25.h),
+                child: ScrollConfiguration(
+                    behavior: DyBehaviorNull(),
+                    child:
+                    SmartRefresher(
+                      enablePullDown: true,
+                      enablePullUp: true,
+                      header: DYrefreshHeader(),
+                      footer: DYrefreshFooter(),
+                      controller: _refreshController,
+                      onRefresh: _onRefresh,
+                      onLoading: _onLoading,
+                      child:  CustomScrollView(
+                        physics: BouncingScrollPhysics(),
+                        slivers: <Widget>[
+                          // Container(
+                          //   child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
+                          // ),
+                          SliverToBoxAdapter(
+                            child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
 
+                          ),
+                      SliverToBoxAdapter(
+                        child: Row(
+                          children: [
+                            // Container(
+                            //   height: 50.h,
+                            //   padding:  EdgeInsets.only(left: 35.w,top: 8.h),
+                            //   child: Text('筛选条件:'
+                            //
+                            //   ),
+                            // ),
+                           Container(
+                              height: 50.h,
+                              width: 700.w,
+                              padding:  EdgeInsets.only(left: 30.w),
+                              child: ListView(
+                                shrinkWrap: true ,
+                                  scrollDirection: Axis.horizontal,
+                                  children:<Widget>  [
+                                    ...buildLeftRightWidget()
+                                  ],
+                                ),
+                            ),
+                          ],
+                        )),
 
-                        ),
-
-
-                        _buildContent(ctx, state),
-                      ],
-                    ),
-                  )
+                          _buildContent(ctx, state),
+                        ],
+                      ),
+                    )
+                ),
               ),
               buildPopView(),
             ],
           );
-
-
     }
     )
         )
     ));
   }
+  Widget getLeftRightWidget() {
+
+    return Container(padding:  EdgeInsets.only(right: 15.w),child:RawChip(
+      label: Text('老孟'),
+      onDeleted: (){
+        print('onDeleted');
+      },
+      deleteIcon: Icon(Icons.delete),
+      deleteIconColor: Colors.red,
+      deleteButtonTooltipMessage: '删除',
+    ));
+  }
+  List<Widget> buildLeftRightWidget() {
+
+    var ll= searchParamList.list.where((element) =>  element.selected !=null)
+        .map((e) {
+
+           return Container(padding:  EdgeInsets.only(right: 15.w),child:RawChip(
+             label: Text(e.selectName==null?"0":e.selectName),
+             onDeleted: (){
+               print('onDeleted');
+               setState(() {
+                 deleteLeftRightWidget(e.selectName);
+               });
+             },
+             deleteIcon: Icon(Icons.delete),
+             deleteIconColor: Colors.red,
+             deleteButtonTooltipMessage: '删除',
+           ));
 
 
+       }).toList();
+     return ll;
+  }
+
+   deleteLeftRightWidget(String code ) {
+
+     searchParamList.list
+        .map((e) {
+      if(e.selectName ==code) {
+        e.selected=null;
+        e.selectName=null;
+        e.itemList.map((el) {
+          if(el.code ==code){
+             el.isSelected =false;
+          }
+          return el;
+        });
+        return e;
+      }else{
+        return e;
+      }
+
+    }).toList();
+  }
   Widget buildPopView() {
     if (_showFilter) {
       return FutureBuilder(
@@ -246,9 +322,11 @@ class _HomePageState extends State<HomePage>
                      searchParamList.list.map((e) {
                       if (e.paramCode==pressModel.paramCode){
                         if (pressItem.isSelected==true){
-                          e.selected="";
+                          e.selected=null;
+                          e.selectName=null;
                         }else{
                           e.selected=pressItem.code;
+                          e.selectName =pressItem.name;
                         }
 
                         return e;
@@ -256,6 +334,12 @@ class _HomePageState extends State<HomePage>
                     }).toList();
                 print('${pressItem.name}');
               },
+              clickSwith: (on , min,max){
+                print(on);
+                print(min);
+                print(max);
+              },
+
               sureFun: () {
                 var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                 var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;

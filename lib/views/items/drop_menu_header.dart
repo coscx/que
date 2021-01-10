@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_geen/views/pages/home/home_page.dart';
 typedef FilterBarCallback = void Function(bool isSelected);
 
 class DropMenuHeader extends StatefulWidget implements PreferredSizeWidget {
@@ -59,7 +59,7 @@ class _dropMenuHeaderState extends State<DropMenuHeader> {
       return Container(
           color: Colors.white,
           padding: EdgeInsets.all(0),
-          height: 44,
+          height: 44.h,
           child: GestureDetector(
             onTap: () {
               if (_selectedIndex == index) {
@@ -88,20 +88,25 @@ class _dropMenuHeaderState extends State<DropMenuHeader> {
                             color: buttonModel.dataSelected
                                 ? buttonModel.selectedColor ?? Color(0xFFF12E49)
                                 : buttonModel.normalColor ?? Color(0xFF333333),
-                            fontSize: 14,
+                            fontSize: 38.sp,
                           ),
                         ),
                       ),
-                      Image(
-                        image: AssetImage((index == _selectedIndex)
-                            ? 'assets/images/dropMenu_images/mmc_dropMenu_down_normal@2x.png'
-                            : 'assets/images/dropMenu_images/mmc_dropMenu_up_normal@2x.png'),
-                        width: 10,
-                        height: 10,
-                        color: buttonModel.dataSelected
-                            ? buttonModel.selectedColor ?? Color(0xFFF12E49)
-                            : buttonModel.normalColor ?? Color(0xFF333333),
-                      ),
+                      index == _selectedIndex ?Icon(Icons.keyboard_arrow_up,
+                        color: Colors.black,):Icon(Icons.keyboard_arrow_down,
+                        color: Colors.black,)
+                      ,
+                      // Image(
+                      //   image: AssetImage((index == _selectedIndex)
+                      //       ? 'assets/images/dropMenu_images/mmc_dropMenu_down_normal@2x.png'
+                      //       : 'assets/images/dropMenu_images/mmc_dropMenu_up_normal@2x.png'),
+                      //   width: 20,
+                      //   height: 20,
+                      //   color: buttonModel.dataSelected
+                      //       ? buttonModel.selectedColor ?? Color(0xFFF12E49)
+                      //       : buttonModel.normalColor ?? Color(0xFF333333),
+                      // ),
+
                       index == widget.items.length - 1
                           ? Container()
                           : Container(
@@ -130,14 +135,16 @@ class _dropMenuHeaderState extends State<DropMenuHeader> {
 
     return Container(
       height: widget.height,
-      child: GridView.count(
+      child: ScrollConfiguration(
+        behavior: DyBehaviorNull(),
+    child: GridView.count(
         crossAxisCount: _menuCount,
         //子Widget宽高比例
         childAspectRatio: (_screenWidth / _menuCount) / widget.height,
         children: widget.items.map<Widget>((item) {
           return _button(item);
         }).toList(),
-      ),
+      )),
     );
   }
 }
