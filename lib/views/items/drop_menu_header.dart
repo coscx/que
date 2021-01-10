@@ -8,11 +8,12 @@ class DropMenuHeader extends StatefulWidget implements PreferredSizeWidget {
   DropMenuHeader({
     @required this.height,
     this.items,
+    this.selectedIndex
   });
 
   double height;
   final List<ButtonModel> items;
-
+  final int selectedIndex;
   Size get preferredSize => Size.fromHeight(height);
 
   @override
@@ -41,8 +42,13 @@ class ButtonModel {
 }
 
 class _dropMenuHeaderState extends State<DropMenuHeader> {
-  int _selectedIndex = 999;
+  int _selectedIndex ;
 
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex=widget.selectedIndex;
+  }
   _button(ButtonModel buttonModel) {
     int index = widget.items.indexOf(buttonModel);
 

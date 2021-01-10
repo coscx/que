@@ -38,6 +38,11 @@ class _HomePageState extends State<HomePage>
   bool _showFilter = false;
   bool _showSort = false;
   bool _showRight =  false;
+  bool _showAge =  false;
+  int _showAgeMin =  16;
+  int _showAgeMax =  70;
+  bool _showChip = false;
+  int _selectedIndex=999;
   static List<SortModel> _leftWidgets = [
     SortModel(name: "服务中", isSelected: true, code: "1"),
     SortModel(name: "跟进中", isSelected: false, code: "2"),
@@ -47,8 +52,10 @@ class _HomePageState extends State<HomePage>
   SortModel _leftSelectedModel = _leftWidgets[0];
   List<String> _dropDownHeaderItemStrings = [_leftWidgets[1].name, '筛选'];
   SearchParamList searchParamList= SearchParamList(list: []);
-  void _showPopView() {
+  void _showPopView(int select) {
     setState(() {
+      if (_selectedIndex >0)
+      _selectedIndex=select;
       _showPop = (_showFilter || _showSort);
     });
   }
@@ -76,7 +83,7 @@ class _HomePageState extends State<HomePage>
     //BlocProvider.of<GlobalBloc>(context).add((EventSetIndexNum()));
     var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-    BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode,searchParamList));
+    BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin));
     _refreshController.refreshCompleted();
   }
 
@@ -88,7 +95,7 @@ class _HomePageState extends State<HomePage>
     var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
     BlocProvider.of<GlobalBloc>(context).add(EventIndexPhotoPage(currentPage));
-    var result= await IssuesApi.searchErpUser('', (++currentPage).toString(),sex.toString(),mode.toString(),searchParamList);
+    var result= await IssuesApi.searchErpUser('', (++currentPage).toString(),sex.toString(),mode.toString(),searchParamList,_showAge,_showAgeMax,_showAgeMin);
     if  (result['code']==200){
 
     } else{
@@ -139,20 +146,22 @@ class _HomePageState extends State<HomePage>
           ],
 
           bottom: DropMenuHeader(
+            selectedIndex: _selectedIndex,
             items: [
               ButtonModel(
                   text: _dropDownHeaderItemStrings[1],
+
                   onTap: (bool selected) {
                     _showFilter = selected;
                     _showSort = false;
-                    _showPopView();
+                    _showPopView(0);
                   }),
               ButtonModel(
                   text: _leftSelectedModel.name,
                   onTap: (bool selected) {
                     _showSort = selected;
                     _showFilter = false;
-                    _showPopView();
+                    _showPopView(0);
                   }),
 
             ],
@@ -225,7 +234,8 @@ class _HomePageState extends State<HomePage>
                                 shrinkWrap: true ,
                                   scrollDirection: Axis.horizontal,
                                   children:<Widget>  [
-                                    ...buildLeftRightWidget()
+                                    ...buildLeftRightWidget(),
+                                  _showAge?buildAgeWidget():Container()
                                   ],
                                 ),
                             ),
@@ -262,14 +272,20 @@ class _HomePageState extends State<HomePage>
 
     var ll= searchParamList.list.where((element) =>  element.selected !=null)
         .map((e) {
-
+            if(e.selectName !=null){
+              _showChip=true;
+            }
            return Container(padding:  EdgeInsets.only(right: 15.w),child:RawChip(
              label: Text(e.selectName==null?"0":e.selectName),
              onDeleted: (){
                print('onDeleted');
-               setState(() {
+
+               //setState(() {
                  deleteLeftRightWidget(e.selectName);
-               });
+              // });
+               var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+               var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+               BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin));
              },
              deleteIcon: Icon(Icons.delete),
              deleteIconColor: Colors.red,
@@ -278,6 +294,7 @@ class _HomePageState extends State<HomePage>
 
 
        }).toList();
+
      return ll;
   }
 
@@ -289,11 +306,12 @@ class _HomePageState extends State<HomePage>
         e.selected=null;
         e.selectName=null;
         e.itemList.map((el) {
-          if(el.code ==code){
-             el.isSelected =false;
+          if(el.name ==code){
+             //el.isSelected =null;
+             el.isSelected = !el.isSelected;
           }
           return el;
-        });
+        }).toList();
         return e;
       }else{
         return e;
@@ -301,6 +319,25 @@ class _HomePageState extends State<HomePage>
 
     }).toList();
   }
+
+  Widget buildAgeWidget() {
+
+    return Container(padding:  EdgeInsets.only(right: 15.w),child:RawChip(
+      label: Text(_showAgeMin.toString()+"-"+_showAgeMax.toString()),
+      onDeleted: (){
+        print('onDeleted');
+        _showAge =false;
+        var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+        var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+        BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin));
+
+      },
+      deleteIcon: Icon(Icons.delete),
+      deleteIconColor: Colors.red,
+      deleteButtonTooltipMessage: '删除',
+    ));
+  }
+
   Widget buildPopView() {
     if (_showFilter) {
       return FutureBuilder(
@@ -317,6 +354,9 @@ class _HomePageState extends State<HomePage>
 
             return DropMenuRightWidget(
               paramList: tempSearchParamList,
+              showAgeMax: _showAgeMax,
+              showAge: _showAge,
+              showAgeMin: _showAgeMin,
               clickCallBack:
                   (SearchParamModel pressModel, ParamItemModel pressItem) {
                      searchParamList.list.map((e) {
@@ -335,6 +375,9 @@ class _HomePageState extends State<HomePage>
                 print('${pressItem.name}');
               },
               clickSwith: (on , min,max){
+                _showAge=on;
+                _showAgeMax=max;
+                _showAgeMin=min;
                 print(on);
                 print(min);
                 print(max);
@@ -343,11 +386,11 @@ class _HomePageState extends State<HomePage>
               sureFun: () {
                 var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                 var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode));
+                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin));
                 print("sure click");
                 _showFilter = false;
                 _showSort = false;
-                _showPopView();
+                _showPopView(2);
               },
               resetFun: () {
                 print("reset click");
@@ -396,9 +439,9 @@ class _HomePageState extends State<HomePage>
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
 
     if(searchParamList ==null){
-      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,searchParamList));
+      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin));
     }else{
-      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,value,mode,));
+      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,value,mode,_showAge,_showAgeMax,_showAgeMin));
     }
 
   }
@@ -462,17 +505,17 @@ class _HomePageState extends State<HomePage>
                 if (e == '全部') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList,_showAge,_showAgeMax,_showAgeMin));
                 }
                 if (e == '我的') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList,_showAge,_showAgeMax,_showAgeMin));
                 }
                 if (e == '良缘') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList,_showAge,_showAgeMax,_showAgeMin));
                 }
               },
               onCanceled: () => print('onCanceled'),

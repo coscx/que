@@ -41,7 +41,7 @@ class IssuesApi {
     return datas;
   }
 
-  static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String is_passive,SearchParamList search ) async {
+  static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String is_passive,SearchParamList search ,bool _showAge, int _showAgeMax, int _showAgeMin) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
@@ -52,7 +52,10 @@ class IssuesApi {
       }
     }).toList();
     if(is_passive=="0") is_passive="all";
-
+    if(_showAge){
+      searchParm['startAge'] = _showAgeMin;
+      searchParm['endAge'] = _showAgeMax;
+    }
     searchParm['gender'] = sex;
     searchParm['is_passive'] = is_passive;
     searchParm['store_id'] = 1;

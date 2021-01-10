@@ -12,6 +12,9 @@ class DropMenuRightWidget extends StatefulWidget {
   final VoidCallback resetFun;
   final VoidCallback sureFun;
   final SwitchCallback clickSwith;
+  final bool showAge ;
+  final int showAgeMin ;
+  final int showAgeMax ;
   String resultCount;
 
   DropMenuRightWidget({
@@ -21,6 +24,9 @@ class DropMenuRightWidget extends StatefulWidget {
     this.sureFun,
     this.resultCount,
     this.clickSwith,
+    this.showAgeMin,
+    this.showAgeMax,
+    this.showAge,
   });
 
   @override
@@ -31,9 +37,18 @@ class DropMenuRightWidget extends StatefulWidget {
 }
 
 class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
-  int minValue =15;
-  int maxValue=35;
-  bool _onOff=false;
+  int minValue ;
+  int maxValue;
+  bool _onOff;
+  RangeValues _rangeValues = RangeValues(90, 270);
+  @override
+  void initState() {
+    super.initState();
+    minValue =widget.showAgeMin;
+    maxValue=widget.showAgeMax;
+    _onOff=widget.showAge;
+    _rangeValues= RangeValues(minValue.toDouble(), maxValue.toDouble());
+  }
   Widget buildButton(
     int modelIndex,
     int itemIndex,
@@ -178,7 +193,32 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
                   color: Colors.orangeAccent,
                 ),
               ),
-
+          // Container(
+          //   width: 400.w,
+          //   child: RangeSlider(
+          //       values: _rangeValues,
+          //       divisions: 700,
+          //       min: minValue.toDouble(),
+          //       max: maxValue.toDouble(),
+          //       labels: RangeLabels("${_rangeValues.start.toStringAsFixed(1)}",
+          //           "${_rangeValues.end.toStringAsFixed(1)}"),
+          //       activeColor: Colors.orangeAccent,
+          //       inactiveColor: Colors.green.withAlpha(99),
+          //       onChangeStart: (value) {
+          //         print('开始滑动:$value');
+          //       },
+          //       onChangeEnd: (value) {
+          //         print('滑动结束:$value');
+          //       },
+          //       onChanged: (value) {
+          //                 setState(() {
+          //                _rangeValues = value;
+          //                if(widget.clickSwith != null){
+          //                   widget.clickSwith(_onOff, value.start.floor(),value.end.floor());
+          //                 }
+          //         });
+          //       }),
+          // ),
               Container(
                 width: 400.w,
                 child: CupertinoRangeSlider(
@@ -234,9 +274,9 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
             children: <Widget>[
               Flexible(
                 child: Container(
-                  margin: EdgeInsets.only(left: 30, right: 30, top: 9),
+                  margin: EdgeInsets.only(left: 70.w, right: 20.w, top: 9.h),
                   child: Wrap(
-                    alignment: WrapAlignment.start,
+                    alignment: WrapAlignment.center,
                     children: List.generate(
                         widget.paramList.list.length,
                         (i) => Container(
@@ -248,11 +288,11 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
               Container(
                 height: 1,
                 color: Color(0xfff0f0f0),
-                margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h, bottom: 10.h),
               ),
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.only(left: 30, right: 30, bottom: 16),
+                padding: EdgeInsets.only(left: 60.w, right: 30.w, bottom: 16.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
