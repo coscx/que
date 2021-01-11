@@ -7,6 +7,7 @@ import 'package:flutter_geen/model/github/repository.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
+import 'package:city_pickers/modal/result.dart';
 const kBaseUrl = 'https://ctx.gugu2019.com';
 
 class IssuesApi {
@@ -76,6 +77,69 @@ class IssuesApi {
     Response<dynamic> rep = await dio.post('/api/v1/customer/editCustomer/'+uuid,queryParameters:data );
     var dd=rep.data;
     return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+  static Future<Map<String,dynamic>> editCustomerOnce(String uuid, String type, int answer ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    Map<String,dynamic> searchParam={};
+    searchParam[type]=answer;
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/editCustomer/'+uuid,queryParameters:searchParam );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+  static Future<Map<String,dynamic>> editCustomerOnceString(String uuid, String type, String answer ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    Map<String,dynamic> searchParam={};
+    searchParam[type]=answer;
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/editCustomer/'+uuid,queryParameters:searchParam );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+
+  static Future<Map<String,dynamic>> editCustomerAddress(String uuid, int type,Result result ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    Map<String,dynamic> searchParam={};
+   if(type ==1){
+     searchParam['np_province_code']=result.provinceId;
+     searchParam['np_province_name']=result.provinceName;
+     searchParam['np_city_code']=result.cityId;
+     searchParam['np_city_name']=result.cityName;
+     searchParam['np_area_code']=result.areaId;
+     searchParam['np_area_name']=result.areaName;
+   }else{
+     searchParam['lp_province_code']=result.provinceId;
+     searchParam['lp_province_name']=result.provinceName;
+     searchParam['lp_city_code']=result.cityId;
+     searchParam['lp_city_name']=result.cityName;
+     searchParam['lp_area_code']=result.areaId;
+     searchParam['lp_area_name']=result.areaName;
+
+   }
+
+
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/editCustomer/'+uuid,queryParameters:searchParam );
+      var dd=rep.data;
+      return dd;
     } on DioError catch(e){
       var dd=e.response.data;
       return dd;

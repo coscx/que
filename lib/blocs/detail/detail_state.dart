@@ -7,7 +7,7 @@ import 'package:flutter_geen/model/widget_model.dart';
 
 /// 说明: 详情状态类
 
-abstract class DetailState extends Equatable {
+abstract class DetailState  {
   const DetailState();
 
   @override

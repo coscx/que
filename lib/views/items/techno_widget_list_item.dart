@@ -38,8 +38,8 @@ class TechnoWidgetListItem extends StatelessWidget {
                     alignment: WrapAlignment.center,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: <Widget>[
-                      Hero(
-                          tag: "hero_widget_image_${data.id}",
+                      Container(
+                          //tag: "hero_widget_image_${data.id}",
                           child: _buildLeading()),
                       StarScore(
                         star: Star(

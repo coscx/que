@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/repositories/itf/widget_repository.dart';
-
+import 'dart:convert';
 import 'detail_event.dart';
 import 'detail_state.dart';
 
@@ -46,7 +46,71 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data']);
       }
     }
+    if(event is EditDetailEventAddress){
+      Map<String ,dynamic> userdetails=state.props.elementAt(0);
+      Map<String ,dynamic> connectList=state.props.elementAt(1);
+      //Map<String ,dynamic>  info = userdetails['info'];
+      //if (event.value is int)
+      Map<String ,dynamic> result = Map.from(userdetails);
+      if(event.type==1){
+        result['info']['np_province_code']=event.result.provinceId;
+        result['info']['np_province_name']=event.result.provinceName;
+        result['info']['np_city_code']=event.result.cityId;
+        result['info']['np_city_name']=event.result.cityName;
+        result['info']['np_area_code']=event.result.areaId;
+        result['info']['np_area_name']=event.result.areaName;
+        result['info']['native_place']=event.result.provinceName+event.result.cityName+event.result.areaName;
 
+      }else{
+        result['info']['lp_province_code']=event.result.provinceId;
+        result['info']['lp_province_name']=event.result.provinceName;
+        result['info']['lp_city_code']=event.result.cityId;
+        result['info']['lp_city_name']=event.result.cityName;
+        result['info']['lp_area_code']=event.result.areaId;
+        result['info']['lp_area_name']=event.result.areaName;
+        result['info']['location_place']=event.result.provinceName+event.result.cityName+event.result.areaName;
+      }
+
+      yield DetailWithData(userdetails: result,connectList: connectList);
+
+    }
+    if(event is EditDetailEvent){
+         Map<String ,dynamic> userdetails=state.props.elementAt(0);
+         Map<String ,dynamic> connectList=state.props.elementAt(1);
+         //Map<String ,dynamic>  info = userdetails['info'];
+         //if (event.value is int)
+         Map<String ,dynamic> result = Map.from(userdetails);
+         result['info'][event.key] =event.value;
+        yield DetailWithData(userdetails: result,connectList: connectList);
+
+    }
+
+    if(event is UploadImgSuccessEvent){
+      String imgUrl="https://queqiaoerp.oss-cn-shanghai.aliyuncs.com/"+event.value;
+      Map<String ,dynamic> userdetails=state.props.elementAt(0);
+      Map<String ,dynamic> connectList=state.props.elementAt(1);
+      Map<String ,dynamic> result = Map.from(userdetails);
+      //List<Map<String ,dynamic>>   ss = userdetails['pics'];
+      Map<String ,dynamic> img ={};
+      img["file_url"] =imgUrl;
+      img["id"] = 0;
+      img["customer_id"] = 0;
+      userdetails['pics'].add(img);
+
+      yield DetailWithData(userdetails: result,connectList: connectList);
+
+    }
+
+    if(event is EditDetailEventString){
+      Map<String ,dynamic> userdetails=state.props.elementAt(0);
+      Map<String ,dynamic> connectList=state.props.elementAt(1);
+      //Map<String ,dynamic>  info = userdetails['info'];
+      //if (event.value is int)
+      Map<String ,dynamic> result = Map.from(userdetails);
+      result['info'][event.key] =event.value;
+      yield DetailWithData(userdetails: result,connectList: connectList);
+
+    }
     if(event is EventDelDetailImg){
       var result1= await IssuesApi.delPhoto(event.img['id'].toString());
       if  (result1['code']==200){

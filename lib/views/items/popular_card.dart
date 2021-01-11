@@ -15,7 +15,7 @@ class PopularCard extends StatelessWidget {
     return Container(
       //onTap: (){},
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 0.h, horizontal: 5.w),
+        margin: EdgeInsets.only(top: 5.h,bottom: 5.h),
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -39,6 +39,7 @@ class PopularCard extends StatelessWidget {
               title: photo['name'],
               location: photo['gender']==1?"男":"女",
               description: photo['np_province_name'] +photo['np_city_name'],
+              age: photo['age'].toString(),
             ),
           ],
         ),
@@ -54,9 +55,10 @@ class ContentCard extends StatelessWidget {
     @required this.title,
     @required this.location,
     @required this.description,
+    @required this.age,
   }) : super(key: key);
 
-  final String title, location, description;
+  final String title, location, description,age;
 
   @override
   Widget build(BuildContext context) {
@@ -68,22 +70,19 @@ class ContentCard extends StatelessWidget {
       padding: EdgeInsets.all(5.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            this.title,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: size.width * 0.035,
-            ),
-          ),
+
           Row(
             children: <Widget>[
-              Icon(
-                Icons.location_on,
-                size: 13,
-                color: Colors.green,
+              Text(
+                this.title,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: size.width * 0.035,
+                ),
               ),
+
               SizedBox(width: 5.w),
               Text(
                 this.location,
@@ -91,16 +90,33 @@ class ContentCard extends StatelessWidget {
                   fontSize: size.width * 0.03,
                 ),
               ),
+              SizedBox(width: 5.w),
+              Text(
+                this.age+"岁",
+                style: TextStyle(
+                  fontSize: size.width * 0.03,
+                ),
+              ),
             ],
           ),
-          Text(
-            this.description,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: size.width * 0.03,
-            ),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 3,
+          SizedBox(height: 15.h),
+          Row(
+            children: [
+              Icon(
+                Icons.location_on,
+                size: 13,
+                color: Colors.green,
+              ),
+              Text(
+                this.description,
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: size.width * 0.03,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+              ),
+            ],
           ),
         ],
       ),

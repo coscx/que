@@ -125,8 +125,8 @@ class SimpleWidgetItem extends StatelessWidget {
 
   Widget _buildLeading() => Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
-        child: Hero(
-          tag: "hero_widget_image_${data.id}",
+        child: Container(
+          //tag: "hero_widget_image_${data.id}",
           child: data.image == null
               ? Material(
                   color: Colors.transparent,

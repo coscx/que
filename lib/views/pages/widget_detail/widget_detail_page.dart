@@ -150,19 +150,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         ));
   }
 
-  _showToast(BuildContext ctx, String msg, bool collected) {
-    Toasts.toast(
-      ctx,
-      msg,
-      duration: Duration(milliseconds:  5000 ),
-      action: collected
-          ? SnackBarAction(
-              textColor: Colors.white,
-              label: '收藏夹管理',
-              onPressed: () => Scaffold.of(ctx).openEndDrawer())
-          : null,
-    );
-  }
+
 
   final List<int> colors = Cons.tabColors;
   int _position = 0;
@@ -216,11 +204,11 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                 },child: _item_detail(context,Colors.black,Icons.format_list_numbered,"编号",info['code'].toString(),false)),
                             GestureDetector(
                                 onTap: (){
-
+                                  _showEditDialog(context,"请输入姓名","",info['name'].toString(),"name",1,info);
                                 },child: _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true)),
                               GestureDetector(
                                   onTap: (){
-                                    showPickerArray(context,[["男生","女生"]],info['gender']==0?[1]:[_getIndexOfList(_sexLevel,info['gender'].toString())]);
+                                    showPickerArray(context,[["未知","男生","女生"]],info['gender']==0?[1]:[info['gender']],"gender",info,"",true);
                                   },child:  _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true)),
                             GestureDetector(
                             onTap: (){
@@ -228,8 +216,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             },child: _item_detail(context,Colors.black,Icons.contact_page_outlined,"年龄",info['age']==0?"-":info['age'].toString()+"岁",false)),
                             GestureDetector(
                             onTap: (){
-                              showPickerDateTime(context);
-                            },child:  _item_detail(context,Colors.black,Icons.broken_image_outlined,"生日",info['birthday'].toString()+"("+info['chinese_zodiac']+"-"+info['zodiac']+")",true)),
+                              showPickerDateTime(context,info['birthday']==null?"-":info['birthday'].toString(),"birthday",info);
+                            },child:  _item_detail(context,Colors.black,Icons.broken_image_outlined,"生日",info['birthday']==null?"-":info['picker.adapter.text']!=""?info['birthday'].toString():info['birthday'].toString().substring(0,10)+"("+info['chinese_zodiac']+"-"+info['zodiac']+")",true)),
                             GestureDetector(
                             onTap: (){
 
@@ -247,32 +235,56 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                   confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
                               );
                               print(result);
-                            },child:  _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place'].toString(),true)),
+                              if(result !=null){
+                                var results= await IssuesApi.editCustomerAddress(info['uuid'],1,result);
+                                if(results['code']==200){
+                                  BlocProvider.of<DetailBloc>(context).add(EditDetailEventAddress(result,1));
+                                  _showToast(context,"编辑成功",false);
+                                }else{
+
+                                  _showToast(context,results['message'],false);
+                                }
+                              }
+
+
+
+
+                            },child:  _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place']==null?"-":(info['native_place']==""?"-":info['native_place'].toString()),true)),
                             GestureDetector(
                             onTap: () async {
                               Result result = await CityPickers.showCityPicker(
                                   context: context,
-                                  locationCode: '320505',
+                                  locationCode: info['lp_area_code'] =="" ? (info['lp_city_code'] ==""? "320500":info['lp_city_code'] ) :info['lp_area_code'] ,
                                   cancelWidget: Text("取消",style: TextStyle(color: Colors.black),),
                                   confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
                               );
                               print(result);
-                            },child:  _item_detail(context,Colors.black,Icons.house_outlined,"居住",info['location_place'].toString(),true)),
+                              if(result !=null){
+                                var results= await IssuesApi.editCustomerAddress(info['uuid'],2,result);
+                                if(results['code']==200){
+                                  BlocProvider.of<DetailBloc>(context).add(EditDetailEventAddress(result,2));
+                                  _showToast(context,"编辑成功",false);
+                                }else{
+
+                                  _showToast(context,results['message'],false);
+                                }
+                              }
+                            },child:  _item_detail(context,Colors.black,Icons.house_outlined,"居住",info['location_place']==null?"-":(info['location_place']==""?"-":info['location_place'].toString()),true)),
                             GestureDetector(
                             onTap: (){
 
                             },child:  _item_detail(context,Colors.black,Icons.point_of_sale,"销售",info['sale_user'].toString(),false)),
                             GestureDetector(
                             onTap: (){
-                            showPickerArray(context,[_nationLevel],info['nation']==0?[1]:[_getIndexOfList(_nationLevel,info['nation'].toString()+"")]);
-                            },child: _item_detail(context,Colors.black,Icons.gamepad_outlined,"民族",info['nation']==1?"汉族":"其他",true)),
+                            showPickerArray(context,[_nationLevel],info['nation']==0?[1]:[_getIndexOfList(_nationLevel,info['nation'].toString()+"")],"nation",info,"",true);
+                            },child: _item_detail(context,Colors.black,Icons.gamepad_outlined,"民族",info['nation']==""?"-":_getNationLevel((info['nation'])),true)),
                             GestureDetector(
                             onTap: (){
-                              showPickerArray(context,[_getHeightList()],info['height']==0?[70]:[_getIndexOfList(_getHeightList(),info['height'].toString()+" cm")]);
+                              showPickerArray(context,[_getHeightList()],info['height']==0?[70]:[_getIndexOfList(_getHeightList(),info['height'].toString())],"height",info,"身高(cm)",false);
                             },child:  _item_detail(context,Colors.black,Icons.height,"身高",info['height']==0?"-":info['height'].toString()+"cm",true)),
                             GestureDetector(
                             onTap: (){
-                              showPickerArray(context,[_getWeightList()],info['weight']==0?[35]:[_getIndexOfList(_getWeightList(),info['weight'].toString()+" kg")]);
+                              showPickerArray(context,[_getWeightList()],info['weight']==0?[35]:[_getIndexOfList(_getWeightList(),info['weight'].toString())],"weight",info,"体重(kg)",false);
                             },child:  _item_detail(context,Colors.black,Icons.line_weight,"体重",info['weight']==0?"-":info['weight'].toString()+"kg",true)),
                             GestureDetector(
                             onTap: (){
@@ -280,20 +292,20 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             },child:  _item_detail(context,Colors.black,Icons.design_services_outlined,"服务",info['serve_user']==""?"-":info['serve_user'].toString(),false)),
                             GestureDetector(
                             onTap: (){
-
+                              _showEditDialog(context,"请输入兴趣","",info['interest']==null?"-":(info['interest']==""?"-":info['interest'].toString()),"interest",5,info);
                             },child:  _item_detail(context,Colors.black,Icons.integration_instructions_outlined,"兴趣",info['interest']==""?"-":info['interest'].toString(),true)),
                             GestureDetector(
                             onTap: (){
-                            showPickerArray(context,[_floodLevel],info['blood_type']==0?[3]:[info['blood_type']]);
+                            showPickerArray(context,[_floodLevel],info['blood_type']==0?[3]:[info['blood_type']],"blood_type",info,"",true);
                             },child:  _item_detail(context,Colors.black,Icons.blur_on_outlined,"血型",info['blood_type']==0?"-":_getFloodLevel(info['blood_type']),true)),
                             GestureDetector(
                             onTap: (){
-
-                            },child:   _item_detail(context,Colors.black,Icons.developer_mode,"择偶",info['demands'].toString(),true)),
+                              _showEditDialog(context,"请输入择偶要求","",info['demands']==null?"":(info['demands']==""?"":info['demands'].toString()),"demands",5,info);
+                            },child:   _item_detail(context,Colors.black,Icons.developer_mode,"择偶",info['demands']==null?"-":(info['demands']==""?"-":info['demands'].toString()),true)),
                             GestureDetector(
                             onTap: (){
-
-                            },child:    _item_detail(context,Colors.black,Icons.bookmarks_outlined,"备注",info['remark'].toString(),true)),
+                              _showEditDialog(context,"请输入备注","",info['remark']==null?"":(info['remark']==""?"":info['interest'].toString()),"remark",5,info);
+                            },child:    _item_detail(context,Colors.black,Icons.bookmarks_outlined,"备注",info['remark']==null?"-":(info['remark']==""?"-":info['remark'].toString()),true)),
 
                           ]
                       ),
@@ -330,18 +342,54 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           spacing: 0,
                           runSpacing: 0,
                           children: <Widget>[
-                            _item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":_getEduLevel(info['education']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.school,"毕业院校",info['school'].toString()==""?"-":info['school'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.tab,"所学专业",info['major']==""?"-":info['major'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":_getCompanyLevel(info['work'])+"",true),
-                            _item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":_getWorkType(info['work_job']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":_getWorkOverTime(info['work_overtime']),true),
-                            _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":_getIncome(info['income']),true),
-                            _item_detail_gradute(context,Colors.redAccent,Icons.house_outlined,"是否有房",info['has_house']==0?"-":_getHasHouse(info['has_house']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.copyright_rounded,"房贷情况",info['loan_record']==0?"-":_getHouseFuture(info['loan_record']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.car_rental,"是否有车",info['has_car']==0?"-":_getHasCar(info['has_car']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.wb_auto_outlined,"车辆档次",info['car_type']==0?"-":_getCarLevel(info['car_type']),true),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_EduLevel],info['education']==0?[1]:[info['education']],"education",info,"",true);
+                            } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":_getEduLevel(info['education']),true)),
+                            GestureDetector(
+                            onTap: (){
+                              _showEditDialog(context,"请输入毕业院校","",info['school']==null?"":(info['school']==""?"":info['school'].toString()),"school",1,info);
+                            } ,child:_item_detail_gradute(context,Colors.black,Icons.school,"毕业院校",info['school'].toString()==""?"-":info['school'].toString(),true)),
+                            GestureDetector(
+                            onTap: (){
+                              _showEditDialog(context,"请输入所学专业","",info['major']==null?"":(info['major']==""?"":info['major'].toString()),"major",1,info);
+                            } ,child:_item_detail_gradute(context,Colors.black,Icons.tab,"所学专业",info['major']==""?"-":info['major'].toString(),true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_companyTypeLevel],info['work']==0?[1]:[info['work']],"work",info,"",true);
+                            } ,child:_item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":_getCompanyLevel(info['work'])+"",true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_WorkTypeLevel],info['work_job']==0?[1]:[info['work_job']],"work_job",info,"",true);
+                            } ,child:_item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":_getWorkType(info['work_job']),true)),
+                            GestureDetector(
+                            onTap: (){
+                              _showEditDialog(context,"请输入职位描述","",info['work_industry']==null?"":(info['work_industry']==""?"":info['work_industry'].toString()),"work_industry",5,info);
+                            } ,child:_item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_WorkOverTimeLevel],info['work_overtime']==0?[1]:[info['work_overtime']],"work_overtime",info,"",true);
+                            } ,child:_item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":_getWorkOverTime(info['work_overtime']),true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_IncomeLevel],info['income']==0?[1]:[info['income']],"income",info,"",true);
+                            } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":_getIncome(info['income']),true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_hasHouseLevel],info['has_house']==0?[1]:[info['has_house']],"has_house",info,"",true);
+                            } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.house_outlined,"是否有房",info['has_house']==0?"-":_getHasHouse(info['has_house']),true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_houseFutureLevel],info['loan_record']==0?[1]:[info['loan_record']],"loan_record",info,"",true);
+                            } ,child: _item_detail_gradute(context,Colors.black,Icons.copyright_rounded,"房贷情况",info['loan_record']==0?"-":_getHouseFuture(info['loan_record']),true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_hasCarLevel],info['has_car']==0?[1]:[info['has_car']],"has_car",info,"",true);
+                            } ,child:_item_detail_gradute(context,Colors.black,Icons.car_rental,"是否有车",info['has_car']==0?"-":_getHasCar(info['has_car']),true)),
+                            GestureDetector(
+                            onTap: (){
+                              showPickerArray(context,[_carLevelLevel],info['car_type']==0?[1]:[info['car_type']],"car_type",info,"",true);
+                            } ,child: _item_detail_gradute(context,Colors.black,Icons.wb_auto_outlined,"车辆档次",info['car_type']==0?"-":_getCarLevel(info['car_type']),true)),
 
                           ]
                       ),
@@ -377,15 +425,42 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           spacing: 0,
                           runSpacing: 0,
                           children: <Widget>[
-                            _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",info['marriage']==0?"-":_getMarriageLevel(info['marriage']),true),
-                            _item_detail_gradute(context,Colors.redAccent,Icons.child_care,"子女信息",info['has_child']==0?"-":_getChildLevel(info['has_child']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.mark_chat_read_outlined,"子女备注",info['child_remark']==""?"-":info['child_remark'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.looks_one_outlined,"独生子女",info['only_child']==0?"-":_getOnlyChildLevel(info['only_child'])+"",true),
-                            _item_detail_gradute(context,Colors.black,Icons.watch_later_outlined,"父母状况",info['parents']==0?"-":_getParentLevel(info['parents']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.attribution_rounded,"父亲职业",info['father_work']==""?"-":info['father_work'].toString(),true),
-                            _item_detail_gradute(context,Colors.black,Icons.sports_motorsports_outlined,"母亲职业",info['mother_work']==""?"-":info['mother_work'].toString(),true),
-                            _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on,"父母收入",info['parents_income']==""?"-":info['parents_income'].toString(),true),
-                            _item_detail_gradute(context,Colors.redAccent,Icons.nine_k,"父母社保",info['parents_insurance']==0?"-":_getParentProtectLevel(info['parents_insurance']),true),
+                          GestureDetector(
+                          onTap: (){
+                            showPickerArray(context,[_marriageLevel],info['marriage']==0?[1]:[info['marriage']],"marriage",info,"",true);
+                         } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",info['marriage']==0?"-":_getMarriageLevel(info['marriage']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_childLevel],info['has_child']==0?[1]:[info['has_child']],"has_child",info,"",true);
+                              } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.child_care,"子女信息",info['has_child']==0?"-":_getChildLevel(info['has_child']),true)),
+                          GestureDetector(
+                          onTap: (){
+                            _showEditDialog(context,"请输入子女备注","",info['child_remark']==null?"":(info['child_remark']==""?"":info['child_remark'].toString()),"child_remark",5,info);
+                          } ,child:_item_detail_gradute(context,Colors.black,Icons.mark_chat_read_outlined,"子女备注",info['child_remark']==""?"-":info['child_remark'].toString(),true)),
+                          GestureDetector(
+                          onTap: (){
+                            showPickerArray(context,[_onlyChildLevel],info['only_child']==0?[1]:[info['only_child']],"only_child",info,"",true);
+                          } ,child:_item_detail_gradute(context,Colors.black,Icons.looks_one_outlined,"独生子女",info['only_child']==0?"-":_getOnlyChildLevel(info['only_child'])+"",true)),
+                          GestureDetector(
+                          onTap: (){
+                            showPickerArray(context,[_parentLevel],info['parents']==0?[1]:[info['parents']],"parents",info,"",true);
+                          } ,child: _item_detail_gradute(context,Colors.black,Icons.watch_later_outlined,"父母状况",info['parents']==0?"-":_getParentLevel(info['parents']),true)),
+                            GestureDetector(
+                                onTap: (){
+                                  _showEditDialog(context,"请输入父亲职业","",info['father_work']==null?"":(info['father_work']==""?"":info['father_work'].toString()),"father_work",1,info);
+                                } ,child: _item_detail_gradute(context,Colors.black,Icons.attribution_rounded,"父亲职业",info['father_work']==""?"-":info['father_work'].toString(),true)),
+                          GestureDetector(
+                          onTap: (){
+                            _showEditDialog(context,"请输入母亲职业","",info['mother_work']==null?"":(info['mother_work']==""?"":info['mother_work'].toString()),"mother_work",1,info);
+                          } ,child:_item_detail_gradute(context,Colors.black,Icons.sports_motorsports_outlined,"母亲职业",info['mother_work']==""?"-":info['mother_work'].toString(),true)),
+                          GestureDetector(
+                          onTap: (){
+                            _showEditDialog(context,"请输入父母收入","",info['parents_income']==null?"":(info['parents_income']==""?"":info['parents_income'].toString()),"parents_income",1,info);
+                          } ,child: _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on,"父母收入",info['parents_income']==""?"-":info['parents_income'].toString(),true)),
+                          GestureDetector(
+                          onTap: (){
+                            showPickerArray(context,[_parentProtectLevel],info['parents_insurance']==0?[1]:[info['parents_insurance']],"parents_insurance",info,"",true);
+                          } ,child: _item_detail_gradute(context,Colors.redAccent,Icons.nine_k,"父母社保",info['parents_insurance']==0?"-":_getParentProtectLevel(info['parents_insurance']),true)),
 
                           ]
                       ),
@@ -419,12 +494,30 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           spacing: 0,
                           runSpacing: 0,
                           children: <Widget>[
-                            _item_detail_gradute(context,Colors.black,Icons.fastfood,"宗教信仰",info['faith']==0?"-":_getFaithLevel(info['faith']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.smoking_rooms,"是否吸烟",info['smoke']==0?"-":_getSmokeLevel(info['smoke']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.wine_bar,"是否喝酒",info['drinkwine']==""?"-":_getDrinkLevel(info['drinkwine']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.nightlife,"生活作息",info['live_rest']==0?"-":_getLifeLevel(info['live_rest'])+"",true),
-                            _item_detail_gradute(context,Colors.black,Icons.child_friendly_outlined,"生育欲望",info['want_child']==0?"-":_getCreatLevel(info['want_child']),true),
-                            _item_detail_gradute(context,Colors.black,Icons.margin,"结婚预期",info['marry_time']==""?"-":_getMarriageDateLevel(info['marry_time']),true),
+                          GestureDetector(
+                          onTap: (){
+                            showPickerArray(context,[_faithLevel],info['faith']==0?[0]:[info['faith']],"faith",info,"",true);
+                          } ,child:_item_detail_gradute(context,Colors.black,Icons.fastfood,"宗教信仰",info['faith']==0?"-":_getFaithLevel(info['faith']),true)),
+                          GestureDetector(
+                          onTap: (){
+                            showPickerArray(context,[_smokeLevel],info['smoke']==0?[0]:[info['smoke']],"smoke",info,"",true);
+                          } ,child:_item_detail_gradute(context,Colors.black,Icons.smoking_rooms,"是否吸烟",info['smoke']==0?"-":_getSmokeLevel(info['smoke']),true)),
+                          GestureDetector(
+                          onTap: (){
+                            showPickerArray(context,[_drinkLevel],info['drinkwine']==0?[0]:[info['drinkwine']],"drinkwine",info,"",true);
+                          } ,child:_item_detail_gradute(context,Colors.black,Icons.wine_bar,"是否喝酒",info['drinkwine']==0?"-":_getDrinkLevel(info['drinkwine']),true)),
+                          GestureDetector(
+                          onTap: (){
+                            showPickerArray(context,[_lifeLevel],info['live_rest']==0?[0]:[info['live_rest']],"live_rest",info,"",true);
+                          } ,child:_item_detail_gradute(context,Colors.black,Icons.nightlife,"生活作息",info['live_rest']==0?"-":_getLifeLevel(info['live_rest'])+"",true)),
+                          GestureDetector(
+                          onTap: (){
+                            showPickerArray(context,[_creatLevel],info['want_child']==0?[0]:[info['want_child']],"want_child",info,"",true);
+                          } ,child:_item_detail_gradute(context,Colors.black,Icons.child_friendly_outlined,"生育欲望",info['want_child']==0?"-":_getCreatLevel(info['want_child']),true)),
+                         GestureDetector(
+                         onTap: (){
+                           showPickerArray(context,[_marriageDateLevel],info['marry_time']==0?[0]:[info['marry_time']],"marry_time",info,"",true);
+                         } ,child:_item_detail_gradute(context,Colors.black,Icons.margin,"结婚预期",info['marry_time']==0?"-":_getMarriageDateLevel(info['marry_time']),true)),
 
                           ]
                       ),
@@ -491,7 +584,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         codeFamily: 'Inconsolata',
                         text: "客户沟通记录",
                         code: "",
-                        show: Container(
+                        show: list.length > 0 ? Container(
                           width: 500,
                           // height: 300,
                           child:
@@ -506,7 +599,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               ]
                           ),
 
-                        )
+                        ):Container(child: Text("暂无沟通"),)
                     ),
 
 
@@ -745,8 +838,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       //height: 180.h,
       child:  Material(
           color:  Colors.transparent ,
-          child: InkWell(
-            onTap: (){},
+          child: Container(
             child: Container(
               margin: EdgeInsets.only(left: 10.w, right: 20.w,top: 10.h,bottom: 10.h),
               child: Row(
@@ -933,10 +1025,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           )),
     );
   }
-  avatar(String url) {
+  avatar(String url,bool isVip) {
     return Stack(
       children: [
-        Container(
+        isVip ? Container(
           width: 150.w,
           height: 150.h,
           decoration: BoxDecoration(
@@ -947,7 +1039,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           ),
           margin: EdgeInsets.only(left: 12.w),
 
-        ),
+        ):Container(),
         Container(
           margin: EdgeInsets.only(left: 42.w,top: 22.h),
 
@@ -969,16 +1061,35 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   }
 
   header(Map<String,dynamic> user) {
+    bool isVip;
+    var vipExpireTime =user['info']['vip_expire_time'];
+    if(vipExpireTime ==null){
+      isVip=false;
+    }else{
+      isVip=true;
+    }
     return Container(
       height: 120.h,
       margin: EdgeInsets.only(top: 8.h,bottom: 20.h,left: 8.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Padding(
+          GestureDetector(
+          onTap: () {
+              ImagePreview.preview(
+                context,
+                images: List.generate(1, (index) {
+                return ImageOptions(
+                        url: user['pic'].length> 0? (user['pic'][0]) :("assets/packages/images/ic_user_none_round.png"),
+                        tag: user['pic'].length> 0? (user['pic'][0]) :("assets/packages/images/ic_user_none_round.png"),
+                        );
+                }),
+              );
+          },
+      child:Padding(
             padding: EdgeInsets.only(left: 0.w, right: 0.w),
-            child: user['pic'].length> 0? avatar(user['pic'][0]) :Image.asset("assets/packages/images/ic_user_none_round.png"),
-          ),
+            child: user['pic'].length> 0? avatar(user['pic'][0],isVip) :Image.asset("assets/packages/images/ic_user_none_round.png"),
+          )),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1006,7 +1117,19 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       child: Text(
                         user['info']['age'].toString(),
                         style: TextStyle(color: Colors.black, fontSize: 18.sp),
-                      ))
+                      )),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                      child:
+                      Text(
+                        user['info']['vip_name']+""+(user['info']['vip_expire_time']==null?"":"("+user['info']['vip_expire_time']+")"),
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 25.sp,
+                        ),
+                      )),
+
                 ],
               ),
               Row(
@@ -1025,7 +1148,30 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         ),
                       ),
 
-                  )
+                  ),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                      child:
+                      Text(
+                        user['info']['serve_user'] !="" ?"服务:":"",
+                        style: TextStyle(
+                          color: Colors.deepOrangeAccent,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 25.sp,
+                        ),
+                      )),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                      child:
+                      Text(
+                        user['info']['serve_user'],
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 25.sp,
+                        ),
+                      )),
+
                 ],
               ),
             ],
@@ -1156,7 +1302,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
                    var result= await IssuesApi.editCustomer(userdetail['info']['uuid'],"1",resultConnectList['data']);
                    if(result['code']==200){
-                     BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(userdetail['info']));
+                     BlocProvider.of<DetailBloc>(context).add(UploadImgSuccessEvent(userdetail,resultConnectList['data']));
                      _showToast(context,"上传成功",false);
                    }else{
 
@@ -1183,26 +1329,64 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
 }
-showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > select) {
+showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > select,String type,Map<String , dynamic> info,String title,bool isIndex) {
    Picker(
       adapter: PickerDataAdapter<String>(pickerdata: pickerData, isArray: true),
       hideHeader: true,
-      title: new Text("请选择"),
+      title: new Text("请选择"+title),
       cancelText: "取消",
       confirmText: "确定",
        selecteds:select,
      // columnPadding: EdgeInsets.only(top: 50.h,bottom: 50.h,left: 50.w,right: 50.w),
        selectedTextStyle: TextStyle(
-         fontSize: 20,
+         fontSize: 28.sp,
          color: Colors.redAccent,
        ),
-      onConfirm: (Picker picker, List value) {
+      textStyle: TextStyle(
+        fontSize: 20.sp,
+        color: Colors.black,
+      ),
+      onConfirm: (Picker picker, List value) async {
         print(value.toString());
         print(picker.getSelectedValues());
+        int values;
+        if(isIndex){
+          values = value.first;
+        }else{
+          values = int.parse(picker.getSelectedValues().first);
+        }
+
+        var result= await IssuesApi.editCustomerOnce(info['uuid'],type,values);
+        if(result['code']==200){
+          BlocProvider.of<DetailBloc>(context).add(EditDetailEvent(type,values));
+          _showToast(context,"编辑成功",false);
+        }else{
+
+          _showToast(context,result['message'],false);
+        }
       }
   ).showDialog(context);
 }
-showPickerDateTime(BuildContext context) {
+_showToast(BuildContext ctx, String msg, bool collected) {
+  Toasts.toast(
+    ctx,
+    msg,
+    duration: Duration(milliseconds:  5000 ),
+    action: collected
+        ? SnackBarAction(
+        textColor: Colors.white,
+        label: '收藏夹管理',
+        onPressed: () => Scaffold.of(ctx).openEndDrawer())
+        : null,
+  );
+}
+showPickerDateTime(BuildContext context,String date,String type,Map<String ,dynamic> info) {
+  String dates = "";
+  if (date =="-"){
+    dates ="1999-01-01 08:00:00";
+  }else{
+    dates=date;
+  }
    Picker(
       adapter:  DateTimePickerAdapter(
         type: PickerDateTimeType.kYMDHM,
@@ -1211,7 +1395,7 @@ showPickerDateTime(BuildContext context) {
         // yearSuffix: "年",
         // monthSuffix: "月",
         // daySuffix: "日",
-        value: DateTime.parse("1999-01-01 08:00:00"),
+        value: DateTime.parse(dates),
         maxValue: DateTime.now(),
         minuteInterval: 1,
         minHour: 0,
@@ -1236,7 +1420,15 @@ showPickerDateTime(BuildContext context) {
         alignment: Alignment.center,
         child: Text(''),
       ),
-      onConfirm: (Picker picker, List value) {
+      onConfirm: (Picker picker, List value) async {
+        var result= await IssuesApi.editCustomerOnceString(info['uuid'],type,picker.adapter.text);
+        if(result['code']==200){
+          BlocProvider.of<DetailBloc>(context).add(EditDetailEventString(type,picker.adapter.text));
+          _showToast(context,"编辑成功",false);
+        }else{
+
+          _showToast(context,result['message'],false);
+        }
         print(picker.adapter.text);
       },
       onSelect: (Picker picker, int index, List<int> selecteds) {
@@ -1245,6 +1437,67 @@ showPickerDateTime(BuildContext context) {
 
       }
   ).showDialog(context);
+}
+
+
+_showEditDialog(BuildContext context,String title,String hintText ,String text,String type,int maxLine,Map<String ,dynamic> info){
+
+  TextEditingController _controller= TextEditingController.fromValue(TextEditingValue(
+    text: '${text == null ? "" : text}',  //判断keyword是否为空
+  ));
+  showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Container(
+            //elevation: 0.0,
+            child: Column(
+              children: <Widget>[
+                //Text(text),
+                TextField(
+                  minLines: maxLine,
+                  maxLines: maxLine,
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+
+                    //filled: true,
+                    //fillColor: Colors.white
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('取消'),
+            ),
+            Container(
+              child: CupertinoDialogAction(
+                onPressed: () async {
+
+                  var result= await IssuesApi.editCustomerOnceString(info['uuid'],type,_controller.text);
+                  if(result['code']==200){
+                    BlocProvider.of<DetailBloc>(context).add(EditDetailEventString(type,_controller.text));
+                    //_showToast(context,"编辑成功",false);
+                  }else{
+
+                    //_showToast(context,result['message'],false);
+                  }
+                  Navigator.pop(context);
+
+
+                },
+                child: Text('确定'),
+              ),
+            ),
+          ],
+        );
+      });
 }
 _getEduLevel(info) {
 
@@ -1462,6 +1715,16 @@ _getSexLevel(info) {
   }
 
 }
+_getNationLevel(info) {
+
+
+  try {
+    return _nationLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+
+}
 _getCompanyLevel(info) {
 
 
@@ -1488,7 +1751,7 @@ List<String> _getWeightList() {
 
   List<String> weight =[] ;
   for (var i = 30; i < 200; i++) {
-    weight.add(i.toString()+" kg");
+    weight.add(i.toString());
   }
   return weight;
 }
@@ -1496,7 +1759,7 @@ List<String> _getHeightList() {
 
   List<String> height=[] ;
   for (var i = 100; i < 200; i++) {
-    height.add(i.toString()+" cm");
+    height.add(i.toString());
   }
   return height;
 }
@@ -1547,12 +1810,21 @@ List<String> _WorkTypeLevel = [
 ];
 List<String> _companyTypeLevel = [
   "未知",
-  "企事业单位公务员",
-  "教育医疗",
-  "民营企业",
-  "私营业主",
+  "国企",
+  "外商独资",
+  "合资",
+  "民营",
+  "股份制企业",
+  "上市公司",
+  "国家机关",
+  "事业单位",
+  "银行",
+  "医院",
+  "学校",
+  "律师事务所",
+  "社会团体",
+  "港澳台公司",
   "其他",
-
 ];
 List<String> _WorkOverTimeLevel = [
   "未知",
@@ -1617,8 +1889,8 @@ List<String> _childLevel = [
 ];
 List<String> _onlyChildLevel = [
   "未知",
-  "有",
-  "无",
+  "是",
+  "否",
 ];
 List<String> _parentLevel = [
   "未知",
@@ -1677,6 +1949,8 @@ List<String> _marriageDateLevel = [
   "2年内",
   "还没想好",
 ];
+
+
 _getPermission(BuildContext context) {
   //请求读写权限
   ObjectUtil.getPermissions([
@@ -1834,8 +2108,8 @@ class WidgetDetailTitle extends StatelessWidget {
             height: 100,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Hero(
-                  tag: "hero_widget_image_${usertail['user']['memberId'].toString()}",
+              child: Container(
+                  //tag: "hero_widget_image_${usertail['user']['memberId'].toString()}",
                   child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       child: Image(image: FadeInImage.assetNetwork(

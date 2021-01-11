@@ -494,8 +494,8 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
 
   Widget buildLeading() => Padding(
         padding:  EdgeInsets.only(top: 10.h),
-        child: Hero(
-          tag: "hero_widget_image_${photo['uuid'].toString()}",
+        child: Container(
+          //tag: "hero_widget_image_${photo['uuid'].toString()}",
           child: photo['head_img'] == ""
               ? Container(
                   // width: 110.w,
