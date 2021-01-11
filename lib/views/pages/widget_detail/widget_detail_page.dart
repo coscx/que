@@ -276,7 +276,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             },child:  _item_detail(context,Colors.black,Icons.point_of_sale,"销售",info['sale_user'].toString(),false)),
                             GestureDetector(
                             onTap: (){
-                            showPickerArray(context,[_nationLevel],info['nation']==0?[1]:[_getIndexOfList(_nationLevel,info['nation'].toString()+"")],"nation",info,"",true);
+                            showPickerArray(context,[_nationLevel],info['nation']==0?[1]:[info['nation']],"nation",info,"",true);
                             },child: _item_detail(context,Colors.black,Icons.gamepad_outlined,"民族",info['nation']==""?"-":_getNationLevel((info['nation'])),true)),
                             GestureDetector(
                             onTap: (){
@@ -304,7 +304,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             },child:   _item_detail(context,Colors.black,Icons.developer_mode,"择偶",info['demands']==null?"-":(info['demands']==""?"-":info['demands'].toString()),true)),
                             GestureDetector(
                             onTap: (){
-                              _showEditDialog(context,"请输入备注","",info['remark']==null?"":(info['remark']==""?"":info['interest'].toString()),"remark",5,info);
+                              _showEditDialog(context,"请输入备注","",info['remark']==null?"":(info['remark']==""?"":info['remark'].toString()),"remark",5,info);
                             },child:    _item_detail(context,Colors.black,Icons.bookmarks_outlined,"备注",info['remark']==null?"-":(info['remark']==""?"-":info['remark'].toString()),true)),
 
                           ]
