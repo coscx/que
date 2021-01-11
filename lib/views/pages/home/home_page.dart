@@ -43,9 +43,10 @@ class _HomePageState extends State<HomePage>
   int _showAgeMax =  70;
   bool _showChip = false;
   int _selectedIndex=999;
+  String serveType ="2";
   static List<SortModel> _leftWidgets = [
-    SortModel(name: "服务中", isSelected: true, code: "1"),
-    SortModel(name: "跟进中", isSelected: false, code: "2"),
+    SortModel(name: "服务中", isSelected: true, code: "2"),
+    SortModel(name: "跟进中", isSelected: false, code: "1"),
     SortModel(name: "已签约", isSelected: false, code: "3"),
     SortModel(name: "即将过期", isSelected: false, code: "4"),
   ];
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage>
     //BlocProvider.of<GlobalBloc>(context).add((EventSetIndexNum()));
     var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-    BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin));
+    BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
     _refreshController.refreshCompleted();
   }
 
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage>
     var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
     BlocProvider.of<GlobalBloc>(context).add(EventIndexPhotoPage(currentPage));
-    var result= await IssuesApi.searchErpUser('', (++currentPage).toString(),sex.toString(),mode.toString(),searchParamList,_showAge,_showAgeMax,_showAgeMin);
+    var result= await IssuesApi.searchErpUser('', (++currentPage).toString(),sex.toString(),mode.toString(),searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType);
     if  (result['code']==200){
 
     } else{
@@ -285,7 +286,7 @@ class _HomePageState extends State<HomePage>
               // });
                var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-               BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin));
+               BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
              },
              deleteIcon: Icon(Icons.delete),
              deleteIconColor: Colors.red,
@@ -329,7 +330,7 @@ class _HomePageState extends State<HomePage>
         _showAge =false;
         var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
         var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-        BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin));
+        BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
 
       },
       deleteIcon: Icon(Icons.delete),
@@ -386,7 +387,7 @@ class _HomePageState extends State<HomePage>
               sureFun: () {
                 var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                 var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin));
+                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
                 print("sure click");
                 _showFilter = false;
                 _showSort = false;
@@ -407,7 +408,18 @@ class _HomePageState extends State<HomePage>
         onSelected: (SortModel model) {
           _leftSelectedModel = model;
           print("select ${model.name}  ${model.code}");
-          setState(() {});
+
+          setState(() {
+            serveType= model.code;
+            _showSort = false;
+            _showFilter = false;
+            var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+            if( mode== 2){
+              var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+              BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
+            }
+
+          });
         },
       );
     } else {
@@ -439,9 +451,9 @@ class _HomePageState extends State<HomePage>
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
 
     if(searchParamList ==null){
-      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin));
+      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
     }else{
-      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,value,mode,_showAge,_showAgeMax,_showAgeMin));
+      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,value,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
     }
 
   }
@@ -505,17 +517,17 @@ class _HomePageState extends State<HomePage>
                 if (e == '全部') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList,_showAge,_showAgeMax,_showAgeMin));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
                 }
                 if (e == '我的') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList,_showAge,_showAgeMax,_showAgeMin));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
                 }
                 if (e == '良缘') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList,_showAge,_showAgeMax,_showAgeMin));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
                 }
               },
               onCanceled: () => print('onCanceled'),
@@ -531,9 +543,9 @@ class _HomePageState extends State<HomePage>
   }
   List<PopupMenuItem<String>> buildItems() {
     final map = {
-      "全部": Icons.zoom_in,
-      "我的": Icons.check,
-      "良缘": Icons.app_blocking,
+      "全部": Icons.border_all,
+      "我的": Icons.mood_sharp,
+      "良缘": Icons.wc,
     };
     return map.keys
         .toList()
@@ -617,7 +629,8 @@ class _HomePageState extends State<HomePage>
     if (state is WidgetsLoaded) {
 
       List<dynamic>  photos=state.photos;
-      if (photos.isEmpty) return EmptyPage();
+      if (photos.isEmpty) return SliverToBoxAdapter(
+          child:EmptyPage());
       return photos.isNotEmpty?SliverList(
         delegate: SliverChildBuilderDelegate(
             (_, int index) => _buildHomeItem(photos[index]),

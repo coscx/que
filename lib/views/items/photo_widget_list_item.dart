@@ -496,7 +496,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         padding:  EdgeInsets.only(top: 10.h),
         child: Container(
           //tag: "hero_widget_image_${photo['uuid'].toString()}",
-          child: photo['head_img'] == ""
+          child: (photo['head_img'] == "" || photo['head_img'] ==null)
               ? Container(
                   // width: 110.w,
                   // height: 210.h,
@@ -513,7 +513,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
               foregroundColor: Colors.white10,
               radius:(60.w) ,
               child: ClipOval(
-                child: CachedNetworkImage(imageUrl: photo['head_img'],
+                child: photo['head_img'] ==null ?Container():CachedNetworkImage(imageUrl: photo['head_img'],
                   fit: BoxFit.cover,
                   width: 120.w,
                   height: 120.h,

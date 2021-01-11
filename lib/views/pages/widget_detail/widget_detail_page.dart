@@ -1118,8 +1118,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         user['info']['age'].toString(),
                         style: TextStyle(color: Colors.black, fontSize: 18.sp),
                       )),
-                  Container(
+
+                  user['info']['vip_expire_time']!=null?Container(
                       margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                      child:Icon(
+                        Icons.monetization_on,
+                        color: Colors.redAccent,
+                      )
+                      ):Container(),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
                       child:
                       Text(
                         user['info']['vip_name']+""+(user['info']['vip_expire_time']==null?"":"("+user['info']['vip_expire_time']+")"),

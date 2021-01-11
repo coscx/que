@@ -42,17 +42,38 @@ class IssuesApi {
     return datas;
   }
 
-  static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String is_passive,SearchParamList search ,bool _showAge, int _showAgeMax, int _showAgeMin) async {
+  static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String mode,SearchParamList search ,bool _showAge, int _showAgeMax, int _showAgeMin,String serveType) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     Map<String,dynamic> searchParm={};
     search.list.map((e) {
       if (e.paramCode=="customerLevel"){
+        if(e.selected != null)
         searchParm['status'] = e.selected;
       }
+      if (e.paramCode=="from"){
+        if(e.selected != null)
+        searchParm['channel[]'] = e.selected;
+      }
+      if (e.paramCode=="graduate"){
+        if(e.selected != null)
+          searchParm['education[]'] = e.selected;
+      }
+      if (e.paramCode=="income"){
+        if(e.selected != null)
+          searchParm['income[]'] = e.selected;
+      }
+      if (e.paramCode=="house"){
+        if(e.selected != null)
+          searchParm['hashouse[]'] = e.selected;
+      }
+      if (e.paramCode=="appointment"){
+        if(e.selected != null)
+          searchParm['marriage[]'] = e.selected;
+      }
     }).toList();
-    if(is_passive=="0") is_passive="all";
+    String is_passive="all";
     if(_showAge){
       searchParm['startAge'] = _showAgeMin;
       searchParm['endAge'] = _showAgeMax;
@@ -63,7 +84,18 @@ class IssuesApi {
     searchParm['pageSize'] = 20;
     searchParm['currentPage'] = page;
     var data={'keywords':keyWord,'currentPage':page,'status':"all",'is_passive':is_passive,"store_id":1,"pageSize":20,'gender':sex};
-    Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:searchParm );
+    String url="/api/v1/customer/system/index";
+    if(mode=="0"){//全部
+      url="/api/v1/customer/system/index";
+    }
+    if(mode=="1"){//良缘
+      url="/api/v1/customer/passive/index";
+    }
+    if(mode=="2"){//我的
+      url="/api/v1/customer/personal/index";
+      searchParm['type'] = serveType;
+    }
+    Response<dynamic> rep = await dio.get(url,queryParameters:searchParm );
     var datas = (rep.data);
     return datas;
   }

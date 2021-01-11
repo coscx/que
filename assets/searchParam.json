@@ -105,23 +105,23 @@
       "dateFlag": false,
       "itemList": [
         {
-          "code": "0",
+          "code": "1",
           "name": "5万及以下"
         },
         {
-          "code": "0",
+          "code": "2",
           "name": "5-10万"
         },
         {
-          "code": "0",
+          "code": "3",
           "name": "10-15万"
         },
         {
-          "code": "0",
+          "code": "4",
           "name": "15-20万"
         },
         {
-          "code": "0",
+          "code": "5",
           "name": "20-30万"
         }
       ],
@@ -135,19 +135,19 @@
     "dateFlag": false,
     "itemList": [
       {
-        "code": "0",
-        "name": "0套"
-      },
-      {
         "code": "1",
-        "name": "1套"
+        "name": "无房"
       },
       {
         "code": "2",
-        "name": "2套"
+        "name": "1套"
       },
       {
         "code": "3",
+        "name": "2套"
+      },
+      {
+        "code": "4",
         "name": "3套"
       }
 
@@ -162,27 +162,27 @@
     "dateFlag": false,
     "itemList": [
       {
-        "code": "0",
+        "code": "1",
         "name": "未婚"
       },
       {
-        "code": "1",
-        "name": "已婚"
-      },
-      {
         "code": "2",
-        "name": "离异单身"
+        "name": "离异带孩"
       },
       {
         "code": "3",
-        "name": "单身未育"
+        "name": "离异单身"
       },
       {
         "code": "4",
-        "name": "离异未育"
+        "name": "单身未育"
       },
       {
         "code": "5",
+        "name": "离异未育"
+      },
+      {
+        "code": "6",
         "name": "丧偶"
       }
     ],

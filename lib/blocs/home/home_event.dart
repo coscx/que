@@ -26,7 +26,8 @@ class EventSearchErpUser extends HomeEvent {
   final bool showAge;
   final int minAge;
   final int maxAge;
-  EventSearchErpUser(this.search,this.sex,this.mode,this.showAge,this.maxAge,this.minAge);
+  final String serveType ;
+  EventSearchErpUser(this.search,this.sex,this.mode,this.showAge,this.maxAge,this.minAge,this.serveType);
 
 }
 class EventTabPhoto extends HomeEvent {
@@ -61,8 +62,9 @@ class EventFresh extends HomeEvent {
   final bool showAge;
   final int minAge;
   final int maxAge;
+  final String serveType ;
   final SearchParamList search;
-  EventFresh(this.sex,this.mode,this.search,this.showAge,this.maxAge,this.minAge);
+  EventFresh(this.sex,this.mode,this.search,this.showAge,this.maxAge,this.minAge,this.serveType);
 }
 class EventGetCreditId extends HomeEvent {
 
