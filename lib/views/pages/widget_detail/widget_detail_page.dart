@@ -2261,22 +2261,26 @@ _showBottom(BuildContext context,String text,String status,String type){
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
 
-                    Container(
+                    Opacity(
+                      opacity:  0.2,
+                      child: Container(
                       child: Text(
                       "沟通方式:" + (type=="1"?"电话":"到店"),
                         textAlign: TextAlign.left,
                         style: TextStyle(fontSize: 24.sp,color:type=="2"?Colors.redAccent:Colors.green,fontWeight: FontWeight.w300),
                       ),
-                    ),
+                    )),
 
 
-                    Container(
+                    Opacity(
+                      opacity: 0.2 ,
+                      child: Container(
                       child: Text(
                         "沟通状态:" +status,
                         textAlign: TextAlign.left,
                         style: TextStyle(fontSize: 24.sp,color:Colors.black54,fontWeight: FontWeight.w300),
                       ),
-                    ),
+                    )),
 
                   ],
                 ),
