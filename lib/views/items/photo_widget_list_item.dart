@@ -482,7 +482,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   _buildTitle(),
-
+                  _buildMiddles(),
                   _buildSummary(),
 
                 ],
@@ -557,7 +557,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         children: <Widget>[
           const SizedBox(width: 1),
           Expanded(
-            child: Text(photo['name']+" "+photo['mobile']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+(photo['status']==0?"C":(photo['status']==1?"B":"A")),
+            child: Text(photo['name']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+""+((photo['height']==0||photo['height']==null)?"": photo['height'].toString()+"cm")+" "+(photo['status']==0?"C级":(photo['status']==1?"B级":"A级")),
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     fontSize: 14,
@@ -582,7 +582,23 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       child: Container(
         child: Text(
           //尾部摘要
-          "房: "+photo['has_house'].toString()+"套 车: "+photo['has_car'].toString()+"辆 " +(photo['marriage']==2?"已婚":"未婚") +" 生日:" +(photo['birthday']==null ? "-":photo['birthday'].toString()),
+          "房: "+photo['has_house'].toString()+"套 车: "+photo['has_car'].toString()+"辆 " +(photo['marriage']==2?"已婚":"未婚") +" 生日:" +(photo['birthday']==null ? "-":photo['birthday'].toString().substring(0,10)),
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: Colors.black, fontSize: 14, shadows: [
+            const Shadow(color: Colors.white, offset: const Offset(.5, .5))
+          ]),
+        ),
+      ),
+    );
+  }
+  Widget _buildMiddles() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 1, bottom: 1, top: 1),
+      child: Container(
+        child: Text(
+          //尾部摘要
+          "红娘: "+photo['sale_name'].toString()+" 沟通"+photo['connect_count'].toString()+"次 " +(photo['appointment_count']==0?"未排约":(photo['appointment']==null?"":photo['appointment'].toString())),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontSize: 14, shadows: [

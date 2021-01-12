@@ -123,7 +123,25 @@
         {
           "code": "5",
           "name": "20-30万"
+        },
+        {
+          "code": "6",
+          "name": "30-50万"
+        },
+        {
+          "code": "7",
+          "name": "50-70万"
+        },
+        {
+          "code": "8",
+          "name": "70-100万"
+        },
+        {
+          "code": "9",
+          "name": "100万以上"
         }
+
+
       ],
       "multiFlag": false,
       "paramCode": "income",
@@ -148,9 +166,12 @@
       },
       {
         "code": "4",
-        "name": "3套"
+        "name": "3套及以上"
+      },
+      {
+        "code": "5",
+        "name": "其他"
       }
-
     ],
     "multiFlag": false,
     "paramCode": "house",
