@@ -15,7 +15,7 @@ class HomeItemSupport {
     WidgetModel model,
     int index,
     Map<String,dynamic>  photo,
-
+    bool show,
   ) {
     switch (index) {
       case 0:
@@ -32,7 +32,7 @@ class HomeItemSupport {
       case 5:
         return CouponWidgetListItem(isClip: false, data: model);
       case 6:
-        return PhotoWidgetListItem(isClip: false, photo: photo,);
+        return PhotoWidgetListItem(isClip: false, photo: photo,showBadge: show,);
     }
     return TechnoWidgetListItem(data: model);
   }

@@ -83,6 +83,7 @@ dependencies:
   select_form_field: "^1.1.0"
   flutter_my_picker: ^1.0.3
   flutter_image_compress: ^0.7.0
+  lottie: ^0.7.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -110,6 +111,7 @@ flutter:
     - assets/images/widgets/
     - assets/images/dropMenu_images/
     - assets/packages/
+    - assets/packages/lottie_flutter/
     - assets/packages/images/
   #  - assets/data/widget.json
     - assets/flutter.db

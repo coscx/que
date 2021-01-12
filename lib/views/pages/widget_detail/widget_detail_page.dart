@@ -29,6 +29,7 @@ import 'package:flutter_geen/views/items/tag.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'dart:typed_data';
@@ -109,9 +110,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       builder: (ctx) => GestureDetector(
           onLongPress: () => Scaffold.of(ctx).openEndDrawer(),
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Icon(Icons.nightlife,
-            color: Colors.black,),
+            padding:  EdgeInsets.only(top: 10.h),
+            child: Container(
+              width: 60.h,
+              height: 60.h,
+              margin: EdgeInsets.fromLTRB(10.w, 0.h, 5.w, 0.h),
+              child:Lottie.asset('assets/packages/lottie_flutter/appointment.json'),
+            ),
           ),
           onTap: () async {}
           ));
@@ -130,11 +135,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           } ,
           child: BlocBuilder<CollectBloc, CollectState>(
               builder: (_, s) => Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: Icon(
-                          Icons.phone_enabled,
-                      color: Colors.black,
-                      size: 25,
+                    padding:  EdgeInsets.only(right: 20.0,top: 10.h),
+                    child: Container(
+                      width: 60.h,
+                      height: 60.h,
+                      margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                      child:Lottie.asset('assets/packages/lottie_flutter/chat.json'),
                     ),
                   )),
         ));
@@ -579,7 +585,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           SizedBox(
             height: 0.h,
           ),
-          Image.asset("assets/images/loadings.gif"),
+          //Image.asset("assets/images/loadings.gif"),
+          Lottie.asset('assets/packages/lottie_flutter/loading.json'),
         ],
       )),
     );
@@ -1064,11 +1071,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       )),
 
                   user['info']['vip_expire_time']!=null?Container(
+                      width: 60.h,
+                      height: 60.h,
                       margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
-                      child:Icon(
-                        Icons.monetization_on,
-                        color: Colors.redAccent,
-                      )
+                      child:Lottie.asset('assets/packages/lottie_flutter/vip-crown.json'),
                       ):Container(),
                   Container(
                       margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),

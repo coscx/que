@@ -21,10 +21,12 @@ import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 class PhotoWidgetListItem extends StatelessWidget {
   final bool hasTopHole;
   final bool hasBottomHole;
   final bool isClip;
+  final bool showBadge;
   final Map<String,dynamic>  photo;
   PhotoWidgetListItem(
       {
@@ -32,6 +34,7 @@ class PhotoWidgetListItem extends StatelessWidget {
       this.hasBottomHole = false,
       this.isClip = true,
       this.photo,
+      this.showBadge
       });
 
   final List<int> colors = Cons.tabColors;
@@ -76,7 +79,7 @@ class PhotoWidgetListItem extends StatelessWidget {
       ))
 
           ),
-          _buildCollectTag(Theme.of(context).primaryColor)
+          _buildCollectTag(Theme.of(context).primaryColor, showBadge)
     ]
       )
     );
@@ -530,25 +533,24 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
     return Colors.blue;
   }
 
-  Widget _buildCollectTag(Color color) {
+  Widget _buildCollectTag(Color color,bool show) {
     return Positioned(
         top: 0,
         right: 40,
-        child: BlocBuilder<CollectBloc, CollectState>(builder: (_, s) {
-          bool show = true;
-          return Opacity(
-            opacity: show ? 1.0 : 0.0,
+        child:Opacity(
+            opacity: show? 1.0:0 ,
             child: SizedOverflowBox(
               alignment: Alignment.bottomCenter,
-              size: const Size(0, 20 - 6.0),
-              child: Tag(
-                color: color,
-                shadowHeight: 6.0,
-                size: const Size(15, 20),
+              size:  Size(0, 70.h),
+              child: Container(
+                width: 100.h,
+                height: 100.h,
+                margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                child:Lottie.asset('assets/packages/lottie_flutter/medal.json'),
               ),
             ),
-          );
-        }));
+          )
+        );
   }
 
   Widget _buildTitle() {

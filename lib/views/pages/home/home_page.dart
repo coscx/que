@@ -749,10 +749,16 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildHomeItem(Map<String,dynamic> photo) =>
-
-           HomeItemSupport.get(null, 6 ,photo);
-
+  Widget _buildHomeItem(Map<String,dynamic> photo) {
+    bool isVip;
+    var vipExpireTime = photo['vip_expire_time'];
+    if (vipExpireTime == null) {
+      isVip = false;
+    } else {
+      isVip = true;
+    }
+   return HomeItemSupport.get(null, 6, photo,isVip);
+  }
   _switchTab(int index, Color color) {
     BlocProvider.of<HomeBloc>(context)
         .add(EventTabTap(Convert.toFamily(index)));
