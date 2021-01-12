@@ -76,8 +76,23 @@ class UploadImgSuccessEvent extends DetailEvent {
     return 'FetchWidgetDetail{widgetModel: }';
   }
 }
+class AddConnectEvent extends DetailEvent {
+  final int connect_type;
+  final int connect_status;
+  final String connect_time;
+  final String subscribe_time;
+  final String connect_message;
+  final Map<String,dynamic> photo;
+  const AddConnectEvent(this.photo,this.connect_message,this.connect_status,this.connect_time,this.connect_type,this.subscribe_time);
 
+  @override
+  List<Object> get props => [photo,connect_message,connect_status,connect_time,connect_type,subscribe_time];
 
+  @override
+  String toString() {
+    return 'FetchWidgetDetail{widgetModel: }';
+  }
+}
 class FreshDetailState extends DetailEvent {
   final Map<String,dynamic> photo;
   const FreshDetailState(this.photo);

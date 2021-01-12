@@ -82,6 +82,7 @@ dependencies:
   cupertino_range_slider: ^1.0.1
   select_form_field: "^1.1.0"
   flutter_my_picker: ^1.0.3
+  flutter_image_compress: ^0.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

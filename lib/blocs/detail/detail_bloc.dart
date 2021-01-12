@@ -84,7 +84,29 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         yield DetailWithData(userdetails: result,connectList: connectList);
 
     }
+    if(event is AddConnectEvent){
+      Map<String ,dynamic> userdetails=state.props.elementAt(0);
+      Map<String ,dynamic> connectList=state.props.elementAt(1);
+      Map<String ,dynamic> result = Map.from(connectList);
+      List<dynamic> res = result['data'];
+      Map<String ,dynamic> connect ={};
+      connect['id'] = 0;
+      connect['username'] = "";
+      connect['connect_type'] = event.connect_type;
+      connect['connect_status'] = event.connect_status;
+      connect['connect_time'] = event.connect_time;
+      connect['subscribe_time'] = event.subscribe_time;
+      connect['connect_message'] = event.connect_message;
+      connect['customer_uuid'] = event.photo['uuid'];
+      res=res.reversed.toList();
+      res.add(connect);
+      result['data']=res.reversed.toList();
 
+      var resultConnectList= await IssuesApi.addConnect(event.photo['uuid'],connect);
+
+      yield DetailWithData(userdetails: userdetails,connectList: result);
+
+    }
     if(event is UploadImgSuccessEvent){
       String imgUrl="https://queqiaoerp.oss-cn-shanghai.aliyuncs.com/"+event.value;
       Map<String ,dynamic> userdetails=state.props.elementAt(0);

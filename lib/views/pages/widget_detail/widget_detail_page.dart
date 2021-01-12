@@ -28,6 +28,7 @@ import 'package:flutter_geen/views/pages/widget_detail/category_end_drawer.dart'
 import 'package:flutter_geen/views/items/tag.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'dart:typed_data';
@@ -45,7 +46,8 @@ class WidgetDetailPage extends StatefulWidget {
 
 class _WidgetDetailPageState extends State<WidgetDetailPage> {
   String memberId ;
-
+  int connectStatus =4;
+  Map<String,dynamic>  userDetail;
   @override
   void initState() {
     super.initState();
@@ -108,12 +110,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           onLongPress: () => Scaffold.of(ctx).openEndDrawer(),
           child: Padding(
             padding: const EdgeInsets.all(15.0),
-            child: Icon(Icons.home,
+            child: Icon(Icons.nightlife,
             color: Colors.black,),
           ),
-          onTap: () async {
-              }
-
+          onTap: () async {}
           ));
 
   Widget _buildCollectButton( BuildContext context) {
@@ -121,25 +121,18 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return BlocListener<DetailBloc, DetailState>(
         listener: (ctx, st) {
           if (st is DetailWithData){
-            //Map<String,dynamic> user=st.props.elementAt(0);
-            //memberId= user['user']['memberId'].toString();
-          }
 
-         // bool collected = st.widgets.contains(model);
-         // String msg = collected ? "收藏【${model.name}】组件成功!" : "已取消【${model.name}】组件收藏!";
-         // _showToast(ctx, msg, collected);
+          }
         },
         child: FeedbackWidget(
           onPressed: () {
-            //BlocProvider.of<TimeBloc>(context).add(EventGetTimeLine(memberId??"12221"));
-            //Navigator.pushNamed(context, UnitRouter.time_line, arguments: memberId);
-            _comment(context);
+            _comment(context,connectStatus,userDetail);
           } ,
           child: BlocBuilder<CollectBloc, CollectState>(
               builder: (_, s) => Padding(
                     padding: const EdgeInsets.only(right: 20.0),
                     child: Icon(
-                          TolyIcon.icon_star_ok,
+                          Icons.phone_enabled,
                       color: Colors.black,
                       size: 25,
                     ),
@@ -162,7 +155,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     //print('build---${state.runtimeType}---');
     if (state is DetailWithData) {
       var info = state.userdetails['info'];
+      userDetail=info;
       List<dynamic> connectList = state.connectList['data'];
+      if (connectList.length>0){
+        Map<String ,dynamic> e=connectList.first;
+        if (e!=null)
+          connectStatus=e['connect_status'];
+      }
       List<Widget> list = _listViewConnectList(connectList);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -883,7 +882,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           color:  Colors.transparent ,
           child: InkWell(
             onTap: (){
-              _showBottom(context,content);
+              _showBottom(context,content,_getStatusIndex(int.parse(connectStatus)),connectType);
               },
             child: Container(
                 margin: EdgeInsets.only(left: 10.w, right: 20.w),
@@ -1247,7 +1246,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                for(int i = 0; i < images.length; i++) {
                  // 获取 ByteData
 
-                 ByteData byteData = await images[i].getByteData();
+                 ByteData byteData = await images[i].getByteData(quality: 60);
                  try {
                    var resultConnectList= await IssuesApi.uploadPhoto("1",byteData,_loading);
                    // print(resultConnectList['data']);
@@ -1287,11 +1286,11 @@ showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > s
        selecteds:select,
      // columnPadding: EdgeInsets.only(top: 50.h,bottom: 50.h,left: 50.w,right: 50.w),
        selectedTextStyle: TextStyle(
-         fontSize: 28.sp,
+         fontSize: 34.sp,
          color: Colors.redAccent,
        ),
       textStyle: TextStyle(
-        fontSize: 20.sp,
+        fontSize: 28.sp,
         color: Colors.black,
       ),
       onConfirm: (Picker picker, List value) async {
@@ -1713,7 +1712,7 @@ List<String> _getHeightList() {
 
 
 List<String> _nationLevel = [
-  "汉族","蒙古族","回族","藏族","维吾尔族","苗族","彝族","壮族","布依族","朝鲜族","满族","侗族","瑶族","白族","土家族",
+  "未知","汉族","蒙古族","回族","藏族","维吾尔族","苗族","彝族","壮族","布依族","朝鲜族","满族","侗族","瑶族","白族","土家族",
   "哈尼族","哈萨克族","傣族","黎族","傈僳族","佤族","畲族","高山族","拉祜族","水族","东乡族","纳西族","景颇族","柯尔克孜族",
   "土族","达斡尔族","仫佬族","羌族","布朗族","撒拉族","毛南族","仡佬族","锡伯族","阿昌族","普米族","塔吉克族","怒族", "乌孜别克族",
   "俄罗斯族","鄂温克族","德昂族","保安族","裕固族","京族","塔塔尔族","独龙族","鄂伦春族","赫哲族","门巴族","珞巴族","基诺族"
@@ -1895,26 +1894,7 @@ List<String> _marriageDateLevel = [
 ];
 
 
-_getPermission(BuildContext context) {
-  //请求读写权限
-  ObjectUtil.getPermissions([
-    PermissionGroup.storage,
-    PermissionGroup.camera,
 
-  ]).then((res) {
-    if (res[PermissionGroup.storage] == PermissionStatus.denied ||
-        res[PermissionGroup.storage] == PermissionStatus.unknown) {
-      //用户拒绝，禁用，或者不可用
-      DialogUtil.showBaseDialog( context, '获取不到权限，APP不能正常使用',
-          right: '去设置', left: '取消', rightClick: (res) {
-            PermissionHandler().openAppSettings();
-          });
-    } else if (res[PermissionGroup.storage] == PermissionStatus.granted) {
-    } else if (res[PermissionGroup.storage] == PermissionStatus.restricted) {
-      //用户同意IOS的回调
-    }
-  });
-}
 _loading(int a, int b){
                 double _progress;
                 _progress = 0;
@@ -1925,12 +1905,28 @@ _loading(int a, int b){
                   EasyLoading.dismiss();
                 }
 }
+
+
 final _Controller = TextEditingController(text: '');
-List<String> goals = ["1.新分未联系",  "2.号码无效", "3.号码未接通",  "4.可继续沟通", "5.有意向面谈",  "6.确定到店时间", "7.已到店，意愿需跟进", "8.已到店，考虑7天付款",  "9.高级会员,支付预付款",  "10.高级会员，费用已结清", "11.毁单",  "12.放弃"];
-String goalValue = '1.新分未联系';
+List<String> goals = ["请选择","1.新分未联系",  "2.号码无效", "3.号码未接通",  "4.可继续沟通", "5.有意向面谈",  "6.确定到店时间", "7.已到店，意愿需跟进", "8.已到店，考虑7天付款",  "9.高级会员,支付预付款",  "10.高级会员，费用已结清", "11.毁单",  "12.放弃"];
+String goalValue = '4.可继续沟通';
 DateTime _date = new DateTime.now();
-int groupValue=0;
-_comment(BuildContext context) {
+int connect_type=1;
+String time1="",time2="";
+
+_getStatusIndex(info) {
+
+  try {
+    return goals[info];
+  } catch (e) {
+    return "4.可继续沟通";
+  }
+
+}
+_comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
+
+  goalValue=_getStatusIndex(connectStatus);
+
   showDialog(
       context: context,
       builder: (ctx) => StatefulBuilder(
@@ -1953,7 +1949,7 @@ _comment(BuildContext context) {
                       alignment: AlignmentDirectional.topCenter,
                       children: <Widget>[
                         Positioned(
-                          top: 50.h,
+                          top: 20.h,
                           child: Image.asset(
                             'assets/images/login_top.png',
                             width: 220.w,
@@ -1964,7 +1960,16 @@ _comment(BuildContext context) {
                           top: 30.h,
                           right: 30.h,
                           child: GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
+                            onTap: () {
+
+                               goalValue = '1.新分未联系';
+                               _date = new DateTime.now();
+                               connect_type=1;
+                              time1="";
+                              time2="";
+                               _Controller.clear();
+                              Navigator.of(context).pop();
+                            } ,
                             child: Image.asset('assets/images/btn_close_black.png',
                               width: 30.w,
                             ),
@@ -1974,7 +1979,7 @@ _comment(BuildContext context) {
                           padding: EdgeInsets.only(
                             left: 30.w,
                             right: 30.w,
-                            top: 80.h,
+                            top: 20.h,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1991,13 +1996,13 @@ _comment(BuildContext context) {
                                   Radio(
                                     activeColor: Colors.deepOrangeAccent,
                                     ///此单选框绑定的值 必选参数
-                                    value: 0,
+                                    value: 1,
                                     ///当前组中这选定的值  必选参数
-                                    groupValue: groupValue,
+                                    groupValue: connect_type,
                                     ///点击状态改变时的回调 必选参数
                                     onChanged: (v) {
                                       state(() {
-                                        groupValue = v;
+                                        connect_type = v;
                                       });
                                     },
                                   ),
@@ -2005,13 +2010,13 @@ _comment(BuildContext context) {
                                   Radio(
                                     activeColor: Colors.deepOrangeAccent,
                                     ///此单选框绑定的值 必选参数
-                                    value: 1,
+                                    value: 2,
                                     ///当前组中这选定的值  必选参数
-                                    groupValue: groupValue,
+                                    groupValue: connect_type,
                                     ///点击状态改变时的回调 必选参数
                                     onChanged: (v) {
                                       state(() {
-                                        groupValue = v;
+                                        connect_type = v;
                                       });
                                     },
                                   ),
@@ -2038,6 +2043,7 @@ _comment(BuildContext context) {
                                       onChanged: (String newValue) {
                                         state(() {
                                           goalValue = newValue;
+                                        connectStatus=  _getIndexOfList(goals,newValue);
                                         });
                                       },
                                       items: goals
@@ -2055,6 +2061,7 @@ _comment(BuildContext context) {
                                 ],
                               ),
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   GestureDetector(
                                     onTap:(){
@@ -2063,9 +2070,12 @@ _comment(BuildContext context) {
                                         context: context,
                                         current: _date,
                                         mode: MyPickerMode.dateTime,
-                                        onChange: (v){
+                                          onConfirm: (v){
                                           //_change('yyyy-MM-dd HH:mm'),
                                           print(v);
+                                          state(() {
+                                            time1 = v.toString().substring(0,19);
+                                          });
                                         }
                                       );
 
@@ -2073,14 +2083,12 @@ _comment(BuildContext context) {
                                     child: Row(
                                       children: [
                                         Text("沟通时间",style: TextStyle(
-                                            fontSize: 14, color: Colors.grey)),
+                                            fontSize: 30.sp, color: Colors.grey)),
                                         Icon(Icons.keyboard_arrow_down_outlined),
                                       ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 100.w,
-                                  ),
+
                                   GestureDetector(
                                     onTap:(){
 
@@ -2091,6 +2099,9 @@ _comment(BuildContext context) {
                                           onConfirm: (v){
                                             //_change('yyyy-MM-dd HH:mm'),
                                             print(v);
+                                            state(() {
+                                              time2 = v.toString().substring(0,19);
+                                            });
                                           }
                                       );
 
@@ -2098,7 +2109,7 @@ _comment(BuildContext context) {
                                     child: Row(
                                       children: [
                                         Text("下次沟通时间 ",style: TextStyle(
-                                            fontSize: 14, color: Colors.grey)),
+                                            fontSize: 30.sp, color: Colors.grey)),
                                         Icon(Icons.keyboard_arrow_down_outlined),
                                       ],
                                     ),
@@ -2106,14 +2117,57 @@ _comment(BuildContext context) {
 
                                 ],
                               ),
+                              SizedBox(
+                                height: 10.w,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GestureDetector(
+                                    onTap:(){
 
+
+
+                                    },
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          Text(time1,style: TextStyle(
+                                              fontSize: 28.sp, color: Colors.redAccent,fontWeight:FontWeight.w800 )),
+
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  GestureDetector(
+                                    onTap:(){
+
+
+
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(time2,style: TextStyle(
+                                            fontSize: 28.sp, color: Colors.redAccent,fontWeight:FontWeight.w800)),
+
+                                      ],
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+
+                              SizedBox(
+                                height: 20.w,
+                              ),
                               Container(
                                 width:300.w,
                                 child: TextField(
                                   controller: _Controller,
-                                  style: TextStyle(color: Colors.blue),
-                                  minLines: 5,
-                                  maxLines: 10,
+                                  style: TextStyle(color: Colors.black),
+                                  minLines: 7,
+                                  maxLines: 7,
                                   cursorColor: Colors.green,
                                   cursorRadius: Radius.circular(3.w),
                                   cursorWidth: 5.w,
@@ -2138,6 +2192,22 @@ _comment(BuildContext context) {
                                     if (_Controller.text.isEmpty){
                                       return;
                                     }
+                                    if (time1==""){
+                                      return;
+                                    }
+                                    if (time2==""){
+                                      return;
+                                    }
+
+
+                                    if (detail != null)
+                                    BlocProvider.of<DetailBloc>(context).add(AddConnectEvent(detail,_Controller.text,connectStatus,time1,connect_type,time2));
+                                    goalValue = '1.新分未联系';
+                                    _date = new DateTime.now();
+                                    connect_type=1;
+                                    time1="";
+                                    time2="";
+                                    _Controller.clear();
                                     Navigator.of(context).pop();
                                   },
                                   child: Text("提交",
@@ -2164,7 +2234,7 @@ _comment(BuildContext context) {
   );
 }
 
-_showBottom(BuildContext context,String text){
+_showBottom(BuildContext context,String text,String status,String type){
   showFLBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -2181,7 +2251,30 @@ _showBottom(BuildContext context,String text){
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
 
+                    Container(
+                      child: Text(
+                      "沟通方式:" + (type=="1"?"电话":"到店"),
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 24.sp,color:type=="2"?Colors.redAccent:Colors.green,fontWeight: FontWeight.w300),
+                      ),
+                    ),
+
+
+                    Container(
+                      child: Text(
+                        "沟通状态:" +status,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 24.sp,color:Colors.black54,fontWeight: FontWeight.w300),
+                      ),
+                    ),
+
+                  ],
+                ),
+              SizedBox(height: 10.h,),
                 Container(
                   child: Text(
                     text,
