@@ -157,13 +157,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
       },
     ));
   }
-  _comment(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (ctx) => CommentDialog()
 
-    );
-  }
   _userDetail(BuildContext context) {
     showDialog(
         context: context,

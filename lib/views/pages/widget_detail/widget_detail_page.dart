@@ -14,6 +14,7 @@ import 'package:flutter_geen/components/permanent/circle.dart';
 import 'package:flutter_geen/views/dialogs/comment.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
+import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
@@ -27,7 +28,6 @@ import 'package:flutter_geen/views/pages/widget_detail/category_end_drawer.dart'
 import 'package:flutter_geen/views/items/tag.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
-import 'package:flutter_geen/views/pages/utils/user_detail_array.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'dart:typed_data';
@@ -112,8 +112,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             color: Colors.black,),
           ),
           onTap: () async {
-
-
               }
 
           ));
@@ -132,7 +130,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
          // _showToast(ctx, msg, collected);
         },
         child: FeedbackWidget(
-
           onPressed: () {
             //BlocProvider.of<TimeBloc>(context).add(EventGetTimeLine(memberId??"12221"));
             //Navigator.pushNamed(context, UnitRouter.time_line, arguments: memberId);
@@ -150,17 +147,11 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         ));
   }
 
-
-
   final List<int> colors = Cons.tabColors;
   int _position = 0;
-
-
   Future<bool> _whenPop(BuildContext context) async {
     if (Scaffold.of(context).isEndDrawerOpen) return true;
-
       return true;
-
   }
   List<Widget> _listViewConnectList(List<dynamic>connectList ){
     return connectList.map((e) =>
@@ -181,7 +172,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-
                 //CustomsExpansionPanelList()
                 //_item(context),
                 WidgetNodePanel(
@@ -199,17 +189,17 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           runSpacing: 0,
                           children: <Widget>[
                             GestureDetector(
-                                onTap: (){
+                            onTap: (){
 
-                                },child: _item_detail(context,Colors.black,Icons.format_list_numbered,"编号",info['code'].toString(),false)),
+                            },child: _item_detail(context,Colors.black,Icons.format_list_numbered,"编号",info['code'].toString(),false)),
                             GestureDetector(
-                                onTap: (){
+                            onTap: (){
                                   _showEditDialog(context,"请输入姓名","",info['name'].toString(),"name",1,info);
-                                },child: _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true)),
+                            },child: _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true)),
                               GestureDetector(
-                                  onTap: (){
+                            onTap: (){
                                     showPickerArray(context,[["未知","男生","女生"]],info['gender']==0?[1]:[info['gender']],"gender",info,"",true);
-                                  },child:  _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true)),
+                            },child:  _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true)),
                             GestureDetector(
                             onTap: (){
 
@@ -225,7 +215,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             GestureDetector(
                             onTap: (){
 
-                                  },child:  _item_detail(context,Colors.orange,Icons.whatshot,"五行",info['wuxing'].toString(),false)),
+                           },child:  _item_detail(context,Colors.orange,Icons.whatshot,"五行",info['wuxing'].toString(),false)),
                             GestureDetector(
                             onTap: () async {
                               Result result = await CityPickers.showCityPicker(
@@ -246,9 +236,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                 }
                               }
 
-
-
-
                             },child:  _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place']==null?"-":(info['native_place']==""?"-":info['native_place'].toString()),true)),
                             GestureDetector(
                             onTap: () async {
@@ -265,7 +252,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                   BlocProvider.of<DetailBloc>(context).add(EditDetailEventAddress(result,2));
                                   _showToast(context,"编辑成功",false);
                                 }else{
-
                                   _showToast(context,results['message'],false);
                                 }
                               }
@@ -393,11 +379,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
                           ]
                       ),
-
                     )
                 ),
-
-
               ],
             ),
 
@@ -408,7 +391,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-
                 //CustomsExpansionPanelList()
                 //_item(context),
                 WidgetNodePanel(
@@ -430,9 +412,9 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             showPickerArray(context,[_marriageLevel],info['marriage']==0?[1]:[info['marriage']],"marriage",info,"",true);
                          } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",info['marriage']==0?"-":_getMarriageLevel(info['marriage']),true)),
                           GestureDetector(
-                              onTap: (){
+                          onTap: (){
                                 showPickerArray(context,[_childLevel],info['has_child']==0?[1]:[info['has_child']],"has_child",info,"",true);
-                              } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.child_care,"子女信息",info['has_child']==0?"-":_getChildLevel(info['has_child']),true)),
+                          } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.child_care,"子女信息",info['has_child']==0?"-":_getChildLevel(info['has_child']),true)),
                           GestureDetector(
                           onTap: (){
                             _showEditDialog(context,"请输入子女备注","",info['child_remark']==null?"":(info['child_remark']==""?"":info['child_remark'].toString()),"child_remark",5,info);
@@ -445,10 +427,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           onTap: (){
                             showPickerArray(context,[_parentLevel],info['parents']==0?[1]:[info['parents']],"parents",info,"",true);
                           } ,child: _item_detail_gradute(context,Colors.black,Icons.watch_later_outlined,"父母状况",info['parents']==0?"-":_getParentLevel(info['parents']),true)),
-                            GestureDetector(
-                                onTap: (){
-                                  _showEditDialog(context,"请输入父亲职业","",info['father_work']==null?"":(info['father_work']==""?"":info['father_work'].toString()),"father_work",1,info);
-                                } ,child: _item_detail_gradute(context,Colors.black,Icons.attribution_rounded,"父亲职业",info['father_work']==""?"-":info['father_work'].toString(),true)),
+                          GestureDetector(
+                          onTap: (){
+                            _showEditDialog(context,"请输入父亲职业","",info['father_work']==null?"":(info['father_work']==""?"":info['father_work'].toString()),"father_work",1,info);
+                          } ,child: _item_detail_gradute(context,Colors.black,Icons.attribution_rounded,"父亲职业",info['father_work']==""?"-":info['father_work'].toString(),true)),
                           GestureDetector(
                           onTap: (){
                             _showEditDialog(context,"请输入母亲职业","",info['mother_work']==null?"":(info['mother_work']==""?"":info['mother_work'].toString()),"mother_work",1,info);
@@ -461,14 +443,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           onTap: (){
                             showPickerArray(context,[_parentProtectLevel],info['parents_insurance']==0?[1]:[info['parents_insurance']],"parents_insurance",info,"",true);
                           } ,child: _item_detail_gradute(context,Colors.redAccent,Icons.nine_k,"父母社保",info['parents_insurance']==0?"-":_getParentProtectLevel(info['parents_insurance']),true)),
-
                           ]
                       ),
-
                     )
                 ),
-
-
               ],
             ),
           ),
@@ -477,7 +455,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-
                 //CustomsExpansionPanelList()
                 //_item(context),
                 WidgetNodePanel(
@@ -518,25 +495,18 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                          onTap: (){
                            showPickerArray(context,[_marriageDateLevel],info['marry_time']==0?[0]:[info['marry_time']],"marry_time",info,"",true);
                          } ,child:_item_detail_gradute(context,Colors.black,Icons.margin,"结婚预期",info['marry_time']==0?"-":_getMarriageDateLevel(info['marry_time']),true)),
-
                           ]
                       ),
-
                     )
                 ),
-
-
               ],
             ),
-
-
           ),
           Container(
             margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-
                 //CustomsExpansionPanelList()
                 //_item(context),
                 WidgetNodePanel(
@@ -557,18 +527,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               context,
                               state.userdetails,
                             ),
-
                           ]
                       ),
-
                     )
                 ),
-
-
               ],
             ),
-
-
           ),
 
           //_buildNodes(state.nodes, state.widgetModel.name)
@@ -577,7 +541,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-
                     //CustomsExpansionPanelList()
                     //_item(context),
                     WidgetNodePanel(
@@ -595,21 +558,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               runSpacing: 0,
                               children: <Widget>[
                                 ...list
-
                               ]
                           ),
-
                         ):Container(child: Text("暂无沟通"),)
                     ),
-
-
                   ],
                 ),
-
-
             ),
-
-
 
         ],
       );
@@ -631,15 +586,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
 
-
-
   Widget _buildTitle(BuildContext context, DetailState state) {
     //print('build---${state.runtimeType}---');
     if (state is DetailWithData) {
       return header(state.userdetails);
       return WidgetDetailTitle(
         usertail: state.userdetails,
-
       );
     }
     return Container();
@@ -718,7 +670,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                   ))
                             ]),
                           ),
-
                           Icon(
                             Icons.arrow_forward_ios_outlined,
                             size: 15,
@@ -933,7 +884,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           child: InkWell(
             onTap: (){
               _showBottom(context,content);
-
               },
             child: Container(
                 margin: EdgeInsets.only(left: 10.w, right: 20.w),
@@ -949,7 +899,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               color: connectType=="1"?Colors.green:Colors.redAccent,
                               radius: 5,
                             ),
-
                             Container(
                               margin: EdgeInsets.only(left: 15.w),
                               child: Text(
@@ -978,8 +927,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         visible: true,
                         child: Row(
                             children: <Widget>[
-
-
                               Icon(
                                 Icons.arrow_forward_ios_outlined,
                                 size: 15,
@@ -1018,7 +965,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           )),
                     ]),
                   ),
-
                 ],
               ),
             ),
@@ -1038,7 +984,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               ),
           ),
           margin: EdgeInsets.only(left: 12.w),
-
         ):Container(),
         Container(
           margin: EdgeInsets.only(left: 42.w,top: 22.h),
@@ -1257,7 +1202,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       )
       ],
     ))
-
     }
     ).toList();
      list.add(
@@ -1313,7 +1257,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                      BlocProvider.of<DetailBloc>(context).add(UploadImgSuccessEvent(userdetail,resultConnectList['data']));
                      _showToast(context,"上传成功",false);
                    }else{
-
                      _showToast(context,result['message'],false);
                    }
                  } on DioError catch(e){
@@ -1321,13 +1264,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                    EasyLoading.showSuccess(dd['message']);
                    //_showToast(context,dd['message'],false);
                  }
-
                  EasyLoading.dismiss();
                }
              }
-
          )
-
      );
 
     return Wrap(
@@ -1446,7 +1386,6 @@ showPickerDateTime(BuildContext context,String date,String type,Map<String ,dyna
       }
   ).showDialog(context);
 }
-
 
 _showEditDialog(BuildContext context,String title,String hintText ,String text,String type,int maxLine,Map<String ,dynamic> info){
 
@@ -1773,9 +1712,6 @@ List<String> _getHeightList() {
 }
 
 
-
-
-
 List<String> _nationLevel = [
   "汉族","蒙古族","回族","藏族","维吾尔族","苗族","彝族","壮族","布依族","朝鲜族","满族","侗族","瑶族","白族","土家族",
   "哈尼族","哈萨克族","傣族","黎族","傈僳族","佤族","畲族","高山族","拉祜族","水族","东乡族","纳西族","景颇族","柯尔克孜族",
@@ -1989,12 +1925,242 @@ _loading(int a, int b){
                   EasyLoading.dismiss();
                 }
 }
-
+final _Controller = TextEditingController(text: '');
+List<String> goals = ["1.新分未联系",  "2.号码无效", "3.号码未接通",  "4.可继续沟通", "5.有意向面谈",  "6.确定到店时间", "7.已到店，意愿需跟进", "8.已到店，考虑7天付款",  "9.高级会员,支付预付款",  "10.高级会员，费用已结清", "11.毁单",  "12.放弃"];
+String goalValue = '1.新分未联系';
+DateTime _date = new DateTime.now();
+int groupValue=0;
 _comment(BuildContext context) {
   showDialog(
       context: context,
-      builder: (ctx) => CommentDialog()
+      builder: (ctx) => StatefulBuilder(
+          builder: (context, state) {
 
+           return  Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 600.w,
+                  height: 800.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                  ),
+                  child: SingleChildScrollView(
+                    //alignment: Alignment.bottomCenter,
+                    //maxHeight: 700.h,
+                    child: Stack(
+                      alignment: AlignmentDirectional.topCenter,
+                      children: <Widget>[
+                        Positioned(
+                          top: 50.h,
+                          child: Image.asset(
+                            'assets/images/login_top.png',
+                            width: 220.w,
+                          ),
+                        ),
+
+                        Positioned(
+                          top: 30.h,
+                          right: 30.h,
+                          child: GestureDetector(
+                            onTap: () => Navigator.of(context).pop(),
+                            child: Image.asset('assets/images/btn_close_black.png',
+                              width: 30.w,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: 30.w,
+                            right: 30.w,
+                            top: 80.h,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 50.h,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text("沟通方式: ",style: TextStyle(
+                                  fontSize: 14, color: Colors.grey)),
+                                  Text("电话"),
+                                  Radio(
+                                    activeColor: Colors.deepOrangeAccent,
+                                    ///此单选框绑定的值 必选参数
+                                    value: 0,
+                                    ///当前组中这选定的值  必选参数
+                                    groupValue: groupValue,
+                                    ///点击状态改变时的回调 必选参数
+                                    onChanged: (v) {
+                                      state(() {
+                                        groupValue = v;
+                                      });
+                                    },
+                                  ),
+                                  Text("到店"),
+                                  Radio(
+                                    activeColor: Colors.deepOrangeAccent,
+                                    ///此单选框绑定的值 必选参数
+                                    value: 1,
+                                    ///当前组中这选定的值  必选参数
+                                    groupValue: groupValue,
+                                    ///点击状态改变时的回调 必选参数
+                                    onChanged: (v) {
+                                      state(() {
+                                        groupValue = v;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  Text("沟通状态: ",style: TextStyle(
+                                      fontSize: 14, color: Colors.grey)),
+                                  Padding(
+                                    padding:
+                                    EdgeInsets.only(left: 10.w),
+                                    child: DropdownButton<String>(
+                                      value: goalValue,
+                                      icon:
+                                      Icon(Icons.keyboard_arrow_down_outlined),
+                                      iconSize: 18,
+                                      elevation: 4,
+                                      underline: Container(
+                                        height: 3.h,
+                                        color: Colors.redAccent,
+                                      ),
+                                      onChanged: (String newValue) {
+                                        state(() {
+                                          goalValue = newValue;
+                                        });
+                                      },
+                                      items: goals
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(
+                                                value,
+                                              ),
+                                            );
+                                          }).toList(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap:(){
+
+                                      MyPicker.showPicker(
+                                        context: context,
+                                        current: _date,
+                                        mode: MyPickerMode.dateTime,
+                                        onChange: (v){
+                                          //_change('yyyy-MM-dd HH:mm'),
+                                          print(v);
+                                        }
+                                      );
+
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text("沟通时间",style: TextStyle(
+                                            fontSize: 14, color: Colors.grey)),
+                                        Icon(Icons.keyboard_arrow_down_outlined),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 100.w,
+                                  ),
+                                  GestureDetector(
+                                    onTap:(){
+
+                                      MyPicker.showPicker(
+                                          context: context,
+                                          current: _date,
+                                          mode: MyPickerMode.dateTime,
+                                          onConfirm: (v){
+                                            //_change('yyyy-MM-dd HH:mm'),
+                                            print(v);
+                                          }
+                                      );
+
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text("下次沟通时间 ",style: TextStyle(
+                                            fontSize: 14, color: Colors.grey)),
+                                        Icon(Icons.keyboard_arrow_down_outlined),
+                                      ],
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+
+                              Container(
+                                width:300.w,
+                                child: TextField(
+                                  controller: _Controller,
+                                  style: TextStyle(color: Colors.blue),
+                                  minLines: 5,
+                                  maxLines: 10,
+                                  cursorColor: Colors.green,
+                                  cursorRadius: Radius.circular(3.w),
+                                  cursorWidth: 5.w,
+                                  showCursor: true,
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10.w),
+                                    hintText: "请输入...",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onChanged: (v){},
+                                )
+                                ,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 20.h, bottom: 5.h),
+                                child: RaisedButton(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                                  color: Colors.lightBlue,
+                                  onPressed: (){
+                                    if (_Controller.text.isEmpty){
+                                      return;
+                                    }
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("提交",
+                                      style: TextStyle(color: Colors.white, fontSize: 18)),
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  height: 20.h,
+                ),
+              ],
+            );
+
+
+          })
   );
 }
 
@@ -2132,9 +2298,5 @@ class WidgetDetailTitle extends StatelessWidget {
           )
         ],
       );
-
-
-
-
 
 }
