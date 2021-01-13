@@ -21,12 +21,12 @@ class WidgetsLoading extends HomeState {
 
 class WidgetsLoaded extends HomeState {
   final List<dynamic>  photos ;
-
+  final String  count ;
   const WidgetsLoaded(
-      {this.photos});
+      {this.photos,this.count});
 
   @override
-  List<Object> get props => [photos];
+  List<Object> get props => [photos,count];
 
   @override
   String toString() {

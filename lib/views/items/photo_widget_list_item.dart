@@ -20,6 +20,7 @@ import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
+import 'package:flutter_geen/views/pages/widget_detail/widget_detail_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 class PhotoWidgetListItem extends StatelessWidget {
@@ -577,14 +578,21 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       ),
     );
   }
-
+  List<String> _marriageLevel = [
+    "未知",
+    "未婚",
+    "离异带孩",
+    "离异单身",
+    "离异未育",
+    "丧偶",
+  ];
   Widget _buildSummary() {
     return Padding(
       padding: const EdgeInsets.only(left: 1, bottom: 1, top: 1),
       child: Container(
         child: Text(
           //尾部摘要
-          "房: "+photo['has_house'].toString()+"套 车: "+photo['has_car'].toString()+"辆 " +(photo['marriage']==2?"已婚":"未婚") +" 生日:" +(photo['birthday']==null ? "-":photo['birthday'].toString().substring(0,10)),
+          "房: "+photo['has_house'].toString()+"套 车: "+photo['has_car'].toString()+"辆 " +(_marriageLevel[photo['marriage']]) +" 生日:" +(photo['birthday']==null ? "-":photo['birthday'].toString().substring(0,10)),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontSize: 14, shadows: [
@@ -600,7 +608,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       child: Container(
         child: Text(
           //尾部摘要
-          "红娘: "+photo['sale_name'].toString()+" 沟通"+photo['connect_count'].toString()+"次 " +(photo['appointment_count']==0?"未排约":(photo['appointment']==null?"":photo['appointment'].toString())),
+         (photo['sale_name']==null?"": "红娘: "+photo['sale_name'].toString())+" 沟通"+photo['connect_count'].toString()+"次 " +(photo['appointment_count']==0?"未排约":(photo['appointment']==null?"":photo['appointment'].toString())),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontSize: 14, shadows: [

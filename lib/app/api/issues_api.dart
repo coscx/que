@@ -36,7 +36,7 @@ class IssuesApi {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
-    var data={'name':keyWord,'currentPage':page,'status':"all",'is_passive':is_passive,"store_id":1,"pageSize":20,'gender':sex};
+    var data={'name':keyWord,'currentPage':page,'status':"all",'is_passive':"all","store_id":1,"pageSize":20,'gender':sex};
     Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
     var datas = (rep.data);
     return datas;
@@ -94,6 +94,9 @@ class IssuesApi {
     if(mode=="2"){//我的
       url="/api/v1/customer/personal/index";
       searchParm['type'] = serveType;
+    }
+    if(mode=="3"){//我的
+      url="/api/v1/customer/public/index";
     }
     Response<dynamic> rep = await dio.get(url,queryParameters:searchParm );
     var datas = (rep.data);

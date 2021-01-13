@@ -6,6 +6,9 @@ import 'package:flutter_geen/views/dialogs/user_detail.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:flutter_geen/app/utils/Toast.dart';
+import 'package:lottie/lottie.dart';
+import 'package:flutter_geen/storage/dao/local_storage.dart';
+import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 class MinePage extends StatefulWidget {
   @override
   _MinePageState createState() => _MinePageState();
@@ -13,13 +16,15 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<MinePage> {
   final double _appBarHeight = 180.0;
+  String name ="MSTAR";
+  String bind="微信绑定";
   final String _userHead =
       'https://img.bosszhipin.com/beijin/mcs/useravatar/20171211/4d147d8bb3e2a3478e20b50ad614f4d02062e3aec7ce2519b427d24a3f300d68_s.jpg';
 
   @override
   bool get wantKeepAlive => true;
   @override
-  void initState() {
+   initState()  {
     super.initState();
     fluwx.weChatResponseEventHandler.distinct((a, b) => a == b).listen((res) async {
       if (res is fluwx.WeChatAuthResponse) {
@@ -33,8 +38,53 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
         }
       }
     });
-  }
+    Future.delayed(Duration(milliseconds: 1)).then((e) async {
+      var ss =  await LocalStorage.get("name");
+      var openidF=  await LocalStorage.get("openid");
+      var sss =ss.toString();
+      var openids =openidF.toString();
+      if(sss == "" || ss == null || ss == "null"){
+      }else{
+       setState(() {
+         name=ss;
+       });
+      }
+      if(openids == "" || openids == null || openids == "null"){
+      }else{
+        setState(() {
+          bind="已绑定微信";
+        });
+      }
 
+
+    });
+
+
+
+  }
+  _bindWx(BuildContext context,String img) {
+    showDialog(
+        context: context,
+        builder: (ctx) => Dialog(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Container(
+            width: 50,
+            child: DeleteCategoryDialog(
+              title: '此账号已绑定微信',
+              content: '是否确定重新绑定?',
+              onSubmit: () {
+                fluwx
+                    .sendWeChatAuth(
+                    scope: "snsapi_userinfo", state: "wechat_sdk_demo_bind")
+                    .then((data) {});
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+        ));
+  }
   _showToast(BuildContext ctx, String msg, bool collected) {
     Toasts.toast(
       ctx,
@@ -101,9 +151,11 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                             top: 40.0,
                             right: 30.0,
                           ),
-                          child: new CircleAvatar(
-                            radius: 35.0,
-                            backgroundImage: new NetworkImage(_userHead),
+                          child: Container(
+                            width: 100.h,
+                            height: 100.h,
+                            margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                            child:Lottie.asset('assets/packages/lottie_flutter/great.json'),
                           ),
                         ),
                       ),
@@ -120,7 +172,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                 bottom: 5.0,
                               ),
                               child: new Text(
-                                'MSTAR',
+                                name,
                                 style: new TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -338,15 +390,20 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                     children: <Widget>[
                       GestureDetector(
                         onTap: () async {
-                          fluwx
-                              .sendWeChatAuth(
-                              scope: "snsapi_userinfo", state: "wechat_sdk_demo_bind")
-                              .then((data) {});
+
+                          var ss =  await LocalStorage.get("openid");
+                          var sss =ss.toString();
+                          if(sss == "" || ss == null || ss == "null"){
+
+                          }else{
+                            _bindWx(context,"");
+                          }
+
 
                         },
                          child: MenuItem(
-                          icon: "assets/packages/images/ic_god.svg",
-                          title: '微信绑定',
+                          icon: "assets/packages/images/login_wechat.svg",
+                          title: bind,
                           ),
                        ),
                       // new MenuItem(

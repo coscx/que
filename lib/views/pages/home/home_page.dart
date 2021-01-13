@@ -44,6 +44,8 @@ class _HomePageState extends State<HomePage>
   bool _showChip = false;
   int _selectedIndex=999;
   String serveType ="2";
+  String totalCount ="";
+  String title="客户管理";
   static List<SortModel> _leftWidgets = [
     SortModel(name: "服务中", isSelected: true, code: "2"),
     SortModel(name: "跟进中", isSelected: false, code: "1"),
@@ -122,7 +124,13 @@ class _HomePageState extends State<HomePage>
     ),
     child:Scaffold(
         appBar: AppBar(
-          title:  Text('客户管理',style: TextStyle(color: Colors.black, fontSize: 48.sp,fontWeight: FontWeight.bold)),
+          title:  Row(
+            children: [
+              Text(title,style: TextStyle(color: Colors.black, fontSize: 48.sp,fontWeight: FontWeight.bold)),
+              totalCount==""?Container(): Text('      共:',style: TextStyle(color: Colors.black, fontSize: 30.sp,fontWeight: FontWeight.w200)),
+              Text(totalCount,style: TextStyle(color: Colors.redAccent, fontSize: 30.sp,fontWeight: FontWeight.normal)),
+            ],
+          ),
           //leading:const Text('Demo',style: TextStyle(color: Colors.black, fontSize: 15)),
           backgroundColor: Colors.white,
           elevation: 0, //去掉Appbar底部阴影
@@ -187,12 +195,36 @@ class _HomePageState extends State<HomePage>
         ));
 
       }
+      if (state is WidgetsLoaded) {
+       var data =state.photos;
+      // print(data.toString());
+       var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+       if(mode == 0){
+         title= "客户管理";
+
+       }
+       if(mode == 1){
+         title= "缔结良缘库";
+
+       }
+       if(mode == 2){
+         title= "我的客户";
+
+       }
+       if(mode == 3){
+         title= "销售公海";
+
+       }
+       //setState(() {
+        totalCount =state.count;
+       //});
+      }
     },
     child:BlocBuilder<HomeBloc, HomeState>(builder: (ctx, state) {
       return Stack(
             children: <Widget>[
 
-              BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
+              //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
 
               Container(
                 //padding:  EdgeInsets.only(top: 25.h),
@@ -529,6 +561,12 @@ class _HomePageState extends State<HomePage>
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                   BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
                 }
+                if (e == '公海') {
+                  BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(3));
+                  var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,3,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+                }
+
               },
               onCanceled: () => print('onCanceled'),
             )
@@ -546,6 +584,7 @@ class _HomePageState extends State<HomePage>
       "全部": Icons.border_all,
       "我的": Icons.mood_sharp,
       "良缘": Icons.wc,
+      "公海": Icons.sports_baseball_rounded,
     };
     return map.keys
         .toList()
@@ -583,6 +622,13 @@ class _HomePageState extends State<HomePage>
       return SizedBox(
         width: 50,
         child: Text("良缘"),
+      );
+
+    }
+    if(state.currentPhotoMode==3){
+      return SizedBox(
+        width: 50,
+        child: Text("公海"),
       );
 
     }

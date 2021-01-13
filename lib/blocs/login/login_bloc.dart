@@ -33,7 +33,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginLoading();
      var result= await IssuesApi.login(event.username, event.password);
      if  (result['code']==200){
-
+       LocalStorage.save("name", result['data']['user']['relname']);
+       LocalStorage.save("openid", result['data']['user']['openid']);
        LocalStorage.save("token", result['data']['token']['access_token']);
        LocalStorage.save("fresh_token", result['data']['token']['fresh_token']);
        LocalStorage.save("memberId", result['data']['user']['id'].toString());
@@ -51,6 +52,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         var result= await IssuesApi.loginWx(event.code);
         if  (result['code']==200){
+          LocalStorage.save("name", result['data']['user']['relname']);
+          LocalStorage.save("openid", result['data']['user']['openid']);
           LocalStorage.save("token", result['data']['token']['access_token']);
           LocalStorage.save("fresh_token", result['data']['token']['fresh_token']);
           LocalStorage.save("memberId", result['data']['user']['id'].toString());

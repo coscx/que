@@ -162,7 +162,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
     if (event is EventLoadMore) {
        var data =event.user01;
-      yield WidgetsLoaded(photos: data);
+       var count = state.props.elementAt(1);
+      yield WidgetsLoaded(photos: data,count: count);
 
     }
     if (event is EventFresh) {
@@ -176,7 +177,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         }
 
-        yield WidgetsLoaded(photos: result['data']['data']);
+        yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString() );
 
       } catch (err) {
         print(err);
@@ -195,7 +196,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         }
 
-        yield WidgetsLoaded(photos: result['data']['data']);
+        yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
 
       } catch (err) {
         print(err);
@@ -217,7 +218,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       }
 
-      yield WidgetsLoaded(photos: result['data']['data']);
+      yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
 
     } catch (err) {
       print(err);
