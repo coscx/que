@@ -6,7 +6,7 @@ import 'package:flutter_geen/repositories/itf/widget_repository.dart';
 import 'dart:convert';
 import 'detail_event.dart';
 import 'detail_state.dart';
-
+import 'package:flutter_geen/storage/dao/local_storage.dart';
 
 
 class DetailBloc extends Bloc<DetailEvent, DetailState> {
@@ -90,8 +90,13 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       Map<String ,dynamic> result = Map.from(connectList);
       List<dynamic> res = result['data'];
       Map<String ,dynamic> connect ={};
+      var name = await LocalStorage.get("name");
+      var userName =name.toString();
+      if(userName == "" || userName == null || userName == "null"){
+        userName="";
+      }
       connect['id'] = 0;
-      connect['username'] = "";
+      connect['username'] = userName;
       connect['connect_type'] = event.connect_type;
       connect['connect_status'] = event.connect_status;
       connect['connect_time'] = event.connect_time;
