@@ -31,6 +31,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_geen/views/dialogs/comment.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
+
 /// 说明: 主题结构 左右滑页 + 底部导航栏
 
 class UnitNavigation extends StatefulWidget {
@@ -49,6 +50,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
+
 
     FltImPlugin().init(host: "mm.3dsqq.com", apiURL: "http://mm.3dsqq.com:8000");
     _controller = PageController();
@@ -79,10 +81,6 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     });
 
     BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(1));
-
-
-
-
     initPlatformState();
     FlutterNfcReader.onTagDiscovered().listen((onData) {
       print(onData.id);
@@ -93,6 +91,8 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     });
 
   }
+
+
 // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;

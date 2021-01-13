@@ -61,7 +61,6 @@ dependencies:
   timeline_list: ^0.0.5
   flare_flutter: ^2.0.6
   umeng_analytics_push: ^1.2.5
-  fluwx: ^2.4.2
   getwidget: ^1.2.4
   flutter_screenutil: ^4.0.0
   flutter_easyrefresh: ^2.1.7
@@ -84,6 +83,7 @@ dependencies:
   flutter_my_picker: ^1.0.3
   flutter_image_compress: ^0.7.0
   lottie: ^0.7.0+1
+  fluwx: ^2.5.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

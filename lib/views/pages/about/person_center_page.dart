@@ -3,7 +3,9 @@ import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
-
+import 'package:flutter_geen/app/api/issues_api.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
+import 'package:flutter_geen/app/utils/Toast.dart';
 class MinePage extends StatefulWidget {
   @override
   _MinePageState createState() => _MinePageState();
@@ -16,7 +18,36 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
 
   @override
   bool get wantKeepAlive => true;
+  @override
+  void initState() {
+    super.initState();
+    fluwx.weChatResponseEventHandler.distinct((a, b) => a == b).listen((res) async {
+      if (res is fluwx.WeChatAuthResponse) {
+        if(res.state =="wechat_sdk_demo_bind") {
+          var result = await IssuesApi.bindAppWeChat(res.code);
+          if (result['code'] == 200) {
+            _showToast(context, "绑定成功", false);
+          } else {
+            _showToast(context, "绑定成功", false);
+          }
+        }
+      }
+    });
+  }
 
+  _showToast(BuildContext ctx, String msg, bool collected) {
+    Toasts.toast(
+      ctx,
+      msg,
+      duration: Duration(milliseconds:  5000 ),
+      action: collected
+          ? SnackBarAction(
+          textColor: Colors.white,
+          label: '收藏夹管理',
+          onPressed: () => Scaffold.of(ctx).openEndDrawer())
+          : null,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -167,7 +198,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                         ),
                         new ContactItem(
                           count: '53',
-                          title: '陪伴榜',
+                          title: '陪伴',
                         ),
                       ],
                     ),
@@ -300,60 +331,69 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                         ))),
 
 
-                new Container(
+                 Container(
                   color: Colors.white,
                   margin: const EdgeInsets.only(top: 20.0),
                   child: Column(
                     children: <Widget>[
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_god.svg",
-                        title: '申请大神',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_profile_mentor_ship.svg",
-                        title: '师徒关系',
-                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          fluwx
+                              .sendWeChatAuth(
+                              scope: "snsapi_userinfo", state: "wechat_sdk_demo_bind")
+                              .then((data) {});
 
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_my_bag.svg",
-                        title: '我的背包',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_activity.svg",
-                        title: '订单',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_app_review.svg",
-                        title: '去好评',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_contribute.svg",
-                        title: '贡献题目',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_invite.svg",
-                        title: '邀请有礼',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_activity.svg",
-                        title: '活动',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_settings.svg",
-                        title: '账号设置',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_service.svg",
-                        title: '在线客服',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_help.svg",
-                        title: '帮助',
-                      ),
-                      new MenuItem(
-                        icon: "assets/packages/images/ic_contact.svg",
-                        title: '联系我们',
-                      ),
+                        },
+                         child: MenuItem(
+                          icon: "assets/packages/images/ic_god.svg",
+                          title: '微信绑定',
+                          ),
+                       ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_profile_mentor_ship.svg",
+                      //   title: '师徒关系',
+                      // ),
+                      //
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_my_bag.svg",
+                      //   title: '我的背包',
+                      // ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_activity.svg",
+                      //   title: '订单',
+                      // ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_app_review.svg",
+                      //   title: '去好评',
+                      // ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_contribute.svg",
+                      //   title: '贡献题目',
+                      // ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_invite.svg",
+                      //   title: '邀请有礼',
+                      // ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_activity.svg",
+                      //   title: '活动',
+                      // ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_settings.svg",
+                      //   title: '账号设置',
+                      // ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_service.svg",
+                      //   title: '在线客服',
+                      // ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_help.svg",
+                      //   title: '帮助',
+                      // ),
+                      // new MenuItem(
+                      //   icon: "assets/packages/images/ic_contact.svg",
+                      //   title: '联系我们',
+                      // ),
 
                     ],
                   ),

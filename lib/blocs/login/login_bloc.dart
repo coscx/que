@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +43,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
      } else{
        yield LoginFailed(reason: result['message']);
      }
+    }
+
+
+    if (event is EventWxLogin) {
+      yield LoginLoading();
+      try {
+        var result= await IssuesApi.loginWx(event.code);
+        if  (result['code']==200){
+          LocalStorage.save("token", result['data']['token']['access_token']);
+          LocalStorage.save("fresh_token", result['data']['token']['fresh_token']);
+          LocalStorage.save("memberId", result['data']['user']['id'].toString());
+          LocalStorage.save("im_token", result['data']['im_token'].toString());
+          IssuesApi.httpHeaders['authorization']="Bearer "+result['data']['token']['access_token'];
+          yield LoginSuccess();
+        } else{
+          yield LoginFailed(reason: result['message']);
+        }
+      } on DioError catch(e){
+        print(e);
+      }
+
     }
     if (event is EventLoginFailed) {
       yield LoginInital();

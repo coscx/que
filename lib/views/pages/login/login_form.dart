@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/res/toly_icon.dart';
+import 'package:flutter_geen/app/utils/Toast.dart';
 import 'package:flutter_geen/blocs/login/login_state.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +12,7 @@ import 'package:flutter_geen/blocs/login/login_bloc.dart';
 import 'package:flutter_geen/blocs/login/login_event.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:fluwx/fluwx.dart' as fluwx;
 class LoginFrom extends StatefulWidget {
   @override
   _LoginFromState createState() => _LoginFromState();
@@ -20,7 +23,45 @@ class _LoginFromState extends State<LoginFrom> {
   final _passwordController = TextEditingController(text: '');
 
   bool _showPwd = false;
+  String _result = "无";
 
+  @override
+  void initState() {
+    super.initState();
+    fluwx.weChatResponseEventHandler.distinct((a, b) => a == b).listen((res) async {
+      if (res is fluwx.WeChatAuthResponse) {
+          if(res.state =="wechat_sdk_demo_login"){
+            BlocProvider.of<LoginBloc>(context).add(
+              EventWxLogin(code: res.code),
+            );
+            if (!mounted) return;
+            setState(() {
+              _result = "state :${res.state} \n code:${res.code}";
+            });
+
+          }
+
+      }
+    });
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _result = null;
+  }
+  _showToast(BuildContext ctx, String msg, bool collected) {
+    Toasts.toast(
+      ctx,
+      msg,
+      duration: Duration(milliseconds:  5000 ),
+      action: collected
+          ? SnackBarAction(
+          textColor: Colors.white,
+          label: '收藏夹管理',
+          onPressed: () => Scaffold.of(ctx).openEndDrawer())
+          : null,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return
@@ -273,9 +314,17 @@ class _LoginFromState extends State<LoginFrom> {
             ],
           ),
         ),
-        SvgPicture.asset(
-          "assets/packages/images/login_wechat.svg",
-          //color: Colors.green,
+        GestureDetector(
+          onTap: (){
+            fluwx
+                .sendWeChatAuth(
+                scope: "snsapi_userinfo", state: "wechat_sdk_demo_login")
+                .then((data) {});
+          },
+          child: SvgPicture.asset(
+            "assets/packages/images/login_wechat.svg",
+            //color: Colors.green,
+          ),
         )
       ],
     );

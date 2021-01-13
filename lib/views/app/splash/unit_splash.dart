@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/dialogs/CustomDialog.dart';
+import 'package:fluwx/fluwx.dart';
 import 'unit_paint.dart';
 /// 说明: app 闪屏页
 
@@ -46,6 +47,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _initFluwx();
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     _factor=0;
@@ -64,7 +66,15 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
      _controller.dispose();
      super.dispose();
   }
-
+  _initFluwx() async {
+    await registerWxApi(
+        appId: "wx45bdf8edd00e99ef",
+        doOnAndroid: true,
+        doOnIOS: true,
+        universalLink: "https://your.univerallink.com/link/");
+    var result = await isWeChatInstalled;
+    print("is installed $result");
+  }
   void _listenStatus(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
       setState(() {

@@ -128,6 +128,39 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> loginWx(String code) async {
+
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    Map<String,dynamic> Param={};
+    Param['code']=code;
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/auth/loginAppByWechat',queryParameters:Param );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+
+  static Future<Map<String,dynamic>> bindAppWeChat(String code) async {
+
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    Map<String,dynamic> Param={};
+    Param['code']=code;
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/auth/bindAppWeChat',queryParameters:Param );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
   static Future<Map<String,dynamic>> editCustomerOnce(String uuid, String type, int answer ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();

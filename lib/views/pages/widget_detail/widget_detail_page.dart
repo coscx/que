@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:city_pickers/modal/result.dart';
@@ -11,14 +10,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/components/permanent/circle.dart';
-import 'package:flutter_geen/views/dialogs/comment.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
-import 'package:flutter_geen/views/pages/utils/object_util.dart';
 import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
-import 'package:flutter_geen/app/res/toly_icon.dart';
 import 'package:flutter_geen/app/utils/Toast.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
@@ -28,14 +24,13 @@ import 'package:flutter_geen/views/pages/widget_detail/category_end_drawer.dart'
 import 'package:flutter_geen/views/items/tag.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_geen/views/pages/utils/dialog_util.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
+import 'package:flutter_geen/views/items/share.dart';
 class WidgetDetailPage extends StatefulWidget {
 
 
@@ -49,6 +44,19 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   String memberId ;
   int connectStatus =4;
   Map<String,dynamic>  userDetail;
+  final List<ShareOpt> list = [
+    ShareOpt(title:'微信', img:'assets/packages/images/login_wechat.svg',shareType:ShareType.SESSION,doAction:(shareType,shareInfo)async{
+      if(shareInfo == null) return;
+      /// 分享到好友
+      var model = fluwx.WeChatShareWebPageModel(
+        shareInfo.url,
+        title: shareInfo.title,
+        thumbnail: fluwx.WeChatImage.network(shareInfo.img),
+        scene: fluwx.WeChatScene.SESSION,
+      );
+      fluwx.shareToWeChat(model);
+    }),
+  ];
   @override
   void initState() {
     super.initState();
@@ -82,6 +90,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             )
         ),
         actions: <Widget>[
+          _buildShare(),
           _buildToHome(),
           _buildCollectButton(context),
         ],
@@ -118,9 +127,42 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               child:Lottie.asset('assets/packages/lottie_flutter/appointment.json'),
             ),
           ),
-          onTap: () async {}
-          ));
+          onTap: () async {
 
+
+          }
+          ));
+  Widget _buildShare() => Builder(
+      builder: (ctx) => GestureDetector(
+          onLongPress: () => Scaffold.of(ctx).openEndDrawer(),
+          child: Padding(
+            padding:  EdgeInsets.only(top: 15.h),
+            child: Container(
+              width: 80.h,
+              height: 80.h,
+              margin: EdgeInsets.fromLTRB(10.w, 0.h, 0.w, 0.h),
+              child:Lottie.asset('assets/packages/lottie_flutter/share.json'),
+            ),
+          ),
+          onTap: () async {
+            showModalBottomSheet(
+              /**
+               * showModalBottomSheet常用属性
+               * shape 设置形状
+               * isScrollControlled：全屏还是半屏
+               * isDismissible：外部是否可以点击，false不可以点击，true可以点击，点击后消失
+               * backgroundColor : 设置背景色
+               */
+                backgroundColor: Colors.transparent,
+                context: context,
+                builder: (BuildContext context) {
+                  return ShareWidget(
+                    ShareInfo('Hello world','http://www.baidu.com',"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.mp.sohu.com%2Fupload%2F20170601%2Faf68bce89ac945e7ad00da688a25fb08.png&refer=http%3A%2F%2Fimg.mp.sohu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1613110527&t=2cdb6d82fcfc0482bb12ffd8cac9b01a",""),
+                    list: list,
+                  );
+                });
+          }
+      ));
   Widget _buildCollectButton( BuildContext context) {
     //监听 CollectBloc 伺机弹出toast
     return BlocListener<DetailBloc, DetailState>(
@@ -2270,7 +2312,6 @@ _showBottom(BuildContext context,String text,String status,String type){
                         style: TextStyle(fontSize: 24.sp,color:type=="2"?Colors.redAccent:Colors.green,fontWeight: FontWeight.w300),
                       ),
                     )),
-
 
                     Opacity(
                       opacity: 0.2 ,

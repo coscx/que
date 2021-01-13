@@ -17,7 +17,10 @@ class EventLogin extends LoginEvent {
   final String password;
   EventLogin({this.username,this.password});
 }
-
+class EventWxLogin extends LoginEvent {
+  final String code;
+  EventWxLogin({this.code});
+}
 class EventLoginFailed extends LoginEvent {
 
 }
