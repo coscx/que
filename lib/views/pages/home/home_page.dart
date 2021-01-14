@@ -527,13 +527,25 @@ class _HomePageState extends State<HomePage>
               padding: EdgeInsets.only(right: 0.w),
               children: {
                 1: state.sex ==1 ?Padding(
-                  padding: EdgeInsets.only(left: 40.w, right: 40.w),
-                  child: Text("男"),
-                ):Text("男"),
+                  padding: EdgeInsets.only(left: 50.w, right: 40.w),
+                  child: Text("男",style:  TextStyle(
+            fontSize: 30.sp,
+            color: Colors.white,
+            )),
+                ):Text("男",style:  TextStyle(
+                  fontSize: 30.sp,
+                  color: Colors.blue,
+                )),
                 2: state.sex ==2 ?Padding(
-                  padding: EdgeInsets.only(left: 40.w, right: 40.w),
-                  child: Text("女"),
-                ):Text("女"),
+                  padding: EdgeInsets.only(left: 50.w, right: 40.w),
+                  child: Text("女",style:  TextStyle(
+                    fontSize: 30.sp,
+                    color: Colors.white,
+                  )),
+                ):Text("女",style:  TextStyle(
+                  fontSize: 30.sp,
+                  color: Colors.blue,
+                )),
 
               },
             ),

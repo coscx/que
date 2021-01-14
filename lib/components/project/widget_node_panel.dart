@@ -69,7 +69,9 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
     );
   }
 
-  Widget buildNodeTitle() => Row(
+  Widget buildNodeTitle() => GestureDetector(
+    onTap: _toggleCodePanel,
+      child:Row(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -87,7 +89,8 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
           //_buildShareButton(),
           _buildCodeButton()
         ],
-      );
+      ) ,
+  );
 
   Widget _buildNodeInfo() => Container(
         width: double.infinity,
@@ -100,14 +103,11 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
 
   Widget _buildCodeButton() => Padding(
         padding: const EdgeInsets.only(right: 10.0),
-        child: ToggleRotate(
-          durationMs: 300,
-          child: Icon(
+        child:  Icon(
             TolyIcon.icon_code,
             color: themeColor,
           ),
-          onTap: _toggleCodePanel,
-        ),
+
       );
 
   Widget _buildShareButton() => FeedbackWidget(

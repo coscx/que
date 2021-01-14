@@ -1,4 +1,4 @@
-import 'package:cupertino_range_slider/cupertino_range_slider.dart';
+import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -189,7 +189,7 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
               Text(
                 minValue.toString()+"",
                 style:  TextStyle(
-                  fontSize: 20,
+                  fontSize: 38.sp,
                   color: Colors.orangeAccent,
                 ),
               ),
@@ -220,34 +220,63 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
           //       }),
           // ),
               Container(
-                width: 400.w,
-                child: CupertinoRangeSlider(
-                  minValue: minValue.roundToDouble(),
-                  maxValue: maxValue.roundToDouble(),
+                width: 458.w,
+                child: frs.RangeSlider(
                   min: 14.0,
                   max: 70.0,
-                  onMinChanged: (minVal){
+                  lowerValue: minValue.toDouble(),
+                  upperValue: maxValue.toDouble(),
+                  divisions: 56,
+                  showValueIndicator: true,
+                  valueIndicatorMaxDecimals: 0,
+                  onChanged: (double newLowerValue, double newUpperValue) {
                     setState(() {
-                      minValue = minVal.round();
+                      minValue = newLowerValue.round();
+                      maxValue = newUpperValue.round();
+
+                    });
+
                     if(widget.clickSwith != null){
                       widget.clickSwith(_onOff, minValue,maxValue);
                     }
-                    });
                   },
-                  onMaxChanged: (maxVal){
-                    setState(() {
-                      maxValue = maxVal.round();
-                      if(widget.clickSwith != null) {
-                        widget.clickSwith(_onOff, minValue, maxValue);
-                      }
-                    });
+                  onChangeStart:
+                      (double startLowerValue, double startUpperValue) {
+                    print(
+                        'Started with values: $startLowerValue and $startUpperValue');
+                  },
+                  onChangeEnd: (double newLowerValue, double newUpperValue) {
+                    print(
+                        'Ended with values: $newLowerValue and $newUpperValue');
                   },
                 ),
+                // child: CupertinoRangeSlider(
+                //   minValue: minValue.roundToDouble(),
+                //   maxValue: maxValue.roundToDouble(),
+                //   min: 14.0,
+                //   max: 70.0,
+                //   onMinChanged: (minVal){
+                //     setState(() {
+                //       minValue = minVal.round();
+                //     if(widget.clickSwith != null){
+                //       widget.clickSwith(_onOff, minValue,maxValue);
+                //     }
+                //     });
+                //   },
+                //   onMaxChanged: (maxVal){
+                //     setState(() {
+                //       maxValue = maxVal.round();
+                //       if(widget.clickSwith != null) {
+                //         widget.clickSwith(_onOff, minValue, maxValue);
+                //       }
+                //     });
+                //   },
+                // ),
               ),
               Text(
                 maxValue.toString()+"",
                 style:  TextStyle(
-                  fontSize: 20,
+                  fontSize: 38.sp,
                   color: Colors.orangeAccent,
                 ),
               ),

@@ -70,20 +70,21 @@ class ImConversationListPage extends StatelessWidget{
         actions:<Widget> [
 
           Container(
-            height: 20.h,
+           margin: EdgeInsets.fromLTRB(0.w,10.h,0.w,0.h),
+           height: 20.h,
             width: 20.w,
             child: IconButton(
               padding: EdgeInsets.zero,
               icon: Icon(
                 Icons.add_circle_outline,
-                size: 24.0,
+                size: 48.sp,
                 color: Colors.black,
               ),
               onPressed: null,
             ),
           ),
         SizedBox(
-          width: 40.w,
+          width: 80.w,
         )
         ],
       ),
@@ -110,7 +111,7 @@ class ImConversationListPage extends StatelessWidget{
                         padding:  EdgeInsets.only(
                             top: 35.h,
                             bottom: 15.h,
-                            left: 40.w,
+                            left: 30.w,
                             right: 35.w
                         ),
                         child:  Column(children: <Widget>[
@@ -122,7 +123,7 @@ class ImConversationListPage extends StatelessWidget{
                           ),
                           Text(
                             "心动速配",
-                            style: new TextStyle(color: Colors.black54, fontSize: 12.0),
+                            style: new TextStyle(color: Colors.black54, fontSize: 26.sp),
                           ),
 
                         ]),
@@ -133,7 +134,7 @@ class ImConversationListPage extends StatelessWidget{
                         padding:  EdgeInsets.only(
                             top: 35.h,
                             bottom: 15.h,
-                            left: 40.w,
+                            left: 30.w,
                             right: 35.w
                         ),
                         child:  Column(children: <Widget>[
@@ -145,7 +146,7 @@ class ImConversationListPage extends StatelessWidget{
                           ),
                           Text(
                             "互动消息",
-                            style: new TextStyle(color: Colors.black54, fontSize: 12.0),
+                            style: new TextStyle(color: Colors.black54, fontSize: 26.sp),
                           ),
 
                         ]),
@@ -155,7 +156,7 @@ class ImConversationListPage extends StatelessWidget{
                         padding:  EdgeInsets.only(
                             top: 35.h,
                             bottom: 15.h,
-                            left: 40.w,
+                            left: 30.w,
                             right: 35.w
                         ),
                         child:  Column(children: <Widget>[
@@ -167,7 +168,7 @@ class ImConversationListPage extends StatelessWidget{
                           ),
                           Text(
                             "访客记录",
-                            style: new TextStyle(color: Colors.black54, fontSize: 12.0),
+                            style: new TextStyle(color: Colors.black54, fontSize: 26.sp),
                           ),
 
                         ]),
@@ -177,7 +178,7 @@ class ImConversationListPage extends StatelessWidget{
                         padding:  EdgeInsets.only(
                             top: 35.h,
                             bottom: 15.h,
-                            left: 40.w,
+                            left: 30.w,
                             right: 35.w
                         ),
                         child:  Column(children: <Widget>[
@@ -189,7 +190,7 @@ class ImConversationListPage extends StatelessWidget{
                           ),
                           Text(
                             "好友在玩",
-                            style: new TextStyle(color: Colors.black54, fontSize: 12.0),
+                            style: new TextStyle(color: Colors.black54, fontSize: 26.sp),
                           ),
 
                         ]),

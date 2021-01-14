@@ -10,7 +10,7 @@ import 'package:flutter_geen/views/dialogs/CustomDialog.dart';
 import 'package:fluwx/fluwx.dart';
 import 'unit_paint.dart';
 /// 说明: app 闪屏页
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class UnitSplash extends StatefulWidget {
   final double size;
 
@@ -114,7 +114,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10))),
     child: Container(
-      width: 50,
+      width: 50.w,
       child: DeleteDialog(),
     ),
   );
@@ -146,7 +146,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
 
   Widget _buildText(double winH, double winW) {
     final shadowStyle = TextStyle(
-      fontSize: 40,
+      fontSize: 80.sp,
       color: Theme.of(context).primaryColor,
       fontWeight: FontWeight.bold,
       shadows: [
@@ -185,9 +185,9 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
             child: FadeTransition(
                 opacity: _controller,
                 child: Container(
-                  height: 120,
+                  height: 200.h,
                   child: FlutterLogo(
-                    size: 60,
+                    size: 120.sp,
                   ),
                 )),
           )),
@@ -200,18 +200,18 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
         begin: const Offset(0, -5),
       ).animate(_controller),
       child: Container(
-        height: 45,
-        width: 45,
+        height: 80.h,
+        width: 80.w,
         child: Image.asset('assets/images/ic_launcher.png'),
       ));
 
   Widget _buildPower() => Positioned(
-        bottom: 30,
-        right: 30,
+        bottom: 80.h,
+        right: 60.w,
         child: AnimatedOpacity(
             duration: const Duration(milliseconds: 300),
             opacity: _animEnd ? 1.0 : 0.0,
-            child: const Text("Power off QueQiao Group",
+            child:  Text("Power off QueQiao Group",
                 style: TextStyle(
                     color: Colors.grey,
                     shadows: [
@@ -220,6 +220,6 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
                           blurRadius: 1,
                           offset: Offset(0.3, 0.3))
                     ],
-                    fontSize: 16))),
+                    fontSize: 32.sp))),
       );
 }

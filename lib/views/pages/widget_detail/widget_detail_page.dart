@@ -1081,36 +1081,40 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
   avatar(String url,bool isVip) {
-    return Stack(
-      children: [
-        isVip ? Container(
-          width: 150.w,
-          height: 150.h,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/radio_header_1.png"),
-                //fit: BoxFit.contain,
-              ),
-          ),
-          margin: EdgeInsets.only(left: 12.w),
-        ):Container(),
-        Container(
-          margin: EdgeInsets.only(left: 42.w,top: 22.h),
+    return Container(
 
-          child: CircleAvatar(
-            radius:(45.w) ,
-            child: ClipOval(
-              child: Image.network(
-                url,
-                 fit: BoxFit.cover,
-                width: 90.w,
-                height: 90.h,
-              ),
+      child: Stack(
+        children: [
+          isVip ? Container(
+
+            width: 180.w,
+            height: 180.h,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/radio_header_1.png"),
+                  fit: BoxFit.cover,
+                ),
             ),
-            backgroundColor: Colors.white,
+            margin: EdgeInsets.only(left: 12.w),
+          ):Container(),
+          Container(
+            margin: EdgeInsets.only(left: 42.w,top: 10.h),
+
+            child: CircleAvatar(
+              radius:(60.w) ,
+              child: ClipOval(
+                child: Image.network(
+                  url,
+                   fit: BoxFit.cover,
+                  width: 120.w,
+                  height: 120.h,
+                ),
+              ),
+              backgroundColor: Colors.white,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -1124,7 +1128,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     }
     return Container(
       height: 120.h,
-      margin: EdgeInsets.only(top: 8.h,bottom: 20.h,left: 8.w),
+      margin: EdgeInsets.only(top: 8.h,bottom: 20.h,left: 12.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
@@ -1141,7 +1145,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               );
           },
       child:Padding(
-            padding: EdgeInsets.only(left: 0.w, right: 0.w),
+            padding: EdgeInsets.only(left: 10.w, right: 0.w),
             child: user['pic'].length> 0? avatar(user['pic'][0],isVip) :Image.asset("assets/packages/images/ic_user_none_round.png"),
           )),
           Column(
@@ -2100,8 +2104,9 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                               Row(
                                 children: [
                                   Text("沟通方式: ",style: TextStyle(
-                                  fontSize: 14, color: Colors.grey)),
-                                  Text("电话"),
+                                  fontSize: 28.sp, color: Colors.grey)),
+                                  Text("电话",style: TextStyle(
+                                      fontSize: 28.sp, color: Colors.black)),
                                   Radio(
                                     activeColor: Colors.deepOrangeAccent,
                                     ///此单选框绑定的值 必选参数
@@ -2115,7 +2120,8 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                                       });
                                     },
                                   ),
-                                  Text("到店"),
+                                  Text("到店",style: TextStyle(
+                                      fontSize: 28.sp, color: Colors.black)),
                                   Radio(
                                     activeColor: Colors.deepOrangeAccent,
                                     ///此单选框绑定的值 必选参数
@@ -2143,7 +2149,7 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                                       value: goalValue,
                                       icon:
                                       Icon(Icons.keyboard_arrow_down_outlined),
-                                      iconSize: 18,
+                                      iconSize: 18.sp,
                                       elevation: 4,
                                       underline: Container(
                                         height: 3.h,
@@ -2162,6 +2168,8 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                                               value: value,
                                               child: Text(
                                                 value,
+                                                  style: TextStyle(
+                                              fontSize: 32.sp, color: Colors.black)
                                               ),
                                             );
                                           }).toList(),

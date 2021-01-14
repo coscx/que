@@ -513,10 +513,11 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
             buildLeading(),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                //mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _buildTitle(),
+                 // _buildTitle(),
+                  _titleTop(),
                   _buildMiddles(),
                   _buildSummary(),
 
@@ -544,15 +545,18 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                   ),
                 )
               : Container(
-            child: CircleAvatar(
-              foregroundColor: Colors.white10,
-              radius:(60.w) ,
-              child: ClipOval(
-                child: photo['head_img'] ==null ?Container():CachedNetworkImage(imageUrl: photo['head_img'],
-                  fit: BoxFit.cover,
-                  width: 120.w,
-                  height: 120.h,
+            child: Container(
+              padding:  EdgeInsets.only(left: 10.w, bottom: 1.h, top: 1.h,right: 10.w),
+              child: CircleAvatar(
+                foregroundColor: Colors.white10,
+                radius:(70.w) ,
+                child: ClipOval(
+                  child: photo['head_img'] ==null ?Container():CachedNetworkImage(imageUrl: photo['head_img'],
+                    fit: BoxFit.cover,
+                    width: 140.w,
+                    height: 140.h,
 
+                  ),
                 ),
               ),
             ),
@@ -617,9 +621,24 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
     "离异未育",
     "丧偶",
   ];
+  Widget _titleTop() {
+    return Padding(
+      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 10.h),
+      child: Container(
+        child: Text(photo['name']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+""+((photo['height']==0||photo['height']==null)?"": photo['height'].toString()+"cm")+" "+(photo['status']==0?"C级":(photo['status']==1?"B级":"A级")),
+            overflow: TextOverflow.ellipsis,
+            style:  TextStyle(
+                fontSize: 30.sp,
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(color: Colors.white, offset: Offset(.3, .3))
+                ])),
+      ),
+    );
+  }
   Widget _buildSummary() {
     return Padding(
-      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 1.h),
+      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 10.h),
       child: Container(
         child: Text(
           //尾部摘要
@@ -635,7 +654,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   }
   Widget _buildMiddles() {
     return Padding(
-      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 1.h),
+      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 10.h),
       child: Container(
         child: Text(
           //尾部摘要

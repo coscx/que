@@ -85,6 +85,7 @@ dependencies:
   lottie: ^0.7.0+1
   fluwx: ^2.5.0
   left_scroll_actions: ^1.5.3
+  flutter_range_slider: "^1.4.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter
