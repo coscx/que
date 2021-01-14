@@ -238,19 +238,19 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                       children: [
                         new ContactItem(
                           count: '696',
-                          title: '好友',
+                          title: '我的审批',
                         ),
                         new ContactItem(
                           count: '0',
-                          title: '关注',
+                          title: '已提交',
                         ),
                         new ContactItem(
                           count: '71',
-                          title: '粉丝',
+                          title: '用户管理',
                         ),
                         new ContactItem(
                           count: '53',
-                          title: '陪伴',
+                          title: '权限管理',
                         ),
                       ],
                     ),
@@ -292,7 +292,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   child: Image.asset("assets/packages/images/tab_match.webp"),
                                 ),
                                 Text(
-                                  "任务中心",
+                                  "我的审批",
                                   style: new TextStyle(color: Colors.black54, fontSize: 12.0),
                                 ),
 
@@ -319,7 +319,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   child: Image.asset("assets/packages/images/tab_match.webp"),
                                 ),
                                 Text(
-                                  "钱包",
+                                  "已提交",
                                   style: new TextStyle(color: Colors.black54, fontSize: 12.0),
                                 ),
 
@@ -348,7 +348,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   child: Image.asset("assets/packages/images/tab_match.webp"),
                                 ),
                                 Text(
-                                  "商城",
+                                  "用户管理",
                                   style: new TextStyle(color: Colors.black54, fontSize: 12.0),
                                 ),
 
@@ -370,7 +370,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   child: Image.asset("assets/packages/images/tab_match.webp"),
                                 ),
                                 Text(
-                                  "我的等级",
+                                  "权限管理",
                                   style: new TextStyle(color: Colors.black54, fontSize: 12.0),
                                 ),
 

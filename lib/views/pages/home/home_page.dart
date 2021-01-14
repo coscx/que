@@ -195,6 +195,10 @@ class _HomePageState extends State<HomePage>
         ));
 
       }
+      if (state is Unauthenticated) {
+        Navigator.of(context).pushReplacementNamed(UnitRouter.login);
+      }
+
       if (state is WidgetsLoaded) {
        var data =state.photos;
       // print(data.toString());
@@ -504,11 +508,14 @@ class _HomePageState extends State<HomePage>
           verticalDirection: VerticalDirection.down,
           children: <Widget>[
             SizedBox(
-              width: 1,
+              width: 1.w,
             ),
-            SizedBox(
-              width: 40,
-              child: Text("筛选:"),
+            Container(
+              width: 100.w,
+              child: Text("筛选:",   style:  TextStyle(
+                fontSize: 32.sp,
+                color: Colors.black,
+              ),),
             ),
             CupertinoSegmentedControl<int>(
               //unselectedColor: Colors.yellow,
@@ -517,14 +524,14 @@ class _HomePageState extends State<HomePage>
               //borderColor: Colors.red,
               groupValue: state.sex==0 ? 1: state.sex,
               onValueChanged: _onValueChanged,
-              padding: EdgeInsets.only(right: 0),
+              padding: EdgeInsets.only(right: 0.w),
               children: {
                 1: state.sex ==1 ?Padding(
-                  padding: EdgeInsets.only(left: 40, right: 40),
+                  padding: EdgeInsets.only(left: 40.w, right: 40.w),
                   child: Text("男"),
                 ):Text("男"),
                 2: state.sex ==2 ?Padding(
-                  padding: EdgeInsets.only(left: 40, right: 40),
+                  padding: EdgeInsets.only(left: 40.w, right: 40.w),
                   child: Text("女"),
                 ):Text("女"),
 
@@ -534,7 +541,7 @@ class _HomePageState extends State<HomePage>
             buildHeadTxt(context,state),
             PopupMenuButton<String>(
               itemBuilder: (context) => buildItems(),
-              offset: Offset(0, 40),
+              offset: Offset(0, 80.w),
               color: Color(0xffF4FFFA),
               elevation: 1,
               shape: RoundedRectangleBorder(
@@ -591,7 +598,7 @@ class _HomePageState extends State<HomePage>
         .map((e) => PopupMenuItem<String>(
         value: e,
         child: Wrap(
-          spacing: 10,
+          spacing: 10.w,
           children: <Widget>[
             Icon(
               map[e],
@@ -694,7 +701,7 @@ class _HomePageState extends State<HomePage>
               child:  Text(
                 "暂时没有用户了，(""^ _ ^)/~┴┴",
                 style:  TextStyle(
-                  fontSize: 20,
+                  fontSize: 40.sp,
                   color: Colors.orangeAccent,
                 ),
               ),
@@ -807,7 +814,7 @@ class _HomePageState extends State<HomePage>
   }
   _switchTab(int index, Color color) {
     BlocProvider.of<HomeBloc>(context)
-        .add(EventTabTap(Convert.toFamily(index)));
+        .add(EventTabTap());
   }
 
   _toDetailPage(WidgetModel model,Map<String,dynamic> photo) {

@@ -93,6 +93,46 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           _buildShare(),
           _buildToHome(),
           _buildCollectButton(context),
+          Container(
+            margin: EdgeInsets.fromLTRB(0.w, 15.h, 0.w, 0.h),
+            child: PopupMenuButton<String>(
+             icon: Icon(
+               Icons.addchart,
+                color: Colors.black,
+              ),
+              itemBuilder: (context) => buildItems(),
+              offset: Offset(0, 60),
+              color: Color(0xffF4FFFA),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                    topRight: Radius.circular(5),
+                    bottomLeft: Radius.circular(5),
+                  )),
+              onSelected: (e) {
+                print(e);
+                if (e == '移入良缘库') {
+                  //BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
+                 // var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+                  //BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+                }
+                if (e == '移入公海') {
+                  //BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
+                  //var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+                  //BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+                }
+                if (e == '划分客户') {
+                  //BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
+                  //var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+                  //BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+                }
+
+              },
+              onCanceled: () => print('onCanceled'),
+            ),
+          )
         ],
 
 
@@ -100,7 +140,28 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       body: Builder(builder: _buildContent),
     ));
   }
-
+  List<PopupMenuItem<String>> buildItems() {
+    final map = {
+      "移入良缘库": Icons.archive_outlined,
+      "移入公海": Icons.copyright_rounded,
+      "划分客户": Icons.pivot_table_chart,
+    };
+    return map.keys
+        .toList()
+        .map((e) => PopupMenuItem<String>(
+        value: e,
+        child: Wrap(
+          spacing: 5.h,
+          children: <Widget>[
+            Icon(
+              map[e],
+              color: Colors.black,
+            ),
+            Text(e),
+          ],
+        )))
+        .toList();
+  }
   Widget _buildContent(BuildContext context) => WillPopScope(
       onWillPop: () => _whenPop(context),
       child: ScrollConfiguration(

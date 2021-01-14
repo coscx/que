@@ -32,7 +32,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
     if (event is EventTabTap) {
 
-      yield* _mapLoadWidgetToState(event.family);
+      yield* _mapLoadWidgetToState();
     }
     if (event is EventCheckUser) {
 
@@ -170,11 +170,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       try {
 
         var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType);
-        if  (result['code']==200){
+        if  (result['message']=="Unauthenticated.") {
+          yield Unauthenticated();
+        }else{
+          if  (result['code']==200){
 
 
-        } else{
+          } else{
 
+          }
         }
 
         yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString() );
@@ -189,11 +193,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       try {
 
         var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType);
-        if  (result['code']==200){
+        if  (result['message']=="Unauthenticated.") {
+          yield Unauthenticated();
+        }else{
+          if  (result['code']==200){
 
 
-        } else{
+          } else{
 
+          }
         }
 
         yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
@@ -206,17 +214,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  Stream<HomeState> _mapLoadWidgetToState(WidgetFamily family) async* {
+  Stream<HomeState> _mapLoadWidgetToState() async* {
     yield WidgetsLoading();
     try {
 
       var result= await IssuesApi.getPhoto('', '1','1','0');
-      if  (result['code']==200){
+      if  (result['message']=="Unauthenticated.") {
+        yield Unauthenticated();
+      }else{
+        if  (result['code']==200){
 
 
-      } else{
+        } else{
 
+        }
       }
+
 
       yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
 

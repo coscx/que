@@ -8,6 +8,8 @@ import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
 import 'package:city_pickers/modal/result.dart';
+
+import '../router.dart';
 const kBaseUrl = 'https://ctx.gugu2019.com';
 
 class IssuesApi {
@@ -17,7 +19,18 @@ class IssuesApi {
     'Content-Type': 'application/json',
     'authorization': ""
   };
-  static Dio dio = Dio(BaseOptions(baseUrl: kBaseUrl,headers: httpHeaders));
+  static Dio dio= Dio(BaseOptions(baseUrl: kBaseUrl,headers: httpHeaders));
+  // static Dio dio=addInterceptors(dios);
+  // static Dio addInterceptors(Dio dio) {
+  //   return dio..interceptors.add(InterceptorsWrapper(onError: (DioError dioError) {
+  //     if (dioError.response?.statusCode == 401) {
+  //         //print(dioError);
+  //         return dioError;
+  //     }
+  //   }));
+  // }
+
+
 
   static Future<Map<String,dynamic>> login( String username, String password) async {
     var data={'username':username,'password':password};
@@ -37,9 +50,14 @@ class IssuesApi {
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     var data={'name':keyWord,'currentPage':page,'status':"all",'is_passive':"all","store_id":1,"pageSize":20,'gender':sex};
+    try {
     Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
-    var datas = (rep.data);
-    return datas;
+    return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
   }
 
   static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String mode,SearchParamList search ,bool _showAge, int _showAgeMax, int _showAgeMin,String serveType) async {
@@ -98,9 +116,14 @@ class IssuesApi {
     if(mode=="3"){//我的
       url="/api/v1/customer/public/index";
     }
-    Response<dynamic> rep = await dio.get(url,queryParameters:searchParm );
-    var datas = (rep.data);
-    return datas;
+    try {
+      Response<dynamic> rep = await dio.get(url,queryParameters:searchParm );
+      return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
   }
   static Future<Map<String,dynamic>> editCustomer(String uuid, String type, String url ) async {
     url="https://queqiaoerp.oss-cn-shanghai.aliyuncs.com/"+url;
@@ -232,9 +255,15 @@ class IssuesApi {
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     var data={'customer_uuid':uuid,'currentPage':page,"pageSize":20};
-    Response<dynamic> rep = await dio.get('/api/v1/customer/connectList',queryParameters:data );
-    var datas = (rep.data);
-    return datas;
+
+    try {
+      Response<dynamic> rep = await dio.get('/api/v1/customer/connectList',queryParameters:data );
+      return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
   }
   static Future<Map<String,dynamic>> uploadPhoto(  String type, ByteData byteData,Function fd) async {
     var ss = await LocalStorage.get("token");

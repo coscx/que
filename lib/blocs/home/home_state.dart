@@ -55,7 +55,12 @@ class WidgetsLoadFailed extends HomeState {
   @override
   List<Object> get props => [];
 }
+class Unauthenticated extends HomeState {
+  const Unauthenticated();
 
+  @override
+  List<Object> get props => [];
+}
 
 class CheckUserSuccess extends HomeState {
   final List<WidgetModel> widgets;

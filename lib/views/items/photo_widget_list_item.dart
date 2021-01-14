@@ -22,6 +22,8 @@ import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
 import 'package:flutter_geen/views/pages/widget_detail/widget_detail_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:left_scroll_actions/cupertinoLeftScroll.dart';
+import 'package:left_scroll_actions/leftScroll.dart';
 import 'package:lottie/lottie.dart';
 class PhotoWidgetListItem extends StatelessWidget {
   final bool hasTopHole;
@@ -42,47 +44,76 @@ class PhotoWidgetListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-      child: Stack(
-        children: <Widget>[
-      Material(
-      color: Theme.of(context).primaryColor.withAlpha(66),
-        shape: true ? TechnoShapeBorder(color: Theme.of(context).primaryColor.withAlpha(100)) : null,
-        child:
-          isClip
-              ? ClipPath(
-                  clipper: ShapeBorderClipper(
-                      shape: CouponShapeBorder(
-                          hasTopHole: hasTopHole,
-                          hasBottomHole: hasBottomHole,
-                          hasLine: false,
-                          edgeRadius: 25,
-                          lineRate: 0.20)),
-                  child: buildContent( context),
-                )
-              : Container(
-            padding:  EdgeInsets.only(top: 10.h,bottom: 10.h,left: 10.w,right: 10.w),
-              child:
-              Column(
-            children: [
-              FeedbackWidget(
-                onPressed: () {
-                  BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
-                  Navigator.pushNamed(context, UnitRouter.widget_detail);
-                },
-                child:  buildContent( context),
-              ),
+    return CupertinoLeftScroll(
+      buttonWidth: 60.w,
+      bounce: true,
+      child: Container(
+        //height: 60,
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          child: Stack(
+              children: <Widget>[
+                Material(
+                    color: Theme.of(context).primaryColor.withAlpha(66),
+                    shape: true ? TechnoShapeBorder(color: Theme.of(context).primaryColor.withAlpha(100)) : null,
+                    child:
+                    isClip
+                        ? ClipPath(
+                      clipper: ShapeBorderClipper(
+                          shape: CouponShapeBorder(
+                              hasTopHole: hasTopHole,
+                              hasBottomHole: hasBottomHole,
+                              hasLine: false,
+                              edgeRadius: 25.w,
+                              lineRate: 0.20)),
+                      child: buildContent( context),
+                    )
+                        : Container(
+                        padding:  EdgeInsets.only(top: 10.h,bottom: 10.h,left: 10.w,right: 10.w),
+                        child:
+                        Column(
+                          children: [
+                            FeedbackWidget(
+                              onPressed: () {
+                                BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
+                                Navigator.pushNamed(context, UnitRouter.widget_detail);
+                              },
+                              child:  buildContent( context),
+                            ),
 
-              //buildMiddle(context),
+                            //buildMiddle(context),
 
-        ],
-      ))
+                          ],
+                        ))
 
-          ),
-          _buildCollectTag(Theme.of(context).primaryColor, showBadge)
-    ]
-      )
+                ),
+                _buildCollectTag(Theme.of(context).primaryColor, showBadge)
+              ]
+          )
+      ),
+      ),
+      buttons: <Widget>[
+
+        LeftScrollItem(
+          text: 'Delete',
+          color: Colors.red,
+          onTap: () {
+            print('delete');
+          },
+        ),
+        LeftScrollItem(
+          text: 'Edit',
+          color: Colors.orange,
+          onTap: () {
+            print('edit');
+          },
+        ),
+      ],
+      onTap: () {
+        print('tap row');
+      },
     );
   }
 Widget buildCard (BuildContext context,Map<String,dynamic> img){
@@ -99,8 +130,8 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                 onLongPress: () => _onLongPress(context,img['imagepath']),
                 child: Container(
                       child: CachedNetworkImage(imageUrl: img['imagepath'],
-                      width: 80,
-                      height: 150,
+                      width: 80.w,
+                      height: 150.h,
                       ),
                       )
 
@@ -123,8 +154,8 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
           ),
 
           Positioned(
-              top: 5,
-              right: 5,
+              top: 5.h,
+              right: 5.w,
               child:
               FeedbackWidget(
                 onPressed: () {
@@ -148,7 +179,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
               hasTopHole: false,
               hasBottomHole: false,
               hasLine: true,
-              edgeRadius: 5,
+              edgeRadius: 5.w,
               lineRate: 0.10)),
       child: Stack(
           children: <Widget>[
@@ -163,8 +194,8 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                           onLongPress: () => _onLongPress(context,img['imagepath']),
                           child: Container(
                             child: CachedNetworkImage(imageUrl: img['imagepath'],
-                              width: 80,
-                              height: 150,
+                              width: 80.w,
+                              height: 150.h,
                             ),
                           )
 
@@ -179,10 +210,10 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                 ],
 
               ),
-              padding: const EdgeInsets.all(2),
-              decoration:const BoxDecoration(
+              padding:  EdgeInsets.all(2.w),
+              decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(10.w)),
               ),
             ),
 
@@ -212,7 +243,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       children: [
         Expanded(child:
           Wrap(
-          spacing: 5, //主轴上子控件的间距
+          spacing: 5.w, //主轴上子控件的间距
             runSpacing: 0, //交叉轴上子控件之间的间距
             children: [
               ...list,
@@ -273,9 +304,9 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         builder: (ctx) => Dialog(
           elevation: 5,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
+              borderRadius: BorderRadius.all(Radius.circular(10.w))),
           child: Container(
-            width: 50,
+            width: 50.w,
             child: DeleteCategoryDialog(
               title: '删除图片',
               content: '是否确定继续执行?',
@@ -295,7 +326,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Container(
-            width: 50,
+            width: 50.w,
             child: DeleteCategoryDialog(
               title: '拒绝此用户',
               content: '是否确定继续执行?',
@@ -313,9 +344,9 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         builder: (ctx) => Dialog(
           elevation: 5,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
+              borderRadius: BorderRadius.all(Radius.circular(10.w))),
           child: Container(
-            width: 50,
+            width: 50.w,
             child: DeleteCategoryDialog(
               title: '撤回此用户的审核结果',
               content: '是否确定继续执行?',
@@ -335,7 +366,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Container(
-            width: 50,
+            width: 50.w,
             child: DeleteCategoryDialog(
               title: '隐藏该用户',
               content: '是否确定继续执行?',
@@ -354,13 +385,13 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         RaisedButton(
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20.w))),
           color: color,
           onPressed: (){
 
           },
           child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         ),
       ],
       );
@@ -372,13 +403,13 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
         RaisedButton(
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20.w))),
           color: color,
           onPressed: (){
             BlocProvider.of<HomeBloc>(context).add(EventCheckUser(photo,2));
           },
           child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         ),
       ],
     );
@@ -475,8 +506,8 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   }
   Widget buildContent(BuildContext context) => Container(
         color: Colors.lightBlue.withAlpha(0),
-        height: 95,
-        padding: const EdgeInsets.only(top: 4, left: 0, right: 10, bottom: 10),
+        height: 160.h,
+        padding:  EdgeInsets.only(top: 4.h, left: 0, right: 10.h, bottom: 10.h),
         child: Row(
           children: <Widget>[
             buildLeading(),
@@ -507,7 +538,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                   color: Colors.transparent,
                   child: CircleText(
                     text: photo['name'],
-                    size: 140.sp,
+                    size: 180.sp,
                     color: invColor,
                     shadowColor: Colors.transparent,
                   ),
@@ -537,7 +568,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   Widget _buildCollectTag(Color color,bool show) {
     return Positioned(
         top: 0,
-        right: 40,
+        right: 40.w,
         child:Opacity(
             opacity: show? 1.0:0 ,
             child: SizedOverflowBox(
@@ -558,12 +589,12 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
     return Expanded(
       child: Row(
         children: <Widget>[
-          const SizedBox(width: 1),
+           SizedBox(width: 1.w),
           Expanded(
             child: Text(photo['name']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+""+((photo['height']==0||photo['height']==null)?"": photo['height'].toString()+"cm")+" "+(photo['status']==0?"C级":(photo['status']==1?"B级":"A级")),
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                    fontSize: 14,
+                style:  TextStyle(
+                    fontSize: 30.sp,
                     fontWeight: FontWeight.bold,
                     shadows: [
                       Shadow(color: Colors.white, offset: Offset(.3, .3))
@@ -588,14 +619,14 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   ];
   Widget _buildSummary() {
     return Padding(
-      padding: const EdgeInsets.only(left: 1, bottom: 1, top: 1),
+      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 1.h),
       child: Container(
         child: Text(
           //尾部摘要
           "房: "+photo['has_house'].toString()+"套 车: "+photo['has_car'].toString()+"辆 " +(_marriageLevel[photo['marriage']]) +" 生日:" +(photo['birthday']==null ? "-":photo['birthday'].toString().substring(0,10)),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: Colors.black, fontSize: 14, shadows: [
+          style: TextStyle(color: Colors.black, fontSize: 23.sp, shadows: [
             const Shadow(color: Colors.white, offset: const Offset(.5, .5))
           ]),
         ),
@@ -604,14 +635,14 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   }
   Widget _buildMiddles() {
     return Padding(
-      padding: const EdgeInsets.only(left: 1, bottom: 1, top: 1),
+      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 1.h),
       child: Container(
         child: Text(
           //尾部摘要
          (photo['sale_name']==null?"": "红娘: "+photo['sale_name'].toString())+" 沟通"+photo['connect_count'].toString()+"次 " +(photo['appointment_count']==0?"未排约":(photo['appointment']==null?"":photo['appointment'].toString())),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: Colors.black, fontSize: 14, shadows: [
+          style: TextStyle(color: Colors.black, fontSize: 23.sp, shadows: [
             const Shadow(color: Colors.white, offset: const Offset(.5, .5))
           ]),
         ),

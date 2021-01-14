@@ -51,7 +51,7 @@
         <!-- Huawei push channel start (optional) -->
         <meta-data
             android:name="com.huawei.hms.client.appid"
-            android:value="appid=huawei_app_id" />
+            android:value="appid=103680303" />
         <!-- Huawei push channel end-->
         <meta-data
             android:name="flutterEmbedding"

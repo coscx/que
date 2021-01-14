@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/res/toly_icon.dart';
 import 'package:flutter_geen/app/utils/Toast.dart';
+import 'package:flutter_geen/blocs/home/home_bloc.dart';
+import 'package:flutter_geen/blocs/home/home_event.dart';
 import 'package:flutter_geen/blocs/login/login_state.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -81,6 +83,8 @@ class _LoginFromState extends State<LoginFrom> {
                    BlocProvider.of<LoginBloc>(context).add(
                      EventLoginFailed(),
                    );
+
+                   BlocProvider.of<HomeBloc>(context).add(EventTabTap());
                 Navigator.of(context).pushReplacementNamed(UnitRouter.nav);
             }
         },

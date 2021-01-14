@@ -13,9 +13,7 @@ abstract class HomeEvent extends Equatable {
 }
 
 class EventTabTap extends HomeEvent {
-  final WidgetFamily family;
 
-  EventTabTap(this.family);
 
 }
 
@@ -79,3 +77,4 @@ class EventPagePlus extends HomeEvent {
 
 
 }
+

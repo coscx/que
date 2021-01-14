@@ -84,6 +84,7 @@ dependencies:
   flutter_image_compress: ^0.7.0
   lottie: ^0.7.0+1
   fluwx: ^2.5.0
+  left_scroll_actions: ^1.5.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
