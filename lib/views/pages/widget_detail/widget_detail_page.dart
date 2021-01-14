@@ -816,7 +816,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 18,
+                          size: 18.sp,
                           color: Colors.black54,
                         ),
 
@@ -828,7 +828,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           ),
                         ),
                         SizedBox(
-                          width: ScreenUtil().setWidth(10),
+                          width: ScreenUtil().setWidth(10.w),
                         ),
                         Visibility(
                             visible: true,
@@ -852,7 +852,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             child: Row(children: <Widget>[
 
                               SizedBox(
-                                width: ScreenUtil().setWidth(10),
+                                width: ScreenUtil().setWidth(10.w),
                               ),
                               Visibility(
                                   visible: false,
@@ -908,7 +908,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 18,
+                          size: 18.sp,
                           color: Colors.black54,
                         ),
 
@@ -920,7 +920,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           ),
                         ),
                         SizedBox(
-                          width: ScreenUtil().setWidth(10),
+                          width: ScreenUtil().setWidth(10.w),
                         ),
                         Visibility(
                             visible: true,
@@ -944,7 +944,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             child: Row(children: <Widget>[
 
                               SizedBox(
-                                width: ScreenUtil().setWidth(10),
+                                width: ScreenUtil().setWidth(10.w),
                               ),
                               Visibility(
                                   visible: false,
@@ -1016,7 +1016,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               ),
                             ),
                             SizedBox(
-                              width: ScreenUtil().setWidth(10),
+                              width: ScreenUtil().setWidth(10.w),
                             ),
                             Visibility(
                                 visible: true,
@@ -1038,7 +1038,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             children: <Widget>[
                               Icon(
                                 Icons.arrow_forward_ios_outlined,
-                                size: 15,
+                                size: 15.sp,
                                 color: Colors.black54,
                               )
 
