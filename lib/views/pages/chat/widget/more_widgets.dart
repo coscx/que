@@ -245,7 +245,7 @@ class MoreWidgets {
         onLongPress: () {},
         child: Container(
             padding:
-                EdgeInsets.only(left: 20.0, right: 16, top: 20, bottom: 20),
+                EdgeInsets.only(left: 20.w, right: 16.w, top: 20.h, bottom: 20.h),
             child: Column(children: <Widget>[
               //1列n行
               Row(
@@ -258,10 +258,10 @@ class MoreWidgets {
                         }
                       },
                       child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(12.w),
                           child: imageChild)),
                   SizedBox(
-                    width: 20.0,
+                    width: 40.w,
                   ),
                   Expanded(
                     //文本过长，打点
@@ -275,10 +275,10 @@ class MoreWidgets {
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: 22.0, color: themeColorMap['black']),
+                              fontSize: 30.sp, color: themeColorMap['black']),
                         ),
                         SizedBox(
-                          height: 5.0,
+                          height: 10.h,
                         ),
                         Text(
                           content,
@@ -286,20 +286,20 @@ class MoreWidgets {
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: 14.0, color: ColorT.text_normal),
+                              fontSize: 28.sp, color: ColorT.text_normal),
                         ),
                       ],
                     ),
                   ),
                   SizedBox(
-                    width: 15.0,
+                    width: 30.w,
                   ),
                   Container(
                     alignment: Alignment.center,
                     child: Icon(
                       Icons.arrow_forward_ios,
                       color: ColorT.text_gray,
-                      size: 18,
+                      size: 30.sp,
                     ),
                   )
                 ],
@@ -345,7 +345,7 @@ class MoreWidgets {
         onLongPress: () {},
         child: Container(
             padding:
-                EdgeInsets.only(left: 20.0, right: 0, top: padding, bottom: 0),
+                EdgeInsets.only(left: 30.w, right: 0, top: padding, bottom: 0),
             child: Column(children: <Widget>[
               Row(
                 children: <Widget>[
@@ -354,7 +354,7 @@ class MoreWidgets {
                           width: 0.0,
                         )
                       : ClipRRect(
-                          borderRadius: BorderRadius.circular(6.0),
+                          borderRadius: BorderRadius.circular(12.h),
                           child: Icon(
                             iconData,
                             size: imageSize,
@@ -362,7 +362,7 @@ class MoreWidgets {
                           ),
                         ),
                   SizedBox(
-                    width: iconData == null ? 0 : 15.0,
+                    width: iconData == null ? 0 : 20.w,
                   ),
                   Expanded(
                     //文本过长，打点
@@ -372,16 +372,16 @@ class MoreWidgets {
                       maxLines: 1,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 17.0, color: textColor),
+                      style: TextStyle(fontSize: 30.sp, color: textColor),
                     ),
                   ),
                   Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.only(right: 16),
+                    padding: EdgeInsets.only(right: 30.w),
                     child: Icon(
                       Icons.arrow_forward_ios,
                       color: ColorT.text_gray,
-                      size: 18,
+                      size: 30.sp,
                     ),
                   )
                 ],
@@ -389,13 +389,13 @@ class MoreWidgets {
               isDivider
                   ? Container(
                       padding: EdgeInsets.only(
-                          left: iconData == null ? 0 : 40.0, top: padding + 2),
+                          left: iconData == null ? 0 : 40.w, top: padding + 2),
                       child: Divider(
-                        height: 1.5,
+                        height: 3.h,
                       ),
                     )
                   : SizedBox(
-                      height: 14,
+                      height: 20.h,
                     )
             ])));
   }
@@ -421,7 +421,7 @@ class MoreWidgets {
         onLongPress: () {},
         child: Container(
             padding:
-                EdgeInsets.only(left: 20.0, right: 0, top: padding, bottom: 0),
+                EdgeInsets.only(left: 30.w, right: 0, top: padding, bottom: 0),
             child: Column(children: <Widget>[
               Row(
                 children: <Widget>[
@@ -430,7 +430,7 @@ class MoreWidgets {
                           width: 0.0,
                         )
                       : ClipRRect(
-                          borderRadius: BorderRadius.circular(6.0),
+                          borderRadius: BorderRadius.circular(12.w),
                           child: Icon(
                             iconData,
                             size: imageSize,
@@ -438,7 +438,7 @@ class MoreWidgets {
                           ),
                         ),
                   SizedBox(
-                    width: iconData == null ? 0 : 15.0,
+                    width: iconData == null ? 0 : 30.w,
                   ),
                   Expanded(
                     //文本过长，打点
@@ -448,7 +448,7 @@ class MoreWidgets {
                       maxLines: 1,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 17.0, color: textColor),
+                      style: TextStyle(fontSize: 30.sp, color: textColor),
                     ),
                   ),
                   Switch(
@@ -466,7 +466,7 @@ class MoreWidgets {
               isDivider
                   ? Container(
                       padding: EdgeInsets.only(
-                          left: iconData == null ? 0 : 40.0, top: padding + 2),
+                          left: iconData == null ? 0 : 40.w, top: padding + 2),
                       child: Divider(
                         height: 1.5,
                       ),
@@ -496,7 +496,7 @@ class MoreWidgets {
         onTap: () {},
         onLongPress: () {},
         child: Container(
-            padding: EdgeInsets.only(left: 20.0, right: 20, top: 8, bottom: 0),
+            padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 8.h, bottom: 0),
             child: Column(children: <Widget>[
               //1列n行
               Row(
@@ -513,10 +513,10 @@ class MoreWidgets {
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: 16.0, color: ColorT.text_dark),
+                              fontSize: 32.sp, color: ColorT.text_dark),
                         ),
                         SizedBox(
-                          height: 3.0,
+                          height: 6.h,
                         ),
                         Text(
                           content,
@@ -524,10 +524,10 @@ class MoreWidgets {
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: 14.0, color: ColorT.text_gray),
+                              fontSize: 28.sp, color: ColorT.text_gray),
                         ),
                         SizedBox(
-                          height: ObjectUtil.isEmpty(note) ? 0 : 3.0,
+                          height: ObjectUtil.isEmpty(note) ? 0 : 6.h,
                         ),
                         ObjectUtil.isEmpty(note)
                             ? SizedBox(
@@ -544,7 +544,7 @@ class MoreWidgets {
                                     softWrap: true,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontSize: 13.0,
+                                      fontSize: 28.sp,
                                       fontStyle: FontStyle.italic,
                                       decoration: TextDecoration.underline,
                                       color: ObjectUtil.getThemeColor(),
@@ -553,23 +553,23 @@ class MoreWidgets {
                     ),
                   ),
                   SizedBox(
-                    width: 15.0,
+                    width: 30.h,
                   ),
                   Container(
-                    height: 40,
+                    height: 80.h,
                     alignment: Alignment.topRight,
                     child: Text(
                       time,
                       maxLines: 1,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 13.0, color: ColorT.text_gray),
+                      style: TextStyle(fontSize: 30.h, color: ColorT.text_gray),
                     ),
                   )
                 ],
               ),
               SizedBox(
-                height: showStatusBar ? 10.0 : 0,
+                height: showStatusBar ? 20.h : 0,
               ),
               showStatusBar
                   ? Row(
@@ -589,14 +589,14 @@ class MoreWidgets {
                                       }
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                                      padding: EdgeInsets.fromLTRB(0, 8.h, 0, 4.h),
                                       decoration: new BoxDecoration(
                                           color:
                                               ObjectUtil.getThemeLightColor(),
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
+                                              Radius.circular(8.w)),
                                           border: new Border.all(
-                                              width: 0.5,
+                                              width: 1.w,
                                               color:
                                                   ObjectUtil.getThemeColor())),
                                       alignment: Alignment.center,
@@ -607,7 +607,7 @@ class MoreWidgets {
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             letterSpacing: 3,
-                                            fontSize: 16.0,
+                                            fontSize: 28.sp,
                                             color: ObjectUtil.getThemeColor()),
                                       ),
                                     ),
@@ -622,13 +622,13 @@ class MoreWidgets {
                                 }
                               },
                               child: Container(
-                                padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                                padding: EdgeInsets.fromLTRB(0, 8.h, 0, 8.h),
                                 decoration: new BoxDecoration(
                                     color: ObjectUtil.getThemeLightColor(),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(4.0)),
+                                        BorderRadius.all(Radius.circular(8.w)),
                                     border: new Border.all(
-                                        width: 0.5,
+                                        width: 1.w,
                                         color: ObjectUtil.getThemeColor())),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -638,7 +638,7 @@ class MoreWidgets {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       letterSpacing: 3,
-                                      fontSize: 16.0,
+                                      fontSize: 30.sp,
                                       color: ObjectUtil.getThemeColor()),
                                 ),
                               ),
@@ -649,7 +649,7 @@ class MoreWidgets {
                       height: 0,
                     ),
               Container(
-                padding: EdgeInsets.only(left: 0.0, top: 13),
+                padding: EdgeInsets.only(left: 0.0, top: 13.h),
                 child: Divider(
                   height: 1.5,
                 ),
@@ -665,7 +665,7 @@ class MoreWidgets {
         child: Text('没有数据',
             maxLines: 1,
             style: new TextStyle(
-                fontSize: 17.0,
+                fontSize: 32.sp,
                 color: Colors.black54,
                 letterSpacing: 0.6,
                 fontWeight: FontWeight.normal,
@@ -687,19 +687,19 @@ class MoreWidgets {
           new PopupMenuItem<String>(
             value: 'one',
             child: Text(texts[0],
-                style: new TextStyle(fontSize: 16.0, color: ColorT.app_main)),
+                style: new TextStyle(fontSize: 28.sp, color: ColorT.app_main)),
           ),
           new PopupMenuItem<String>(
             value: 'two',
             child: Text(texts[1],
-                style: new TextStyle(fontSize: 16.0, color: ColorT.app_main)),
+                style: new TextStyle(fontSize: 28.sp, color: ColorT.app_main)),
           ),
           new PopupMenuItem<String>(
             value: 'three',
             child: Text(texts[2],
                 maxLines: 1,
                 style: new TextStyle(
-                    fontSize: 16.0, color: ObjectUtil.getThemeSwatchColor())),
+                    fontSize: 28.sp, color: ObjectUtil.getThemeSwatchColor())),
           ),
         ]).then((res) {
       if (null != onItemClick) {
@@ -720,19 +720,19 @@ class MoreWidgets {
           new PopupMenuItem<String>(
             value: 'one',
             child: Text(texts[0],
-                style: new TextStyle(fontSize: 16.0, color: ColorT.app_main)),
+                style: new TextStyle(fontSize: 28.sp, color: ColorT.app_main)),
           ),
           new PopupMenuItem<String>(
             value: 'two',
             child: Text(texts[1],
-                style: new TextStyle(fontSize: 16.0, color: ColorT.app_main)),
+                style: new TextStyle(fontSize: 28.sp, color: ColorT.app_main)),
           ),
           new PopupMenuItem<String>(
             value: 'three',
             child: Text(texts[2],
                 maxLines: 1,
                 style: new TextStyle(
-                    fontSize: 16.0, color: ObjectUtil.getThemeSwatchColor())),
+                    fontSize: 28.sp, color: ObjectUtil.getThemeSwatchColor())),
           ),
         ]).then((res) {
       if (null != onItemClick) {
@@ -752,19 +752,19 @@ class MoreWidgets {
           new PopupMenuItem<String>(
             value: 'one',
             child: Text(texts[0],
-                style: new TextStyle(fontSize: 16.0, color: ColorT.app_main)),
+                style: new TextStyle(fontSize: 28.sp, color: ColorT.app_main)),
           ),
           new PopupMenuItem<String>(
             value: 'two',
             child: Text(texts[1],
-                style: new TextStyle(fontSize: 16.0, color: ColorT.app_main)),
+                style: new TextStyle(fontSize: 28.sp, color: ColorT.app_main)),
           ),
           new PopupMenuItem<String>(
             value: 'three',
             child: Text(texts[2],
                 maxLines: 1,
                 style: new TextStyle(
-                    fontSize: 16.0, color: ObjectUtil.getThemeSwatchColor())),
+                    fontSize: 28.sp, color: ObjectUtil.getThemeSwatchColor())),
           ),
         ]).then((res) {
       if (null != onItemClick) {
