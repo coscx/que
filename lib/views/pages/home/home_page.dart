@@ -124,6 +124,8 @@ class _HomePageState extends State<HomePage>
     ),
     child:Scaffold(
         appBar: AppBar(
+          titleSpacing:40.w,
+          leadingWidth: 0,
           title:  Row(
             children: [
               Text(title,style: TextStyle(color: Colors.black, fontSize: 48.sp,fontWeight: FontWeight.bold)),
@@ -546,7 +548,6 @@ class _HomePageState extends State<HomePage>
                   fontSize: 30.sp,
                   color: Colors.blue,
                 )),
-
               },
             ),
 

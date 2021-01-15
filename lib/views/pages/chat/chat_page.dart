@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -893,11 +893,11 @@ class ChatsState extends State<ChatsPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: 10,right: 10,top: 0,bottom: 0),
+                    padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 0,bottom: 0),
                     child: Text('',
                       style:
                       TextStyle(
-                        fontSize: 12,
+                        fontSize: 24.sp,
                         color: Theme.of(context).disabledColor,
                       ),
                     ),
@@ -944,7 +944,7 @@ class ChatsState extends State<ChatsPage> {
       return     ScrollConfiguration(
           behavior: DyBehaviorNull(),
           child:ListView.builder(
-              padding: EdgeInsets.only(left: 10,right: 10,top: 0,bottom: 0),
+              padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 0,bottom: 0),
           itemBuilder: (BuildContext context, int index) {
             return _messageListViewItem(state.messageList,index,tfSender);
           },
@@ -1071,28 +1071,32 @@ class ChatsState extends State<ChatsPage> {
     if (entity.receiver == tfSender) {
       //对方的消息
       return Container(
-        margin: EdgeInsets.only(left: 10, right: 40, bottom: 6.5, top: 6.5),
+        margin: EdgeInsets.only(left: 10.w, right: 40.w, bottom: 6.h, top: 6.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _headPortrait('', 1),
-            SizedBox(width: 10),
-            new Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    GestureDetector(
-                      child: _contentWidget(entity,tfSender),
-                      onTap: () {
-                        //if (null != onItemClick) {
-                          //onItemClick(entity);
-                        //}
-                      },
-                      onLongPress: () {
-                        DialogUtil.buildToast('长按了消息');
-                      },
-                    ),
-                  ],
+            SizedBox(width: 10.w),
+             Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 0.w, right: 0.w, bottom: 0.h, top: 12.h),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: _contentWidget(entity,tfSender),
+                        onTap: () {
+                          //if (null != onItemClick) {
+                            //onItemClick(entity);
+                          //}
+                        },
+                        onLongPress: () {
+                          DialogUtil.buildToast('长按了消息');
+                        },
+                      ),
+                    ],
+                  ),
                 )),
           ],
         ),
@@ -1100,56 +1104,60 @@ class ChatsState extends State<ChatsPage> {
     } else {
       //自己的消息
       return Container(
-        margin: EdgeInsets.only(left: 40, right: 10, bottom: 6.5, top: 6.5),
+        margin: EdgeInsets.only(left: 40.w, right: 10.w, bottom: 6.h, top: 6.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
+             Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 0.w, right: 0.w, bottom: 0.h, top: 12.h),
 
-                    SizedBox(height: 1),
-                    GestureDetector(
-                      child: _contentWidget(entity,tfSender),
-                      onTap: () {
-                        if (null != onItemClick) {
-                          //onItemClick(entity);
-                        }
-                      },
-                      onLongPress: () {
-                        DialogUtil.buildToast('长按了消息');
-                      },
-                    ),
-                    //显示是否重发1、发送2中按钮，发送成功0或者null不显示
-                    // entity.flags == 11
-                    //     ? IconButton(
-                    //     icon: Icon(Icons.refresh, color: Colors.red, size: 18),
-                    //     onPressed: () {
-                    //       if (null != onResend) {
-                    //         onResend(entity);
-                    //       }
-                    //     })
-                    //     : (entity.flags == 10
-                    //     ? Container(
-                    //   alignment: Alignment.center,
-                    //   padding: EdgeInsets.only(top: 20, right: 20),
-                    //   width: 32.0,
-                    //   height: 32.0,
-                    //   child: SizedBox(
-                    //       width: 12.0,
-                    //       height: 12.0,
-                    //       child: CircularProgressIndicator(
-                    //         valueColor: AlwaysStoppedAnimation(
-                    //             ObjectUtil.getThemeSwatchColor()),
-                    //         strokeWidth: 2,
-                    //       )),
-                    // )
-                    //     : SizedBox(
-                    //   width: 0,
-                    //   height: 0,
-                    // )),
-                  ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+
+                      SizedBox(height: 1.h),
+                      GestureDetector(
+                        child: _contentWidget(entity,tfSender),
+                        onTap: () {
+                          if (null != onItemClick) {
+                            //onItemClick(entity);
+                          }
+                        },
+                        onLongPress: () {
+                          DialogUtil.buildToast('长按了消息');
+                        },
+                      ),
+                      //显示是否重发1、发送2中按钮，发送成功0或者null不显示
+                      // entity.flags == 11
+                      //     ? IconButton(
+                      //     icon: Icon(Icons.refresh, color: Colors.red, size: 18),
+                      //     onPressed: () {
+                      //       if (null != onResend) {
+                      //         onResend(entity);
+                      //       }
+                      //     })
+                      //     : (entity.flags == 10
+                      //     ? Container(
+                      //   alignment: Alignment.center,
+                      //   padding: EdgeInsets.only(top: 20, right: 20),
+                      //   width: 32.0,
+                      //   height: 32.0,
+                      //   child: SizedBox(
+                      //       width: 12.0,
+                      //       height: 12.0,
+                      //       child: CircularProgressIndicator(
+                      //         valueColor: AlwaysStoppedAnimation(
+                      //             ObjectUtil.getThemeSwatchColor()),
+                      //         strokeWidth: 2,
+                      //       )),
+                      // )
+                      //     : SizedBox(
+                      //   width: 0,
+                      //   height: 0,
+                      // )),
+                    ],
+                  ),
                 )),
             SizedBox(width: 10),
             _headPortrait('', 0),
@@ -1164,7 +1172,7 @@ class ChatsState extends State<ChatsPage> {
   */
   Widget _headPortrait(String url, int owner) {
     return ClipRRect(
-        borderRadius: BorderRadius.circular(6.0),
+        borderRadius: BorderRadius.circular(6.w),
         child: url.isEmpty
             ? Image.asset(
             (owner == 1
@@ -1172,16 +1180,16 @@ class ChatsState extends State<ChatsPage> {
                 dir: 'icon', format: 'png')
                 : FileUtil.getImagePath('logo',
                 dir: 'splash', format: 'png')),
-            width: 44,
-            height: 44)
+            width: 88.w,
+            height: 88.h)
             : (ObjectUtil.isNetUri(url)
             ? Image.network(
           url,
-          width: 44,
-          height: 44,
+          width: 88.w,
+          height: 88.h,
           fit: BoxFit.fill,
         )
-            : Image.asset(url, width: 44, height: 44)));
+            : Image.asset(url, width: 88, height: 88)));
   }
 
   /*
@@ -1203,13 +1211,13 @@ class ChatsState extends State<ChatsPage> {
       widget = buildImageWidget(entity,tfSender);
     }else {
       widget = ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(12.w),
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(15.h),
           color: ObjectUtil.getThemeLightColor(),
           child: Text(
             '未知消息类型',
-            style: TextStyle(fontSize: 16, color: Colors.black),
+            style: TextStyle(fontSize: 30.sp, color: Colors.black),
           ),
         ),
       );
@@ -1220,15 +1228,15 @@ class ChatsState extends State<ChatsPage> {
   Widget buildTextWidget(Message entity,String  tfSender) {
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(16.w),
       child: Container(
-        padding: EdgeInsets.only(left: 6, right: 6, top: 8, bottom: 8),
+        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 16.h, bottom: 16.h),
         color: entity.sender == tfSender
             ?Color.fromARGB(255, 158, 234, 106)
             : Colors.white,
         child: Text(
           entity.content['text'],
-          style: TextStyle(fontSize: 16, color: Colors.black),
+          style: TextStyle(fontSize: 32.sp, color: Colors.black),
         ),
       ),
     );
@@ -1243,18 +1251,18 @@ class ChatsState extends State<ChatsPage> {
     if (imageURL == null || imageURL.length == 0) {
       imageURL = ValueUtil.toStr(message.content['url']);
     }
-    double size = 120;
+    double size = 120.w;
     Widget image;
     if (message.type== MessageType.MESSAGE_TEXT&&
         message.content['text'].contains('assets/images/face')) {
       //assets/images/face中的表情
-      size = 32;
+      size = 32.w;
       image = Image.asset(message.content['text'], width: size, height: size);
       isFace=1;
     } else if (message.type== MessageType.MESSAGE_TEXT &&
         message.content['text'].contains('assets/images/figure')) {
       //assets/images/figure中的表情
-      size = 90;
+      size = 90.w;
       image = Image.asset(message.content['text'], width: size, height: size);
       isFace=1;
     }
@@ -1264,11 +1272,11 @@ class ChatsState extends State<ChatsPage> {
       child: isFace==1?
 
       ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8.w),
         child: Container(
           padding: EdgeInsets.all((message.content['text'].isNotEmpty &&
               message.content['text'].contains('assets/images/face'))
-              ? 10
+              ? 10.w
               : 0),
           color: message.sender == tfSender
               ? Colors.white
@@ -1282,13 +1290,13 @@ class ChatsState extends State<ChatsPage> {
           //背景Colors.transparent 透明
           color: Colors.transparent,
           //设置四周圆角 角度
-          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+          borderRadius: BorderRadius.all(Radius.circular(4.w)),
           //设置四周边框
 
         ),
 
-        width: 100,
-        height: 120,
+        width: 100.w,
+        height: 120.h,
         child: //Image.network(imageURL)
         GestureDetector(
            child:
@@ -1397,7 +1405,7 @@ class ChatsState extends State<ChatsPage> {
   }
   _buildWrapper({bool isSelf, Message message, Widget child}) {
     return Container(
-      margin: EdgeInsets.all(1),
+      margin: EdgeInsets.all(1.w),
       child: Row(
         mainAxisAlignment: isSelf ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [

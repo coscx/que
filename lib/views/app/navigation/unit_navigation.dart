@@ -5,6 +5,7 @@ import 'package:flt_im_plugin/value_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
 import 'package:flutter_geen/views/pages/about/person_center_page.dart';
 import 'package:flutter_geen/views/pages/search/serach_page.dart';
@@ -31,7 +32,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_geen/views/dialogs/comment.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
-
+import 'package:umeng_analytics_push/umeng_analytics_push.dart';
 /// 说明: 主题结构 左右滑页 + 底部导航栏
 
 class UnitNavigation extends StatefulWidget {
@@ -89,7 +90,16 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
       _userDetail(context);
 
     });
+    Future.delayed(Duration(seconds: 5)).then((e) async {
 
+     var token = await UmengAnalyticsPush.deviceToken();
+    if (token !=""){
+    IssuesApi.addToken(token);
+    }
+
+
+
+    });
   }
 
 

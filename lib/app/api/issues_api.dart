@@ -265,6 +265,22 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> addToken( String token ) async {
+    var ss = await LocalStorage.get("memberId");
+    var memberId =ss.toString();
+    var data={'memberId':memberId,'token':token,"pageSize":20};
+    Dio dioA= Dio();
+    try {
+      Response<dynamic> rep = await dioA.get('http://mm.3dsqq.com:8000/addtoken',queryParameters:data );
+      return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+
+
   static Future<Map<String,dynamic>> uploadPhoto(  String type, ByteData byteData,Function fd) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();

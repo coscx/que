@@ -52,7 +52,7 @@ class PhotoWidgetListItem extends StatelessWidget {
         color: Colors.white,
         alignment: Alignment.center,
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          margin:  EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
           child: Stack(
               children: <Widget>[
                 Material(
@@ -506,23 +506,32 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   }
   Widget buildContent(BuildContext context) => Container(
         color: Colors.lightBlue.withAlpha(0),
-        height: 160.h,
-        padding:  EdgeInsets.only(top: 4.h, left: 0, right: 10.h, bottom: 10.h),
-        child: Row(
-          children: <Widget>[
-            buildLeading(),
-            Expanded(
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                 // _buildTitle(),
-                  _titleTop(),
-                  _buildMiddles(),
-                  _buildSummary(),
+        height: 170.h,
+        padding:  EdgeInsets.only(top: 0.h, left: 0, right: 10.w, bottom: 10.h),
+        child: Column(
+          children: [
+            Row(
+              children: <Widget>[
+                buildLeading(),
 
-                ],
-              ),
+                  Expanded(
+                    child: Container(
+                      padding:  EdgeInsets.only(top: 0.h, left: 10.h, right: 0.w, bottom: 0.h),
+                      child: Column(
+                        //mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                         // _buildTitle(),
+                          _titleTop(),
+                          _buildMiddles(),
+                          _buildSummary(),
+
+                        ],
+                      ),
+                    ),
+                  ),
+
+              ],
             ),
           ],
         ),
@@ -534,12 +543,13 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
           //tag: "hero_widget_image_${photo['uuid'].toString()}",
           child: (photo['head_img'] == "" || photo['head_img'] ==null)
               ? Container(
-                  // width: 110.w,
-                  // height: 210.h,
+                   // width: 100.w,
+                   // height: 100.h,h
                   color: Colors.transparent,
                   child: CircleText(
                     text: photo['name'],
-                    size: 180.sp,
+                    size: 130.h,
+                    fontSize: 50.sp,
                     color: invColor,
                     shadowColor: Colors.transparent,
                   ),
@@ -623,7 +633,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   ];
   Widget _titleTop() {
     return Padding(
-      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 10.h),
+      padding:  EdgeInsets.only(left: 1.w, bottom: 0.h, top: 5.h),
       child: Container(
         child: Text(photo['name']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+""+((photo['height']==0||photo['height']==null)?"": photo['height'].toString()+"cm")+" "+(photo['status']==0?"C级":(photo['status']==1?"B级":"A级")),
             overflow: TextOverflow.ellipsis,
@@ -638,7 +648,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   }
   Widget _buildSummary() {
     return Padding(
-      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 10.h),
+      padding:  EdgeInsets.only(left: 1.w, bottom: 0.h, top: 5.h),
       child: Container(
         child: Text(
           //尾部摘要
@@ -654,7 +664,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   }
   Widget _buildMiddles() {
     return Padding(
-      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 10.h),
+      padding:  EdgeInsets.only(left: 1.w, bottom: 0.h, top: 5.h),
       child: Container(
         child: Text(
           //尾部摘要

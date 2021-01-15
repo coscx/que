@@ -6,7 +6,7 @@ import 'package:flutter_geen/views/pages/utils/file_util.dart';
 
 import 'package:flutter_geen/views/pages/utils/functions.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MoreWidgets {
   /*
   *  生成常用的AppBar
@@ -779,7 +779,7 @@ class MoreWidgets {
     return Column(
       children: <Widget>[
         SizedBox(
-          height: 8,
+          height: 12.h,
         ),
         InkWell(
             onTap: () {
@@ -788,20 +788,20 @@ class MoreWidgets {
               }
             },
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(8.w),
               child: Container(
-                width: 54,
-                height: 54,
+                width: 120.w,
+                height: 108.h,
                 color: ObjectUtil.getThemeLightColor(),
-                child: Icon(icon, size: 28),
+                child: Icon(icon, size: 40.sp),
               ),
             )),
         SizedBox(
-          height: 5,
+          height: 5.h,
         ),
         Text(
           text,
-          style: TextStyle(fontSize: 12),
+          style: TextStyle(fontSize: 20.sp),
         ),
       ],
     );

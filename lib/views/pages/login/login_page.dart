@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
         arcBackground(),
         Container(
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(left: 20.0, right: 20, top: 20),
+            padding:  EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
             child:
 //
 //          BlocBuilder<LoginBloc, LoginState>(
@@ -66,9 +66,9 @@ class LoginPage extends StatelessWidget {
     return ArcBackground(
       image: AssetImage("assets/images/caver.webp"),
       child: Padding(
-        padding: const EdgeInsets.all(50.0),
+        padding:  EdgeInsets.all(100.w),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding:  EdgeInsets.all(20.w),
           decoration: BoxDecoration(
               color: Colors.white.withAlpha(0), shape: BoxShape.rectangle),
 

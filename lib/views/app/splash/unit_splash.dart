@@ -146,7 +146,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
 
   Widget _buildText(double winH, double winW) {
     final shadowStyle = TextStyle(
-      fontSize: 80.sp,
+      fontSize: 70.sp,
       color: Theme.of(context).primaryColor,
       fontWeight: FontWeight.bold,
       shadows: [

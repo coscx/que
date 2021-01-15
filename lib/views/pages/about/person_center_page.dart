@@ -59,8 +59,6 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
 
     });
 
-
-
   }
   _bindWx(BuildContext context,String img) {
     showDialog(
@@ -68,9 +66,9 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
         builder: (ctx) => Dialog(
           elevation: 5,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
+              borderRadius: BorderRadius.all(Radius.circular(10.w))),
           child: Container(
-            width: 50,
+            width: 50.w,
             child: DeleteCategoryDialog(
               title: '此账号已绑定微信',
               content: '是否确定重新绑定?',
@@ -147,9 +145,9 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                       Expanded(
                         flex: 1,
                         child: new Padding(
-                          padding: const EdgeInsets.only(
-                            top: 40.0,
-                            right: 30.0,
+                          padding:  EdgeInsets.only(
+                            top: 40.h,
+                            right: 30.w,
                           ),
                           child: Container(
                             width: 100.h,
@@ -165,11 +163,11 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            new Padding(
-                              padding: const EdgeInsets.only(
-                                top: 40.0,
-                                left: 3.0,
-                                bottom: 5.0,
+                             Padding(
+                              padding:  EdgeInsets.only(
+                                top: 40.h,
+                                left: 3.w,
+                                bottom: 5.h,
                               ),
                               child: new Text(
                                 name,
@@ -188,13 +186,13 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   //color: Colors.black87,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 3.0,
+                                  padding:  EdgeInsets.only(
+                                    left: 3.w,
                                   ),
                                   child: new Text(
                                     '121.423.199',
                                     style: new TextStyle(
-                                        color: Colors.grey, fontSize: 15.0),
+                                        color: Colors.grey, fontSize: 25.sp),
                                   ),
                                 ),
                                 ]),
@@ -205,10 +203,10 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                         ),
                       ),
                       Padding(
-                          padding: const EdgeInsets.only(
+                          padding:  EdgeInsets.only(
                             left: 0.0,
-                            right: 20,
-                            top: 40
+                            right: 20.w,
+                            top: 40.h
                           ),
                           child:new Icon(
                             Icons.chevron_right,
@@ -226,12 +224,12 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
               <Widget>[
                 new Container(
                   color: Colors.white,
-                  child: new Padding(
-                    padding: const EdgeInsets.only(
-                      top: 0.0,
-                      bottom: 10.0,
-                      left: 20,
-                      right: 20
+                  child:  Padding(
+                    padding:  EdgeInsets.only(
+                      top: 0.h,
+                      bottom: 10.h,
+                      left: 20.w,
+                      right: 20.w
                     ),
                     child: new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -269,6 +267,13 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.w),
                         child: Row(
+
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+//                交叉轴的布局方式，对于column来说就是水平方向的布局方式
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          //就是字child的垂直布局方向，向上还是向下
+                          verticalDirection: VerticalDirection.down,
                           children: <Widget>[
                             SizedBox(
                               width: ScreenUtil().setWidth(10.w),
@@ -281,19 +286,18 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                               padding:  EdgeInsets.only(
                                   top: 15.h,
                                   bottom: 15.h,
-                                  left: 60.w,
-                                  right: 20.w
+
                               ),
                               child:  Column(children: <Widget>[
                                 Container(
-                                  height: ScreenUtil().setHeight(60),
-                                  width: ScreenUtil().setWidth(60),
+                                  height: 100.h,
+                                  width: 100.w,
                                   alignment: FractionalOffset.topLeft,
                                   child: Image.asset("assets/packages/images/tab_match.webp"),
                                 ),
                                 Text(
                                   "我的审批",
-                                  style: new TextStyle(color: Colors.black54, fontSize: 12.0),
+                                  style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
                                 ),
 
                               ]),
@@ -308,19 +312,18 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                               padding:  EdgeInsets.only(
                                   top: 10.h,
                                   bottom: 10.h,
-                                  left: 60.w,
-                                  right: 20.w
+
                               ),
                               child:  Column(children: <Widget>[
                                 Container(
-                                  height: ScreenUtil().setHeight(60),
-                                  width: ScreenUtil().setWidth(60),
+                                  height: 100.h,
+                                  width: 100.w,
                                   alignment: FractionalOffset.topLeft,
                                   child: Image.asset("assets/packages/images/tab_match.webp"),
                                 ),
                                 Text(
                                   "已提交",
-                                  style: new TextStyle(color: Colors.black54, fontSize: 12.0),
+                                  style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
                                 ),
 
                               ]),
@@ -337,19 +340,18 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                               padding:  EdgeInsets.only(
                                   top: 10.h,
                                   bottom: 10.h,
-                                  left: 60.w,
-                                  right: 20.w
+
                               ),
                               child:  Column(children: <Widget>[
                                 Container(
-                                  height: ScreenUtil().setHeight(60),
-                                  width: ScreenUtil().setWidth(60),
+                                  height: 100.h,
+                                  width: 100.w,
                                   alignment: FractionalOffset.topLeft,
                                   child: Image.asset("assets/packages/images/tab_match.webp"),
                                 ),
                                 Text(
                                   "用户管理",
-                                  style: new TextStyle(color: Colors.black54, fontSize: 12.0),
+                                  style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
                                 ),
 
                               ]),
@@ -359,25 +361,26 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                               padding:  EdgeInsets.only(
                                   top: 10.h,
                                   bottom: 10.h,
-                                  left: 60.w,
-                                  right: 20.w
+
                               ),
                               child:  Column(children: <Widget>[
                                 Container(
-                                  height: ScreenUtil().setHeight(60),
-                                  width: ScreenUtil().setWidth(60),
+                                  height: 100.h,
+                                  width: 100.w,
                                   alignment: FractionalOffset.topLeft,
                                   child: Image.asset("assets/packages/images/tab_match.webp"),
                                 ),
                                 Text(
                                   "权限管理",
-                                  style: new TextStyle(color: Colors.black54, fontSize: 12.0),
+                                  style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
                                 ),
 
                               ]),
                             ),
 
-
+                            SizedBox(
+                              width: ScreenUtil().setWidth(10.w),
+                            ),
 
                           ],
                         ))),
@@ -385,7 +388,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
 
                  Container(
                   color: Colors.white,
-                  margin: const EdgeInsets.only(top: 20.0),
+                  margin:  EdgeInsets.only(top: 40.h),
                   child: Column(
                     children: <Widget>[
                       GestureDetector(
@@ -394,7 +397,10 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           var ss =  await LocalStorage.get("openid");
                           var sss =ss.toString();
                           if(sss == "" || ss == null || ss == "null"){
-
+                            fluwx
+                                .sendWeChatAuth(
+                                scope: "snsapi_userinfo", state: "wechat_sdk_demo_bind")
+                                .then((data) {});
                           }else{
                             _bindWx(context,"");
                           }
@@ -485,16 +491,16 @@ class ContactItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return new GestureDetector(
       onTap: onPressed,
-      child: new Column(
+      child:  Column(
         children: [
-          new Padding(
-            padding: const EdgeInsets.only(
-              bottom: 4.0,
+           Padding(
+            padding:  EdgeInsets.only(
+              bottom: 4.h,
             ),
-            child: new Text(count, style: new TextStyle(fontSize: 18.0)),
+            child: new Text(count, style: new TextStyle(fontSize: 36.sp)),
           ),
           new Text(title,
-              style: new TextStyle(color: Colors.black54, fontSize: 12.0)),
+              style: new TextStyle(color: Colors.black54, fontSize: 22.sp)),
         ],
       ),
     );

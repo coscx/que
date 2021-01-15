@@ -2049,7 +2049,7 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 600.w,
+                  width: 700.w,
                   height: 800.h,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -2138,45 +2138,51 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                                 ],
                               ),
 
-                              Row(
+                              SingleChildScrollView(
+                                //设置水平方向排列
+                                  scrollDirection: Axis.horizontal,
+                                  child:Row(
                                 children: [
                                   Text("沟通状态: ",style: TextStyle(
                                       fontSize: 14, color: Colors.grey)),
                                   Padding(
                                     padding:
-                                    EdgeInsets.only(left: 10.w),
-                                    child: DropdownButton<String>(
-                                      value: goalValue,
-                                      icon:
-                                      Icon(Icons.keyboard_arrow_down_outlined),
-                                      iconSize: 18.sp,
-                                      elevation: 4,
-                                      underline: Container(
-                                        height: 3.h,
-                                        color: Colors.redAccent,
+                                    EdgeInsets.only(left: 0.w),
+                                    child: Container(
+                                      width: 393.w,
+                                      child: DropdownButton<String>(
+                                        value: goalValue,
+                                        icon:
+                                        Icon(Icons.keyboard_arrow_down_outlined),
+                                        iconSize: 30.sp,
+                                        elevation: 4,
+                                        underline: Container(
+                                          height: 3.h,
+                                          color: Colors.redAccent,
+                                        ),
+                                        onChanged: (String newValue) {
+                                          state(() {
+                                            goalValue = newValue;
+                                          connectStatus=  _getIndexOfList(goals,newValue);
+                                          });
+                                        },
+                                        items: goals
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(
+                                                  value,
+                                                    style: TextStyle(
+                                                fontSize: 32.sp, color: Colors.black)
+                                                ),
+                                              );
+                                            }).toList(),
                                       ),
-                                      onChanged: (String newValue) {
-                                        state(() {
-                                          goalValue = newValue;
-                                        connectStatus=  _getIndexOfList(goals,newValue);
-                                        });
-                                      },
-                                      items: goals
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(
-                                                value,
-                                                  style: TextStyle(
-                                              fontSize: 32.sp, color: Colors.black)
-                                              ),
-                                            );
-                                          }).toList(),
                                     ),
                                   ),
                                 ],
-                              ),
+                              )),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [

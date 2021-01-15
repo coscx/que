@@ -15,6 +15,7 @@ import 'package:flutter_geen/blocs/login/login_event.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class LoginFrom extends StatefulWidget {
   @override
   _LoginFromState createState() => _LoginFromState();
@@ -101,13 +102,13 @@ class _LoginFromState extends State<LoginFrom> {
       Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text("ERP系统",style: TextStyle(fontSize: 25),),
-        SizedBox(height: 5,),
+        Text("ERP系统",style: TextStyle(fontSize: 40.sp),),
+        SizedBox(height: 15.h,),
         Text("登录",style: TextStyle(color: Colors.grey),),
-        SizedBox(height:20,),
+        SizedBox(height:30.h,),
         buildUsernameInput(),
         Stack(
-          alignment: Alignment(.8,0),
+          alignment: Alignment(0.8,0),
           children: [
             buildPasswordInput(),
             FeedbackWidget(
@@ -121,7 +122,7 @@ class _LoginFromState extends State<LoginFrom> {
             Checkbox(value: true, onChanged: (e) => {}),
             Text(
               "自动登录",
-              style: TextStyle(color: Color(0xff444444), fontSize: 14),
+              style: TextStyle(color: Color(0xff444444), fontSize: 30.sp),
             ),
             Spacer(),
             GestureDetector(
@@ -133,7 +134,7 @@ class _LoginFromState extends State<LoginFrom> {
               "如何注册?",
               style: TextStyle(
                   color: Colors.blue,
-                  fontSize: 14,
+                  fontSize: 25.sp,
                   decoration: TextDecoration.underline),
             ))
           ],
@@ -163,9 +164,9 @@ class _LoginFromState extends State<LoginFrom> {
         builder: (ctx) => Dialog(
           elevation: 5,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
+              borderRadius: BorderRadius.all(Radius.circular(10.w))),
           child: Container(
-            width: 50,
+            width: 50.w,
             child: DeleteCategoryDialog(
               title: '注册功能暂未开放',
               content: '请联系主管申请注册',
@@ -194,18 +195,18 @@ class _LoginFromState extends State<LoginFrom> {
   }
 
   Widget _buildBtn(LoginState state) => Container(
-    margin: EdgeInsets.only(top: 10, left: 10, right: 10,bottom: 0),
-    height: 40,
+    margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w,bottom: 0),
+    height: 80.h,
     width: MediaQuery.of(context).size.width,
     child:
     RaisedButton(
       elevation: 0,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20))),
+          borderRadius: BorderRadius.all(Radius.circular(35.w))),
       color: Colors.blue,
       onPressed: state is LoginInital?  _doLogIn :null,
       child: Text("登   录",
-          style: TextStyle(color: Colors.white, fontSize: 18)),
+          style: TextStyle(color: Colors.white, fontSize: 30.sp)),
     ),
   );
 
@@ -216,27 +217,27 @@ class _LoginFromState extends State<LoginFrom> {
           decoration: BoxDecoration(
             border: Border.all(
               color: Colors.grey.withOpacity(0.5),
-              width: 1.0,
+              width: 2.w,
             ),
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(30.w),
           ),
           margin:
-          const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+           EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
           child: Row(
             children: <Widget>[
               Padding(
                 padding:
-                EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
                 child: Icon(
                   Icons.person_outline,
                   color: Colors.grey,
                 ),
               ),
               Container(
-                height: 20.0,
-                width: 1.0,
+                height: 20.h,
+                width: 1.w,
                 color: Colors.grey.withOpacity(0.5),
-                margin: const EdgeInsets.only(left: 00.0, right: 10.0),
+                margin:  EdgeInsets.only(left: 00.0, right: 10.w),
               ),
               Expanded(
                 child: TextField(
@@ -244,7 +245,7 @@ class _LoginFromState extends State<LoginFrom> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: '请输入用户名...',
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: Colors.grey,fontSize: 30.sp),
                   ),
                 ),
               )
@@ -262,27 +263,27 @@ class _LoginFromState extends State<LoginFrom> {
           decoration: BoxDecoration(
             border: Border.all(
               color: Colors.grey.withOpacity(0.5),
-              width: 1.0,
+              width: 2.w,
             ),
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(30.w),
           ),
           margin:
-          const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+           EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
           child: Row(
             children: <Widget>[
               Padding(
                 padding:
-                EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
                 child: Icon(
                   Icons.lock_outline,
                   color: Colors.grey,
                 ),
               ),
               Container(
-                height: 30.0,
-                width: 1.0,
+                height: 30.h,
+                width: 1.w,
                 color: Colors.grey.withOpacity(0.5),
-                margin: const EdgeInsets.only(left: 00.0, right: 10.0),
+                margin:  EdgeInsets.only(left: 00.0, right: 10.w),
               ),
               Expanded(
                 child: TextField(
@@ -291,7 +292,7 @@ class _LoginFromState extends State<LoginFrom> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: '请输入密码...',
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: Colors.grey,fontSize: 30.sp),
                   ),
                 ),
               )

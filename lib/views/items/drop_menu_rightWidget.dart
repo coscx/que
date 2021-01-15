@@ -186,13 +186,7 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
             activeColor: Colors.blue,
             //trackColor: Colors.white10,
             ),
-              Text(
-                minValue.toString()+"",
-                style:  TextStyle(
-                  fontSize: 38.sp,
-                  color: Colors.orangeAccent,
-                ),
-              ),
+
           // Container(
           //   width: 400.w,
           //   child: RangeSlider(
