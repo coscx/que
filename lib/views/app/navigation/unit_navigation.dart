@@ -28,10 +28,12 @@ import 'package:flutter_geen/views/pages/home/home_drawer.dart';
 import 'package:flutter_geen/views/pages/index/index_page.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
 import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:io';
+import 'package:flutter_xupdate/flutter_xupdate.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:flutter_geen/views/dialogs/comment.dart';
+import 'dart:convert';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
+import 'package:package_info/package_info.dart';
 import 'package:umeng_analytics_push/umeng_analytics_push.dart';
 /// 说明: 主题结构 左右滑页 + 底部导航栏
 
@@ -47,7 +49,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
   String debugLable = 'Unknown';
   FltImPlugin im = FltImPlugin();
   static String tfSender = "";
-
+  CheckUpdate checkUpdate = CheckUpdate();
   @override
   void initState() {
     super.initState();
@@ -97,9 +99,15 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     IssuesApi.addToken(token);
     }
 
+    });
+    Future.delayed(Duration(seconds: 1)).then((e) async {
 
+      _checkUpdateVersion();
 
     });
+
+
+
   }
 
 
@@ -341,7 +349,48 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     }
     return type == 'num' ? int.parse(left) : left;
   }
+  // 获取版本
+  Future<dynamic> initPackageInfo () async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+   // version = packageInfo.version;
+  }
 
+  // 检查是否需要版本更新
+  void _checkUpdateVersion () async {
+    await initPackageInfo();
+    try {
+      var response = await IssuesApi.getVersion("app/version/detail?", 'mobile', 'json');
+      if (response["code"] != 0) {
+        //setState(() {
+         // versionData = response["data"];
+        //});
+         Map<String ,dynamic > versionData ={};
+        versionData['isForce'] =true;
+        versionData['hasUpdate'] =true;
+        versionData['isIgnorable']=false;
+        versionData['versionCode']="1.10";
+        versionData['versionName']="123";
+        versionData['updateLog']="435345345";
+        versionData['apkUrl']="https://gugu-1300042725.cos.ap-shanghai.myqcloud.com/1_mTHVZBH.apk";
+        versionData['apkSize']="1567";
+        // 后台返回的版本号是带小数点的（2.8.1）所以去除小数点用于做对比
+        var targetVersion = "120";//response["data"]["versionCode"].replaceAll('.', '');
+        var version="110";
+        // 当前App运行版本
+        var currentVersion = version;//.replaceAll('.', '');
+        if (int.parse(targetVersion) > int.parse(currentVersion)) {
+          if (Platform.isAndroid) { // 安卓弹窗提示本地下载， 交由flutter_xupdate 处理，不用我们干嘛。
+            await checkUpdate.initXUpdate();
+            checkUpdate.checkUpdateByUpdateEntity(versionData); // flutter_xupdate 自定义JSON 方式，
+          } else if (Platform.isIOS) { // IOS 跳转 AppStore
+            //showIOSDialog(); // 弹出ios提示更新框
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
   void onPeerMessageACK(result, int error) {
     //BlocProvider.of<PeerBloc>(context).add(EventReceiveNewMessageAck(Map<String, dynamic>.from(result)));
   }
@@ -449,3 +498,130 @@ class _CenterDockedFloatingActionButtonLocation
 }
 
 num degToRad(num deg) => deg * (math.pi / 180.0);
+
+class CheckUpdate{
+  // 将自定义的json内容解析为UpdateEntity实体类
+  UpdateEntity customParseJson(String json) {
+    AppInfo appInfo = AppInfo.fromJson(json);
+    return UpdateEntity(
+        isForce: appInfo.isForce, // 是否强制更新
+        hasUpdate: appInfo.hasUpdate, // 是否需要更新  默认true， 手动自行判断
+        isIgnorable: appInfo.isIgnorable, // 是否显示 “忽略该版本”
+        versionCode: appInfo.versionCode, // 新版本号
+        versionName: appInfo.versionName, // 新版名称
+        updateContent: appInfo.updateLog, // 新版更新日志
+        downloadUrl: appInfo.apkUrl, // 新版本下载链接
+        apkSize: appInfo.apkSize); // 新版本大小
+  }
+  // 自定义JSON更新
+  checkUpdateByUpdateEntity(Map jsonData) async {
+    var versionCode = jsonData["versionCode"].replaceAll('.', '');
+    var updateText = jsonData["updateLog"].split('。');
+    var updateLog = '';
+    updateText.forEach((t) {
+      updateLog += '\r\n$t';
+    });
+    var rusultJson = {
+      "isForce": jsonData["isForce"] == 1,
+      "hasUpdate": true,
+      "isIgnorable": false,
+      "versionCode": int.parse(versionCode),
+      "versionName": jsonData["versionName"],
+      "updateLog": updateLog,
+      "apkUrl": jsonData["apkUrl"],
+      "apkSize":jsonData["apkSize"]
+    };
+    FlutterXUpdate.updateByInfo(updateEntity: customParseJson(json.encode(rusultJson)));
+  }
+
+  // 初始化插件
+  Future<dynamic> initXUpdate () async {
+    FlutterXUpdate.init(
+      //是否输出日志
+        debug: true,
+        //是否使用post请求
+        isPost: false,
+        //post请求是否是上传json
+        isPostJson: false,
+        //是否开启自动模式
+        isWifiOnly: false,
+        ///是否开启自动模式
+        isAutoMode: false,
+        //需要设置的公共参数
+        supportSilentInstall: false,
+        //在下载过程中，如果点击了取消的话，是否弹出切换下载方式的重试提示弹窗
+        enableRetry: false)
+        .then((value) {
+      print("初始化成功: $value");
+    }).catchError((error) {
+      print(error);
+    });
+    FlutterXUpdate.setUpdateHandler(
+        onUpdateError: (Map<String, dynamic> message) async {
+          print("初始化成功: $message");
+        }, onUpdateParse: (String json) async {
+      //这里是自定义json解析
+      return customParseJson(json);
+    });
+  }
+}
+
+// 使用Dart Data Class Generator插件进行创建  使用命令: Generate from JSON
+class AppInfo {
+  final bool isForce;
+  final bool hasUpdate;
+  final bool isIgnorable;
+  final int versionCode;
+  final String versionName;
+  final String updateLog;
+  final String apkUrl;
+  final int apkSize;
+
+  AppInfo({
+    this.isForce,
+    this.hasUpdate,
+    this.isIgnorable,
+    this.versionCode,
+    this.versionName,
+    this.updateLog,
+    this.apkUrl,
+    this.apkSize,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'isForce': isForce,
+      'hasUpdate': hasUpdate,
+      'isIgnorable': isIgnorable,
+      'versionCode': versionCode,
+      'versionName': versionName,
+      'updateLog': updateLog,
+      'apkUrl': apkUrl,
+      'apkSize': apkSize,
+    };
+  }
+
+  static AppInfo fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+
+    return AppInfo(
+      isForce: map['isForce'],
+      hasUpdate: map['hasUpdate'],
+      isIgnorable: map['isIgnorable'],
+      versionCode: map['versionCode'],
+      versionName: map['versionName'],
+      updateLog: map['updateLog'],
+      apkUrl: map['apkUrl'],
+      apkSize: int.parse(map['apkSize']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  static AppInfo fromJson(String source) => fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'AppInfo isForce: $isForce, hasUpdate: $hasUpdate, isIgnorable: $isIgnorable, versionCode: $versionCode, versionName: $versionName, updateLog: $updateLog, apkUrl: $apkUrl, apkSize: $apkSize';
+  }
+}
