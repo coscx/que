@@ -25,7 +25,7 @@ import 'package:flutter_geen/views/pages/data/big.dart';
 import 'package:flutter_geen/views/pages/data/card.dart';
 import 'package:flutter_geen/views/pages/data/info.dart';
 import 'package:flutter_geen/views/pages/home/home_drawer.dart';
-import 'package:flutter_geen/views/pages/index/index_page.dart';
+import 'package:flt_im_plugin/conversion.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
 import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
 import 'dart:io';
@@ -53,8 +53,6 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-
-
     FltImPlugin().init(host: "mm.3dsqq.com", apiURL: "http://mm.3dsqq.com:8000");
     _controller = PageController();
     tfSender = ValueUtil.toStr(2);
@@ -81,9 +79,21 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
 
       BlocProvider.of<GlobalBloc>(context).add(EventSetMemberId(tfSender));
 
+
+      var count = 0;
+      Map response = await im.getConversations();
+      var  conversions = response["data"];
+      conversions.map((e) {
+        if (e['unreadCount'] > 0){
+          count=count+e['unreadCount'];
+        }
+      }).toList();
+
+      BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
+
     });
 
-    BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(1));
+    //BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(1));
     initPlatformState();
     FlutterNfcReader.onTagDiscovered().listen((onData) {
       print(onData.id);
@@ -436,6 +446,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     }
 
 
+
     //_showNotification(title,content);
     BlocProvider.of<PeerBloc>(context).add(EventReceiveNewMessage(message));
   }
@@ -444,7 +455,17 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
 
   }
 
-  void onNewMessage(result, int error) {
+  void onNewMessage(result, int error)async {
+    var count = 0;
+    Map response = await im.getConversations();
+    var  conversions = response["data"];
+    conversions.map((e) {
+      if (e['unreadCount'] > 0){
+        count=count+e['unreadCount'];
+      }
+    }).toList();
+
+    BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
     BlocProvider.of<ChatBloc>(context).add(EventNewMessage(result));
   }
 }

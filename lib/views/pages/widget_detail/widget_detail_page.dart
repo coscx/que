@@ -2089,7 +2089,7 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                               Navigator.of(context).pop();
                             } ,
                             child: Image.asset('assets/images/btn_close_black.png',
-                              width: 30.w,
+                              width: 40.w,
                             ),
                           ),
                         ),

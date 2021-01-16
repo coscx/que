@@ -6,7 +6,7 @@ import 'package:flutter_geen/blocs/global/global_event.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:flutter_geen/blocs/global/global_state.dart';
 
 /// 说明: 自定义底部导航栏
 
@@ -39,7 +39,13 @@ class _UnitBottomBarState extends State<UnitBottomBar> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
+    return BlocListener<GlobalBloc, GlobalState>(
+    listener: (ctx, state) {
+      setState(() {
+
+      });
+    },child :
+    BottomAppBar(
         elevation: 0,
         //shape: const CircularNotchedRectangle(),
         notchMargin: 5,
@@ -62,7 +68,7 @@ class _UnitBottomBarState extends State<UnitBottomBar> with SingleTickerProvider
             ),
           ]
           ,
-        ));
+        )));
   }
 
   List<String> get info => widget.itemData.keys.toList();
@@ -147,6 +153,13 @@ class _UnitBottomBarState extends State<UnitBottomBar> with SingleTickerProvider
             child:Badge(
                 elevation: 0,
                 showBadge: i==1 ?(bar2 ==0?false:true):(bar3 ==0?false:true),
+                badgeContent: i==1 ?(bar2 ==0?Text(""):Text(bar2.toString(),style: TextStyle(
+                  fontSize: 18.sp,
+                  color: Colors.white,
+                ))):(bar3 ==0?Text(""):Text(bar3.toString(),style: TextStyle(
+                  fontSize: 18.sp,
+                  color: Colors.white,
+                ))),
                 position:BadgePosition.topEnd(top: -ScreenUtil().setHeight(5),end: -ScreenUtil().setWidth(5)),
                 toAnimate: false,
                 child:
@@ -180,10 +193,10 @@ class _UnitBottomBarState extends State<UnitBottomBar> with SingleTickerProvider
     first++;
     setState(() {
       _position = i;
-      if (i==0){ BlocProvider.of<GlobalBloc>(context).add(EventSetBar1(0));}
-      if (i==1){ BlocProvider.of<GlobalBloc>(context).add(EventSetBar2(0));}
-      if (i==2){ BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(0));}
-      if (i==3){ BlocProvider.of<GlobalBloc>(context).add(EventSetBar4(0));}
+      // if (i==0){ BlocProvider.of<GlobalBloc>(context).add(EventSetBar1(0));}
+      // if (i==1){ BlocProvider.of<GlobalBloc>(context).add(EventSetBar2(0));}
+      // if (i==2){BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(0));}
+      // if (i==3){ BlocProvider.of<GlobalBloc>(context).add(EventSetBar4(0));}
       // jumpTo thrid frame(index from 0)
       controllers.value = 0;
       controllers.duration=Duration(milliseconds:700);

@@ -56,7 +56,7 @@ class PhotoWidgetListItem extends StatelessWidget {
           child: Stack(
               children: <Widget>[
                 Material(
-                    color: Theme.of(context).primaryColor.withAlpha(66),
+                    color: Theme.of(context).primaryColor.withAlpha(33),
                     shape: true ? TechnoShapeBorder(color: Theme.of(context).primaryColor.withAlpha(100)) : null,
                     child:
                     isClip

@@ -6,7 +6,7 @@ import 'package:flutter_geen/model/widget_model.dart';
 
 /// 说明: 主页状态类
 
-abstract class ChatState extends Equatable {
+abstract class ChatState {
   const ChatState();
 
   @override

@@ -220,7 +220,14 @@ class ImConversationListPage extends StatelessWidget{
               physics: const AlwaysScrollableScrollPhysics(),
               child: Container(
                 color: Colors.white,
-                child: BlocBuilder<ChatBloc, ChatState>(builder: _buildContent),
+                child: BlocListener<ChatBloc, ChatState>(
+                  listener: (ctx, state) {
+                    if (state is ChatMessageSuccess) {
+
+
+                    }
+
+                  },child:BlocBuilder<ChatBloc, ChatState>(builder: _buildContent)),
               )
 
 
@@ -349,11 +356,20 @@ class ImConversationListPage extends StatelessWidget{
             itemCount: state.message.length,
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
-                  onTap: ()  {
+                  onTap: ()  async{
                     BlocProvider.of<PeerBloc>(context).add(EventFirstLoadMessage(memberId,state.message[index].cid));
                     if (state.message[index].newMsgCount>0){
                       FltImPlugin im = FltImPlugin();
                       im.clearReadCount(cid:state.message[index].cid);
+                      var count = 0;
+                      Map response = await im.getConversations();
+                      var  conversions = response["data"];
+                      conversions.map((e) {
+                        if (e['unreadCount'] > 0){
+                          count=count+e['unreadCount'];
+                        }
+                      }).toList();
+                      BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
                       BlocProvider.of<ChatBloc>(context).add(EventFreshMessage());
                     }
                     Navigator.pushNamed(context, UnitRouter.to_chats, arguments: state.message[index]);
