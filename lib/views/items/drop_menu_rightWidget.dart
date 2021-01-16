@@ -213,8 +213,15 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
           //         });
           //       }),
           // ),
+              Text(
+                minValue.toString()+"",
+                style:  TextStyle(
+                  fontSize: 38.sp,
+                  color: Colors.orangeAccent,
+                ),
+              ),
               Container(
-                width: 458.w,
+                width: 438.w,
                 child: frs.RangeSlider(
                   min: 14.0,
                   max: 70.0,

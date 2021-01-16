@@ -631,6 +631,21 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
     "离异未育",
     "丧偶",
   ];
+
+  List<String> _hasHouseLevel = [
+    "无房",
+    "1套房",
+    "2套房",
+    "3套房及以上",
+    "其他",
+  ];
+
+  List<String> _hasCarLevel = [
+    "",
+    "有车",
+    "无车",
+  ];
+
   Widget _titleTop() {
     return Padding(
       padding:  EdgeInsets.only(left: 1.w, bottom: 0.h, top: 5.h),
@@ -652,7 +667,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       child: Container(
         child: Text(
           //尾部摘要
-          "房: "+photo['has_house'].toString()+"套 车: "+photo['has_car'].toString()+"辆 " +(_marriageLevel[photo['marriage']]) +" 生日:" +(photo['birthday']==null ? "-":photo['birthday'].toString().substring(0,10)),
+          (photo['has_house']==null?"":_hasHouseLevel[photo['has_house']])+" "+(photo['has_car']==null?"":_hasCarLevel[photo['has_car']])+" " +(_marriageLevel[photo['marriage']]) +" 生日:" +(photo['birthday']==null ? "-":photo['birthday'].toString().substring(0,10)),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontSize: 23.sp, shadows: [

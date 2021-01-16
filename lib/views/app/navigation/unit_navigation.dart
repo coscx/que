@@ -365,16 +365,16 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
          // versionData = response["data"];
         //});
          Map<String ,dynamic > versionData ={};
-        versionData['isForce'] =true;
+        versionData['isForce'] =response["data"]['isForce'];
         versionData['hasUpdate'] =true;
         versionData['isIgnorable']=false;
-        versionData['versionCode']="1.10";
-        versionData['versionName']="123";
-        versionData['updateLog']="435345345";
-        versionData['apkUrl']="https://gugu-1300042725.cos.ap-shanghai.myqcloud.com/1_mTHVZBH.apk";
-        versionData['apkSize']="1567";
+        versionData['versionCode']=response["data"]['versionCode'];
+        versionData['versionName']=response["data"]['versionName'];
+        versionData['updateLog']=response["data"]['updateLog'];
+        versionData['apkUrl']=response["data"]['apkUrl'];
+        versionData['apkSize']=response["data"]['apkSize'];
         // 后台返回的版本号是带小数点的（2.8.1）所以去除小数点用于做对比
-        var targetVersion = "120";//response["data"]["versionCode"].replaceAll('.', '');
+        var targetVersion = response["data"]['versionCode'].replaceAll('.', '') ;//response["data"]["versionCode"].replaceAll('.', '');
         var version="110";
         // 当前App运行版本
         var currentVersion = version;//.replaceAll('.', '');

@@ -41,6 +41,8 @@ class _HomePageState extends State<HomePage>
   bool _showAge =  false;
   int _showAgeMin =  16;
   int _showAgeMax =  70;
+  bool _visible =  false;
+  int _visibleCount = 0;
   bool _showChip = false;
   int _selectedIndex=999;
   String serveType ="2";
@@ -265,19 +267,22 @@ class _HomePageState extends State<HomePage>
                             //
                             //   ),
                             // ),
-                           Container(
-                              height: 50.h,
-                              width: 700.w,
-                              padding:  EdgeInsets.only(left: 30.w),
-                              child: ListView(
-                                shrinkWrap: true ,
-                                  scrollDirection: Axis.horizontal,
-                                  children:<Widget>  [
-                                    ...buildLeftRightWidget(),
-                                  _showAge?buildAgeWidget():Container()
-                                  ],
-                                ),
-                            ),
+                           Visibility(
+                             visible: _visible,
+                             child: Container(
+                                height: 50.h,
+                                width: 700.w,
+                                padding:  EdgeInsets.only(left: 30.w),
+                                child: ListView(
+                                  shrinkWrap: true ,
+                                    scrollDirection: Axis.horizontal,
+                                    children:<Widget>  [
+                                      ...buildLeftRightWidget(),
+                                    _showAge?buildAgeWidget():Container()
+                                    ],
+                                  ),
+                              ),
+                           ),
                           ],
                         )),
 
@@ -338,7 +343,8 @@ class _HomePageState extends State<HomePage>
   }
 
    deleteLeftRightWidget(String code ) {
-
+     _visible=false;
+     _visibleCount=0;
      searchParamList.list
         .map((e) {
       if(e.selectName ==code) {
@@ -357,6 +363,16 @@ class _HomePageState extends State<HomePage>
       }
 
     }).toList();
+
+     searchParamList.list.map((e) {
+       if(e.selected !="" && e.selected !=null){
+         _visible=true;
+         _visibleCount++;
+       }
+
+     }).toList();
+
+
   }
 
   Widget buildAgeWidget() {
@@ -366,6 +382,10 @@ class _HomePageState extends State<HomePage>
       onDeleted: (){
         print('onDeleted');
         _showAge =false;
+        if(_visibleCount ==0){
+          _visible=false;
+        }
+
         var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
         var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
         BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
@@ -426,6 +446,26 @@ class _HomePageState extends State<HomePage>
                 var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                 var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
                 BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
+                _visible=false;
+                _visibleCount=0;
+                searchParamList.list.map((e) {
+                  if(e.selected!="" && e.selected !=null){
+                    _visible=true;
+                    _visibleCount++;
+                  }
+
+                }).toList();
+                if(_visibleCount==0){
+                  if(_showAge ==true){
+                    _visible=true;
+                  }else{
+                    _visible=false;
+                  }
+                }else{
+                  _visible=true;
+                }
+
+
                 print("sure click");
                 _showFilter = false;
                 _showSort = false;

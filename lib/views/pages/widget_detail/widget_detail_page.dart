@@ -2024,8 +2024,11 @@ final _Controller = TextEditingController(text: '');
 List<String> goals = ["请选择","1.新分未联系",  "2.号码无效", "3.号码未接通",  "4.可继续沟通", "5.有意向面谈",  "6.确定到店时间", "7.已到店，意愿需跟进", "8.已到店，考虑7天付款",  "9.高级会员,支付预付款",  "10.高级会员，费用已结清", "11.毁单",  "12.放弃"];
 String goalValue = '4.可继续沟通';
 DateTime _date = new DateTime.now();
+DateTime _date1= _date.add(new Duration(days: 3));
 int connect_type=1;
-String time1="",time2="";
+var time1s=_date.toString();
+var time2s=_date.add(new Duration(days: 3)).toString();
+String time1=time1s.substring(0,19),time2=time2s.substring(0,19);
 
 _getStatusIndex(info) {
 
@@ -2061,13 +2064,13 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                     child: Stack(
                       alignment: AlignmentDirectional.topCenter,
                       children: <Widget>[
-                        Positioned(
-                          top: 20.h,
-                          child: Image.asset(
-                            'assets/images/login_top.png',
-                            width: 220.w,
-                          ),
-                        ),
+                        // Positioned(
+                        //   top: 20.h,
+                        //   child: Image.asset(
+                        //     'assets/images/login_top.png',
+                        //     width: 220.w,
+                        //   ),
+                        // ),
 
                         Positioned(
                           top: 30.h,
@@ -2078,8 +2081,10 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                                goalValue = '1.新分未联系';
                                _date = new DateTime.now();
                                connect_type=1;
-                              time1="";
-                              time2="";
+                               var time1s=_date.toString();
+                               var time2s=_date.add(new Duration(days: 3)).toString();
+                                time1=time1s.substring(0,19);
+                                time2=time2s.substring(0,19);
                                _Controller.clear();
                               Navigator.of(context).pop();
                             } ,
@@ -2092,13 +2097,13 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                           padding: EdgeInsets.only(
                             left: 30.w,
                             right: 30.w,
-                            top: 20.h,
+                            top: 0.h,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               SizedBox(
-                                height: 50.h,
+                                height: 0.h,
                               ),
 
                               Row(
@@ -2197,6 +2202,7 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                                           //_change('yyyy-MM-dd HH:mm'),
                                           print(v);
                                           state(() {
+                                            _date=v;
                                             time1 = v.toString().substring(0,19);
                                           });
                                         }
@@ -2217,12 +2223,13 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
 
                                       MyPicker.showPicker(
                                           context: context,
-                                          current: _date,
+                                          current: _date1,
                                           mode: MyPickerMode.dateTime,
                                           onConfirm: (v){
                                             //_change('yyyy-MM-dd HH:mm'),
                                             print(v);
                                             state(() {
+                                              _date1=v;
                                               time2 = v.toString().substring(0,19);
                                             });
                                           }
