@@ -2337,6 +2337,12 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                                     connect_type=1;
                                     time1="";
                                     time2="";
+                                    _date = new DateTime.now();
+                                    connect_type=1;
+                                    var time1s=_date.toString();
+                                    var time2s=_date.add(new Duration(days: 3)).toString();
+                                    time1=time1s.substring(0,19);
+                                    time2=time2s.substring(0,19);
                                     _Controller.clear();
                                     Navigator.of(context).pop();
                                   },

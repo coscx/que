@@ -319,11 +319,11 @@ class _HomePageState extends State<HomePage>
             if(e.selectName !=null){
               _showChip=true;
             }
-           return Container(padding:  EdgeInsets.only(right: 15.w),child:RawChip(
-             label: Text(e.selectName==null?"0":e.selectName),
+           return Container(padding:  EdgeInsets.only(right: 15.w,left: 1.w,top: 1.h,bottom: 1.h),child:RawChip(
+             label: Text(e.selectName==null?"0":e.selectName,style: TextStyle(color: Colors.black, fontSize: 30.sp),),
+             padding: EdgeInsets.only(left: 5.w,right: 5.w,top: 0.h,bottom: 5.h),
              onDeleted: (){
-               print('onDeleted');
-
+               //print('onDeleted');
                //setState(() {
                  deleteLeftRightWidget(e.selectName);
               // });

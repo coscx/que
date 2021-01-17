@@ -633,6 +633,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   ];
 
   List<String> _hasHouseLevel = [
+    "未知",
     "无房",
     "1套房",
     "2套房",

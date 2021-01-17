@@ -16,7 +16,12 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
   String name;
   String color;
   String info;
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    name="";
+  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -31,7 +36,7 @@ class _HomeRightDrawerState extends State<HomeRightDrawer> {
     return Container(
         color: color.withAlpha(33),
         child: ListView(padding: EdgeInsets.zero, children: <Widget>[
-          UnitDrawerHeader(color:color),
+          UnitDrawerHeader(color:color,id: "",),
           _buildTitle(context),
           EditCategoryPanel()
         ]),

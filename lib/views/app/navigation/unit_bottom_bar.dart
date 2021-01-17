@@ -153,13 +153,13 @@ class _UnitBottomBarState extends State<UnitBottomBar> with SingleTickerProvider
             child:Badge(
                 elevation: 0,
                 showBadge: i==1 ?(bar2 ==0?false:true):(bar3 ==0?false:true),
-                badgeContent: i==1 ?(bar2 ==0?Text(""):Text(bar2.toString(),style: TextStyle(
-                  fontSize: 18.sp,
-                  color: Colors.white,
-                ))):(bar3 ==0?Text(""):Text(bar3.toString(),style: TextStyle(
-                  fontSize: 18.sp,
-                  color: Colors.white,
-                ))),
+                // badgeContent: i==1 ?(bar2 ==0?Text(""):Text(bar2.toString(),style: TextStyle(
+                //   fontSize: 18.sp,
+                //   color: Colors.white,
+                // ))):(bar3 ==0?Text(""):Text(bar3.toString(),style: TextStyle(
+                //   fontSize: 18.sp,
+                //   color: Colors.white,
+                // ))),
                 position:BadgePosition.topEnd(top: -ScreenUtil().setHeight(5),end: -ScreenUtil().setWidth(5)),
                 toAnimate: false,
                 child:
