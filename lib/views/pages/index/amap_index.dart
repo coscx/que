@@ -1,4 +1,4 @@
-//
+// import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // class SelectLocationFromMapPage extends StatefulWidget {
@@ -125,8 +125,7 @@
 //                     if (await requestPermission()) {
 //                       await controller.showMyLocation(true);
 //                       await controller?.showLocateControl(true);
-//                       final latLng = await _controller?.getLocation(
-//                           delay: Duration(seconds: 2));
+//                       final latLng = await _controller?.getLocation();
 //                       await enableFluttifyLog(false); // 关闭log
 //                       _loadData(latLng);
 //                     }
@@ -201,7 +200,7 @@
 //                       ),
 //                       onTap: () async {
 //                         await _controller.setCenterCoordinate(
-//                             item.latLng.latitude, item.latLng.longitude,
+//                             item.latLng,
 //                             zoomLevel: 16);
 //                         Navigator.pop(context, {
 //                         'address': item.address,
