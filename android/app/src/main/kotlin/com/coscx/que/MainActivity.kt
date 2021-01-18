@@ -9,13 +9,28 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.GeneratedPluginRegistrant
 import io.github.zileyuan.umeng_analytics_push.UmengAnalyticsPushFlutterAndroid
 import io.github.zileyuan.umeng_analytics_push.UmengAnalyticsPushPlugin
+import android.os.Bundle
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugins.GeneratedPluginRegistrant.registerWith
+
 
 class MainActivity: FlutterActivity() {
     var handler: Handler = Handler(Looper.myLooper())
 
+    //通讯名称,回到手机桌面
+    private val CHANNEL = "android/back/desktop"
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-        GeneratedPluginRegistrant.registerWith(flutterEngine);
+        registerWith(flutterEngine);
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { methodCall, result ->
+            if (methodCall.method == "backDesktop") {
+                result.success(true)
+                moveTaskToBack(false)
+            }
+        }
     }
+
+
 
     override fun onNewIntent(intent: Intent) {
         // Actively update and save the intent every time you go back to the front desk, and then you can get the latest intent

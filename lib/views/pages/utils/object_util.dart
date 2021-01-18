@@ -1,10 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/views/pages/resource/colors.dart';
-
-import 'package:permission_handler/permission_handler.dart';
 
 class ObjectUtil {
   static bool isNotEmpty(Object object) {
@@ -136,10 +133,7 @@ class ObjectUtil {
 
   }
 
-  static Future<Map<PermissionGroup, PermissionStatus>> getPermissions(
-      List<PermissionGroup> permissions) async {
-    return await PermissionHandler().requestPermissions(permissions);
-  }
+
 
   static var clickTime = 0;
 

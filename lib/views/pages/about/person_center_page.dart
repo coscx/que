@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,6 +61,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
     });
 
   }
+
   _bindWx(BuildContext context,String img) {
     showDialog(
         context: context,
@@ -84,17 +86,39 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
         ));
   }
   _showToast(BuildContext ctx, String msg, bool collected) {
-    Toasts.toast(
-      ctx,
-      msg,
-      duration: Duration(milliseconds:  5000 ),
-      action: collected
-          ? SnackBarAction(
-          textColor: Colors.white,
-          label: '收藏夹管理',
-          onPressed: () => Scaffold.of(ctx).openEndDrawer())
-          : null,
-    );
+    // Toasts.toast(
+    //   ctx,
+    //   msg,
+    //   duration: Duration(milliseconds:  5000 ),
+    //   action: collected
+    //       ? SnackBarAction(
+    //       textColor: Colors.white,
+    //       label: '收藏夹管理',
+    //       onPressed: () => Scaffold.of(ctx).openEndDrawer())
+    //       : null,
+    // );
+    BotToast.showNotification(
+
+      leading: (cancel) => Container(
+          child: IconButton(
+            icon: Icon(Icons.error, color: Colors.redAccent),
+            onPressed: cancel,
+          )),
+      title: (text)=>Container(
+        child: Text(msg,style: new TextStyle(
+            color: Colors.black, fontSize: 40.sp)),
+      ),
+      duration: const Duration(seconds: 5),
+
+      trailing: (cancel) => Container(
+        child: IconButton(
+          icon: Icon(Icons.cancel),
+          onPressed: cancel,
+        ),
+      ),
+      onTap: () {
+        BotToast.showText(text: 'Tap toast');
+      },); //弹出简单通知Toast
   }
   @override
   Widget build(BuildContext context) {

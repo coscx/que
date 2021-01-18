@@ -49,7 +49,7 @@ dependencies:
   video_thumbnail: ^0.2.4
   flutter_plugin_record: ^0.3.4
   audioplayers: ^0.17.0
-  permission_handler: '^4.4.0+hotfix.2'
+  permission_handler: '5.0.1+1'
   image_picker: ^0.6.7+14
   vibration: ^1.7.2
   flutter_audio_recorder: ^0.5.5
@@ -88,6 +88,9 @@ dependencies:
   flutter_range_slider: "^1.4.0"
   flutter_xupdate: ^1.0.2
   package_info: ^0.4.3+2
+  amap_flutter_map: ^1.0.0
+  amap_flutter_location: ^1.0.0
+  bot_toast: ^3.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

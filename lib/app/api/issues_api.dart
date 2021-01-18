@@ -324,18 +324,28 @@ class IssuesApi {
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     var data={'name':keyWord,'currentPage':page,'status':"all",'is_passive':"all","store_id":1,"pageSize":20};
-    Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
-    var datas = (rep.data);
-    return datas;
+    try {
+      Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
+      return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
   }
   static Future<Map<String,dynamic>> delPhoto( String imgId, ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     var data={'ids':imgId};
-    Response<dynamic> rep = await dio.post('/api/v1/customer/deleteResources',queryParameters:data );
-    var datas = (rep.data);
-    return datas;
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/deleteResources',queryParameters:data );
+      return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
   }
   static Future<Map<String,dynamic>> getData( ) async {
     var ss = await LocalStorage.get("token");

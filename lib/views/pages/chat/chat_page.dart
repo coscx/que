@@ -47,7 +47,6 @@ import 'package:vibration/vibration.dart';
 class ChatsPage extends StatefulWidget {
 
   final Conversion model;
-
   ChatsPage({this.model});
 
   @override
@@ -89,6 +88,7 @@ class ChatsState extends State<ChatsPage> {
   FltImPlugin im = FltImPlugin();
   FRefreshController controller3;
   bool _isLoading = false;
+   Permission _permission;
   @override
   void initState() {
     // TODO: implement initState
@@ -168,27 +168,19 @@ class ChatsState extends State<ChatsPage> {
     }
   }
   _getPermission() {
-    //请求读写权限
-    ObjectUtil.getPermissions([
-      PermissionGroup.storage,
-      PermissionGroup.camera,
-      PermissionGroup.speech,
-      PermissionGroup.location,
-    ]).then((res) {
-      if (res[PermissionGroup.storage] == PermissionStatus.denied ||
-          res[PermissionGroup.storage] == PermissionStatus.unknown) {
-        //用户拒绝，禁用，或者不可用
-        DialogUtil.showBaseDialog(context, '获取不到权限，APP不能正常使用',
-            right: '去设置', left: '取消', rightClick: (res) {
-          PermissionHandler().openAppSettings();
-        });
-      } else if (res[PermissionGroup.storage] == PermissionStatus.granted) {
-      } else if (res[PermissionGroup.storage] == PermissionStatus.restricted) {
-        //用户同意IOS的回调
-      }
-    });
+    requestPermiss(_permission);
   }
+  void requestPermiss(Permission permission) async {
+    //多个权限申请
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.storage,
+      Permission.location,
+      Permission.speech,
 
+    ].request();
+    print(statuses);
+  }
   _getLocalMessage() async {
 
   }

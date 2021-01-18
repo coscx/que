@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:city_pickers/city_pickers.dart';
 import 'package:city_pickers/modal/result.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/components/permanent/circle.dart';
@@ -189,7 +191,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             ),
           ),
           onTap: () async {
-
+            Navigator.of(context).pushNamed(UnitRouter.baidu_map);
 
           }
           ));
@@ -228,8 +230,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     //监听 CollectBloc 伺机弹出toast
     return BlocListener<DetailBloc, DetailState>(
         listener: (ctx, st) {
-          if (st is DetailWithData){
-
+          if (st is DelSuccessData){
+              _showToast(ctx, st.reason, true);
           }
         },
         child: FeedbackWidget(
@@ -262,422 +264,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   }
   Widget _buildDetail(BuildContext context, DetailState state) {
     //print('build---${state.runtimeType}---');
-    if (state is DetailWithData) {
-      var info = state.userdetails['info'];
-      userDetail=info;
-      List<dynamic> connectList = state.connectList['data'];
-      if (connectList.length>0){
-        Map<String ,dynamic> e=connectList.first;
-        if (e!=null)
-          connectStatus=e['connect_status'];
-      }
-      List<Widget> list = _listViewConnectList(connectList);
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                //CustomsExpansionPanelList()
-                //_item(context),
-                WidgetNodePanel(
-                    codeFamily: 'Inconsolata',
-                    text: "基础资料",
-                    code: "",
-                    show: Container(
-                      width: 500,
-                      // height: 300,
-                      child:
-                      Wrap(
-                          alignment: WrapAlignment.start,
-                          direction: Axis.horizontal,
-                          spacing: 0,
-                          runSpacing: 0,
-                          children: <Widget>[
-                            GestureDetector(
-                            onTap: (){
-
-                            },child: _item_detail(context,Colors.black,Icons.format_list_numbered,"编号",info['code'].toString(),false)),
-                            GestureDetector(
-                            onTap: (){
-                                  _showEditDialog(context,"请输入姓名","",info['name'].toString(),"name",1,info);
-                            },child: _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true)),
-                              GestureDetector(
-                            onTap: (){
-                                    showPickerArray(context,[["未知","男生","女生"]],info['gender']==0?[1]:[info['gender']],"gender",info,"",true);
-                            },child:  _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true)),
-                            GestureDetector(
-                            onTap: (){
-
-                            },child: _item_detail(context,Colors.black,Icons.contact_page_outlined,"年龄",info['age']==0?"-":info['age'].toString()+"岁",false)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerDateTime(context,info['birthday']==null?"-":info['birthday'].toString(),"birthday",info);
-                            },child:  _item_detail(context,Colors.black,Icons.broken_image_outlined,"生日",info['birthday']==null?"-":info['picker.adapter.text']!=""?info['birthday'].toString():info['birthday'].toString().substring(0,10)+"("+info['chinese_zodiac']+"-"+info['zodiac']+")",true)),
-                            GestureDetector(
-                            onTap: (){
-
-                            },child:  _item_detail(context,Colors.red,Icons.settings_backup_restore_outlined,"八字",info['bazi'].toString(),false)),
-                            GestureDetector(
-                            onTap: (){
-
-                           },child:  _item_detail(context,Colors.orange,Icons.whatshot,"五行",info['wuxing'].toString(),false)),
-                            GestureDetector(
-                            onTap: () async {
-                              Result result = await CityPickers.showCityPicker(
-                                  context: context,
-                                  locationCode: info['np_area_code'] =="" ? (info['np_city_code'] ==""? "320500":info['np_city_code'] ) :info['np_area_code'] ,
-                                  cancelWidget: Text("取消",style: TextStyle(color: Colors.black),),
-                                  confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
-                              );
-                              print(result);
-                              if(result !=null){
-                                var results= await IssuesApi.editCustomerAddress(info['uuid'],1,result);
-                                if(results['code']==200){
-                                  BlocProvider.of<DetailBloc>(context).add(EditDetailEventAddress(result,1));
-                                  _showToast(context,"编辑成功",false);
-                                }else{
-
-                                  _showToast(context,results['message'],false);
-                                }
-                              }
-
-                            },child:  _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place']==null?"-":(info['native_place']==""?"-":info['native_place'].toString()),true)),
-                            GestureDetector(
-                            onTap: () async {
-                              Result result = await CityPickers.showCityPicker(
-                                  context: context,
-                                  locationCode: info['lp_area_code'] =="" ? (info['lp_city_code'] ==""? "320500":info['lp_city_code'] ) :info['lp_area_code'] ,
-                                  cancelWidget: Text("取消",style: TextStyle(color: Colors.black),),
-                                  confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
-                              );
-                              print(result);
-                              if(result !=null){
-                                var results= await IssuesApi.editCustomerAddress(info['uuid'],2,result);
-                                if(results['code']==200){
-                                  BlocProvider.of<DetailBloc>(context).add(EditDetailEventAddress(result,2));
-                                  _showToast(context,"编辑成功",false);
-                                }else{
-                                  _showToast(context,results['message'],false);
-                                }
-                              }
-                            },child:  _item_detail(context,Colors.black,Icons.house_outlined,"居住",info['location_place']==null?"-":(info['location_place']==""?"-":info['location_place'].toString()),true)),
-                            GestureDetector(
-                            onTap: (){
-
-                            },child:  _item_detail(context,Colors.black,Icons.point_of_sale,"销售",info['sale_user'].toString(),false)),
-                            GestureDetector(
-                            onTap: (){
-                            showPickerArray(context,[_nationLevel],info['nation']==0?[1]:[info['nation']],"nation",info,"",true);
-                            },child: _item_detail(context,Colors.black,Icons.gamepad_outlined,"民族",info['nation']==""?"-":_getNationLevel((info['nation'])),true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_getHeightList()],info['height']==0?[70]:[_getIndexOfList(_getHeightList(),info['height'].toString())],"height",info,"身高(cm)",false);
-                            },child:  _item_detail(context,Colors.black,Icons.height,"身高",info['height']==0?"-":info['height'].toString()+"cm",true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_getWeightList()],info['weight']==0?[35]:[_getIndexOfList(_getWeightList(),info['weight'].toString())],"weight",info,"体重(kg)",false);
-                            },child:  _item_detail(context,Colors.black,Icons.line_weight,"体重",info['weight']==0?"-":info['weight'].toString()+"kg",true)),
-                            GestureDetector(
-                            onTap: (){
-
-                            },child:  _item_detail(context,Colors.black,Icons.design_services_outlined,"服务",info['serve_user']==""?"-":info['serve_user'].toString(),false)),
-                            GestureDetector(
-                            onTap: (){
-                              _showEditDialog(context,"请输入兴趣","",info['interest']==null?"-":(info['interest']==""?"-":info['interest'].toString()),"interest",5,info);
-                            },child:  _item_detail(context,Colors.black,Icons.integration_instructions_outlined,"兴趣",info['interest']==""?"-":info['interest'].toString(),true)),
-                            GestureDetector(
-                            onTap: (){
-                            showPickerArray(context,[_floodLevel],info['blood_type']==0?[3]:[info['blood_type']],"blood_type",info,"",true);
-                            },child:  _item_detail(context,Colors.black,Icons.blur_on_outlined,"血型",info['blood_type']==0?"-":_getFloodLevel(info['blood_type']),true)),
-                            GestureDetector(
-                            onTap: (){
-                              _showEditDialog(context,"请输入择偶要求","",info['demands']==null?"":(info['demands']==""?"":info['demands'].toString()),"demands",5,info);
-                            },child:   _item_detail(context,Colors.black,Icons.developer_mode,"择偶",info['demands']==null?"-":(info['demands']==""?"-":info['demands'].toString()),true)),
-                            GestureDetector(
-                            onTap: (){
-                              _showEditDialog(context,"请输入备注","",info['remark']==null?"":(info['remark']==""?"":info['remark'].toString()),"remark",5,info);
-                            },child:    _item_detail(context,Colors.black,Icons.bookmarks_outlined,"备注",info['remark']==null?"-":(info['remark']==""?"-":info['remark'].toString()),true)),
-
-                          ]
-                      ),
-
-                    )
-                ),
-
-
-              ],
-            ),
-
-
-          ),
-
-          Container(
-            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-
-                //CustomsExpansionPanelList()
-                //_item(context),
-                WidgetNodePanel(
-                    codeFamily: 'Inconsolata',
-                    text: "学历工作及资产",
-                    code: "",
-                    show: Container(
-                      width: 500,
-                      // height: 300,
-                      child:
-                      Wrap(
-                          alignment: WrapAlignment.start,
-                          direction: Axis.horizontal,
-                          spacing: 0,
-                          runSpacing: 0,
-                          children: <Widget>[
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_EduLevel],info['education']==0?[1]:[info['education']],"education",info,"",true);
-                            } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":_getEduLevel(info['education']),true)),
-                            GestureDetector(
-                            onTap: (){
-                              _showEditDialog(context,"请输入毕业院校","",info['school']==null?"":(info['school']==""?"":info['school'].toString()),"school",1,info);
-                            } ,child:_item_detail_gradute(context,Colors.black,Icons.school,"毕业院校",info['school'].toString()==""?"-":info['school'].toString(),true)),
-                            GestureDetector(
-                            onTap: (){
-                              _showEditDialog(context,"请输入所学专业","",info['major']==null?"":(info['major']==""?"":info['major'].toString()),"major",1,info);
-                            } ,child:_item_detail_gradute(context,Colors.black,Icons.tab,"所学专业",info['major']==""?"-":info['major'].toString(),true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_companyTypeLevel],info['work']==0?[1]:[info['work']],"work",info,"",true);
-                            } ,child:_item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":_getCompanyLevel(info['work'])+"",true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_WorkTypeLevel],info['work_job']==0?[1]:[info['work_job']],"work_job",info,"",true);
-                            } ,child:_item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":_getWorkType(info['work_job']),true)),
-                            GestureDetector(
-                            onTap: (){
-                              _showEditDialog(context,"请输入职位描述","",info['work_industry']==null?"":(info['work_industry']==""?"":info['work_industry'].toString()),"work_industry",5,info);
-                            } ,child:_item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_WorkOverTimeLevel],info['work_overtime']==0?[1]:[info['work_overtime']],"work_overtime",info,"",true);
-                            } ,child:_item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":_getWorkOverTime(info['work_overtime']),true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_IncomeLevel],info['income']==0?[1]:[info['income']],"income",info,"",true);
-                            } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":_getIncome(info['income']),true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_hasHouseLevel],info['has_house']==0?[1]:[info['has_house']],"has_house",info,"",true);
-                            } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.house_outlined,"是否有房",info['has_house']==0?"-":_getHasHouse(info['has_house']),true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_houseFutureLevel],info['loan_record']==0?[1]:[info['loan_record']],"loan_record",info,"",true);
-                            } ,child: _item_detail_gradute(context,Colors.black,Icons.copyright_rounded,"房贷情况",info['loan_record']==0?"-":_getHouseFuture(info['loan_record']),true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_hasCarLevel],info['has_car']==0?[1]:[info['has_car']],"has_car",info,"",true);
-                            } ,child:_item_detail_gradute(context,Colors.black,Icons.car_rental,"是否有车",info['has_car']==0?"-":_getHasCar(info['has_car']),true)),
-                            GestureDetector(
-                            onTap: (){
-                              showPickerArray(context,[_carLevelLevel],info['car_type']==0?[1]:[info['car_type']],"car_type",info,"",true);
-                            } ,child: _item_detail_gradute(context,Colors.black,Icons.wb_auto_outlined,"车辆档次",info['car_type']==0?"-":_getCarLevel(info['car_type']),true)),
-
-                          ]
-                      ),
-                    )
-                ),
-              ],
-            ),
-
-          ),
-
-          Container(
-            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                //CustomsExpansionPanelList()
-                //_item(context),
-                WidgetNodePanel(
-                    codeFamily: 'Inconsolata',
-                    text: "婚姻及父母家庭",
-                    code: "",
-                    show: Container(
-                      width: 500,
-                      // height: 300,
-                      child:
-                      Wrap(
-                          alignment: WrapAlignment.start,
-                          direction: Axis.horizontal,
-                          spacing: 0,
-                          runSpacing: 0,
-                          children: <Widget>[
-                          GestureDetector(
-                          onTap: (){
-                            showPickerArray(context,[_marriageLevel],info['marriage']==0?[1]:[info['marriage']],"marriage",info,"",true);
-                         } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",info['marriage']==0?"-":_getMarriageLevel(info['marriage']),true)),
-                          GestureDetector(
-                          onTap: (){
-                                showPickerArray(context,[_childLevel],info['has_child']==0?[1]:[info['has_child']],"has_child",info,"",true);
-                          } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.child_care,"子女信息",info['has_child']==0?"-":_getChildLevel(info['has_child']),true)),
-                          GestureDetector(
-                          onTap: (){
-                            _showEditDialog(context,"请输入子女备注","",info['child_remark']==null?"":(info['child_remark']==""?"":info['child_remark'].toString()),"child_remark",5,info);
-                          } ,child:_item_detail_gradute(context,Colors.black,Icons.mark_chat_read_outlined,"子女备注",info['child_remark']==""?"-":info['child_remark'].toString(),true)),
-                          GestureDetector(
-                          onTap: (){
-                            showPickerArray(context,[_onlyChildLevel],info['only_child']==0?[1]:[info['only_child']],"only_child",info,"",true);
-                          } ,child:_item_detail_gradute(context,Colors.black,Icons.looks_one_outlined,"独生子女",info['only_child']==0?"-":_getOnlyChildLevel(info['only_child'])+"",true)),
-                          GestureDetector(
-                          onTap: (){
-                            showPickerArray(context,[_parentLevel],info['parents']==0?[1]:[info['parents']],"parents",info,"",true);
-                          } ,child: _item_detail_gradute(context,Colors.black,Icons.watch_later_outlined,"父母状况",info['parents']==0?"-":_getParentLevel(info['parents']),true)),
-                          GestureDetector(
-                          onTap: (){
-                            _showEditDialog(context,"请输入父亲职业","",info['father_work']==null?"":(info['father_work']==""?"":info['father_work'].toString()),"father_work",1,info);
-                          } ,child: _item_detail_gradute(context,Colors.black,Icons.attribution_rounded,"父亲职业",info['father_work']==""?"-":info['father_work'].toString(),true)),
-                          GestureDetector(
-                          onTap: (){
-                            _showEditDialog(context,"请输入母亲职业","",info['mother_work']==null?"":(info['mother_work']==""?"":info['mother_work'].toString()),"mother_work",1,info);
-                          } ,child:_item_detail_gradute(context,Colors.black,Icons.sports_motorsports_outlined,"母亲职业",info['mother_work']==""?"-":info['mother_work'].toString(),true)),
-                          GestureDetector(
-                          onTap: (){
-                            _showEditDialog(context,"请输入父母收入","",info['parents_income']==null?"":(info['parents_income']==""?"":info['parents_income'].toString()),"parents_income",1,info);
-                          } ,child: _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on,"父母收入",info['parents_income']==""?"-":info['parents_income'].toString(),true)),
-                          GestureDetector(
-                          onTap: (){
-                            showPickerArray(context,[_parentProtectLevel],info['parents_insurance']==0?[1]:[info['parents_insurance']],"parents_insurance",info,"",true);
-                          } ,child: _item_detail_gradute(context,Colors.redAccent,Icons.nine_k,"父母社保",info['parents_insurance']==0?"-":_getParentProtectLevel(info['parents_insurance']),true)),
-                          ]
-                      ),
-                    )
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                //CustomsExpansionPanelList()
-                //_item(context),
-                WidgetNodePanel(
-                    codeFamily: 'Inconsolata',
-                    text: "用户画像相关",
-                    code: "",
-                    show: Container(
-                      width: 500,
-                      // height: 300,
-                      child:
-                      Wrap(
-                          alignment: WrapAlignment.start,
-                          direction: Axis.horizontal,
-                          spacing: 0,
-                          runSpacing: 0,
-                          children: <Widget>[
-                          GestureDetector(
-                          onTap: (){
-                            showPickerArray(context,[_faithLevel],info['faith']==0?[0]:[info['faith']],"faith",info,"",true);
-                          } ,child:_item_detail_gradute(context,Colors.black,Icons.fastfood,"宗教信仰",info['faith']==0?"-":_getFaithLevel(info['faith']),true)),
-                          GestureDetector(
-                          onTap: (){
-                            showPickerArray(context,[_smokeLevel],info['smoke']==0?[0]:[info['smoke']],"smoke",info,"",true);
-                          } ,child:_item_detail_gradute(context,Colors.black,Icons.smoking_rooms,"是否吸烟",info['smoke']==0?"-":_getSmokeLevel(info['smoke']),true)),
-                          GestureDetector(
-                          onTap: (){
-                            showPickerArray(context,[_drinkLevel],info['drinkwine']==0?[0]:[info['drinkwine']],"drinkwine",info,"",true);
-                          } ,child:_item_detail_gradute(context,Colors.black,Icons.wine_bar,"是否喝酒",info['drinkwine']==0?"-":_getDrinkLevel(info['drinkwine']),true)),
-                          GestureDetector(
-                          onTap: (){
-                            showPickerArray(context,[_lifeLevel],info['live_rest']==0?[0]:[info['live_rest']],"live_rest",info,"",true);
-                          } ,child:_item_detail_gradute(context,Colors.black,Icons.nightlife,"生活作息",info['live_rest']==0?"-":_getLifeLevel(info['live_rest'])+"",true)),
-                          GestureDetector(
-                          onTap: (){
-                            showPickerArray(context,[_creatLevel],info['want_child']==0?[0]:[info['want_child']],"want_child",info,"",true);
-                          } ,child:_item_detail_gradute(context,Colors.black,Icons.child_friendly_outlined,"生育欲望",info['want_child']==0?"-":_getCreatLevel(info['want_child']),true)),
-                         GestureDetector(
-                         onTap: (){
-                           showPickerArray(context,[_marriageDateLevel],info['marry_time']==0?[0]:[info['marry_time']],"marry_time",info,"",true);
-                         } ,child:_item_detail_gradute(context,Colors.black,Icons.margin,"结婚预期",info['marry_time']==0?"-":_getMarriageDateLevel(info['marry_time']),true)),
-                          ]
-                      ),
-                    )
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                //CustomsExpansionPanelList()
-                //_item(context),
-                WidgetNodePanel(
-                    codeFamily: 'Inconsolata',
-                    text: "用户图片",
-                    code: "",
-                    show: Container(
-                      width: 500,
-                      // height: 300,
-                      child:
-                      Wrap(
-                          alignment: WrapAlignment.start,
-                          direction: Axis.horizontal,
-                          spacing: 0,
-                          runSpacing: 0,
-                          children: <Widget>[
-                            _buildLinkTo(
-                              context,
-                              state.userdetails,
-                            ),
-                          ]
-                      ),
-                    )
-                ),
-              ],
-            ),
-          ),
-
-          //_buildNodes(state.nodes, state.widgetModel.name)
-          Container(
-              margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    //CustomsExpansionPanelList()
-                    //_item(context),
-                    WidgetNodePanel(
-                        codeFamily: 'Inconsolata',
-                        text: "客户沟通记录",
-                        code: "",
-                        show: list.length > 0 ? Container(
-                          width: 500,
-                          // height: 300,
-                          child:
-                          Wrap(
-                              alignment: WrapAlignment.start,
-                              direction: Axis.horizontal,
-                              spacing: 0,
-                              runSpacing: 0,
-                              children: <Widget>[
-                                ...list
-                              ]
-                          ),
-                        ):Container(child: Text("暂无沟通"),)
-                    ),
-                  ],
-                ),
-            ),
-
-        ],
-      );
+    if (state is DetailWithData  ) {
+     return _BuildStateDetail(context,state.userdetails,state.connectList);
     }
-
+    if(state is DelSuccessData){
+      return _BuildStateDetail(context,state.userdetails,state.connectList);
+    }
     if(state is DetailLoading){
 
     }
@@ -694,7 +286,421 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       )),
     );
   }
+  Widget _BuildStateDetail(BuildContext context, Map<String,dynamic> userdetails, Map<String,dynamic> connectLists ){
+    var info = userdetails['info'];
+    userDetail=info;
+    List<dynamic> connectList = connectLists['data'];
+    if (connectList.length>0){
+      Map<String ,dynamic> e=connectList.first;
+      if (e!=null)
+        connectStatus=e['connect_status'];
+    }
+    List<Widget> list = _listViewConnectList(connectList);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              //CustomsExpansionPanelList()
+              //_item(context),
+              WidgetNodePanel(
+                  codeFamily: 'Inconsolata',
+                  text: "基础资料",
+                  code: "",
+                  show: Container(
+                    width: 500,
+                    // height: 300,
+                    child:
+                    Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[
+                          GestureDetector(
+                              onTap: (){
 
+                              },child: _item_detail(context,Colors.black,Icons.format_list_numbered,"编号",info['code'].toString(),false)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入姓名","",info['name'].toString(),"name",1,info);
+                              },child: _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[["未知","男生","女生"]],info['gender']==0?[1]:[info['gender']],"gender",info,"",true);
+                              },child:  _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true)),
+                          GestureDetector(
+                              onTap: (){
+
+                              },child: _item_detail(context,Colors.black,Icons.contact_page_outlined,"年龄",info['age']==0?"-":info['age'].toString()+"岁",false)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerDateTime(context,info['birthday']==null?"-":info['birthday'].toString(),"birthday",info);
+                              },child:  _item_detail(context,Colors.black,Icons.broken_image_outlined,"生日",info['birthday']==null?"-":info['picker.adapter.text']!=""?info['birthday'].toString():info['birthday'].toString().substring(0,10)+"("+info['chinese_zodiac']+"-"+info['zodiac']+")",true)),
+                          GestureDetector(
+                              onTap: (){
+
+                              },child:  _item_detail(context,Colors.red,Icons.settings_backup_restore_outlined,"八字",info['bazi'].toString(),false)),
+                          GestureDetector(
+                              onTap: (){
+
+                              },child:  _item_detail(context,Colors.orange,Icons.whatshot,"五行",info['wuxing'].toString(),false)),
+                          GestureDetector(
+                              onTap: () async {
+                                Result result = await CityPickers.showCityPicker(
+                                    context: context,
+                                    locationCode: info['np_area_code'] =="" ? (info['np_city_code'] ==""? "320500":info['np_city_code'] ) :info['np_area_code'] ,
+                                    cancelWidget: Text("取消",style: TextStyle(color: Colors.black),),
+                                    confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
+                                );
+                                print(result);
+                                if(result !=null){
+                                  var results= await IssuesApi.editCustomerAddress(info['uuid'],1,result);
+                                  if(results['code']==200){
+                                    BlocProvider.of<DetailBloc>(context).add(EditDetailEventAddress(result,1));
+                                    _showToast(context,"编辑成功",false);
+                                  }else{
+
+                                    _showToast(context,results['message'],false);
+                                  }
+                                }
+
+                              },child:  _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place']==null?"-":(info['native_place']==""?"-":info['native_place'].toString()),true)),
+                          GestureDetector(
+                              onTap: () async {
+                                Result result = await CityPickers.showCityPicker(
+                                    context: context,
+                                    locationCode: info['lp_area_code'] =="" ? (info['lp_city_code'] ==""? "320500":info['lp_city_code'] ) :info['lp_area_code'] ,
+                                    cancelWidget: Text("取消",style: TextStyle(color: Colors.black),),
+                                    confirmWidget: Text("确定",style: TextStyle(color: Colors.black),)
+                                );
+                                print(result);
+                                if(result !=null){
+                                  var results= await IssuesApi.editCustomerAddress(info['uuid'],2,result);
+                                  if(results['code']==200){
+                                    BlocProvider.of<DetailBloc>(context).add(EditDetailEventAddress(result,2));
+                                    _showToast(context,"编辑成功",false);
+                                  }else{
+                                    _showToast(context,results['message'],false);
+                                  }
+                                }
+                              },child:  _item_detail(context,Colors.black,Icons.house_outlined,"居住",info['location_place']==null?"-":(info['location_place']==""?"-":info['location_place'].toString()),true)),
+                          GestureDetector(
+                              onTap: (){
+
+                              },child:  _item_detail(context,Colors.black,Icons.point_of_sale,"销售",info['sale_user'].toString(),false)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_nationLevel],info['nation']==0?[1]:[info['nation']],"nation",info,"",true);
+                              },child: _item_detail(context,Colors.black,Icons.gamepad_outlined,"民族",info['nation']==""?"-":_getNationLevel((info['nation'])),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_getHeightList()],info['height']==0?[70]:[_getIndexOfList(_getHeightList(),info['height'].toString())],"height",info,"身高(cm)",false);
+                              },child:  _item_detail(context,Colors.black,Icons.height,"身高",info['height']==0?"-":info['height'].toString()+"cm",true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_getWeightList()],info['weight']==0?[35]:[_getIndexOfList(_getWeightList(),info['weight'].toString())],"weight",info,"体重(kg)",false);
+                              },child:  _item_detail(context,Colors.black,Icons.line_weight,"体重",info['weight']==0?"-":info['weight'].toString()+"kg",true)),
+                          GestureDetector(
+                              onTap: (){
+
+                              },child:  _item_detail(context,Colors.black,Icons.design_services_outlined,"服务",info['serve_user']==""?"-":info['serve_user'].toString(),false)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入兴趣","",info['interest']==null?"-":(info['interest']==""?"-":info['interest'].toString()),"interest",5,info);
+                              },child:  _item_detail(context,Colors.black,Icons.integration_instructions_outlined,"兴趣",info['interest']==""?"-":info['interest'].toString(),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_floodLevel],info['blood_type']==0?[3]:[info['blood_type']],"blood_type",info,"",true);
+                              },child:  _item_detail(context,Colors.black,Icons.blur_on_outlined,"血型",info['blood_type']==0?"-":_getFloodLevel(info['blood_type']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入择偶要求","",info['demands']==null?"":(info['demands']==""?"":info['demands'].toString()),"demands",5,info);
+                              },child:   _item_detail(context,Colors.black,Icons.developer_mode,"择偶",info['demands']==null?"-":(info['demands']==""?"-":info['demands'].toString()),true)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入备注","",info['remark']==null?"":(info['remark']==""?"":info['remark'].toString()),"remark",5,info);
+                              },child:    _item_detail(context,Colors.black,Icons.bookmarks_outlined,"备注",info['remark']==null?"-":(info['remark']==""?"-":info['remark'].toString()),true)),
+
+                        ]
+                    ),
+
+                  )
+              ),
+
+
+            ],
+          ),
+
+
+        ),
+
+        Container(
+          margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+
+              //CustomsExpansionPanelList()
+              //_item(context),
+              WidgetNodePanel(
+                  codeFamily: 'Inconsolata',
+                  text: "学历工作及资产",
+                  code: "",
+                  show: Container(
+                    width: 500,
+                    // height: 300,
+                    child:
+                    Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_EduLevel],info['education']==0?[1]:[info['education']],"education",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":_getEduLevel(info['education']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入毕业院校","",info['school']==null?"":(info['school']==""?"":info['school'].toString()),"school",1,info);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.school,"毕业院校",info['school'].toString()==""?"-":info['school'].toString(),true)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入所学专业","",info['major']==null?"":(info['major']==""?"":info['major'].toString()),"major",1,info);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.tab,"所学专业",info['major']==""?"-":info['major'].toString(),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_companyTypeLevel],info['work']==0?[1]:[info['work']],"work",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":_getCompanyLevel(info['work'])+"",true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_WorkTypeLevel],info['work_job']==0?[1]:[info['work_job']],"work_job",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":_getWorkType(info['work_job']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入职位描述","",info['work_industry']==null?"":(info['work_industry']==""?"":info['work_industry'].toString()),"work_industry",5,info);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_WorkOverTimeLevel],info['work_overtime']==0?[1]:[info['work_overtime']],"work_overtime",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":_getWorkOverTime(info['work_overtime']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_IncomeLevel],info['income']==0?[1]:[info['income']],"income",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":_getIncome(info['income']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_hasHouseLevel],info['has_house']==0?[1]:[info['has_house']],"has_house",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.house_outlined,"是否有房",info['has_house']==0?"-":_getHasHouse(info['has_house']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_houseFutureLevel],info['loan_record']==0?[1]:[info['loan_record']],"loan_record",info,"",true);
+                              } ,child: _item_detail_gradute(context,Colors.black,Icons.copyright_rounded,"房贷情况",info['loan_record']==0?"-":_getHouseFuture(info['loan_record']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_hasCarLevel],info['has_car']==0?[1]:[info['has_car']],"has_car",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.car_rental,"是否有车",info['has_car']==0?"-":_getHasCar(info['has_car']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_carLevelLevel],info['car_type']==0?[1]:[info['car_type']],"car_type",info,"",true);
+                              } ,child: _item_detail_gradute(context,Colors.black,Icons.wb_auto_outlined,"车辆档次",info['car_type']==0?"-":_getCarLevel(info['car_type']),true)),
+
+                        ]
+                    ),
+                  )
+              ),
+            ],
+          ),
+
+        ),
+
+        Container(
+          margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              //CustomsExpansionPanelList()
+              //_item(context),
+              WidgetNodePanel(
+                  codeFamily: 'Inconsolata',
+                  text: "婚姻及父母家庭",
+                  code: "",
+                  show: Container(
+                    width: 500,
+                    // height: 300,
+                    child:
+                    Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_marriageLevel],info['marriage']==0?[1]:[info['marriage']],"marriage",info,"",true);
+                              } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",info['marriage']==0?"-":_getMarriageLevel(info['marriage']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_childLevel],info['has_child']==0?[1]:[info['has_child']],"has_child",info,"",true);
+                              } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.child_care,"子女信息",info['has_child']==0?"-":_getChildLevel(info['has_child']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入子女备注","",info['child_remark']==null?"":(info['child_remark']==""?"":info['child_remark'].toString()),"child_remark",5,info);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.mark_chat_read_outlined,"子女备注",info['child_remark']==""?"-":info['child_remark'].toString(),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_onlyChildLevel],info['only_child']==0?[1]:[info['only_child']],"only_child",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.looks_one_outlined,"独生子女",info['only_child']==0?"-":_getOnlyChildLevel(info['only_child'])+"",true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_parentLevel],info['parents']==0?[1]:[info['parents']],"parents",info,"",true);
+                              } ,child: _item_detail_gradute(context,Colors.black,Icons.watch_later_outlined,"父母状况",info['parents']==0?"-":_getParentLevel(info['parents']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入父亲职业","",info['father_work']==null?"":(info['father_work']==""?"":info['father_work'].toString()),"father_work",1,info);
+                              } ,child: _item_detail_gradute(context,Colors.black,Icons.attribution_rounded,"父亲职业",info['father_work']==""?"-":info['father_work'].toString(),true)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入母亲职业","",info['mother_work']==null?"":(info['mother_work']==""?"":info['mother_work'].toString()),"mother_work",1,info);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.sports_motorsports_outlined,"母亲职业",info['mother_work']==""?"-":info['mother_work'].toString(),true)),
+                          GestureDetector(
+                              onTap: (){
+                                _showEditDialog(context,"请输入父母收入","",info['parents_income']==null?"":(info['parents_income']==""?"":info['parents_income'].toString()),"parents_income",1,info);
+                              } ,child: _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on,"父母收入",info['parents_income']==""?"-":info['parents_income'].toString(),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_parentProtectLevel],info['parents_insurance']==0?[1]:[info['parents_insurance']],"parents_insurance",info,"",true);
+                              } ,child: _item_detail_gradute(context,Colors.redAccent,Icons.nine_k,"父母社保",info['parents_insurance']==0?"-":_getParentProtectLevel(info['parents_insurance']),true)),
+                        ]
+                    ),
+                  )
+              ),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              //CustomsExpansionPanelList()
+              //_item(context),
+              WidgetNodePanel(
+                  codeFamily: 'Inconsolata',
+                  text: "用户画像相关",
+                  code: "",
+                  show: Container(
+                    width: 500,
+                    // height: 300,
+                    child:
+                    Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_faithLevel],info['faith']==0?[0]:[info['faith']],"faith",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.fastfood,"宗教信仰",info['faith']==0?"-":_getFaithLevel(info['faith']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_smokeLevel],info['smoke']==0?[0]:[info['smoke']],"smoke",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.smoking_rooms,"是否吸烟",info['smoke']==0?"-":_getSmokeLevel(info['smoke']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_drinkLevel],info['drinkwine']==0?[0]:[info['drinkwine']],"drinkwine",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.wine_bar,"是否喝酒",info['drinkwine']==0?"-":_getDrinkLevel(info['drinkwine']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_lifeLevel],info['live_rest']==0?[0]:[info['live_rest']],"live_rest",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.nightlife,"生活作息",info['live_rest']==0?"-":_getLifeLevel(info['live_rest'])+"",true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_creatLevel],info['want_child']==0?[0]:[info['want_child']],"want_child",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.child_friendly_outlined,"生育欲望",info['want_child']==0?"-":_getCreatLevel(info['want_child']),true)),
+                          GestureDetector(
+                              onTap: (){
+                                showPickerArray(context,[_marriageDateLevel],info['marry_time']==0?[0]:[info['marry_time']],"marry_time",info,"",true);
+                              } ,child:_item_detail_gradute(context,Colors.black,Icons.margin,"结婚预期",info['marry_time']==0?"-":_getMarriageDateLevel(info['marry_time']),true)),
+                        ]
+                    ),
+                  )
+              ),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              //CustomsExpansionPanelList()
+              //_item(context),
+              WidgetNodePanel(
+                  codeFamily: 'Inconsolata',
+                  text: "用户图片",
+                  code: "",
+                  show: Container(
+                    width: 500,
+                    // height: 300,
+                    child:
+                    Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[
+                          _buildLinkTo(
+                            context,
+                            userdetails,
+                          ),
+                        ]
+                    ),
+                  )
+              ),
+            ],
+          ),
+        ),
+
+        //_buildNodes(state.nodes, state.widgetModel.name)
+        Container(
+          margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              //CustomsExpansionPanelList()
+              //_item(context),
+              WidgetNodePanel(
+                  codeFamily: 'Inconsolata',
+                  text: "客户沟通记录",
+                  code: "",
+                  show: list.length > 0 ? Container(
+                    width: 500,
+                    // height: 300,
+                    child:
+                    Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[
+                          ...list
+                        ]
+                    ),
+                  ):Container(child: Text("暂无沟通"),)
+              ),
+            ],
+          ),
+        ),
+
+      ],
+    );
+  }
   Widget _buildTitle(BuildContext context, DetailState state) {
     //print('build---${state.runtimeType}---');
     if (state is DetailWithData) {
@@ -1249,73 +1255,76 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
     List<dynamic> imgList =userdetail['pics'];
     List<Widget> list = [];
-    imgList.map((e) => {
+    if (imgList.length > 0 && imgList !=null){
+      imgList.map((e)  {
+        if(e ==null ) return e;
+        list.add( Column(
+          children:<Widget> [
+            Stack(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.fromLTRB(13.w, 25.h, 0.w, 10.h),
+                    child: Stack(
+                      children: <Widget>[
+                        Column(
+                          children:<Widget> [
+                            GestureDetector(
+                                onTap: () {
+                                  ImagePreview.preview(
+                                    context,
+                                    images: List.generate(1, (index) {
+                                      return ImageOptions(
+                                        url: e['file_url'],
+                                        tag: e['file_url'],
+                                      );
+                                    }),
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(2.w, 0.h, 2.w, 0.h),
+                                  child: CachedNetworkImage(imageUrl: e['file_url'],
+                                    width: 140.w,
+                                    height: 240.h,
+                                  ),
+                                )
+                            )
 
-      list.add( Column(
-      children:<Widget> [
-          Stack(
-          children: <Widget>[
-          Container(
-            margin: EdgeInsets.fromLTRB(13.w, 25.h, 0.w, 10.h),
-          child: Stack(
-          children: <Widget>[
-            Column(
-              children:<Widget> [
-              GestureDetector(
-               onTap: () {
-                 ImagePreview.preview(
-                     context,
-                     images: List.generate(1, (index) {
-                   return ImageOptions(
-                     url: e['file_url'],
-                     tag: e['file_url'],
-                   );
-                 }),
-                 );
-               },
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(2.w, 0.h, 2.w, 0.h),
-                child: CachedNetworkImage(imageUrl: e['file_url'],
-                width: 140.w,
-                height: 240.h,
+                          ],
+
+                        ),
+
+                      ],
+
+                    ),
+                    padding:  EdgeInsets.all(4.w),
+                    decoration:const BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
                   ),
-                )
-              )
 
-            ],
-
-          ),
-
-        ],
-
-      ),
-      padding:  EdgeInsets.all(4.w),
-      decoration:const BoxDecoration(
-      color: Colors.red,
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-    ),
-
-    Positioned(
-        top: 25.h,
-        right: 0.w,
-        child:
-        FeedbackWidget(
-        onPressed: () {
-            _deletePhoto(context,e,userdetail);
-        },
-        child: const Icon(
-            CupertinoIcons.delete_solid,
-            color: Colors.white,
-        ),
-        )
-        ),
-      ]
-      )
-      ],
-    ))
+                  Positioned(
+                      top: 25.h,
+                      right: 0.w,
+                      child:
+                      FeedbackWidget(
+                        onPressed: () {
+                          _deletePhoto(context,e,userdetail);
+                        },
+                        child: const Icon(
+                          CupertinoIcons.delete_solid,
+                          color: Colors.white,
+                        ),
+                      )
+                  ),
+                ]
+            )
+          ],
+        ));
+      }
+      ).toList();
     }
-    ).toList();
+
      list.add(
          GestureDetector(
              child: Padding(
@@ -1428,17 +1437,39 @@ showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > s
   ).showDialog(context);
 }
 _showToast(BuildContext ctx, String msg, bool collected) {
-  Toasts.toast(
-    ctx,
-    msg,
-    duration: Duration(milliseconds:  5000 ),
-    action: collected
-        ? SnackBarAction(
-        textColor: Colors.white,
-        label: '收藏夹管理',
-        onPressed: () => Scaffold.of(ctx).openEndDrawer())
-        : null,
-  );
+  // Toasts.toast(
+  //   ctx,
+  //   msg,
+  //   duration: Duration(milliseconds:  5000 ),
+  //   action: collected
+  //       ? SnackBarAction(
+  //       textColor: Colors.white,
+  //       label: '收藏夹管理',
+  //       onPressed: () => Scaffold.of(ctx).openEndDrawer())
+  //       : null,
+  // );
+  BotToast.showNotification(
+    backgroundColor: Colors.white,
+    leading: (cancel) => Container(
+      child: IconButton(
+        icon: Icon(Icons.error, color: Colors.redAccent),
+        onPressed: cancel,
+      )),
+    title: (text)=>Container(
+        child: Text(msg,style: new TextStyle(
+        color: Colors.black, fontSize: 40.sp)),
+      ),
+    duration: const Duration(seconds: 5),
+
+    trailing: (cancel) => Container(
+      child: IconButton(
+       icon: Icon(Icons.cancel),
+      onPressed: cancel,
+      ),
+    ),
+    onTap: () {
+      BotToast.showText(text: 'Tap toast');
+    },); //弹出简单通知Toast
 }
 showPickerDateTime(BuildContext context,String date,String type,Map<String ,dynamic> info) {
   String dates = "";

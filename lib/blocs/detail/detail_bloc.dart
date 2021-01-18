@@ -141,26 +141,27 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     if(event is EventDelDetailImg){
       var result1= await IssuesApi.delPhoto(event.img['id'].toString());
       if  (result1['code']==200){
-            var result= await IssuesApi.getUserDetail(event.user['uuid'].toString());
-            if  (result['code']==200){
+            Map<String ,dynamic> userdetails=state.props.elementAt(0);
+            Map<String ,dynamic> connectList=state.props.elementAt(1);
+            List<dynamic> res = userdetails['pics'];
+            var imgR=  res.map((e) {
+              if (e['id']==event.img['id']){
 
-            } else{
+              }else{
+                return e;
+              }
+
+            }).toList();
+            if (imgR == null){
 
             }
+            userdetails['pics']=imgR;
+            yield DetailWithData(userdetails: userdetails,connectList: connectList);
 
-            var resultConnectList= await IssuesApi.getConnectList(event.user['uuid'].toString(),"1");
-            if  (resultConnectList['code']==200){
-
-            } else{
-
-            }
-
-            if(result['data'].isEmpty){
-              yield DetailEmpty();
-            }else{
-              yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data']);
-            }
       } else{
+        Map<String ,dynamic> userdetails=state.props.elementAt(0);
+        Map<String ,dynamic> connectList=state.props.elementAt(1);
+        yield DelSuccessData(userdetails: userdetails,connectList: connectList,reason:result1['message']);
 
       }
 

@@ -29,7 +29,22 @@ class DetailWithData extends DetailState {
   }
 
 }
+class DelSuccessData extends DetailState {
 
+  final Map<String,dynamic>  userdetails ;
+  final Map<String,dynamic>  connectList ;
+  final String  reason ;
+  const DelSuccessData({this.userdetails,this.connectList,this.reason});
+
+  @override
+  List<Object> get props => [userdetails,connectList,reason];
+
+  @override
+  String toString() {
+    return 'DelSuccessData{widget: }';
+  }
+
+}
 class DetailLoading extends DetailState {}
 
 class DetailEmpty extends DetailState {}

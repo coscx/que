@@ -13,6 +13,8 @@ import 'package:flutter_geen/views/pages/chat/conversation_list.dart';
 import 'package:flutter_geen/views/pages/data/brower.dart';
 import 'package:flutter_geen/views/pages/data/card.dart';
 import 'package:flutter_geen/views/pages/gallery/gallery_page.dart';
+import 'package:flutter_geen/views/pages/index/amap.dart';
+import 'package:flutter_geen/views/pages/index/map.dart';
 import 'package:flutter_geen/views/pages/issues_point/issues_detail.dart';
 import 'package:flutter_geen/views/pages/issues_point/issues_point_page.dart';
 import 'package:flutter_geen/views/pages/login/login_page.dart';
@@ -69,6 +71,7 @@ class UnitRouter {
   static const String person_page ='PersonCenterPage';
   static const String create_user_page ='CreateUserPage';
   static const String select_page ='SelectPage';
+  static const String baidu_map ='BaiduMap';
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       //根据名称跳转相应页面
@@ -102,7 +105,8 @@ class UnitRouter {
 
       case login:
         return Right2LeftRouter(child: LoginPage());
-
+      case baidu_map:
+        return Right2LeftRouter(child: BaiduMap());
 
       case galley:
         return Right2LeftRouter(child: GalleryPage());
