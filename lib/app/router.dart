@@ -14,6 +14,7 @@ import 'package:flutter_geen/views/pages/data/brower.dart';
 import 'package:flutter_geen/views/pages/data/card.dart';
 import 'package:flutter_geen/views/pages/gallery/gallery_page.dart';
 import 'package:flutter_geen/views/pages/index/amap.dart';
+import 'package:flutter_geen/views/pages/index/amap_index.dart';
 import 'package:flutter_geen/views/pages/index/map.dart';
 import 'package:flutter_geen/views/pages/issues_point/issues_detail.dart';
 import 'package:flutter_geen/views/pages/issues_point/issues_point_page.dart';
@@ -106,7 +107,7 @@ class UnitRouter {
       case login:
         return Right2LeftRouter(child: LoginPage());
       case baidu_map:
-        return Right2LeftRouter(child: BaiduMap());
+        return Right2LeftRouter(child: SelectLocationFromMapPage());
 
       case galley:
         return Right2LeftRouter(child: GalleryPage());
