@@ -15,7 +15,7 @@ class UserDetailDialog extends Dialog  {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            width: ScreenUtil().screenWidth*0.9,
+            width: 650.w,
             height: 650.h,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -60,7 +60,7 @@ class UserDetailDialog extends Dialog  {
                         ),
 
                          Container(
-                            width: ScreenUtil().screenWidth*0.8,
+                            width: 700.w,
                             height: 330.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(3.w)),
