@@ -839,7 +839,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         Visibility(
                             visible: true,
                             child: Container(
-                              width: 506.w,
+                              width: ScreenUtil().screenWidth*0.71,
                               child: Text(
                                 answer,
                                 maxLines: 20,
