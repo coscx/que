@@ -2,7 +2,6 @@ import 'package:flt_im_plugin/flt_im_plugin.dart';
 import 'package:flt_im_plugin/value_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/router.dart';
@@ -16,9 +15,8 @@ import 'package:flutter_geen/views/pages/chat/view/util/date.dart';
 import 'package:flutter_geen/views/pages/chat/widget/more_widgets.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
 import 'package:flutter_geen/views/pages/utils/dialog_util.dart';
-import 'package:flutter_screenutil/screenutil.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:flt_im_plugin/flt_im_plugin.dart';
 import 'package:flt_im_plugin/conversion.dart';
 //会控菜单项
 enum ConferenceItem { AddMember, LockConference, ModifyLayout, TurnoffAll }

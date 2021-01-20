@@ -79,7 +79,7 @@ class ContentCard extends StatelessWidget {
                 this.title,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: size.width * 0.035,
+                  fontSize: 30.sp,
                 ),
               ),
 
@@ -87,14 +87,14 @@ class ContentCard extends StatelessWidget {
               Text(
                 this.location,
                 style: TextStyle(
-                  fontSize: size.width * 0.03,
+                  fontSize: 30.sp,
                 ),
               ),
               SizedBox(width: 5.w),
               Text(
                 this.age+"岁",
                 style: TextStyle(
-                  fontSize: size.width * 0.03,
+                  fontSize: 30.sp,
                 ),
               ),
             ],
@@ -104,14 +104,14 @@ class ContentCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.location_on,
-                size: 13,
+                size: 28.sp,
                 color: Colors.green,
               ),
               Text(
                 this.description,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontSize: size.width * 0.03,
+                  fontSize: 30.sp,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 3,

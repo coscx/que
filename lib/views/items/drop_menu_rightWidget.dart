@@ -221,7 +221,7 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
                 ),
               ),
               Container(
-                width: 438.w,
+                width: ScreenUtil().screenWidth*0.6,
                 child: frs.RangeSlider(
                   min: 14.0,
                   max: 70.0,
@@ -335,6 +335,7 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
                             for (SearchParamModel model in widget.paramList.list) {
                               for (ParamItemModel item in model.itemList) {
                                 item.isSelected = false;
+
                               }
                             }
                             setState(() {});

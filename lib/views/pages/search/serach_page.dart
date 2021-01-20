@@ -50,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
                   fontFamily: "Quicksand",
                   fontWeight: FontWeight.w900,
                   fontStyle: FontStyle.italic,
-                  fontSize: 22.0,
+                  fontSize: 45.sp,
                   decoration: TextDecoration.none,
                   color: Colors.black,
                 )
@@ -151,13 +151,13 @@ class _SearchPageState extends State<SearchPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 10.0, left: 20, bottom: 5),
+            padding:  EdgeInsets.only(top: 10.h, left: 35.w, bottom: 5.h),
             child: Wrap(
-              spacing: 5,
+              spacing: 5.w,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: <Widget>[
                 Circle(
-                  radius: 5,
+                  radius: 5.w,
                   color: Colors.orange,
                 ),
                 Text(
@@ -181,7 +181,7 @@ class _SearchPageState extends State<SearchPage> {
                     Icon(
                       Icons.star,
                       color: selected ? Colors.blue : Colors.grey,
-                      size: 18,
+                      size: 18.sp,
                     )),
             onChange: _doSelectStart,
           ),

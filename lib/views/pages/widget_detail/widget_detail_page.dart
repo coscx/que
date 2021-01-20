@@ -311,7 +311,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   text: "基础资料",
                   code: "",
                   show: Container(
-                    width: 500,
+                    width: ScreenUtil().screenWidth*0.98,
                     // height: 300,
                     child:
                     Wrap(
@@ -680,7 +680,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   text: "客户沟通记录",
                   code: "",
                   show: list.length > 0 ? Container(
-                    width: 500,
+                    width: ScreenUtil().screenWidth*0.98,
                     // height: 300,
                     child:
                     Wrap(
@@ -822,7 +822,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 18.sp,
+                          size: 30.sp,
                           color: Colors.black54,
                         ),
 
@@ -834,7 +834,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           ),
                         ),
                         SizedBox(
-                          width: ScreenUtil().setWidth(10.w),
+                          width: 10.w,
                         ),
                         Visibility(
                             visible: true,
@@ -914,7 +914,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 18.sp,
+                          size: 30.sp,
                           color: Colors.black54,
                         ),
 
@@ -1044,7 +1044,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             children: <Widget>[
                               Icon(
                                 Icons.arrow_forward_ios_outlined,
-                                size: 15.sp,
+                                size: 30.sp,
                                 color: Colors.black54,
                               )
 

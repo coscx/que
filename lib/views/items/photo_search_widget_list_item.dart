@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/views/items/popular_card.dart';
-import 'package:flutter_star/flutter_star.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/res/style/shape/coupon_shape_border.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
@@ -16,7 +16,6 @@ import 'package:flutter_geen/blocs/search/search_event.dart';
 import 'package:flutter_geen/components/permanent/circle_text.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_geen/components/permanent/tag.dart';
-import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
@@ -38,7 +37,7 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        margin:  EdgeInsets.symmetric(horizontal: 15.w, vertical: 0.h),
         child: Stack(
             children: <Widget>[
               isClip
@@ -48,7 +47,7 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
                         hasTopHole: hasTopHole,
                         hasBottomHole: hasBottomHole,
                         hasLine: false,
-                        edgeRadius: 25,
+                        edgeRadius: 25.w,
                         lineRate: 0.20)),
                 child: buildContent(context),
               )
@@ -87,8 +86,8 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
                             _onLongPress(context, img['imagepath']),
                         child: Container(
                           child: CachedNetworkImage(imageUrl: img['imagepath'],
-                            width: 80,
-                            height: 150,
+                            width: 100.w,
+                            height: 180.h,
                           ),
                         )
                     )
@@ -98,16 +97,16 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
               ],
 
             ),
-            padding: const EdgeInsets.all(2),
-            decoration: const BoxDecoration(
+            padding:  EdgeInsets.all(2.w),
+            decoration:  BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(10.w)),
             ),
           ),
 
           Positioned(
-              top: 5,
-              right: 5,
+              top: 5.h,
+              right: 5.w,
               child:
               FeedbackWidget(
                 onPressed: () {
@@ -145,7 +144,7 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
         children: [
           Expanded(child:
           Wrap(
-            spacing: 5, //主轴上子控件的间距
+            spacing: 5.w, //主轴上子控件的间距
             runSpacing: 0, //交叉轴上子控件之间的间距
             children: [
               ...list
@@ -192,9 +191,9 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
             Dialog(
               elevation: 5,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                  borderRadius: BorderRadius.all(Radius.circular(10.w))),
               child: Container(
-                width: 50,
+                width: 50.w,
                 child: DeleteCategoryDialog(
                   title: '撤回此用户的审核结果',
                   content: '是否确定继续执行?',
@@ -215,9 +214,9 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
             Dialog(
               elevation: 5,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                  borderRadius: BorderRadius.all(Radius.circular(10.w))),
               child: Container(
-                width: 50,
+                width: 50.w,
                 child: DeleteCategoryDialog(
                   title: '删除图片',
                   content: '是否确定继续执行?',
@@ -238,9 +237,9 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
             Dialog(
               elevation: 5,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                  borderRadius: BorderRadius.all(Radius.circular(10.w))),
               child: Container(
-                width: 50,
+                width: 50.w,
                 child: DeleteCategoryDialog(
                   title: '拒绝此用户',
                   content: '是否确定继续执行?',
@@ -261,9 +260,9 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
             Dialog(
               elevation: 5,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                  borderRadius: BorderRadius.all(Radius.circular(10.w))),
               child: Container(
-                width: 50,
+                width: 50.w,
                 child: DeleteCategoryDialog(
                   title: '隐藏该用户',
                   content: '是否确定继续执行?',
@@ -284,13 +283,13 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
         RaisedButton(
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20.w))),
           color: color,
           onPressed: () {
 
           },
           child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         ),
       ],
     );
@@ -303,13 +302,13 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
         RaisedButton(
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20.w))),
           color: color,
           onPressed: () {
             BlocProvider.of<SearchBloc>(context).add(EventCheckUsers(photo, 2));
           },
           child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         ),
       ],
     );
@@ -322,13 +321,13 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
         RaisedButton(
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20.w))),
           color: color,
           onPressed: () {
             BlocProvider.of<SearchBloc>(context).add(EventCheckUsers(photo, 3));
           },
           child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         ),
       ],
     );
@@ -341,13 +340,13 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
         RaisedButton(
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20.w))),
           color: color,
           onPressed: () {
             BlocProvider.of<SearchBloc>(context).add(EventCheckUsers(photo, 4));
           },
           child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         ),
       ],
     );
@@ -361,13 +360,13 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
         RaisedButton(
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20.w))),
           color: color,
           onPressed: () {
             _resetUser(context);
           },
           child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         ),
       ],
     );
@@ -381,13 +380,13 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
         RaisedButton(
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20.w))),
           color: color,
           onPressed: () {
             _refuseUser(context);
           },
           child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         ),
       ],
     );
@@ -401,13 +400,13 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
         RaisedButton(
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: BorderRadius.all(Radius.circular(20.w))),
           color: color,
           onPressed: () {
             _hideUser(context);
           },
           child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         ),
       ],
     );
@@ -448,14 +447,15 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
                   color: Colors.transparent,
                   child: CircleText(
                     text: photo['userName'],
-                    size: 60,
+                    size: 60.w,
+                    fontSize: 30.sp,
                     color: invColor,
                   ),
                 )
               : Container(
             child: CachedNetworkImage(imageUrl: photo['img'],
-              width: 55.0,
-              height: 100.0,
+              width: 55.w,
+              height: 100.h,
             ),
           )
           ,
@@ -469,7 +469,7 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
   Widget _buildCollectTag(Color color) {
     return Positioned(
         top: 0,
-        right: 40,
+        right: 40.w,
         child: BlocBuilder<CollectBloc, CollectState>(builder: (_, s) {
           bool show = true;
           return Opacity(
@@ -491,12 +491,12 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
     return Expanded(
       child: Row(
         children: <Widget>[
-          const SizedBox(width: 1),
+           SizedBox(width: 1.w),
           Expanded(
             child: Text(photo['userName']+" "+photo['tel']+" "+(photo['sex']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+(photo['device']==1?"安卓 ":"苹果 "),
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                    fontSize: 17,
+                style:  TextStyle(
+                    fontSize: 28.sp,
                     fontWeight: FontWeight.bold,
                     shadows: [
                       Shadow(color: Colors.white, offset: Offset(.3, .3))
@@ -513,14 +513,14 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
 
   Widget _buildSummary() {
     return Padding(
-      padding: const EdgeInsets.only(left: 1, bottom: 1, top: 1),
+      padding:  EdgeInsets.only(left: 1.w, bottom: 1.h, top: 1.h),
       child: Container(
         child: Text(
           //尾部摘要
           "型号: "+photo['machine']+"版本: "+photo['version']+" "+photo['addressed'] +" "+(photo['isAi']==1?"已认证":"未认证") +" 会员:" +photo['endtime'],
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: Colors.grey[600], fontSize: 14, shadows: [
+          style: TextStyle(color: Colors.grey[600], fontSize: 14.sp, shadows: [
             const Shadow(color: Colors.white, offset: const Offset(.5, .5))
           ]),
         ),
