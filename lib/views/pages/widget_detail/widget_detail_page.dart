@@ -1001,7 +1001,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               _showBottom(context,content,_getStatusIndex(int.parse(connectStatus)),connectType);
               },
             child: Container(
-                margin: EdgeInsets.only(left: 10.w, right: 20.w),
+                margin: EdgeInsets.only(left: 15.w, right: 20.w),
               child: Column(
                 children: [
                   Row(
