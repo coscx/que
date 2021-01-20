@@ -147,18 +147,18 @@ class UserDetailDialog extends Dialog  {
                                         )),
 
                                   ),
-                                  Positioned(
-                                    top: 230.h,
-                                    left: 95.w,
-                                    child:Text("会员到期:2021-12-25 15:20:30",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w100,
-                                          letterSpacing: 0.w,
-                                        )),
-
-                                  ),
+                                  // Positioned(
+                                  //   top: 230.h,
+                                  //   left: 95.w,
+                                  //   child:Text("会员到期:2021-12-25 15:20:30",
+                                  //       style: TextStyle(
+                                  //         color: Colors.black,
+                                  //         fontSize: 11,
+                                  //         fontWeight: FontWeight.w100,
+                                  //         letterSpacing: 0.w,
+                                  //       )),
+                                  //
+                                  // ),
                                   Positioned(
                                     top: 35.h,
                                     left: 398.w,

@@ -386,9 +386,14 @@ class IssuesApi {
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     var data={};
-    Response<dynamic> rep = await dio.get('/api/v1/customer/detail/'+memberId );
-    //var datas = json.decode(rep.data);
-    return rep.data;
+    try{
+      Response<dynamic> rep = await dio.get('/api/v1/customer/detail/'+memberId );
+      //var datas = json.decode(rep.data);
+      return rep.data;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
   }
 
   static Future<Map<String,dynamic>> getTimeLine( String memberId) async {

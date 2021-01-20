@@ -9,6 +9,7 @@ import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/components/permanent/overlay_tool_wrapper.dart';
+import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
 import 'package:flutter_geen/views/items/drop_menu_header.dart';
@@ -119,8 +120,15 @@ class _HomePageState extends State<HomePage>
     } else {
       //this._outputController.text = barcode;
       print(barcode);
-      BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(barcode));
-      _userDetail(context);
+      //BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(barcode));
+      var result= await IssuesApi.getUserDetail('uuid');
+      if  (result['code']==200){
+        _userDetail(context);
+      } else{
+        _createUser(context,null);
+      }
+
+
 
     }
   }
@@ -133,6 +141,33 @@ class _HomePageState extends State<HomePage>
 
 
 
+  }
+  _createUser(BuildContext context,Map<String,dynamic> img) {
+    showDialog(
+        context: context,
+        builder: (ctx) => Dialog(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.w))),
+          child: Container(
+            width: 50.w,
+            child: DeleteCategoryDialog(
+              title: '未查到数据',
+              content: '是否录入？',
+              onSubmit: () {
+                Future.delayed(Duration(milliseconds: 500)).then((e) async {
+
+                  Navigator.pushNamed(context, UnitRouter.create_user_page);
+
+                });
+                Navigator.of(context).pop();
+                //BlocProvider.of<DetailBloc>(context).add(EventDelDetailImg(img,detail['info']));
+
+                //
+              },
+            ),
+          ),
+        ));
   }
   @override
   Widget build(BuildContext context) {
