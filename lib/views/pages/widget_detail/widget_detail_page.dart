@@ -451,7 +451,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   text: "学历工作及资产",
                   code: "",
                   show: Container(
-                    width: 500,
+                    width:  ScreenUtil().screenWidth*0.98,
                     // height: 300,
                     child:
                     Wrap(
@@ -530,7 +530,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   text: "婚姻及父母家庭",
                   code: "",
                   show: Container(
-                    width: 500,
+                    width:  ScreenUtil().screenWidth*0.98,
                     // height: 300,
                     child:
                     Wrap(
@@ -594,7 +594,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   text: "用户画像相关",
                   code: "",
                   show: Container(
-                    width: 500,
+                    width:  ScreenUtil().screenWidth*0.98,
                     // height: 300,
                     child:
                     Wrap(
@@ -646,7 +646,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   text: "用户图片",
                   code: "",
                   show: Container(
-                    width: 500,
+                    width:  ScreenUtil().screenWidth*0.98,
                     // height: 300,
                     child:
                     Wrap(
