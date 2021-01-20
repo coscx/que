@@ -311,7 +311,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   text: "基础资料",
                   code: "",
                   show: Container(
-                    width: ScreenUtil().screenWidth*0.98,
+                    width:  ScreenUtil().screenWidth*0.98,
                     // height: 300,
                     child:
                     Wrap(
@@ -680,7 +680,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   text: "客户沟通记录",
                   code: "",
                   show: list.length > 0 ? Container(
-                    width: ScreenUtil().screenWidth*0.98,
+                    width:  ScreenUtil().screenWidth*0.98,
                     // height: 300,
                     child:
                     Wrap(
@@ -822,7 +822,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 30.sp,
+                          size: 18.sp,
                           color: Colors.black54,
                         ),
 
@@ -834,7 +834,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           ),
                         ),
                         SizedBox(
-                          width: 10.w,
+                          width: ScreenUtil().setWidth(10.w),
                         ),
                         Visibility(
                             visible: true,
@@ -914,7 +914,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 30.sp,
+                          size: 18.sp,
                           color: Colors.black54,
                         ),
 
@@ -1044,7 +1044,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             children: <Widget>[
                               Icon(
                                 Icons.arrow_forward_ios_outlined,
-                                size: 30.sp,
+                                size: 15.sp,
                                 color: Colors.black54,
                               )
 
