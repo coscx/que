@@ -174,7 +174,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
                 ),
                 Center(
                   child: Icon(
-                    Icons.done,
+                    Icons.location_on,
                     size: 72.sp,
                     color: Color(0xFFFF0000),
                   ),
@@ -203,7 +203,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
                           EdgeInsets.only(top: 25.h, bottom: 0.h, right: 18.w),
                           alignment: Alignment.centerRight,
                           child:   Icon(
-                            Icons.where_to_vote_sharp,
+                            Icons.done,
                             size: 60.sp,
                             color: item.select == true
                                 ? Colors.green
