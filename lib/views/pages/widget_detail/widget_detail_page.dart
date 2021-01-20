@@ -822,7 +822,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 18.sp,
+                          size: 32.sp,
                           color: Colors.black54,
                         ),
 
@@ -914,7 +914,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 18.sp,
+                          size: 32.sp,
                           color: Colors.black54,
                         ),
 
@@ -931,7 +931,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         Visibility(
                             visible: true,
                             child: Container(
-                              width: ScreenUtil().screenWidth*0.71,
+                              width: ScreenUtil().screenWidth*0.6,
                               child: Text(
                                 answer,
                                 maxLines: 20,
