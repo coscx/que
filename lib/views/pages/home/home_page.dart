@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:io';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -120,22 +121,23 @@ class _HomePageState extends State<HomePage>
     } else {
       //this._outputController.text = barcode;
       print(barcode);
+      BotToast.showLoading();
       //BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(barcode));
-      var result= await IssuesApi.getUserDetail('uuid');
+      var result= await IssuesApi.getUserDetail('a87ca69e-7092-493e-9f13-2955aeaf2d0f');
       if  (result['code']==200){
-        _userDetail(context);
+        _userDetail(context,result['data']);
       } else{
         _createUser(context,null);
       }
 
-
+      BotToast.closeAllLoading();
 
     }
   }
-  _userDetail(BuildContext context) {
+  _userDetail(BuildContext context,Map<String ,dynamic> user) {
     showDialog(
         context: context,
-        builder: (ctx) => UserDetailDialog()
+        builder: (ctx) => UserDetailDialog(user)
 
     );
 

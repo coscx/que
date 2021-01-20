@@ -494,12 +494,20 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
     );
   }
 
-  _userDetail(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (ctx) => UserDetailDialog()
+  _userDetail(BuildContext context) async {
+    BotToast.showLoading();
 
-    );
+    var result= await IssuesApi.getUserDetail('a87ca69e-7092-493e-9f13-2955aeaf2d0f');
+    if  (result['code']==200){
+      showDialog(
+          context: context,
+          builder: (ctx) => UserDetailDialog(result['data'])
+
+      );
+    } else{
+
+    }
+    BotToast.closeAllLoading();
   }
 }
 
