@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:io';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -125,11 +126,17 @@ class _HomePageState extends State<HomePage>
     }
   }
   _userDetail(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (ctx) => UserDetailDialog()
+    // showDialog(
+    //     context: context,
+    //     builder: (ctx) => UserDetailDialog()
+    //
+    // );
+    BotToast.showWidget(toastBuilder: (cancelFunc) =>UserDetailDialog());
 
-    );
+
+  }
+  Widget _toastBuilder()  {
+   return UserDetailDialog();
   }
   @override
   Widget build(BuildContext context) {
