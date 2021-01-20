@@ -4,20 +4,21 @@
 import 'package:fbutton/fbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-class UserDetailDialog extends Dialog  {
-  UserDetailDialog({Key key}) : super(key: key);
+class UserDetailDialog extends StatelessWidget {
+  final VoidCallback resetFun;
+ UserDetailDialog(this.resetFun);
 
   @override
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
       child: Container(
-
-        margin: EdgeInsets.only(
-          left: 50.w,
-          right: 0.w,
-          top: 80.h,
-        ),
+        alignment: FractionalOffset.bottomCenter,
+        // margin: EdgeInsets.only(
+        //   left: 50.w,
+        //   right: 0.w,
+        //   top: 80.h,
+        // ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -46,7 +47,7 @@ class UserDetailDialog extends Dialog  {
                       top: 30.h,
                       right: 30.h,
                       child: GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
+                        onTap: () async => resetFun,
                         child: Image.asset('assets/images/btn_close_black.png',
                           color: Colors.black,
                           width: 30.w,

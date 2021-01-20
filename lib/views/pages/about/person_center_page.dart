@@ -387,7 +387,10 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   ),
                                   CustomOffsetAnimation(
                                     controller: controller,
-                                    child: UserDetailDialog(),
+                                    child: UserDetailDialog((){
+                                              cancel();
+                                        }
+                                    ),
                                   )
                                 ],
                               ),
@@ -554,13 +557,13 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
     );
   }
 
-  _userDetail(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (ctx) => UserDetailDialog()
-
-    );
-  }
+  // _userDetail(BuildContext context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (ctx) => UserDetailDialog()
+  //
+  //   );
+  // }
 }
 class CustomOffsetAnimation extends StatefulWidget {
   final AnimationController controller;

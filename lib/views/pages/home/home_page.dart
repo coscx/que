@@ -131,13 +131,13 @@ class _HomePageState extends State<HomePage>
     //     builder: (ctx) => UserDetailDialog()
     //
     // );
-    BotToast.showWidget(toastBuilder: (cancelFunc) =>UserDetailDialog());
+    // BotToast.showWidget(toastBuilder: (cancelFunc) =>UserDetailDialog());
 
 
   }
-  Widget _toastBuilder()  {
-   return UserDetailDialog();
-  }
+  // Widget _toastBuilder()  {
+  //  return UserDetailDialog();
+  // }
   @override
   Widget build(BuildContext context) {
     super.build(context);

@@ -189,11 +189,11 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
   }
 
   _userDetail(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (ctx) => UserDetailDialog()
-
-    );
+    // showDialog(
+    //     context: context,
+    //     builder: (ctx) => UserDetailDialog()
+    //
+    // );
   }
   login({void Function() success}) async {
     if (tfSender == null || tfSender.length == 0) {
