@@ -8,27 +8,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.14.0"
-  amap_flutter_base:
-    dependency: transitive
-    description:
-      name: amap_flutter_base
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.1"
-  amap_flutter_location:
-    dependency: "direct main"
-    description:
-      name: amap_flutter_location
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
-  amap_flutter_map:
-    dependency: "direct main"
-    description:
-      name: amap_flutter_map
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
   amap_location_fluttify:
     dependency: transitive
     description:
@@ -891,13 +870,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0-nullsafety.1"
-  stream_transform:
-    dependency: transitive
-    description:
-      name: stream_transform
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.2.0"
   string_scanner:
     dependency: transitive
     description:
