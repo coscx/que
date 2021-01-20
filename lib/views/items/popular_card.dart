@@ -15,7 +15,9 @@ class PopularCard extends StatelessWidget {
     return Container(
       //onTap: (){},
       child: Container(
-        margin: EdgeInsets.only(top: 5.h,bottom: 5.h),
+        width: ScreenUtil().screenWidth*0.98,
+        //height: 150.h,
+        margin: EdgeInsets.only(top: 10.h,bottom: 10.h,left: 10.w,right: 10.w),
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -65,8 +67,8 @@ class ContentCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width / 1.2,
-      height: 120.h,
-      margin: EdgeInsets.only(left: 110.w, top: 10.h),
+      height: 150.h,
+      margin: EdgeInsets.only(left: 120.w, top: 10.h),
       padding: EdgeInsets.all(5.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,8 +137,8 @@ class ImageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100.w,
-      height: 140.h,
+      width: 120.w,
+      height: 160.h,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(

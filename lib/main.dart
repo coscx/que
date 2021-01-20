@@ -12,10 +12,11 @@ Future<void> main() async {
   if (Platform.isAndroid == false) {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     IosDeviceInfo info = await deviceInfo.iosInfo;
-    print('======a=======a=======a=======a========a======={info.model}');
-    print('======a=======a=======a=======a========a======={info.utsname.machine.toLowerCase()}');
+    print('======a=======a=======a=======a========a=======${info.model}');
+    print('======a=======a=======a=======a========a=======${info.utsname.machine.toLowerCase()}');
     print('======a=======a=======a=======a========a=======${info.systemName}');
     isIpad = info.utsname.machine.toLowerCase().contains("ipad");
+    isIpad = info.model=="iPad";
   }
   runApp(BlocWrapper(child: FlutterGeen(isPad: isIpad,)));
   await enableFluttifyLog(false);
