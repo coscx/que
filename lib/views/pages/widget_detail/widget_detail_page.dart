@@ -1104,7 +1104,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             margin: EdgeInsets.only(left: 12.w),
           ):Container(),
           Container(
-            margin: EdgeInsets.only(left: 42.w,top: 10.h),
+            margin: EdgeInsets.only(left: 42.w,top: 20.h),
 
             child: CircleAvatar(
               radius:(60.w) ,
@@ -1133,8 +1133,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       isVip=true;
     }
     return Container(
-      height: 120.h,
-      margin: EdgeInsets.only(top: 8.h,bottom: 20.h,left: 12.w),
+      height: 140.h,
+      margin: EdgeInsets.only(top: 8.h,bottom: 10.h,left: 12.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[

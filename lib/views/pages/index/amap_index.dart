@@ -174,7 +174,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
                 ),
                 Center(
                   child: Icon(
-                    Icons.place,
+                    Icons.done,
                     size: 72.sp,
                     color: Color(0xFFFF0000),
                   ),

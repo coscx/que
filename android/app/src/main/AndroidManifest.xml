@@ -28,6 +28,7 @@
     <!--用于读取手机当前的状态-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!--用于写入缓存数据到扩展存储卡-->
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
@@ -37,7 +38,7 @@
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/logo"
         android:allowBackup="true"
-        tools:replace="android:label,android:allowBackup"
+        tools:replace="android:label,android:allowBackup,android:icon"
         >
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity

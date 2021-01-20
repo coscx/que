@@ -9,6 +9,7 @@ import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/components/permanent/overlay_tool_wrapper.dart';
+import 'package:flutter_geen/views/dialogs/user_detail.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
 import 'package:flutter_geen/views/items/drop_menu_header.dart';
 import 'package:flutter_geen/views/items/drop_menu_leftWidget.dart';
@@ -17,10 +18,11 @@ import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/common/empty_page.dart';
 import 'package:flutter_geen/views/items/home_item_support.dart';
 import 'package:flutter_geen/views/pages/home/toly_app_bar.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'background.dart';
-
+import 'package:qrscan/qrscan.dart' as scanner;
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -109,6 +111,26 @@ class _HomePageState extends State<HomePage>
     BlocProvider.of<HomeBloc>(context).add(EventLoadMore(newUsers));
     _refreshController.loadComplete();
   }
+  Future _scan() async {
+    await Permission.camera.request();
+    String barcode = await scanner.scan();
+    if (barcode == null) {
+      print('nothing return.');
+    } else {
+      //this._outputController.text = barcode;
+      print(barcode);
+      BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(barcode));
+      _userDetail(context);
+
+    }
+  }
+  _userDetail(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (ctx) => UserDetailDialog()
+
+    );
+  }
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -135,21 +157,24 @@ class _HomePageState extends State<HomePage>
           elevation: 0, //去掉Appbar底部阴影
           actions:<Widget> [
 
-            // Container(
-            //   height: 20,
-            //   width: 20,
-            //   child: IconButton(
-            //     padding: EdgeInsets.zero,
-            //     icon: Icon(
-            //       Icons.add_circle_outline,
-            //       size: 24.0,
-            //       color: Colors.black,
-            //     ),
-            //     onPressed: null,
-            //   ),
-            // ),
+            Container(
+              height: 20,
+              width: 20,
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                icon: Icon(
+                  Icons.crop_free,
+                  size: 24.0,
+                  color: Colors.black,
+                ),
+                onPressed: (){
+                  //Navigator.of(context).pushNamed(UnitRouter.qr_view);
+                  _scan();
+                },
+              ),
+            ),
             SizedBox(
-              width: 40.w,
+              width: 60.w,
             )
           ],
 

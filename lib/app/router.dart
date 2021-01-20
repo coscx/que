@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/views/app/navigation/unit_navigation.dart';
+import 'package:flutter_geen/views/items/QrCode.dart';
 import 'package:flutter_geen/views/pages/about/about_me_page.dart';
 import 'package:flutter_geen/views/pages/about/about_app_page.dart';
 import 'package:flutter_geen/views/pages/about/person_center_page.dart';
@@ -73,6 +74,7 @@ class UnitRouter {
   static const String create_user_page ='CreateUserPage';
   static const String select_page ='SelectPage';
   static const String baidu_map ='BaiduMap';
+  static const String qr_view ='QrView';
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       //根据名称跳转相应页面
@@ -103,7 +105,8 @@ class UnitRouter {
         return Right2LeftRouter(child: VersionInfo());
       case issues_point:
         return Right2LeftRouter(child: IssuesPointPage());
-
+      case qr_view:
+        return Right2LeftRouter(child: QRView());
       case login:
         return Right2LeftRouter(child: LoginPage());
       case baidu_map:

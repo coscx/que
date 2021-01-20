@@ -91,6 +91,8 @@ dependencies:
   device_info: ^1.0.0
   bot_toast: ^3.0.5
   amap_map_fluttify: ^0.30.1
+  qrscan: ^0.2.21
+  image_gallery_saver: ^1.6.7
 dev_dependencies:
   flutter_test:
     sdk: flutter
