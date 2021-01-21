@@ -749,7 +749,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
           bottom: 0
       ),
       width: double.infinity,
-      height: 180.h,
+      height: 150.h,
       child:  Material(
           color:  Colors.transparent ,
           child: Container(
@@ -779,7 +779,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         Visibility(
                             visible: true,
                             child: Container(
-                              width: ScreenUtil().screenWidth*0.61,
+                              width: ScreenUtil().screenWidth*0.33,
                               child: Text(
                                 answer,
                                 maxLines: 20,
@@ -841,7 +841,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
           bottom: 0
       ),
       width: double.infinity,
-      height: 180.h,
+      height: 150.h,
       child:  Material(
           color:  Colors.transparent ,
           child: Container(
@@ -871,7 +871,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         Visibility(
                             visible: true,
                             child: Container(
-                              width: ScreenUtil().screenWidth*0.5,
+                              width: ScreenUtil().screenWidth*0.33,
                               child: Text(
                                 answer,
                                 maxLines: 20,
