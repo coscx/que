@@ -1576,7 +1576,7 @@ _showEditDialog(BuildContext context,String title,String hintText ,String text,S
                     //_showToast(context,"编辑成功",false);
                   }else{
 
-                    //_showToast(context,result['message'],false);
+                    _showToast(context,result['message'],false);
                   }
                   Navigator.pop(context);
 
