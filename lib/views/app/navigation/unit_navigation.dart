@@ -83,11 +83,11 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
       var count = 0;
       Map response = await im.getConversations();
       var  conversions = response["data"];
-      conversions.map((e) {
-        if (e['unreadCount'] > 0){
-          count=count+e['unreadCount'];
-        }
-      }).toList();
+      // conversions.map((e) {
+      //   if (e['unreadCount'] > 0){
+      //     count=count+e['unreadCount'];
+      //   }
+      // }).toList();
 
       BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
 
@@ -461,11 +461,11 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     var count = 0;
     Map response = await im.getConversations();
     var  conversions = response["data"];
-    conversions.map((e) {
-      if (e['unreadCount'] > 0){
-        count=count+e['unreadCount'];
-      }
-    }).toList();
+    // conversions.map((e) {
+    //   if (e['unreadCount'] > 0){
+    //     count=count+e['unreadCount'];
+    //   }
+    // }).toList();
 
     BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
     BlocProvider.of<ChatBloc>(context).add(EventNewMessage(result));
