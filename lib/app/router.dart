@@ -106,7 +106,7 @@ class UnitRouter {
       case issues_point:
         return Right2LeftRouter(child: IssuesPointPage());
       case qr_view:
-        return Right2LeftRouter(child: QRView());
+        return Right2LeftRouter(child: ScanView());
       case login:
         return Right2LeftRouter(child: LoginPage());
       case baidu_map:

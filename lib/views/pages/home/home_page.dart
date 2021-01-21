@@ -24,14 +24,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'background.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:flutter_qr_reader/flutter_qr_reader.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+  QrReaderViewController _controller;
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   bool _showPop = false;
   bool _showFilter = false;
@@ -115,24 +115,30 @@ class _HomePageState extends State<HomePage>
   }
   Future _scan() async {
     await Permission.camera.request();
-    String barcode = await scanner.scan();
-    if (barcode == null) {
-      print('nothing return.');
-    } else {
-      //this._outputController.text = barcode;
-      print(barcode);
-      BotToast.showLoading();
-      //BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(barcode));
-      var result= await IssuesApi.getUserDetail('a87ca69e-7092-493e-9f13-2955aeaf2d0f');
-      if  (result['code']==200){
-        _userDetail(context,result['data']);
-      } else{
-        _createUser(context,null);
+
+    Navigator.pushNamed(context, UnitRouter.qr_view).then((barcode) async {
+      //String barcode = "";//await scanner.scan();
+      if (barcode == null) {
+        print('nothing return.');
+      } else {
+        //this._outputController.text = barcode;
+        print(barcode);
+        BotToast.showLoading();
+        //BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(barcode));
+        var result= await IssuesApi.getUserDetail('a87ca69e-7092-493e-9f13-2955aeaf2d0f');
+        if  (result['code']==200){
+          _userDetail(context,result['data']);
+        } else{
+          _createUser(context,null);
+        }
+
+        BotToast.closeAllLoading();
+
       }
 
-      BotToast.closeAllLoading();
-
     }
+    );
+
   }
   _userDetail(BuildContext context,Map<String ,dynamic> user) {
     showDialog(

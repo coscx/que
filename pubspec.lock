@@ -414,6 +414,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.4"
+  flutter_qr_reader:
+    dependency: "direct main"
+    description:
+      name: flutter_qr_reader
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.3"
   flutter_range_slider:
     dependency: "direct main"
     description:
@@ -788,13 +795,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.6.3"
-  qrscan:
-    dependency: "direct main"
-    description:
-      name: qrscan
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.2.21"
   rect_getter:
     dependency: transitive
     description:
