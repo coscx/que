@@ -18,6 +18,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
   String keyword = "";
   String address = "";
   bool isloading = true;
+  bool isFirst =false;
   MyLocationOption locationOption =MyLocationOption(show: true);
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _controller.dispose();
+    //_controller.dispose();
 
   }
   @override
@@ -153,19 +154,20 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
               children: <Widget>[
                 AmapView(
                   showZoomControl: false,
-                  centerCoordinate: LatLng(35, 120),
+                  centerCoordinate: LatLng(35, 121),
                   maskDelay: Duration(milliseconds: 500),
                   zoomLevel: 16,
                   onMapCreated: (controller) async {
                     _controller = controller;
                     if (await requestPermission()) {
-                      await controller.showMyLocation(locationOption);
-                      Future.delayed(Duration(milliseconds: 500)).then((e) async {
+                        await controller.showMyLocation(locationOption);
+                      //Future.delayed(Duration(milliseconds: 500)).then((e) async {
                         await controller?.showLocateControl(true);
                         final latLng = await _controller?.getLocation();
                         await enableFluttifyLog(false); // 关闭log
+                        isFirst =false;
                         _loadData(latLng);
-                      });
+                     // });
                     }
                   },
                   onMapMoveEnd: (MapMove move) async {
@@ -290,25 +292,33 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
   }
 
   void _loadData(LatLng latLng) async {
-    if (!mounted) return;
-    setState(() {
-      isloading = true;
-    });
+
+    if (isFirst ==true){
+     // return;
+    }
+    if (mounted) {
+      setState(() {
+        isloading = true;
+      });
+    }
+
 
     /// 逆地理编码（坐标转地址）
     ReGeocode reGeocodeList = await AmapSearch.instance.searchReGeocode(
       latLng,
     );
 
-    print(await reGeocodeList.toString());
+    //print(await reGeocodeList.toString());
     address = await reGeocodeList.formatAddress;
-
+   if(address ==""){
+     address ="江苏省苏州市姑苏区吴门桥街道吴中大厦";
+   }
 
     final poiList = await AmapSearch.instance.searchKeyword(
       address.toString(),
       city: "苏州",
     );
-
+    //final poiList =new List();
     poiModel = new PoiModel("当前位置", address, latLng,false);
     list.clear();
     list.add(poiModel);
@@ -324,10 +334,12 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
           provinceName.toString() + cityName.toString() + address.toString(),
           latLng,false));
     }
-    if (!mounted) return;
-    setState(() {
-      isloading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isloading = false;
+      });
+    }
+    isFirst =true;
   }
   /// 动态申请定位权限
   Future<bool> requestPermission() async {
