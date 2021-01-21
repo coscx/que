@@ -1375,7 +1375,24 @@ class ChatsState extends State<ChatsPage> {
 
   Widget buildLocalImageWidget(String imageURL) {
     if (imageURL.startsWith("http://localhost")) {
+      return FutureBuilder(
+        future: getLocalCacheImage(url: imageURL),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Container();
+          }
+          if (snapshot.hasData) {
+            return Image.memory(snapshot.data);
+          } else {
+            if (imageURL.startsWith("http://localhost")) {
               return Container();
+            } else if (imageURL.startsWith('file:/')) {
+              return Image.file(File(imageURL));
+            }
+            return Image.network(imageURL);
+          }
+        },
+      );
        } else if (imageURL.startsWith('file:/')) {
               return Image.file(File(imageURL.substring(6)));
        }
@@ -1395,6 +1412,20 @@ class ChatsState extends State<ChatsPage> {
     NativeResponse response = NativeResponse.fromMap(result);
     return response.data;
   }
+  Future<Uint8List> getLocalMediaURL({String url}) async {
+
+    Map result = await im.getLocalMediaURL(url: url);
+    NativeResponse response = NativeResponse.fromMap(result);
+    return response.data;
+  }
+
+
+
+  // Future<File> _getLocalFile(String filename) async {
+  //   String dir = (await getExternalStorageDirectory()).path;
+  //   File f = new File('$dir/$filename');
+  //   return f;
+  // }
   _buildWrapper({bool isSelf, Message message, Widget child}) {
     return Container(
       margin: EdgeInsets.all(1.w),
