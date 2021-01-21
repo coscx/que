@@ -310,10 +310,10 @@ class ChatsState extends State<ChatsPage> {
       actions: <Widget>[
         InkWell(
             child: Container(
-                padding: EdgeInsets.only(right: 15, left: 15),
+                padding: EdgeInsets.only(right: 15.w, left: 15.w),
                 child: Icon(
                   Icons.more_horiz,
-                  size: 22,
+                  size: 22.sp,
                   color: Colors.black,
                 )),
             onTap: () {
@@ -383,20 +383,20 @@ class ChatsState extends State<ChatsPage> {
 
         },
       )),
-      Divider(height: 1.0),
+      Divider(height: 1.h),
       Container(
         decoration: new BoxDecoration(
           color: Theme.of(context).cardColor,
         ),
         child: Container(
-          height: 54,
+          height: 88.h,
           child: Row(
             children: <Widget>[
               IconButton(
                   icon: _isShowVoice
                       ? Icon(Icons.keyboard)
                       : Icon(Icons.play_circle_outline),
-                  iconSize: 32,
+                  iconSize: 55.sp,
                   onPressed: () {
                     setState(() {
                       _hideKeyBoard();
@@ -417,7 +417,7 @@ class ChatsState extends State<ChatsPage> {
                   icon: _isShowFace
                       ? Icon(Icons.keyboard)
                       : Icon(Icons.sentiment_very_satisfied),
-                  iconSize: 32,
+                  iconSize: 55.sp,
                   onPressed: () {
                     _hideKeyBoard();
                     setState(() {
@@ -440,23 +440,23 @@ class ChatsState extends State<ChatsPage> {
                       },
                       child: new Container(
                         alignment: Alignment.center,
-                        width: 40,
-                        height: 32,
-                        margin: EdgeInsets.only(right: 8),
+                        width: 90.w,
+                        height: 32.h,
+                        margin: EdgeInsets.only(right: 8.w),
                         child: new Text(
                           '发送',
                           style: new TextStyle(
-                              fontSize: 14.0, color: Colors.red),
+                              fontSize: 28.sp, color: Colors.red),
                         ),
                         decoration: new BoxDecoration(
                           color: ObjectUtil.getThemeSwatchColor(),
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(8.w)),
                         ),
                       ),
                     )
                   : IconButton(
                       icon: Icon(Icons.add_circle_outline),
-                      iconSize: 32,
+                      iconSize: 55.sp,
                       onPressed: () {
                         _hideKeyBoard();
                         setState(() {
@@ -475,7 +475,7 @@ class ChatsState extends State<ChatsPage> {
       ),
       (_isShowTools || _isShowFace || _isShowVoice)
           ? Container(
-              height: 251.4,
+              height: 418.h,
               child: _bottomWidget(),
             )
           : SizedBox(
@@ -506,32 +506,32 @@ class ChatsState extends State<ChatsPage> {
         Align(
             alignment: Alignment.centerLeft,
             child: Container(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.w),
                 child: Icon(
                   Icons.headset,
                   color: _headsetColor,
-                  size: 50,
+                  size: 80.sp,
                 ))),
         Align(
             alignment: Alignment.center,
             child: Column(
               children: <Widget>[
                 Container(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 10.h),
                     child: _audioIconPath == ''
                         ? SizedBox(
-                            width: 30,
-                            height: 30,
+                            width: 60.w,
+                            height: 60.h,
                           )
                         : Image.asset(
                             FileUtil.getImagePath(_audioIconPath,
                                 dir: 'icon', format: 'png'),
-                            width: 30,
-                            height: 30,
+                            width: 60.w,
+                            height: 60.h,
                             color: ObjectUtil.getThemeSwatchColor(),
                           )),
                 Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(10.w),
                     child: GestureDetector(
                       onScaleStart: (res) {
                         _startRecord();
@@ -579,16 +579,16 @@ class ChatsState extends State<ChatsPage> {
                         });
                       },
                       onScaleUpdate: (res) {
-                        if (res.focalPoint.dy > 550 &&
-                            res.focalPoint.dy < 620) {
-                          if (res.focalPoint.dx > 10 &&
-                              res.focalPoint.dx < 80) {
+                        if (res.focalPoint.dy > 550.h &&
+                            res.focalPoint.dy < 620.h) {
+                          if (res.focalPoint.dx > 10.w &&
+                              res.focalPoint.dx < 80.w) {
                             setState(() {
                               voiceText = '松开 试听';
                               _headsetColor = ObjectUtil.getThemeLightColor();
                             });
-                          } else if (res.focalPoint.dx > 330 &&
-                              res.focalPoint.dx < 400) {
+                          } else if (res.focalPoint.dx > 330.w &&
+                              res.focalPoint.dx < 400.w) {
                             setState(() {
                               voiceText = '松开 删除';
                               _highlightColor = ObjectUtil.getThemeLightColor();
@@ -612,9 +612,9 @@ class ChatsState extends State<ChatsPage> {
                         child: new Text(
                           voiceText,
                           style: new TextStyle(
-                              fontSize: 17.0, color: ColorT.gray_33),
+                              fontSize: 30.sp, color: ColorT.gray_33),
                         ),
-                        radius: 60,
+                        radius: 120.w,
                         backgroundColor: voiceBackground,
                       ),
                     ))
@@ -623,11 +623,11 @@ class ChatsState extends State<ChatsPage> {
         Align(
             alignment: Alignment.centerRight,
             child: Container(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.w),
                 child: Icon(
                   Icons.highlight_off,
                   color: _highlightColor,
-                  size: 50,
+                  size: 80.sp,
                 ))),
       ],
     );
@@ -675,7 +675,7 @@ class ChatsState extends State<ChatsPage> {
                   circular: false,
                   indicator: CircleSwiperIndicator(
                       radius: 3.0,
-                      padding: EdgeInsets.only(top: 20.0),
+                      padding: EdgeInsets.only(top: 10.w),
                       itemColor: ColorT.gray_99,
                       itemActiveColor: ObjectUtil.getThemeSwatchColor()),
                   children: _guideFigureList),
@@ -711,24 +711,24 @@ class ChatsState extends State<ChatsPage> {
           ],
         )),
         SizedBox(
-          height: 2,
+          height: 4.h,
         ),
-        new Divider(height: 1.0),
+        new Divider(height: 2.h),
         Container(
-          height: 24,
+          height: 48.h,
           child: Row(
             children: <Widget>[
               Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(left: 20.w),
                       child: InkWell(
                         child: Icon(
                           Icons.sentiment_very_satisfied,
                           color: _isFaceFirstList
                               ? ObjectUtil.getThemeSwatchColor()
                               : _headsetColor,
-                          size: 22,
+                          size: 48.sp,
                         ),
                         onTap: () {
                           setState(() {
@@ -739,14 +739,14 @@ class ChatsState extends State<ChatsPage> {
               Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                      padding: EdgeInsets.only(left: 10),
+                      padding: EdgeInsets.only(left: 20.w),
                       child: InkWell(
                         child: Icon(
                           Icons.favorite_border,
                           color: _isFaceFirstList
                               ? _headsetColor
                               : ObjectUtil.getThemeSwatchColor(),
-                          size: 24,
+                          size: 48.sp,
                         ),
                         onTap: () {
                           setState(() {
@@ -790,7 +790,7 @@ class ChatsState extends State<ChatsPage> {
     _widgets.add(MoreWidgets.buildIcon(Icons.mic, '语音输入'));
     _widgets.add(MoreWidgets.buildIcon(Icons.favorite, '我的收藏'));
     _guideToolsList.add(GridView.count(
-        crossAxisCount: 4, padding: EdgeInsets.all(0.0), children: _widgets));
+        crossAxisCount: 4, padding: EdgeInsets.all(5.0), children: _widgets));
     List<Widget> _widgets1 = new List();
     _widgets1.add(MoreWidgets.buildIcon(Icons.person, '名片'));
     _widgets1.add(MoreWidgets.buildIcon(Icons.folder, '文件'));
@@ -801,7 +801,7 @@ class ChatsState extends State<ChatsPage> {
         circular: false,
         indicator: CircleSwiperIndicator(
             radius: 3.0,
-            padding: EdgeInsets.only(top: 10.0, bottom: 10),
+            padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
             itemColor: ColorT.gray_99,
             itemActiveColor: ObjectUtil.getThemeSwatchColor()),
         children: _guideToolsList);
@@ -830,13 +830,13 @@ class ChatsState extends State<ChatsPage> {
   /*输入框*/
   _enterWidget() {
     return new Material(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(12.w),
       shadowColor: ObjectUtil.getThemeLightColor(),
       color: ColorT.gray_f0,
       elevation: 0,
       child: Container(
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(3.0)),
-          constraints: BoxConstraints(minHeight: 30.0, maxHeight: 150.0),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6.w)),
+          constraints: BoxConstraints(minHeight: 60.h, maxHeight: 250.h),
           child:new TextField(
               maxLines: null,
               keyboardType: TextInputType.multiline,
@@ -846,9 +846,9 @@ class ChatsState extends State<ChatsPage> {
           inputFormatters: [
             LengthLimitingTextInputFormatter(150), //长度限制11
           ], //只能输入整数
-          style: TextStyle(color: Colors.black, fontSize: 18),
+          style: TextStyle(color: Colors.black, fontSize: 32.sp),
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(10),
+            contentPadding: EdgeInsets.all(10.w),
             border: InputBorder.none,
             filled: true,
             fillColor: Colors.transparent,
