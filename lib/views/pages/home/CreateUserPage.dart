@@ -301,7 +301,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                         padding: EdgeInsets.only(top: 20.h, bottom: 15.h,left: 50.h,right: 50.h),
                                         child: Container(
                                           width: ScreenUtil().screenWidth*0.8,
-                                          height: 70.h,
+                                          height: 120.h,
                                           child: RaisedButton(
                                             elevation: 0,
                                             shape: RoundedRectangleBorder(
@@ -312,7 +312,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                               Navigator.of(context).pop();
                                             },
                                             child: Text("下一步",
-                                                style: TextStyle(color: Colors.white, fontSize: 18)),
+                                                style: TextStyle(color: Colors.white, fontSize: 45.sp)),
                                           ),
                                         ),
                                       ),
@@ -749,7 +749,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
           bottom: 0
       ),
       width: double.infinity,
-      height: 80.h,
+      height: 180.h,
       child:  Material(
           color:  Colors.transparent ,
           child: Container(
@@ -762,7 +762,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 32.sp,
+                          size: 80.sp,
                           color: Colors.black54,
                         ),
 
@@ -770,7 +770,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 30.sp, color: Colors.grey),
+                            style: TextStyle(fontSize: 50.sp, color: Colors.grey),
                           ),
                         ),
                         SizedBox(
@@ -784,7 +784,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 answer,
                                 maxLines: 20,
                                 style: TextStyle(
-                                    fontSize: 35.sp, color: Colors.redAccent),
+                                    fontSize: 50.sp, color: Colors.redAccent),
                               ),
                             )),
                       ]),
@@ -841,7 +841,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
           bottom: 0
       ),
       width: double.infinity,
-      height: 80.h,
+      height: 180.h,
       child:  Material(
           color:  Colors.transparent ,
           child: Container(
@@ -854,7 +854,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 32.sp,
+                          size: 80.sp,
                           color: Colors.black54,
                         ),
 
@@ -862,7 +862,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 30.sp, color: Colors.grey),
+                            style: TextStyle(fontSize: 50.sp, color: Colors.grey),
                           ),
                         ),
                         SizedBox(
@@ -876,7 +876,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 answer,
                                 maxLines: 20,
                                 style: TextStyle(
-                                    fontSize: 35.sp, color: color),
+                                    fontSize: 50.sp, color: color),
                               ),
                             )),
                       ]),
