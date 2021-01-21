@@ -191,7 +191,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             ),
           ),
           onTap: () async {
-            Navigator.of(context).pushNamed(UnitRouter.baidu_map);
+            Navigator.of(context).pushNamed(UnitRouter.baidu_map).then((value) {
+              if(value != null && value !="")
+              _showToast(ctx, value, true);
+            });
 
           }
           ));
@@ -1437,6 +1440,9 @@ showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > s
   ).showDialog(context);
 }
 _showToast(BuildContext ctx, String msg, bool collected) {
+  if (msg ==null){
+    msg="ti";
+  }
   // Toasts.toast(
   //   ctx,
   //   msg,

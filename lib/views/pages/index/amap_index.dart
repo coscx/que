@@ -1,4 +1,5 @@
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,6 +20,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
   String address = "";
   bool isloading = true;
   bool isFirst =false;
+  String returnAddress ="";
   MyLocationOption locationOption =MyLocationOption(show: true);
   @override
   void initState() {
@@ -56,17 +58,22 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
         backgroundColor: Colors.white,
         actions:<Widget> [
 
-      Container(
-        margin: EdgeInsets.only(right: 10.w),
-        child: IconButton(
-        icon: Icon(Icons.add_location_alt),
-        onPressed: () {},
-        color: Colors.deepOrange,
-        splashColor:Colors.grey,
-        highlightColor:Colors.blue[300],
-        tooltip:'确认选择',
+        Container(
+          margin: EdgeInsets.only(right: 10.w),
+          child: IconButton(
+          icon: Icon(Icons.add_location_alt),
+          onPressed: () {
+            if (returnAddress ==""){
+              BotToast.showSimpleNotification(title: returnAddress);
+            }
+            Navigator.pop(context,returnAddress);
+          },
+          color: Colors.deepOrange,
+          splashColor:Colors.grey,
+          highlightColor:Colors.blue[300],
+          tooltip:'确认选择',
+          ),
         ),
-      ),
       SizedBox(
             width: 10.w,
           )
@@ -268,6 +275,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
                               list=   list.map((e) {
                                 if (e.latLng == item.latLng){
                                   e.select =true;
+                                  returnAddress = item.title+"#"+item.address;
                                   return e;
                                 } else{
                                   e.select =false;
