@@ -17,7 +17,6 @@ import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_star/flutter_star.dart';
 import 'package:flutter_geen/app/res/cons.dart';
-import 'package:flutter_geen/app/utils/Toast.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_geen/components/permanent/panel.dart';
@@ -45,6 +44,7 @@ class WidgetDetailPage extends StatefulWidget {
 class _WidgetDetailPageState extends State<WidgetDetailPage> {
   String memberId ;
   int connectStatus =4;
+  int canEdit = 0;
   Map<String,dynamic>  userDetail;
   final List<ShareOpt> list = [
     ShareOpt(title:'微信', img:'assets/packages/images/login_wechat.svg',shareType:ShareType.SESSION,doAction:(shareType,shareInfo)async{
@@ -195,7 +195,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             //   if(value != null && value !="")
             //   _showToast(ctx, value, true);
             // });
-            _appoint(context,userDetail);
+            if(canEdit ==1){
+              _appoint(context,userDetail);
+
+            }else{
+              _showToast(ctx, "权限不足", true);
+            }
+
           }
           ));
   Widget _buildShare() => Builder(
@@ -296,7 +302,9 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     );
   }
   Widget _BuildStateDetail(BuildContext context, Map<String,dynamic> userdetails, Map<String,dynamic> connectLists, Map<String,dynamic> appointLists){
+
     var info = userdetails['info'];
+    canEdit= userdetails['can_edit'];
     userDetail=info;
     List<dynamic> connectList = connectLists['data'];
     List<dynamic> appointList = appointLists['data'];
@@ -720,7 +728,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   codeFamily: 'Inconsolata',
                   text: "客户排约记录",
                   code: "",
-                  show: list.length > 0 ? Container(
+                  show: appointListView.length > 0 ? Container(
                     width:  ScreenUtil().screenWidth*0.98,
                     // height: 300,
                     child:
@@ -741,6 +749,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       ],
     );
   }
+
+
+
+
   Widget _buildTitle(BuildContext context, DetailState state) {
     //print('build---${state.runtimeType}---');
     if (state is DetailWithData) {

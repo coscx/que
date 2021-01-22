@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_geen/app/res/style/unit_text_style.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/components/permanent/circle.dart';
-import 'package:flutter_geen/components/permanent/panel.dart';
 import 'package:flutter_geen/model/category_model.dart';
-import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/repositories/itf/category_repository.dart';
 import 'package:flutter_geen/views/common/unit_drawer_header.dart';
 
