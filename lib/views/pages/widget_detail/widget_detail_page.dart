@@ -2409,7 +2409,7 @@ _appoint(BuildContext context,Map<String,dynamic> detail) {
                                             decoration: InputDecoration(
                                                 labelText: "排约对象",
                                                 labelStyle: TextStyle(color: Colors.blue),
-                                                hintText: "请输入...",
+                                                hintText: "请选择>>>",
                                                 enabledBorder: const OutlineInputBorder(
                                                   borderSide:
                                                   const BorderSide(color: Colors.blue, width: 1),
@@ -2477,7 +2477,7 @@ _appoint(BuildContext context,Map<String,dynamic> detail) {
                                             decoration: InputDecoration(
                                                 labelText: "排约地点",
                                                 labelStyle: TextStyle(color: Colors.blue),
-                                                hintText: "请输入...",
+                                                hintText: "请选择>>>",
                                                 enabledBorder: const OutlineInputBorder(
                                                   borderSide:
                                                   const BorderSide(color: Colors.blue, width: 1),
