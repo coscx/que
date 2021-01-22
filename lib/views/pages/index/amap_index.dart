@@ -275,7 +275,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
                               list=   list.map((e) {
                                 if (e.latLng == item.latLng){
                                   e.select =true;
-                                  returnAddress = item.title+"#"+item.address;
+                                  returnAddress = item.title+"#"+item.address+"#"+item.latLng.longitude.toString()+"#"+item.latLng.latitude.toString();
                                   return e;
                                 } else{
                                   e.select =false;

@@ -93,6 +93,25 @@ class AddConnectEvent extends DetailEvent {
     return 'FetchWidgetDetail{widgetModel: }';
   }
 }
+class AddAppointEvent extends DetailEvent {
+  final String other_uuid ;
+  final String appointment_time ;
+  final String appointment_address ;
+  final String remark;
+  final String address_lng ;
+  final String address_lat ;
+  final Map<String,dynamic> photo;
+  final String other_name;
+  const AddAppointEvent(this.photo,this.other_uuid,this.appointment_time,this.appointment_address,this.remark,this.address_lng,this.address_lat,this.other_name);
+
+  @override
+  List<Object> get props => [photo,other_uuid,appointment_time,appointment_address,remark,address_lng,address_lat,other_name];
+
+  @override
+  String toString() {
+    return 'FetchWidgetDetail{widgetModel: }';
+  }
+}
 class FreshDetailState extends DetailEvent {
   final Map<String,dynamic> photo;
   const FreshDetailState(this.photo);

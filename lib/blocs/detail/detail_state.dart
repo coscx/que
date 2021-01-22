@@ -18,10 +18,11 @@ class DetailWithData extends DetailState {
 
   final Map<String,dynamic>  userdetails ;
   final Map<String,dynamic>  connectList ;
-  const DetailWithData({this.userdetails,this.connectList});
+  final Map<String,dynamic>  appointList ;
+  const DetailWithData({this.userdetails,this.connectList,this.appointList});
 
   @override
-  List<Object> get props => [userdetails,connectList];
+  List<Object> get props => [userdetails,connectList,appointList];
 
   @override
   String toString() {
@@ -33,8 +34,9 @@ class DelSuccessData extends DetailState {
 
   final Map<String,dynamic>  userdetails ;
   final Map<String,dynamic>  connectList ;
+  final Map<String,dynamic>  appointList ;
   final String  reason ;
-  const DelSuccessData({this.userdetails,this.connectList,this.reason});
+  const DelSuccessData({this.userdetails,this.connectList,this.appointList,this.reason});
 
   @override
   List<Object> get props => [userdetails,connectList,reason];

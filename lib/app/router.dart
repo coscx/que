@@ -22,6 +22,7 @@ import 'package:flutter_geen/views/pages/issues_point/issues_point_page.dart';
 import 'package:flutter_geen/views/pages/login/login_page.dart';
 import 'package:flutter_geen/views/pages/login/logins.dart';
 import 'package:flutter_geen/views/pages/search/serach_page.dart';
+import 'package:flutter_geen/views/pages/search/serach_page_appoint.dart';
 import 'package:flutter_geen/views/pages/setting/code_style_setting.dart';
 import 'package:flutter_geen/views/pages/setting/font_setting.dart';
 import 'package:flutter_geen/views/pages/setting/item_style_setting.dart';
@@ -73,6 +74,7 @@ class UnitRouter {
   static const String person_page ='PersonCenterPage';
   static const String create_user_page ='CreateUserPage';
   static const String select_page ='SelectPage';
+  static const String search_page_appoint ='SearchPageAppoint';
   static const String baidu_map ='BaiduMap';
   static const String qr_view ='QrView';
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -82,8 +84,11 @@ class UnitRouter {
         return Right2LeftRouter(
             child: WidgetDetailPage(
         ));
+
       case search:
         return Right2LeftRouter(child: SearchPage());
+      case search_page_appoint:
+        return Right2LeftRouter(child: SearchPageAppoint());
       case select_page:
         return Right2LeftRouter(child: SelectPage(title: "ttt",));
       case collect:

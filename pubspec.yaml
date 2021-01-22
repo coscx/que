@@ -93,6 +93,7 @@ dependencies:
   amap_map_fluttify: ^0.30.1
   flutter_qr_reader: ^1.0.3
   image_gallery_saver: ^1.6.7
+  dropdown_search: ^0.4.8
 dev_dependencies:
   flutter_test:
     sdk: flutter

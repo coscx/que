@@ -19,13 +19,13 @@ import 'package:flutter_geen/components/permanent/tag.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
-class PhotoSearchWidgetListItem extends StatelessWidget {
+class PhotoSearchAppointWidgetListItem extends StatelessWidget {
   final bool hasTopHole;
   final bool hasBottomHole;
   final bool isClip;
   final Map<String, dynamic> photo;
 
-  PhotoSearchWidgetListItem({
+  PhotoSearchAppointWidgetListItem({
     this.hasTopHole = true,
     this.hasBottomHole = false,
     this.isClip = true,
@@ -55,8 +55,9 @@ class PhotoSearchWidgetListItem extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
-                      Navigator.pushNamed(context, UnitRouter.widget_detail);
+                      Navigator.pop(context,photo['uuid']+"#"+photo['name']);
+                      //BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
+                      //Navigator.pushNamed(context, UnitRouter.widget_detail);
                     },
                     child: buildContent(context),
                   ),

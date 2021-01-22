@@ -168,6 +168,20 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> addAppoint(String uuid, Map<String,dynamic> data) async {
+
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/addAppointment',queryParameters:data );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
   static Future<Map<String,dynamic>> loginWx(String code) async {
 
     var ss = await LocalStorage.get("token");
@@ -272,6 +286,21 @@ class IssuesApi {
 
     try {
       Response<dynamic> rep = await dio.get('/api/v1/customer/connectList',queryParameters:data );
+      return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+  static Future<Map<String,dynamic>> getAppointmentList( String uuid, String page ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'customer_uuid':uuid,'currentPage':page,"pageSize":20};
+
+    try {
+      Response<dynamic> rep = await dio.get('/api/v1/customer/appointmentList',queryParameters:data );
       return rep.data;
 
     } on DioError catch(e){

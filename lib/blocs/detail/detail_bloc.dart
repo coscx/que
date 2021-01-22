@@ -40,15 +40,23 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 
       }
 
+      var appointList= await IssuesApi.getAppointmentList(event.photo['uuid'].toString(),"1");
+      if  (appointList['code']==200){
+
+      } else{
+
+      }
+
       if(result['data'].isEmpty){
         yield DetailEmpty();
       }else{
-        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data']);
+        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data'],appointList:appointList['data']);
       }
     }
     if(event is EditDetailEventAddress){
       Map<String ,dynamic> userdetails=state.props.elementAt(0);
       Map<String ,dynamic> connectList=state.props.elementAt(1);
+      Map<String ,dynamic> appointList=state.props.elementAt(2);
       //Map<String ,dynamic>  info = userdetails['info'];
       //if (event.value is int)
       Map<String ,dynamic> result = Map.from(userdetails);
@@ -71,22 +79,24 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         result['info']['location_place']=event.result.provinceName+event.result.cityName+event.result.areaName;
       }
 
-      yield DetailWithData(userdetails: result,connectList: connectList);
+      yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList);
 
     }
     if(event is EditDetailEvent){
          Map<String ,dynamic> userdetails=state.props.elementAt(0);
          Map<String ,dynamic> connectList=state.props.elementAt(1);
+         Map<String ,dynamic> appointList=state.props.elementAt(2);
          //Map<String ,dynamic>  info = userdetails['info'];
          //if (event.value is int)
          Map<String ,dynamic> result = Map.from(userdetails);
          result['info'][event.key] =event.value;
-        yield DetailWithData(userdetails: result,connectList: connectList);
+        yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList);
 
     }
     if(event is AddConnectEvent){
       Map<String ,dynamic> userdetails=state.props.elementAt(0);
       Map<String ,dynamic> connectList=state.props.elementAt(1);
+      Map<String ,dynamic> appointList=state.props.elementAt(2);
       Map<String ,dynamic> result = Map.from(connectList);
       List<dynamic> res = result['data'];
       Map<String ,dynamic> connect ={};
@@ -109,13 +119,45 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 
       var resultConnectList= await IssuesApi.addConnect(event.photo['uuid'],connect);
 
-      yield DetailWithData(userdetails: userdetails,connectList: result);
+      yield DetailWithData(userdetails: userdetails,connectList: result,appointList:appointList);
+
+    }
+    if(event is AddAppointEvent){
+      Map<String ,dynamic> userdetails=state.props.elementAt(0);
+      Map<String ,dynamic> connectList=state.props.elementAt(1);
+      Map<String ,dynamic> appointList=state.props.elementAt(2);
+      Map<String ,dynamic> result = Map.from(appointList);
+      List<dynamic> res = result['data'];
+      Map<String ,dynamic> connect ={};
+      var name = await LocalStorage.get("name");
+      var userName =name.toString();
+      if(userName == "" || userName == null || userName == "null"){
+        userName="";
+      }
+      connect['id'] = 0;
+      connect['username'] = userName;
+      connect['other_name'] =event.other_name;
+      connect['other_uuid'] = event.other_uuid;
+      connect['appointment_time'] = event.appointment_time;
+      connect['appointment_address'] = event.appointment_address;
+      connect['remark'] = event.remark;
+      connect['address_lat'] = event.address_lat;
+      connect['address_lng'] = event.address_lng;
+      connect['customer_uuid'] = event.photo['uuid'];
+      res=res.reversed.toList();
+      res.add(connect);
+      result['data']=res.reversed.toList();
+
+      var resultConnectList= await IssuesApi.addAppoint(event.photo['uuid'],connect);
+
+      yield DetailWithData(userdetails: userdetails,connectList: connectList,appointList:result);
 
     }
     if(event is UploadImgSuccessEvent){
       String imgUrl="https://queqiaoerp.oss-cn-shanghai.aliyuncs.com/"+event.value;
       Map<String ,dynamic> userdetails=state.props.elementAt(0);
       Map<String ,dynamic> connectList=state.props.elementAt(1);
+      Map<String ,dynamic> appointList=state.props.elementAt(2);
       Map<String ,dynamic> result = Map.from(userdetails);
       //List<Map<String ,dynamic>>   ss = userdetails['pics'];
       Map<String ,dynamic> img ={};
@@ -124,18 +166,19 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       img["customer_id"] = 0;
       userdetails['pics'].add(img);
 
-      yield DetailWithData(userdetails: result,connectList: connectList);
+      yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList);
 
     }
 
     if(event is EditDetailEventString){
       Map<String ,dynamic> userdetails=state.props.elementAt(0);
       Map<String ,dynamic> connectList=state.props.elementAt(1);
+      Map<String ,dynamic> appointList=state.props.elementAt(2);
       //Map<String ,dynamic>  info = userdetails['info'];
       //if (event.value is int)
       Map<String ,dynamic> result = Map.from(userdetails);
       result['info'][event.key] =event.value;
-      yield DetailWithData(userdetails: result,connectList: connectList);
+      yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList);
 
     }
     if(event is EventDelDetailImg){
@@ -143,6 +186,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       if  (result1['code']==200){
             Map<String ,dynamic> userdetails=state.props.elementAt(0);
             Map<String ,dynamic> connectList=state.props.elementAt(1);
+            Map<String ,dynamic> appointList=state.props.elementAt(2);
             List<dynamic> res = userdetails['pics'];
             var imgR=  res.map((e) {
               if (e['id']==event.img['id']){
@@ -156,13 +200,13 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 
             }
             userdetails['pics']=imgR;
-            yield DetailWithData(userdetails: userdetails,connectList: connectList);
+            yield DetailWithData(userdetails: userdetails,connectList: connectList,appointList:appointList);
 
       } else{
         Map<String ,dynamic> userdetails=state.props.elementAt(0);
         Map<String ,dynamic> connectList=state.props.elementAt(1);
-        yield DelSuccessData(userdetails: userdetails,connectList: connectList,reason:result1['message']);
-
+        Map<String ,dynamic> appointList=state.props.elementAt(3);
+        yield DelSuccessData(userdetails: userdetails,connectList: connectList,appointList:appointList,reason:result1['message']);
       }
 
 
@@ -189,10 +233,17 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 
       }
 
+      var appointList= await IssuesApi.getAppointmentList(photo['uuid'].toString(),"1");
+      if  (appointList['code']==200){
+
+      } else{
+
+      }
+
       if(result['data'].isEmpty){
         yield DetailEmpty();
       }else{
-        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data']);
+        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data'],appointList:appointList['data']);
       }
 
     } catch (e) {

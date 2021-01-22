@@ -774,12 +774,12 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           ),
                         ),
                         SizedBox(
-                          width: ScreenUtil().setWidth(20.w),
+                          width: 20.w,
                         ),
                         Visibility(
                             visible: true,
                             child: Container(
-                              width: ScreenUtil().screenWidth*0.33,
+                              width: ScreenUtil().screenWidth*0.533,
                               child: Text(
                                 answer,
                                 maxLines: 20,
@@ -798,7 +798,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                             child: Row(children: <Widget>[
 
                               SizedBox(
-                                width: ScreenUtil().setWidth(10.w),
+                                width: 10.w,
                               ),
                               Visibility(
                                   visible: false,
@@ -866,12 +866,12 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           ),
                         ),
                         SizedBox(
-                          width: ScreenUtil().setWidth(20.w),
+                          width: 20.w,
                         ),
                         Visibility(
                             visible: true,
                             child: Container(
-                              width: ScreenUtil().screenWidth*0.33,
+                              width: ScreenUtil().screenWidth*0.45,
                               child: Text(
                                 answer,
                                 maxLines: 20,
