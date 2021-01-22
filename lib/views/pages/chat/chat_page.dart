@@ -822,8 +822,8 @@ class ChatsState extends State<ChatsPage> {
                 }
               },
               icon: Image.asset(name,
-                  width: crossAxisCount == 5 ? 60 : 32,
-                  height: crossAxisCount == 5 ? 60 : 32));
+                  width: crossAxisCount == 5 ? 60.w : 32.w,
+                  height: crossAxisCount == 5 ? 60.h : 32.h));
         }).toList());
   }
 
@@ -1243,18 +1243,18 @@ class ChatsState extends State<ChatsPage> {
     if (imageURL == null || imageURL.length == 0) {
       imageURL = ValueUtil.toStr(message.content['url']);
     }
-    double size = 120.w;
+    double size = 240.w;
     Widget image;
     if (message.type== MessageType.MESSAGE_TEXT&&
         message.content['text'].contains('assets/images/face')) {
       //assets/images/face中的表情
-      size = 32.w;
+      size = 50.w;
       image = Image.asset(message.content['text'], width: size, height: size);
       isFace=1;
     } else if (message.type== MessageType.MESSAGE_TEXT &&
         message.content['text'].contains('assets/images/figure')) {
       //assets/images/figure中的表情
-      size = 90.w;
+      size = 120.w;
       image = Image.asset(message.content['text'], width: size, height: size);
       isFace=1;
     }
@@ -1287,8 +1287,8 @@ class ChatsState extends State<ChatsPage> {
 
         ),
 
-        width: 100.w,
-        height: 120.h,
+        width: 190.w,
+        height: 220.h,
         child: //Image.network(imageURL)
         GestureDetector(
            child:
