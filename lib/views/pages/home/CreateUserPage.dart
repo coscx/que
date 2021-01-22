@@ -301,11 +301,11 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                         padding: EdgeInsets.only(top: 20.h, bottom: 15.h,left: 50.h,right: 50.h),
                                         child: Container(
                                           width: ScreenUtil().screenWidth*0.8,
-                                          height: 120.h,
+                                          height: 90.h,
                                           child: RaisedButton(
                                             elevation: 0,
                                             shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(20))),
+                                                borderRadius: BorderRadius.all(Radius.circular(40.w))),
                                             color: Colors.lightBlue,
                                             onPressed: (){
 
@@ -749,7 +749,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
           bottom: 0
       ),
       width: double.infinity,
-      height: 150.h,
+      height: 120.h,
       child:  Material(
           color:  Colors.transparent ,
           child: Container(
@@ -762,7 +762,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 80.sp,
+                          size: 50.sp,
                           color: Colors.black54,
                         ),
 
@@ -770,7 +770,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 50.sp, color: Colors.grey),
+                            style: TextStyle(fontSize: 40.sp, color: Colors.grey),
                           ),
                         ),
                         SizedBox(
@@ -784,7 +784,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 answer,
                                 maxLines: 20,
                                 style: TextStyle(
-                                    fontSize: 50.sp, color: Colors.redAccent),
+                                    fontSize: 40.sp, color: Colors.redAccent),
                               ),
                             )),
                       ]),
@@ -841,7 +841,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
           bottom: 0
       ),
       width: double.infinity,
-      height: 150.h,
+      height: 120.h,
       child:  Material(
           color:  Colors.transparent ,
           child: Container(
@@ -854,7 +854,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       children: <Widget>[
                         Icon(
                           icon,
-                          size: 80.sp,
+                          size: 50.sp,
                           color: Colors.black54,
                         ),
 
@@ -862,7 +862,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 50.sp, color: Colors.grey),
+                            style: TextStyle(fontSize: 40.sp, color: Colors.grey),
                           ),
                         ),
                         SizedBox(
@@ -876,7 +876,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 answer,
                                 maxLines: 20,
                                 style: TextStyle(
-                                    fontSize: 50.sp, color: color),
+                                    fontSize: 40.sp, color: color),
                               ),
                             )),
                       ]),
