@@ -105,8 +105,9 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     Future.delayed(Duration(seconds: 5)).then((e) async {
 
      var token = await UmengAnalyticsPush.deviceToken();
-    if (token !=""){
-    IssuesApi.addToken(token);
+     print(token);
+    if (token !="" && token !=null){
+      IssuesApi.addToken(token);
     }
 
     });

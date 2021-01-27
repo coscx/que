@@ -11,6 +11,7 @@ import 'package:flutter_geen/blocs/chat/chat_state.dart';
 import 'package:flutter_geen/blocs/peer/peer_bloc.dart';
 import 'package:flutter_geen/blocs/peer/peer_event.dart';
 import 'package:flutter_geen/blocs/peer/peer_state.dart';
+import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/pages/chat/view/util/date.dart';
 import 'package:flutter_geen/views/pages/chat/widget/more_widgets.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
@@ -369,6 +370,11 @@ class ImConversationListPage extends StatelessWidget{
                       // }).toList();
                       BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
                       BlocProvider.of<ChatBloc>(context).add(EventFreshMessage());
+                    }
+                    var data = state.message[index];
+                    var memberIds = await LocalStorage.get("memberId");
+                    if(memberIds != "" && memberIds != null){
+                      data.memId=memberIds;
                     }
                     Navigator.pushNamed(context, UnitRouter.to_chats, arguments: state.message[index]);
                   },
