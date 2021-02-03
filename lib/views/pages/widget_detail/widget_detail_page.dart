@@ -353,7 +353,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child:  _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true)),
                           GestureDetector(
                               onTap: (){
-
                               },child: _item_detail(context,Colors.black,Icons.contact_page_outlined,"年龄",info['age']==0?"-":info['age'].toString()+"岁",false)),
                           GestureDetector(
                               onTap: (){
@@ -365,7 +364,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child:  _item_detail(context,Colors.red,Icons.settings_backup_restore_outlined,"八字",info['bazi'].toString(),false)),
                           GestureDetector(
                               onTap: (){
-
                               },child:  _item_detail(context,Colors.orange,Icons.whatshot,"五行",info['wuxing'].toString(),false)),
                           GestureDetector(
                               onTap: () async {
@@ -386,7 +384,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                     _showToast(context,results['message'],false);
                                   }
                                 }
-
                               },child:  _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place']==null?"-":(info['native_place']==""?"-":info['native_place'].toString()),true)),
                           GestureDetector(
                               onTap: () async {
@@ -409,7 +406,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child:  _item_detail(context,Colors.black,Icons.house_outlined,"居住",info['location_place']==null?"-":(info['location_place']==""?"-":info['location_place'].toString()),true)),
                           GestureDetector(
                               onTap: (){
-
                               },child:  _item_detail(context,Colors.black,Icons.point_of_sale,"销售",info['sale_user'].toString(),false)),
                           GestureDetector(
                               onTap: (){
@@ -425,7 +421,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child:  _item_detail(context,Colors.black,Icons.line_weight,"体重",info['weight']==0?"-":info['weight'].toString()+"kg",true)),
                           GestureDetector(
                               onTap: (){
-
                               },child:  _item_detail(context,Colors.black,Icons.design_services_outlined,"服务",info['serve_user']==""?"-":info['serve_user'].toString(),false)),
                           GestureDetector(
                               onTap: (){
@@ -450,11 +445,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   )
               ),
 
-
             ],
           ),
-
-
         ),
 
         Container(

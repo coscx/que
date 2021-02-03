@@ -72,10 +72,8 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
           if (state is PeerMessageSuccess){
             Message mess =Message.fromMap(event.message);
             cunrrentId= state.props.elementAt(1);
-            if (cunrrentId ==null){
-              cunrrentId= mess.receiver;
-            }
-            if (cunrrentId == null && mess.sender!=cunrrentId){
+
+            if (cunrrentId != null && mess.sender!=cunrrentId){
               List<Message> history=state.props.elementAt(0);
               newMessage.addAll(history);
             }else{
@@ -85,7 +83,9 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
             }
 
 
-          } else if (state is LoadMorePeerMessageSuccess){
+          } else
+
+            if (state is LoadMorePeerMessageSuccess){
               FltImPlugin im = FltImPlugin();
               var res = await im.createConversion(
                 currentUID: event.message['receiver'].toString(),

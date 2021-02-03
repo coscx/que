@@ -47,7 +47,8 @@ import 'package:vibration/vibration.dart';
 class ChatsPage extends StatefulWidget {
 
   final Conversion model;
-  ChatsPage({this.model});
+  final String memId ;
+  ChatsPage({this.model,this.memId});
 
   @override
   State<StatefulWidget> createState() {
@@ -94,6 +95,7 @@ class ChatsState extends State<ChatsPage> {
     // TODO: implement initState
     _first = true;
     _alive = true;
+    tfSender =widget.model.memId;
     super.initState();
     _flutterRecord = FlutterRecord();
     _fixedPlayer = new AudioPlayer();
@@ -110,7 +112,7 @@ class ChatsState extends State<ChatsPage> {
     Future.delayed(Duration(milliseconds: 1)).then((e) async {
       var memberId = await LocalStorage.get("memberId");
       if(memberId != "" && memberId != null){
-        tfSender=memberId.toString();
+        //tfSender=memberId.toString();
       }
 
     });
@@ -1098,7 +1100,7 @@ class ChatsState extends State<ChatsPage> {
       return Container(
         margin: EdgeInsets.only(left: 40.w, right: 10.w, bottom: 6.h, top: 6.h),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
              Expanded(
                 child: Container(
