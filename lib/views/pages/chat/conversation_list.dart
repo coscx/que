@@ -263,7 +263,7 @@ class ImConversationListPage extends StatelessWidget{
   Widget _buildListItem(Conversion conversation) {
     return Container(
       color:Colors.white,
-      padding:  EdgeInsets.only(top: 10.h,left: 20.w),
+      padding:  EdgeInsets.only(top: 15.h,left: 20.w),
 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -282,7 +282,7 @@ class ImConversationListPage extends StatelessWidget{
                   borderRadius: BorderRadius.circular(46.w),
                   // image url 去要到自己的服务器上去请求回来再赋值，这里使用一张默认值即可
                   image: DecorationImage(
-                      image: conversation.avatarURL==""? Image.asset("assets/packages/images/chat_hi.png").image:NetworkImage(conversation.avatarURL==""?"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606922115065&di=29da8ee4b3f8b33012622f12141fea1d&imgtype=0&src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202007%2F08%2F20200708231202_ucvgx.thumb.400_0.jpeg":conversation.avatarURL)
+                      image: conversation.type== ConversionType.CONVERSATION_PEER? Image.asset("assets/packages/images/chat_hi.png").image:Image.asset("assets/packages/images/chat_notice.png").image
                   ),
                 ),
               )
@@ -301,7 +301,7 @@ class ImConversationListPage extends StatelessWidget{
                     borderRadius: BorderRadius.circular(46.w),
                     // image url 去要到自己的服务器上去请求回来再赋值，这里使用一张默认值即可
                     image: DecorationImage(
-                        image: conversation.avatarURL==""? Image.asset("assets/packages/images/chat_hi.png").image:NetworkImage(conversation.avatarURL==""?"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606922115065&di=29da8ee4b3f8b33012622f12141fea1d&imgtype=0&src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202007%2F08%2F20200708231202_ucvgx.thumb.400_0.jpeg":conversation.avatarURL)
+                        image: conversation.type == ConversionType.CONVERSATION_PEER? Image.asset("assets/packages/images/chat_hi.png").image:Image.asset("assets/packages/images/chat_notice.png").image
                     ),
                   ),
                 ),
@@ -316,16 +316,23 @@ class ImConversationListPage extends StatelessWidget{
                       constraints: BoxConstraints(maxWidth: 260.w),
                       margin: EdgeInsets.only(top: 2.w,left: 10.w),
                       child: Text(
-                        conversation.cid,
+                        conversation.type == ConversionType.CONVERSATION_PEER ?conversation.cid :conversation.cid+"群",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: TextStyle(fontWeight: FontWeight.w500,color: Colors.black, fontSize: 30.sp),
                       ),
                     ),
-                    Container(
-                      constraints: BoxConstraints(maxWidth: 260.w),
+                    conversation.type == ConversionType.CONVERSATION_PEER ?Container(
+                      constraints: BoxConstraints(maxWidth: 0.6.sw),
                       margin: EdgeInsets.only(top: 8.w),
                       child: Text((conversation.detail.contains('assets/images/face') || conversation.detail.contains('assets/images/figure'))?'[表情消息]':conversation.detail,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(color: Colors.grey, fontSize: 30.sp)),
+                    ):Container(
+                      constraints: BoxConstraints(maxWidth: 0.6.sw),
+                      margin: EdgeInsets.only(top: 8.w),
+                      child: Text((conversation.message.sender + ":"+((conversation.detail.contains('assets/images/face') || conversation.detail.contains('assets/images/figure'))?'[表情消息]':conversation.detail)),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: TextStyle(color: Colors.grey, fontSize: 30.sp)),
@@ -355,22 +362,38 @@ class ImConversationListPage extends StatelessWidget{
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
                   onTap: ()  async{
-                    BlocProvider.of<PeerBloc>(context).add(EventFirstLoadMessage(memberId,state.message[index].cid));
-                    if (state.message[index].newMsgCount>0){
+
+
                       FltImPlugin im = FltImPlugin();
-                      im.clearReadCount(cid:state.message[index].cid);
-                      var count = 0;
-                      Map response = await im.getConversations();
-                      var  conversions = response["data"];
-                      // conversions.map((e) {
-                      //   if (e['unreadCount'] > 0){
-                      //     count=count+e['unreadCount'];
-                      //   }
-                      // }).toList();
-                      BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
-                      BlocProvider.of<ChatBloc>(context).add(EventFreshMessage());
-                    }
-                    Navigator.pushNamed(context, UnitRouter.to_chats, arguments: state.message[index]);
+                      if (state.message[index].newMsgCount > 0){
+                        if(state.message[index].type == ConversionType.CONVERSATION_GROUP){
+                          im.clearGroupReadCount(cid:state.message[index].cid);
+                          var count = 0;
+                          BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
+                          BlocProvider.of<ChatBloc>(context).add(EventFreshMessage());
+                        }
+                        if(state.message[index].type == ConversionType.CONVERSATION_PEER){
+                          im.clearReadCount(cid:state.message[index].cid);
+                          var count = 0;
+                          BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
+                          BlocProvider.of<ChatBloc>(context).add(EventFreshMessage());
+                        }
+
+                      }
+                      if(state.message[index].type == ConversionType.CONVERSATION_GROUP){
+                        BlocProvider.of<GroupBloc>(context).add(EventGroupFirstLoadMessage(memberId,state.message[index].cid));
+                        Navigator.pushNamed(context, UnitRouter.to_group_chat, arguments: state.message[index]);
+                      }
+                      if(state.message[index].type == ConversionType.CONVERSATION_PEER){
+                        BlocProvider.of<PeerBloc>(context).add(EventFirstLoadMessage(memberId,state.message[index].cid));
+                        Navigator.pushNamed(context, UnitRouter.to_chats, arguments: state.message[index]);
+                      }
+
+
+
+
+
+
                   },
                   onLongPress: (){
 

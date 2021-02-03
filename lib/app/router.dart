@@ -11,6 +11,7 @@ import 'package:flutter_geen/views/pages/category/category_detail.dart';
 import 'package:flutter_geen/views/pages/category/collect_page.dart';
 import 'package:flutter_geen/views/pages/chat/chat_page.dart';
 import 'package:flutter_geen/views/pages/chat/conversation_list.dart';
+import 'package:flutter_geen/views/pages/chat/group_page.dart';
 import 'package:flutter_geen/views/pages/data/brower.dart';
 import 'package:flutter_geen/views/pages/data/card.dart';
 import 'package:flutter_geen/views/pages/gallery/gallery_page.dart';
@@ -65,6 +66,7 @@ class UnitRouter {
   static const String about_app = 'AboutAppPage';
   static const String to_chat = 'ToChatPage';
   static const String to_chats = 'ChatsPage';
+  static const String to_group_chat = 'GroupChatPage';
   static const String time_line = 'TimeLine';
   static const String chat_list = 'ChatList';
   static const String index_page = 'IndexPage';
@@ -128,6 +130,8 @@ class UnitRouter {
         return Right2LeftRouter(child: AboutMePage());
       case to_chats:
         return Right2LeftRouter(child: ChatsPage(model: settings.arguments,));
+      case to_group_chat:
+        return Right2LeftRouter(child: GroupChatPage(model: settings.arguments,));
       case point_detail:
         return Right2LeftRouter(child: IssuesDetailPage());
       case index_page:
