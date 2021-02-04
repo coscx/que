@@ -247,7 +247,11 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
           //loadConversions();
            int error = ValueUtil.toInt(data['error']);
            onNewMessage(result, error);
-        } else if (type == 'onSystemMessage') {
+        } else if (type == 'onNewGroupMessage') {
+           //loadConversions();
+           int error = ValueUtil.toInt(data['error']);
+           onNewGroupMessage(result, error);
+         } else if (type == 'onSystemMessage') {
           //loadConversions();
         } else if (type == 'onPeerMessageACK') {
           int error = ValueUtil.toInt(data['error']);
@@ -256,6 +260,8 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
           onPeerMessage(result);
         } else if (type == 'onPeerSecretMessage') {
           onPeerSecretMessage(result);
+        }  else if (type == 'onGroupMessage') {
+           onGroupMessage(result);
         } else if (type == 'onImageUploadSuccess') {
           String url = ValueUtil.toStr(data['URL']);
           onImageUploadSuccess(result, url);
@@ -457,7 +463,24 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
   void onPeerSecretMessage(result) {
 
   }
+  void onGroupMessage(result) {
+    Map<String, dynamic> message= Map<String, dynamic>.from(result);
+    String title="通知";
+    String content="消息";
+    var type =message['type'];
+    if(type == "MESSAGE_TEXT"){
+      title="通知";
+      content= message['content']['text'];
+    }else{
+      title="通知";
+      content= '聊天消息';
+    }
 
+
+
+    //_showNotification(title,content);
+    BlocProvider.of<GroupBloc>(context).add(EventGroupReceiveNewMessage(message));
+  }
   void onNewMessage(result, int error)async {
     var count = 0;
     Map response = await im.getConversations();
@@ -471,7 +494,24 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
     BlocProvider.of<ChatBloc>(context).add(EventNewMessage(result));
   }
+  void onNewGroupMessage(result, int error)async {
+    var count = 1;
+    print(result);
+    //Map response = await im.getConversations();
+    //var  conversions = response["data"];
+    // conversions.map((e) {
+    //   if (e['unreadCount'] > 0){
+    //     count=count+e['unreadCount'];
+    //   }
+    // }).toList();
+
+     BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
+     BlocProvider.of<ChatBloc>(context).add(EventNewMessage(result));
+  }
+
 }
+
+
 abstract class _DockedFloatingActionButtonLocation
     extends FloatingActionButtonLocation {
   const _DockedFloatingActionButtonLocation();

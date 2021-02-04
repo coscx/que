@@ -297,9 +297,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     child:BlocBuilder<HomeBloc, HomeState>(builder: (ctx, state) {
       return Stack(
             children: <Widget>[
-
               //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
-
               Container(
                 //padding:  EdgeInsets.only(top: 25.h),
                 child: ScrollConfiguration(

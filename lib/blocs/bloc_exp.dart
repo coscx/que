@@ -42,6 +42,10 @@ export 'peer/peer_bloc.dart';
 export 'peer/peer_state.dart';
 export 'peer/peer_event.dart';
 
+export 'group/group_bloc.dart';
+export 'group/group_state.dart';
+export 'group/group_event.dart';
+
 
 export 'timeline/time_bloc.dart';
 export 'timeline/time_state.dart';
