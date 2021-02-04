@@ -88,8 +88,8 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
           } else if (state is LoadMoreGroupMessageSuccess){
               FltImPlugin im = FltImPlugin();
               var res = await im.createGroupConversion(
-                currentUID: event.message['receiver'].toString(),
-                groupUID: event.message['sender'].toString(),
+                currentUID: event.message['sender'].toString(),
+                groupUID: event.message['receiver'].toString(),
               );
               cunrrentId=event.message['sender'].toString();
               Map response = await im.loadData();
