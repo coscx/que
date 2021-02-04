@@ -18,6 +18,7 @@ import 'package:flutter_geen/views/pages/utils/dialog_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flt_im_plugin/conversion.dart';
+import 'package:flutter_geen/storage/dao/local_storage.dart';
 //会控菜单项
 enum ConferenceItem { AddMember, LockConference, ModifyLayout, TurnoffAll }
 /*
@@ -80,7 +81,9 @@ class ImConversationListPage extends StatelessWidget{
                 size: 48.sp,
                 color: Colors.black,
               ),
-              onPressed: null,
+              onPressed: (){
+                Navigator.pushNamed(context, UnitRouter.user);
+              },
             ),
           ),
         SizedBox(
@@ -365,28 +368,57 @@ class ImConversationListPage extends StatelessWidget{
 
 
                       FltImPlugin im = FltImPlugin();
-                      if (state.message[index].newMsgCount > 0){
+                      List<Conversion>  message;
                         if(state.message[index].type == ConversionType.CONVERSATION_GROUP){
                           im.clearGroupReadCount(cid:state.message[index].cid);
-                          var count = 0;
-                          BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
-                          BlocProvider.of<ChatBloc>(context).add(EventFreshMessage());
+                            message=state.message.map((e) {
+                            if(e.type == ConversionType.CONVERSATION_GROUP){
+                              e.newMsgCount =0;
+                              return e;
+                            }else{
+                              return e;
+                            }
+                          }).toList();
+                          //var count = 0;
+                          //if (state.message[index].newMsgCount > 0){
+                            //BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
+                            BlocProvider.of<ChatBloc>(context).add(EventFreshMessage());
+                          //}
+
                         }
                         if(state.message[index].type == ConversionType.CONVERSATION_PEER){
                           im.clearReadCount(cid:state.message[index].cid);
-                          var count = 0;
-                          BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
+                          message=state.message.map((e) {
+                            if(e.type == ConversionType.CONVERSATION_PEER){
+                              e.newMsgCount =0;
+                              return e;
+                            }else{
+                              return e;
+                            }
+                          }).toList();
+                          //var count = 0;
                           BlocProvider.of<ChatBloc>(context).add(EventFreshMessage());
                         }
-
+                        var count =0;
+                        message.map((e) {
+                          count+= e.newMsgCount;
+                        }).toList();
+                       if(count ==0){
+                         BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(0));
+                       }
+                      var memberId = await LocalStorage.get("memberId");
+                      if(memberId != "" && memberId != null){
+                        memberId=memberId.toString();
                       }
+
+                      final Conversion model = Conversion.fromMap({"memId":memberId,"cid":state.message[index].cid,"name":state.message[index].name});
                       if(state.message[index].type == ConversionType.CONVERSATION_GROUP){
                         BlocProvider.of<GroupBloc>(context).add(EventGroupFirstLoadMessage(memberId,state.message[index].cid));
-                        Navigator.pushNamed(context, UnitRouter.to_group_chat, arguments: state.message[index]);
+                        Navigator.pushNamed(context, UnitRouter.to_group_chat, arguments: model);
                       }
                       if(state.message[index].type == ConversionType.CONVERSATION_PEER){
                         BlocProvider.of<PeerBloc>(context).add(EventFirstLoadMessage(memberId,state.message[index].cid));
-                        Navigator.pushNamed(context, UnitRouter.to_chats, arguments: state.message[index]);
+                        Navigator.pushNamed(context, UnitRouter.to_chats, arguments: model);
                       }
 
 

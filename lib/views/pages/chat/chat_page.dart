@@ -315,7 +315,7 @@ class ChatsState extends State<ChatsPage> {
                 padding: EdgeInsets.only(right: 15.w, left: 15.w),
                 child: Icon(
                   Icons.more_horiz,
-                  size: 22.sp,
+                  size: 50.sp,
                   color: Colors.black,
                 )),
             onTap: () {

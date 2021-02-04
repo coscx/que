@@ -59,7 +59,20 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> getUser(  String page ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'currentPage':page,'status':"all",'is_passive':"all","store_id":1,"pageSize":100};
+    try {
+      Response<dynamic> rep = await dio.get('/api/v1/system/user/list',queryParameters:data );
+      return rep.data;
 
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
   static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String mode,SearchParamList search ,bool _showAge, int _showAgeMax, int _showAgeMin,String serveType) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();

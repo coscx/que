@@ -46,6 +46,9 @@ export 'group/group_bloc.dart';
 export 'group/group_state.dart';
 export 'group/group_event.dart';
 
+export 'user/user_bloc.dart';
+export 'user/user_state.dart';
+export 'user/user_event.dart';
 
 export 'timeline/time_bloc.dart';
 export 'timeline/time_state.dart';
