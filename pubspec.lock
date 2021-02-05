@@ -302,13 +302,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_audio_recorder:
-    dependency: "direct main"
-    description:
-      name: flutter_audio_recorder
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.5.5"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -414,13 +407,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.11"
-  flutter_plugin_record:
-    dependency: "direct main"
-    description:
-      name: flutter_plugin_record
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.4"
   flutter_qr_reader:
     dependency: "direct main"
     description:
@@ -435,13 +421,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.5.0"
-  flutter_record:
-    dependency: "direct main"
-    description:
-      name: flutter_record
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.7"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -449,6 +428,27 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.0"
+  flutter_sound:
+    dependency: "direct main"
+    description:
+      name: flutter_sound
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "7.5.3+1"
+  flutter_sound_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_sound_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "7.5.3+1"
+  flutter_sound_web:
+    dependency: transitive
+    description:
+      name: flutter_sound_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "7.5.3+1"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -585,6 +585,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.16.1"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.6.2"
   json_annotation:
     dependency: transitive
     description:
@@ -599,6 +606,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.5.3"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.9.4"
   logging:
     dependency: transitive
     description:
@@ -794,7 +808,7 @@ packages:
       name: provider
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.4"
+    version: "4.3.3"
   pull_to_refresh:
     dependency: "direct main"
     description:
@@ -802,6 +816,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.6.3"
+  recase:
+    dependency: transitive
+    description:
+      name: recase
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.0.1"
   rect_getter:
     dependency: transitive
     description:
@@ -1088,6 +1109,6 @@ packages:
     source: hosted
     version: "4.5.1"
 sdks:
-  dart: ">=2.10.0-110 <2.11.0"
+  dart: ">=2.10.0 <2.11.0"
   flutter: ">=1.20.0 <2.0.0"
   flutter_plugin_android_lifecycle: ">=1.0.2 <2.0.0"

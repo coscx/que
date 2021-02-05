@@ -47,6 +47,24 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
 
         yield PeerMessageSuccess(newMessage,event.peerUID);
       }
+    if (event is EventSendNewVoiceMessage) {
+      FltImPlugin im = FltImPlugin();
+      Map result = await im.sendAudioMessage(
+        secret: false,
+        sender: event.currentUID,
+        receiver: event.peerUID,
+        path: event.path ??'',
+        second: event.second
+      );
+      List<Message> newMessage =[];
+      Map response = await im.loadData();
+      var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
+
+      newMessage.addAll(messages.reversed.toList());
+
+      yield PeerMessageSuccess(newMessage,event.peerUID);
+    }
+
     if (event is EventSendNewImageMessage) {
       FltImPlugin im = FltImPlugin();
       Map result = await im.sendImageMessage(

@@ -50,3 +50,12 @@ class EventSendNewImageMessage extends PeerEvent {
   EventSendNewImageMessage(this.currentUID,this.peerUID,this.content,);
 
 }
+class EventSendNewVoiceMessage extends PeerEvent {
+
+  final String currentUID;
+  final String peerUID;
+  final String path;
+  final int second;
+  EventSendNewVoiceMessage(this.currentUID,this.peerUID,this.path,this.second);
+
+}

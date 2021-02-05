@@ -12,10 +12,7 @@ import 'package:flt_im_plugin/value_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_geen/views/pages/data/CustomLoadMore.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
@@ -26,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/blocs/peer/peer_bloc.dart';
 import 'package:flutter_geen/blocs/peer/peer_event.dart';
 import 'package:flutter_geen/blocs/peer/peer_state.dart';
-import 'package:flutter_geen/views/items/chat_item_widgets.dart';
 import 'package:flutter_geen/views/pages/chat/widget/more_widgets.dart';
 import 'package:flutter_geen/views/pages/chat/widget/popupwindow_widget.dart';
 import 'package:flutter_geen/views/pages/resource/colors.dart';
@@ -36,11 +32,12 @@ import 'package:flutter_geen/views/pages/utils/file_util.dart';
 import 'package:flutter_geen/views/pages/utils/functions.dart';
 import 'package:flutter_geen/views/pages/utils/image_util.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
-import 'package:flutter_record/flutter_record.dart';
 import 'package:frefresh/frefresh.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vibration/vibration.dart';
-
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:path/path.dart' as path;
 /*
 *  发送聊天信息
 */
@@ -80,7 +77,6 @@ class ChatsState extends State<ChatsPage> {
   bool _alive = false;
   ScrollController _scrollController = new ScrollController();
   String _audioIconPath = '';
-  FlutterRecord _flutterRecord;
   String _voiceFilePath = '';
   String _voiceFileName = '';
   AudioCache _audioPlayer;
@@ -90,6 +86,23 @@ class ChatsState extends State<ChatsPage> {
   FRefreshController controller3;
   bool _isLoading = false;
    Permission _permission;
+   Timer _timer;
+   int voiceCount = 0;
+  StreamSubscription _recorderSubscription;
+  StreamSubscription _playerSubscription;
+
+  // StreamSubscription _dbPeakSubscription;
+  FlutterSoundRecorder flutterSound;
+  String _recorderTxt = '00:00:00';
+  // String _playerTxt = '00:00:00';
+
+  double _dbLevel = 0.0;
+  FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
+  FlutterSoundPlayer playerModule = FlutterSoundPlayer();
+
+  var _path = "";
+  var _duration = 0.0;
+  var _maxLength = 59.0;
   @override
   void initState() {
     // TODO: implement initState
@@ -97,7 +110,6 @@ class ChatsState extends State<ChatsPage> {
     _alive = true;
     tfSender =widget.model.memId;
     super.initState();
-    _flutterRecord = FlutterRecord();
     _fixedPlayer = new AudioPlayer();
     _audioPlayer = new AudioCache(fixedPlayer: _fixedPlayer);
     _textFieldNode.addListener(_focusNodeListener); // 初始化一个listener
@@ -143,6 +155,35 @@ class ChatsState extends State<ChatsPage> {
 
       }
     });
+
+
+    init();
+  }
+  Future<void> _initializeExample(bool withUI) async {
+
+    await playerModule.closeAudioSession();
+
+    await playerModule.openAudioSession(
+        focus: AudioFocus.requestFocusTransient,
+        category: SessionCategory.playAndRecord,
+        mode: SessionMode.modeDefault,
+        device: AudioDevice.speaker);
+
+    await playerModule.setSubscriptionDuration(Duration(milliseconds: 30));
+    await recorderModule.setSubscriptionDuration(Duration(milliseconds: 30));
+  }
+
+  Future<void> init() async {
+    recorderModule.openAudioSession(
+        focus: AudioFocus.requestFocusTransient,
+        category: SessionCategory.playAndRecord,
+        mode: SessionMode.modeDefault,
+        device: AudioDevice.speaker);
+    await _initializeExample(false);
+
+    if (Platform.isAndroid) {
+      // copyAssets();
+    }
   }
 
   @override
@@ -153,7 +194,53 @@ class ChatsState extends State<ChatsPage> {
     super.dispose();
     _first = false;
     _textFieldNode.removeListener(_focusNodeListener); // 页面消失时必须取消这个listener！！
+    _cancelRecorderSubscriptions();
+    _cancelPlayerSubscriptions();
+    _releaseFlauto();
   }
+  /// 取消录音监听
+  /// 结束录音
+  _stopRecorder() async {
+    try {
+      await recorderModule.stopRecorder();
+      print('stopRecorder');
+      _cancelRecorderSubscriptions();
+    } catch (err) {
+      print('stopRecorder error: $err');
+    }
+    setState(() {
+      _dbLevel = 0.0;
+
+    });
+  }
+
+  /// 取消录音监听
+  void _cancelRecorderSubscriptions() {
+    if (_recorderSubscription != null) {
+      _recorderSubscription.cancel();
+      _recorderSubscription = null;
+    }
+  }
+
+  /// 取消播放监听
+  void _cancelPlayerSubscriptions() {
+    if (_playerSubscription != null) {
+      _playerSubscription.cancel();
+      _playerSubscription = null;
+    }
+  }
+
+  /// 释放录音和播放
+  Future<void> _releaseFlauto() async {
+    try {
+      await playerModule.closeAudioSession();
+      await recorderModule.closeAudioSession();
+    } catch (e) {
+      print('Released unsuccessful');
+      print(e);
+    }
+  }
+
   Future<Null> _focusNodeListener() async {
     if (_textFieldNode.hasFocus) {
       Future.delayed(Duration(milliseconds: 5), () {
@@ -179,7 +266,7 @@ class ChatsState extends State<ChatsPage> {
       Permission.storage,
       Permission.location,
       Permission.speech,
-
+      Permission.microphone
     ].request();
     print(statuses);
   }
@@ -518,58 +605,87 @@ class ChatsState extends State<ChatsPage> {
             alignment: Alignment.center,
             child: Column(
               children: <Widget>[
-                Container(
-                    padding: EdgeInsets.only(top: 10.h),
-                    child: _audioIconPath == ''
-                        ? SizedBox(
-                            width: 60.w,
-                            height: 60.h,
-                          )
-                        : Image.asset(
-                            FileUtil.getImagePath(_audioIconPath,
-                                dir: 'icon', format: 'png'),
-                            width: 60.w,
-                            height: 60.h,
-                            color: ObjectUtil.getThemeSwatchColor(),
-                          )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        padding: EdgeInsets.only(top: 10.h),
+                        child: _audioIconPath == ''
+                            ? SizedBox(
+                                width: 60.w,
+                                height: 60.h,
+                              )
+                            : Image.asset(
+                                FileUtil.getImagePath(_audioIconPath,
+                                    dir: 'icon', format: 'png'),
+                                width: 60.w,
+                                height: 60.h,
+                                color: ObjectUtil.getThemeSwatchColor(),
+                              )),
+
+                            Text(voiceCount.toString() +"S")
+                  ],
+                ),
                 Container(
                     padding: EdgeInsets.all(10.w),
                     child: GestureDetector(
-                      onScaleStart: (res) {
+                      onScaleStart: (res) async {
+                        if(_timer != null){
+                          _timer.cancel();
+                          _timer =Timer.periodic(
+                              Duration(milliseconds: 1000), (t){
+                            //print(voiceCount);
+                            setState(() {
+                              voiceCount= voiceCount+1;
+                            });
+                          }
+                          );
+                        }else{
+                          _timer =Timer.periodic(
+                              Duration(milliseconds: 1000), (t){
+                            //print(voiceCount);
+                            setState(() {
+                              voiceCount= voiceCount+1;
+                            });
+                          }
+                          );
+                        }
+
+                        if(recorderModule.isRecording ){
+                          await _stopRecorder();
+                        }
                         _startRecord();
+
+
                       },
-                      onScaleEnd: (res) {
+                      onScaleEnd: (res) async {
                         if (_headsetColor == ObjectUtil.getThemeLightColor()) {
                           DialogUtil.buildToast('试听功能暂未实现');
-                          if (_flutterRecord.isRecording) {
-                            _flutterRecord.stopRecorder();
+                          if (recorderModule.isRecording) {
+                            _stopRecorder();
                           }
                         } else if (_highlightColor ==
                             ObjectUtil.getThemeLightColor()) {
                           File file = File(_voiceFilePath);
                           file.delete();
-                          if (_flutterRecord.isRecording) {
-                            _flutterRecord.stopRecorder();
+                          if (recorderModule.isRecording) {
+                            _stopRecorder();
                           }
                         } else {
-                          if (_flutterRecord.isRecording) {
-                            _flutterRecord.stopRecorder().then((res) {
+                          if (recorderModule.isRecording) {
+                              _stopRecorder();
+                              var  length = await _getDuration(_voiceFilePath);
                               File file = File(_voiceFilePath);
-                              _flutterRecord
-                                  .getDuration(
-                                      path: _voiceFileName) //需要去掉文件类型后缀
-                                  .then((length) {
-                                print('voice length is---' + length.toString());
-                                if (length < 1000) {
+                                if (length*1000 < 1000) {
                                   //小于1s不发送
                                   file.delete();
                                   DialogUtil.buildToast('你说话时间太短啦~');
                                 } else {
                                   //发送语音
-                                  _buildVoiceMessage(file, length);
+                                  _buildVoiceMessage(file, length.floor());
                                 }
-                              });
-                            });
+                                voiceCount= 0;
+                                _timer.cancel();
                           }
                         }
                         setState(() {
@@ -634,35 +750,164 @@ class ChatsState extends State<ChatsPage> {
       ],
     );
   }
+  /// 获取录音文件秒数
+  Future<double> _getDuration( String _path) async {
+    Duration d = await flutterSoundHelper.duration(_path);
+    if (d ==null) return 0;
+    var _duration = d != null ? d.inMilliseconds / 1000.0: 0.00;
+    print("_duration == $_duration");
+    var minutes = d.inMinutes;
+    var seconds = d.inSeconds % 60;
+    var millSecond = d.inMilliseconds % 1000 ~/ 10;
+    var _recorderTxt = "";
+    if (minutes > 9) {
+      _recorderTxt = _recorderTxt + "$minutes";
+    } else {
+      _recorderTxt = _recorderTxt + "0$minutes";
+    }
 
-  _startRecord() {
+    if (seconds > 9) {
+      _recorderTxt = _recorderTxt + ":$seconds";
+    } else {
+      _recorderTxt = _recorderTxt + ":0$seconds";
+    }
+    if (millSecond > 9) {
+      _recorderTxt = _recorderTxt + ":$millSecond";
+    } else {
+      _recorderTxt = _recorderTxt + ":0$millSecond";
+    }
+    print(_recorderTxt);
+    return  d.inMilliseconds / 01000;
+  }
+  _startRecord() async {
+
     Vibration.vibrate(duration: 50);
     setState(() {
       voiceText = '松开 结束';
       voiceBackground = ColorT.divider;
+      _stopRecorder();
     });
-    //flutterRecord这个框架把文件都存在了根目录，所以要在MainActivity创建文件../BHMFlutter/voice/
-    _voiceFileName = 'BHMFlutter/voice/' + DateTime.now().millisecondsSinceEpoch.toString();
-    _flutterRecord.startRecorder(path: _voiceFileName, maxVolume: 10.0).then((voiceFilePath) {
-      print('voice file path-- ' + voiceFilePath);
-      _voiceFilePath = voiceFilePath;
-    });
+    try{
+        requestPermiss(_permission);
+        print('===>  获取了权限');
+        Directory tempDir = await getTemporaryDirectory();
+        var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+        _voiceFilePath =
+            '${tempDir.path}/s-$time${ext[Codec.aacADTS.index]}';
+        print('===>  准备开始录音');
+        await recorderModule.startRecorder(
+          toFile: _voiceFilePath,
+          codec: Codec.aacADTS,
+          bitRate: 8000,
+          sampleRate: 8000,
+        );
 
-    _flutterRecord.volumeSubscription.stream.listen((volume) {
+        /// 监听录音
+        _recorderSubscription = recorderModule.onProgress.listen((e) {
+          if (e != null && e.duration != null) {
+            var volume=e.decibels;
+            setState(() {
+              if (volume <= 0) {
+                _audioIconPath = '';
+              } else if (volume > 0 && volume < 30) {
+                _audioIconPath = 'audio_player_1';
+              } else if (volume < 50) {
+                _audioIconPath = 'audio_player_2';
+              } else if (volume < 100) {
+                _audioIconPath = 'audio_player_3';
+              }
+            });
+          }
+        });
+
+      } catch (err) {
       setState(() {
-        if (volume <= 0) {
-          _audioIconPath = '';
-        } else if (volume > 0 && volume < 3) {
-          _audioIconPath = 'audio_player_1';
-        } else if (volume < 5) {
-          _audioIconPath = 'audio_player_2';
-        } else if (volume < 10) {
-          _audioIconPath = 'audio_player_3';
+      _stopRecorder();
+      _cancelRecorderSubscriptions();
+      });
+      }
+  }
+  /// 开始播放
+  Future<void> _startPlayer(String _path ) async {
+    try {
+      var p=await _fileExists(_path);
+      if (p !="") {
+        await playerModule.startPlayer(
+            fromURI: p,
+            codec: Codec.aacADTS,
+            whenFinished: () {
+              print('==> 结束播放');
+              _stopPlayer();
+              setState(() {});
+            });
+      } else {
+        throw RecordingPermissionException("未找到文件路径");
+      }
+
+      _cancelPlayerSubscriptions();
+      _playerSubscription = playerModule.onProgress.listen((e) {
+        if (e != null) {
+          // print("${e.duration} -- ${e.position} -- ${e.duration.inMilliseconds} -- ${e.position.inMilliseconds}");
+          // DateTime date = new DateTime.fromMillisecondsSinceEpoch(
+          //     e.position.inMilliseconds,
+          //     isUtc: true);
+          // String txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
+
+          // this.setState(() {
+          // this._playerTxt = txt.substring(0, 8);
+          // });
         }
       });
+
+      print('===> 开始播放');
+    } catch (err) {
+      print('==> 错误: $err');
+    }
+    setState(() {
+
     });
   }
 
+  /// 结束播放
+  Future<void> _stopPlayer() async {
+    try {
+      await playerModule.stopPlayer();
+      print('===> 结束播放');
+      _cancelPlayerSubscriptions();
+    } catch (err) {
+      print('==> 错误: $err');
+    }
+
+  }
+
+  /// 暂停/继续播放
+  void _pauseResumePlayer() {
+    if (playerModule.isPlaying) {
+      playerModule.pausePlayer();
+
+      print('===> 暂停播放');
+    } else {
+      playerModule.resumePlayer();
+
+      print('===> 继续播放');
+    }
+    setState(() {});
+  }
+
+  /// 判断文件是否存在
+  Future<String> _fileExists(String paths) async {
+
+    if (paths.startsWith("http://localhost")) {
+
+        File f =   await _getLocalFile(path.basename(paths));
+        return _voiceFilePath;
+
+    } else if(paths.startsWith("http")){
+      return paths;
+    }
+
+    return paths;
+  }
   _faceWidget() {
     _initFaceList();
     return Column(
@@ -934,13 +1179,13 @@ class ChatsState extends State<ChatsPage> {
   }
   Widget _buildContent(BuildContext context, PeerState state) {
     if (state is PeerMessageSuccess) {
-
+      var messageLists =state.messageList;
       return     ScrollConfiguration(
           behavior: DyBehaviorNull(),
           child:ListView.builder(
               padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 0,bottom: 0),
           itemBuilder: (BuildContext context, int index) {
-            return _messageListViewItem(state.messageList,index,tfSender);
+            return _messageListViewItem(messageLists,index,tfSender);
           },
           //倒置过来的ListView，这样数据多的时候也会显示“底部”（其实是顶部），
           //因为正常的listView数据多的时候，没有办法显示在顶部最后一条
@@ -950,16 +1195,16 @@ class ChatsState extends State<ChatsPage> {
           shrinkWrap: true,
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: state.messageList.length));
+          itemCount: messageLists.length));
     }
     if (state is LoadMorePeerMessageSuccess) {
-
+      var messageLists =state.messageList;
       return     ScrollConfiguration(
           behavior: DyBehaviorNull(),
           child: ListView.builder(
               padding: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 0),
           itemBuilder: (BuildContext context, int index) {
-            return _messageListViewItem(state.messageList,index,tfSender);
+            return _messageListViewItem(messageLists,index,tfSender);
           },
           //倒置过来的ListView，这样数据多的时候也会显示“底部”（其实是顶部），
           //因为正常的listView数据多的时候，没有办法显示在顶部最后一条
@@ -969,7 +1214,7 @@ class ChatsState extends State<ChatsPage> {
           shrinkWrap: true,
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: state.messageList.length));
+          itemCount: messageLists.length));
     }
     return Container();
   }
@@ -982,7 +1227,40 @@ class ChatsState extends State<ChatsPage> {
     //list最后一条消息（时间上是最老的），是没有下一条了
     Message _nextEntity = (index == messageList.length - 1) ? null : messageList[index + 1];
     Message _entity = messageList[index];
-    return buildChatListItem(_nextEntity, _entity,tfSender, onResend: (reSendEntity) {_onResend(reSendEntity); }, onItemClick: (onClickEntity) async {Message entity = onClickEntity;});
+    return buildChatListItem(_nextEntity, _entity,tfSender,
+        onResend: (reSendEntity) {
+      _onResend(reSendEntity);
+        },
+        onItemClick: (onClickEntity) async {
+      Message entity = onClickEntity;
+      if (entity.type == MessageType.MESSAGE_AUDIO){
+        //点击了语音
+        if (_entity.playing == 1) {
+          //正在播放，就停止播放
+          await _stopPlayer();
+          setState(() {
+            _entity.playing = 0;
+          });
+        } else {
+          setState(()  {
+            for (Message other in messageList) {
+              other.playing = 0;
+              //停止其他正在播放的
+            }
+          });
+          _entity.playing = 1;
+          await _startPlayer(_entity.content['url']);
+          Future.delayed(Duration(milliseconds: _entity.content['duration']*1000), () async {
+            if (_alive) {
+              setState(()  {
+                _entity.playing = 0;
+              });
+              await  _stopPlayer();
+            }
+          });
+        }
+      }
+    });
   }
   Widget buildChatListItem(Message nextEntity, Message entity,String tfSender,
       {OnItemClick onResend, OnItemClick onItemClick}) {
@@ -1081,9 +1359,9 @@ class ChatsState extends State<ChatsPage> {
                       GestureDetector(
                         child: _contentWidget(entity,tfSender),
                         onTap: () {
-                          //if (null != onItemClick) {
-                            //onItemClick(entity);
-                          //}
+                          if (null != onItemClick) {
+                            onItemClick(entity);
+                          }
                         },
                         onLongPress: () {
                           DialogUtil.buildToast('长按了消息');
@@ -1115,7 +1393,7 @@ class ChatsState extends State<ChatsPage> {
                         child: _contentWidget(entity,tfSender),
                         onTap: () {
                           if (null != onItemClick) {
-                            //onItemClick(entity);
+                            onItemClick(entity);
                           }
                         },
                         onLongPress: () {
@@ -1203,7 +1481,10 @@ class ChatsState extends State<ChatsPage> {
     } else if (entity.type == MessageType.MESSAGE_IMAGE) {
       //文本
       widget = buildImageWidget(entity,tfSender);
-    }else {
+    } else if (entity.type == MessageType.MESSAGE_AUDIO) {
+      //文本
+      widget = buildVoiceWidget(entity,tfSender);
+    } else {
       widget = ClipRRect(
         borderRadius: BorderRadius.circular(12.w),
         child: Container(
@@ -1374,7 +1655,69 @@ class ChatsState extends State<ChatsPage> {
       ),
     );
   }
-
+   Widget buildVoiceWidget(Message entity,String  tfSender) {
+    double width;
+    if (entity.content['duration'] < 5) {
+      width = 160.w;
+    } else if (entity.content['duration'] < 10) {
+      width = 240.w;
+    } else if (entity.content['duration'] < 20) {
+      width = 280.w;
+    } else {
+      width = 300.w;
+   }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: Container(
+          padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+          width: width,
+          color: entity.sender == tfSender
+              ? Colors.white
+              : Color.fromARGB(255, 158, 234, 106),
+          child: Row(
+            mainAxisAlignment: entity.sender == tfSender
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
+            children: <Widget>[
+              entity.sender == tfSender
+                  ? Text('')
+                  : Text((entity.content['duration']).toString() + 's',
+                  style: TextStyle(fontSize: 18, color: Colors.black)),
+              SizedBox(
+                width: 5,
+              ),
+              entity.playing == 1
+                  ? Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 1, right: 1),
+                width: 18.0,
+                height: 18.0,
+                child: SizedBox(
+                    width: 14.0,
+                    height: 14.0,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.black),
+                      strokeWidth: 2,
+                    )),
+              )
+                  : Image.asset(
+                FileUtil.getImagePath('audio_player_3',
+                    dir: 'icon', format: 'png'),
+                width: 18,
+                height: 18,
+                color: Colors.black,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              entity.sender == tfSender
+                  ? Text((entity.content['duration']).toString() + 's',
+                  style: TextStyle(fontSize: 18, color: Colors.black))
+                  : Text(''),
+            ],
+          )),
+    );
+  }
   Widget buildLocalImageWidget(String imageURL) {
     if (imageURL.startsWith("http://localhost")) {
       return FutureBuilder(
@@ -1423,11 +1766,11 @@ class ChatsState extends State<ChatsPage> {
 
 
 
-  // Future<File> _getLocalFile(String filename) async {
-  //   String dir = (await getExternalStorageDirectory()).path;
-  //   File f = new File('$dir/$filename');
-  //   return f;
-  // }
+  Future<File> _getLocalFile(String filename) async {
+    String dir = (await getTemporaryDirectory()).path;
+    File f = new File('$dir/$filename');
+    return f;
+  }
   _buildWrapper({bool isSelf, Message message, Widget child}) {
     return Container(
       margin: EdgeInsets.all(1.w),
@@ -1443,10 +1786,7 @@ class ChatsState extends State<ChatsPage> {
       ),
     );
   }
-  Widget buildVoiceWidget(MessageEntity entity) {
 
-
-  }
 
   Widget buildVideoWidget(MessageEntity entity) {
 
@@ -1516,10 +1856,10 @@ class ChatsState extends State<ChatsPage> {
 
   _buildVoiceMessage(File file, int length) {
 
-    setState(() {
-
+    //setState(() {
+    BlocProvider.of<PeerBloc>(context).add(EventSendNewVoiceMessage(tfSender,widget.model.cid,file.path,length.floor()));
       _controller.clear();
-    });
+   // });
 
   }
 

@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_geen/views/pages/data/CustomLoadMore.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
@@ -36,7 +37,7 @@ import 'package:flutter_geen/views/pages/utils/file_util.dart';
 import 'package:flutter_geen/views/pages/utils/functions.dart';
 import 'package:flutter_geen/views/pages/utils/image_util.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
-import 'package:flutter_record/flutter_record.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:frefresh/frefresh.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vibration/vibration.dart';
@@ -79,7 +80,7 @@ class GroupChatState extends State<GroupChatPage> {
   bool _alive = false;
   ScrollController _scrollController = new ScrollController();
   String _audioIconPath = '';
-  FlutterRecord _flutterRecord;
+  FlutterSoundRecorder _flutterRecord;
   String _voiceFilePath = '';
   String _voiceFileName = '';
   AudioCache _audioPlayer;
@@ -89,13 +90,15 @@ class GroupChatState extends State<GroupChatPage> {
   FRefreshController controller3;
   bool _isLoading = false;
    Permission _permission;
+  Timer _timer;
+  int voiceCount = 0;
   @override
   void initState() {
     // TODO: implement initState
     _first = true;
     _alive = true;
     super.initState();
-    _flutterRecord = FlutterRecord();
+    _flutterRecord = FlutterSoundRecorder();
     _fixedPlayer = new AudioPlayer();
     _audioPlayer = new AudioCache(fixedPlayer: _fixedPlayer);
     _textFieldNode.addListener(_focusNodeListener); // 初始化一个listener
@@ -516,25 +519,41 @@ class GroupChatState extends State<GroupChatPage> {
             alignment: Alignment.center,
             child: Column(
               children: <Widget>[
-                Container(
-                    padding: EdgeInsets.only(top: 10.h),
-                    child: _audioIconPath == ''
-                        ? SizedBox(
-                            width: 60.w,
-                            height: 60.h,
-                          )
-                        : Image.asset(
-                            FileUtil.getImagePath(_audioIconPath,
-                                dir: 'icon', format: 'png'),
-                            width: 60.w,
-                            height: 60.h,
-                            color: ObjectUtil.getThemeSwatchColor(),
-                          )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        padding: EdgeInsets.only(top: 10.h),
+                        child: _audioIconPath == ''
+                            ? SizedBox(
+                          width: 60.w,
+                          height: 60.h,
+                        )
+                            : Image.asset(
+                          FileUtil.getImagePath(_audioIconPath,
+                              dir: 'icon', format: 'png'),
+                          width: 60.w,
+                          height: 60.h,
+                          color: ObjectUtil.getThemeSwatchColor(),
+                        )),
+
+                    Text(voiceCount.toString() +"S")
+                  ],
+                ),
                 Container(
                     padding: EdgeInsets.all(10.w),
                     child: GestureDetector(
                       onScaleStart: (res) {
                         _startRecord();
+                        _timer =Timer.periodic(
+                            Duration(milliseconds: 1000), (t){
+                          print('执行');
+                          setState(() {
+                            voiceCount= voiceCount+1;
+                          });
+                        }
+                        );
+
                       },
                       onScaleEnd: (res) {
                         if (_headsetColor == ObjectUtil.getThemeLightColor()) {
@@ -551,22 +570,21 @@ class GroupChatState extends State<GroupChatPage> {
                           }
                         } else {
                           if (_flutterRecord.isRecording) {
-                            _flutterRecord.stopRecorder().then((res) {
+                            _flutterRecord.stopRecorder().then((res) async {
+                              var  length = await _getDuration(_voiceFilePath);
                               File file = File(_voiceFilePath);
-                              _flutterRecord
-                                  .getDuration(
-                                      path: _voiceFileName) //需要去掉文件类型后缀
-                                  .then((length) {
-                                print('voice length is---' + length.toString());
-                                if (length < 1000) {
-                                  //小于1s不发送
-                                  file.delete();
-                                  DialogUtil.buildToast('你说话时间太短啦~');
-                                } else {
-                                  //发送语音
-                                  _buildVoiceMessage(file, length);
-                                }
-                              });
+                              if (length < 1000) {
+                                //小于1s不发送
+
+                                file.delete();
+                                DialogUtil.buildToast('你说话时间太短啦~');
+                              } else {
+                                //发送语音
+                                _buildVoiceMessage(file, length.floor());
+                              }
+                              voiceCount= 0;
+                              _timer.cancel();
+
                             });
                           }
                         }
@@ -632,8 +650,35 @@ class GroupChatState extends State<GroupChatPage> {
       ],
     );
   }
+  /// 获取录音文件秒数
+  Future<double> _getDuration( String _path) async {
+    Duration d = await flutterSoundHelper.duration(_path);
+    var _duration = d != null ? d.inMilliseconds / 1000.0: 0.00;
+    print("_duration == $_duration");
+    var minutes = d.inMinutes;
+    var seconds = d.inSeconds % 60;
+    var millSecond = d.inMilliseconds % 1000 ~/ 10;
+    var _recorderTxt = "";
+    if (minutes > 9) {
+      _recorderTxt = _recorderTxt + "$minutes";
+    } else {
+      _recorderTxt = _recorderTxt + "0$minutes";
+    }
 
-  _startRecord() {
+    if (seconds > 9) {
+      _recorderTxt = _recorderTxt + ":$seconds";
+    } else {
+      _recorderTxt = _recorderTxt + ":0$seconds";
+    }
+    if (millSecond > 9) {
+      _recorderTxt = _recorderTxt + ":$millSecond";
+    } else {
+      _recorderTxt = _recorderTxt + ":0$millSecond";
+    }
+    print(_recorderTxt);
+    return  d.inMilliseconds / 01000;
+  }
+  _startRecord() async {
     Vibration.vibrate(duration: 50);
     setState(() {
       voiceText = '松开 结束';
@@ -641,12 +686,15 @@ class GroupChatState extends State<GroupChatPage> {
     });
     //flutterRecord这个框架把文件都存在了根目录，所以要在MainActivity创建文件../BHMFlutter/voice/
     _voiceFileName = 'BHMFlutter/voice/' + DateTime.now().millisecondsSinceEpoch.toString();
-    _flutterRecord.startRecorder(path: _voiceFileName, maxVolume: 10.0).then((voiceFilePath) {
-      print('voice file path-- ' + voiceFilePath);
-      _voiceFilePath = voiceFilePath;
-    });
-
-    _flutterRecord.volumeSubscription.stream.listen((volume) {
+    print('===>  准备开始录音');
+    await _flutterRecord.startRecorder(
+      toFile: _voiceFileName,
+      codec: Codec.aacADTS,
+      bitRate: 8000,
+      sampleRate: 8000,
+    );
+    _flutterRecord.onProgress.listen((e) {
+      var volume=e.decibels;
       setState(() {
         if (volume <= 0) {
           _audioIconPath = '';
@@ -660,6 +708,7 @@ class GroupChatState extends State<GroupChatPage> {
       });
     });
   }
+
 
   _faceWidget() {
     _initFaceList();
