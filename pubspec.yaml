@@ -48,7 +48,6 @@ dependencies:
   video_player: ^1.0.1
   video_thumbnail: ^0.2.4
   flutter_sound: ^7.5.3+1
-  audioplayers: ^0.17.0
   permission_handler: '5.0.1+1'
   image_picker: ^0.6.7+14
   vibration: ^1.7.2

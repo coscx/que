@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flt_im_plugin/conversion.dart';
 import 'package:flt_im_plugin/flt_im_plugin.dart';
@@ -12,14 +10,9 @@ import 'package:flt_im_plugin/value_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_geen/views/pages/data/CustomLoadMore.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
-import 'package:flutter_sound/public/flutter_sound_recorder.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
-import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/pages/chat/view/emoji/emoji_picker.dart';
 import 'package:flutter_geen/views/pages/chat/view/util/ImMessage.dart';
 import 'package:flutter_geen/views/pages/chat/widget/Swipers.dart';
@@ -27,7 +20,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/blocs/group/group_bloc.dart';
 import 'package:flutter_geen/blocs/group/group_event.dart';
 import 'package:flutter_geen/blocs/group/group_state.dart';
-import 'package:flutter_geen/views/items/chat_item_widgets.dart';
 import 'package:flutter_geen/views/pages/chat/widget/more_widgets.dart';
 import 'package:flutter_geen/views/pages/chat/widget/popupwindow_widget.dart';
 import 'package:flutter_geen/views/pages/resource/colors.dart';
@@ -37,11 +29,12 @@ import 'package:flutter_geen/views/pages/utils/file_util.dart';
 import 'package:flutter_geen/views/pages/utils/functions.dart';
 import 'package:flutter_geen/views/pages/utils/image_util.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:frefresh/frefresh.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vibration/vibration.dart';
-
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:path/path.dart' as path;
 /*
 *  发送聊天信息
 */
@@ -64,8 +57,6 @@ class GroupChatState extends State<GroupChatPage> {
   bool _isShowVoice = false; //是否显示语音输入栏
   bool _isShowFace = false; //是否显示表情栏
   bool _isShowTools = false; //是否显示工具栏
-  TextEditingController _controller = new TextEditingController();
-  FocusNode _textFieldNode = FocusNode();
   var voiceText = '按住 说话';
   var voiceBackground = ObjectUtil.getThemeLightColor();
   Color _headsetColor = ColorT.gray_99;
@@ -74,50 +65,42 @@ class GroupChatState extends State<GroupChatPage> {
   List<Widget> _guideFigureList = new List();
   List<Widget> _guideToolsList = new List();
   bool _isFaceFirstList = true;
-  List<Message> _messageList = new List();
-  bool _isLoadAll = false; //是否已经加载完本地数据
-  bool _first = false;
   bool _alive = false;
-  ScrollController _scrollController = new ScrollController();
   String _audioIconPath = '';
-  FlutterSoundRecorder _flutterRecord;
   String _voiceFilePath = '';
-  String _voiceFileName = '';
-  AudioCache _audioPlayer;
-  AudioPlayer _fixedPlayer;
   String tfSender="0" ;
   FltImPlugin im = FltImPlugin();
   FRefreshController controller3;
   bool _isLoading = false;
-   Permission _permission;
+  Permission _permission;
   Timer _timer;
   int voiceCount = 0;
+  StreamSubscription _recorderSubscription;
+  StreamSubscription _playerSubscription;
+  // StreamSubscription _dbPeakSubscription;
+  FlutterSoundRecorder flutterSound;
+  TextEditingController _controller = new TextEditingController();
+  ScrollController _scrollController = new ScrollController();
+  FocusNode _textFieldNode = FocusNode();
+  FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
+  FlutterSoundPlayer playerModule = FlutterSoundPlayer();
+  double progress = 0;
   @override
   void initState() {
     // TODO: implement initState
-    _first = true;
-    _alive = true;
     super.initState();
-    _flutterRecord = FlutterSoundRecorder();
-    _fixedPlayer = new AudioPlayer();
-    _audioPlayer = new AudioCache(fixedPlayer: _fixedPlayer);
+    _alive = true;
+    tfSender =widget.model.memId;
+    controller3 = FRefreshController();
     _textFieldNode.addListener(_focusNodeListener); // 初始化一个listener
     _getLocalMessage();
     _initData();
     _checkBlackList();
     _getPermission();
-    controller3 = FRefreshController();
-    controller3.setOnStateChangedCallback((state) {
-      print('state = $state');
-    });
-    Future.delayed(Duration(milliseconds: 1)).then((e) async {
-      var memberId = await LocalStorage.get("memberId");
-      if(memberId != "" && memberId != null){
-        tfSender=memberId.toString();
-      }
-
-    });
     _scrollController.addListener(() {
+      if (!mounted) {
+        return;
+      }
       if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent) {
 
         if (_isLoading) {
@@ -138,23 +121,87 @@ class GroupChatState extends State<GroupChatPage> {
             });
           }
         });
-
-
-
-
       }
     });
+    init();
+  }
+  Future<void> _initializeExample(bool withUI) async {
+
+    await playerModule.closeAudioSession();
+
+    await playerModule.openAudioSession(
+        focus: AudioFocus.requestFocusTransient,
+        category: SessionCategory.playAndRecord,
+        mode: SessionMode.modeDefault,
+        device: AudioDevice.speaker);
+
+    await playerModule.setSubscriptionDuration(Duration(milliseconds: 30));
+    await recorderModule.setSubscriptionDuration(Duration(milliseconds: 30));
+  }
+
+  Future<void> init() async {
+    recorderModule.openAudioSession(
+        focus: AudioFocus.requestFocusTransient,
+        category: SessionCategory.playAndRecord,
+        mode: SessionMode.modeDefault,
+        device: AudioDevice.speaker);
+    await _initializeExample(false);
+
+    if (Platform.isAndroid) {
+      // copyAssets();
+    }
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     _alive = false;
-    _fixedPlayer.stop();
     super.dispose();
-    _first = false;
     _textFieldNode.removeListener(_focusNodeListener); // 页面消失时必须取消这个listener！！
+    _cancelRecorderSubscriptions();
+    _cancelPlayerSubscriptions();
+    _releaseFlauto();
   }
+  /// 取消录音监听
+  /// 结束录音
+  _stopRecorder() async {
+    try {
+      await recorderModule.stopRecorder();
+      print('stopRecorder');
+      _cancelRecorderSubscriptions();
+    } catch (err) {
+      print('stopRecorder error: $err');
+    }
+
+  }
+
+  /// 取消录音监听
+  void _cancelRecorderSubscriptions() {
+    if (_recorderSubscription != null) {
+      _recorderSubscription.cancel();
+      _recorderSubscription = null;
+    }
+  }
+
+  /// 取消播放监听
+  void _cancelPlayerSubscriptions() {
+    if (_playerSubscription != null) {
+      _playerSubscription.cancel();
+      _playerSubscription = null;
+    }
+  }
+
+  /// 释放录音和播放
+  Future<void> _releaseFlauto() async {
+    try {
+      await playerModule.closeAudioSession();
+      await recorderModule.closeAudioSession();
+    } catch (e) {
+      print('Released unsuccessful');
+      print(e);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -543,49 +590,63 @@ class GroupChatState extends State<GroupChatPage> {
                 Container(
                     padding: EdgeInsets.all(10.w),
                     child: GestureDetector(
-                      onScaleStart: (res) {
-                        _startRecord();
-                        _timer =Timer.periodic(
-                            Duration(milliseconds: 1000), (t){
-                          print('执行');
-                          setState(() {
-                            voiceCount= voiceCount+1;
-                          });
+                      onScaleStart: (res) async {
+                        if(_timer != null){
+                          _timer.cancel();
+                          _timer =Timer.periodic(
+                              Duration(milliseconds: 1000), (t){
+                            //print(voiceCount);
+                            setState(() {
+                              voiceCount= voiceCount+1;
+                            });
+                          }
+                          );
+                        }else{
+                          _timer =Timer.periodic(
+                              Duration(milliseconds: 1000), (t){
+                            //print(voiceCount);
+                            setState(() {
+                              voiceCount= voiceCount+1;
+                            });
+                          }
+                          );
                         }
-                        );
+
+                        if(recorderModule.isRecording ){
+                          await _stopRecorder();
+                        }
+                        _startRecord();
+
 
                       },
-                      onScaleEnd: (res) {
+                      onScaleEnd: (res) async {
                         if (_headsetColor == ObjectUtil.getThemeLightColor()) {
                           DialogUtil.buildToast('试听功能暂未实现');
-                          if (_flutterRecord.isRecording) {
-                            _flutterRecord.stopRecorder();
+                          if (recorderModule.isRecording) {
+                            _stopRecorder();
                           }
                         } else if (_highlightColor ==
                             ObjectUtil.getThemeLightColor()) {
                           File file = File(_voiceFilePath);
                           file.delete();
-                          if (_flutterRecord.isRecording) {
-                            _flutterRecord.stopRecorder();
+                          if (recorderModule.isRecording) {
+                            _stopRecorder();
                           }
                         } else {
-                          if (_flutterRecord.isRecording) {
-                            _flutterRecord.stopRecorder().then((res) async {
-                              var  length = await _getDuration(_voiceFilePath);
-                              File file = File(_voiceFilePath);
-                              if (length < 1000) {
-                                //小于1s不发送
-
-                                file.delete();
-                                DialogUtil.buildToast('你说话时间太短啦~');
-                              } else {
-                                //发送语音
-                                _buildVoiceMessage(file, length.floor());
-                              }
-                              voiceCount= 0;
-                              _timer.cancel();
-
-                            });
+                          if (recorderModule.isRecording) {
+                            _stopRecorder();
+                            var  length = await _getDuration(_voiceFilePath);
+                            File file = File(_voiceFilePath);
+                            if (length*1000 < 1000) {
+                              //小于1s不发送
+                              file.delete();
+                              DialogUtil.buildToast('你说话时间太短啦~');
+                            } else {
+                              //发送语音
+                              _buildVoiceMessage(file, length.floor());
+                            }
+                            voiceCount= 0;
+                            _timer.cancel();
                           }
                         }
                         setState(() {
@@ -653,6 +714,7 @@ class GroupChatState extends State<GroupChatPage> {
   /// 获取录音文件秒数
   Future<double> _getDuration( String _path) async {
     Duration d = await flutterSoundHelper.duration(_path);
+    if (d ==null) return 0;
     var _duration = d != null ? d.inMilliseconds / 1000.0: 0.00;
     print("_duration == $_duration");
     var minutes = d.inMinutes;
@@ -664,7 +726,6 @@ class GroupChatState extends State<GroupChatPage> {
     } else {
       _recorderTxt = _recorderTxt + "0$minutes";
     }
-
     if (seconds > 9) {
       _recorderTxt = _recorderTxt + ":$seconds";
     } else {
@@ -679,36 +740,130 @@ class GroupChatState extends State<GroupChatPage> {
     return  d.inMilliseconds / 01000;
   }
   _startRecord() async {
+
     Vibration.vibrate(duration: 50);
     setState(() {
       voiceText = '松开 结束';
       voiceBackground = ColorT.divider;
+      _stopRecorder();
     });
-    //flutterRecord这个框架把文件都存在了根目录，所以要在MainActivity创建文件../BHMFlutter/voice/
-    _voiceFileName = 'BHMFlutter/voice/' + DateTime.now().millisecondsSinceEpoch.toString();
-    print('===>  准备开始录音');
-    await _flutterRecord.startRecorder(
-      toFile: _voiceFileName,
-      codec: Codec.aacADTS,
-      bitRate: 8000,
-      sampleRate: 8000,
-    );
-    _flutterRecord.onProgress.listen((e) {
-      var volume=e.decibels;
-      setState(() {
-        if (volume <= 0) {
-          _audioIconPath = '';
-        } else if (volume > 0 && volume < 3) {
-          _audioIconPath = 'audio_player_1';
-        } else if (volume < 5) {
-          _audioIconPath = 'audio_player_2';
-        } else if (volume < 10) {
-          _audioIconPath = 'audio_player_3';
+    try{
+      requestPermiss(_permission);
+      print('===>  获取了权限');
+      Directory tempDir = await getTemporaryDirectory();
+      var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      _voiceFilePath =
+      '${tempDir.path}/s-$time${ext[Codec.aacADTS.index]}';
+      print('===>  准备开始录音');
+      await recorderModule.startRecorder(
+        toFile: _voiceFilePath,
+        codec: Codec.aacADTS,
+        bitRate: 8000,
+        sampleRate: 8000,
+      );
+
+      /// 监听录音
+      _recorderSubscription = recorderModule.onProgress.listen((e) {
+        if (e != null && e.duration != null) {
+          var volume=e.decibels;
+          setState(() {
+            if (volume <= 0) {
+              _audioIconPath = '';
+            } else if (volume > 0 && volume < 30) {
+              _audioIconPath = 'audio_player_1';
+            } else if (volume < 50) {
+              _audioIconPath = 'audio_player_2';
+            } else if (volume < 100) {
+              _audioIconPath = 'audio_player_3';
+            }
+          });
         }
       });
+
+    } catch (err) {
+      setState(() {
+        _stopRecorder();
+        _cancelRecorderSubscriptions();
+      });
+    }
+  }
+  /// 开始播放
+  Future<void> _startPlayer(String _path ) async {
+    try {
+      var p=await _fileExists(_path);
+      if (p !="") {
+        await playerModule.startPlayer(
+            fromURI: p,
+            codec: Codec.aacADTS,
+            whenFinished: () {
+              print('==> 结束播放');
+              _stopPlayer();
+              setState(() {});
+            });
+      } else {
+        throw RecordingPermissionException("未找到文件路径");
+      }
+
+      _cancelPlayerSubscriptions();
+      _playerSubscription = playerModule.onProgress.listen((e) {
+        if (e != null) {
+          //print("${e.duration} -- ${e.position} -- ${e.duration.inMilliseconds} -- ${e.position.inMilliseconds}");
+          // setState(() {
+          //   progress = e.position.inMilliseconds / e.duration.inMilliseconds;
+          // });
+
+        }
+      });
+
+      print('===> 开始播放');
+    } catch (err) {
+      print('==> 错误: $err');
+    }
+    setState(() {
+
     });
   }
 
+  /// 结束播放
+  Future<void> _stopPlayer() async {
+    try {
+      await playerModule.stopPlayer();
+      print('===> 结束播放');
+      _cancelPlayerSubscriptions();
+    } catch (err) {
+      print('==> 错误: $err');
+    }
+
+  }
+
+  /// 暂停/继续播放
+  void _pauseResumePlayer() {
+    if (playerModule.isPlaying) {
+      playerModule.pausePlayer();
+
+      print('===> 暂停播放');
+    } else {
+      playerModule.resumePlayer();
+
+      print('===> 继续播放');
+    }
+    setState(() {});
+  }
+
+  /// 判断文件是否存在
+  Future<String> _fileExists(String paths) async {
+
+    if (paths.startsWith("http://localhost")) {
+
+      File f =   await _getLocalFile(path.basename(paths));
+      return _voiceFilePath;
+
+    } else if(paths.startsWith("http")){
+      return paths;
+    }
+
+    return paths;
+  }
 
   _faceWidget() {
     _initFaceList();
@@ -1029,7 +1184,40 @@ class GroupChatState extends State<GroupChatPage> {
     //list最后一条消息（时间上是最老的），是没有下一条了
     Message _nextEntity = (index == messageList.length - 1) ? null : messageList[index + 1];
     Message _entity = messageList[index];
-    return buildChatListItem(_nextEntity, _entity,tfSender, onResend: (reSendEntity) {_onResend(reSendEntity); }, onItemClick: (onClickEntity) async {Message entity = onClickEntity;});
+    return buildChatListItem(_nextEntity, _entity,tfSender,
+        onResend: (reSendEntity) {
+          _onResend(reSendEntity);
+        },
+        onItemClick: (onClickEntity) async {
+          Message entity = onClickEntity;
+          if (entity.type == MessageType.MESSAGE_AUDIO){
+            //点击了语音
+            if (_entity.playing == 1) {
+              //正在播放，就停止播放
+              await _stopPlayer();
+              setState(() {
+                _entity.playing = 0;
+              });
+            } else {
+              setState(()  {
+                for (Message other in messageList) {
+                  other.playing = 0;
+                  //停止其他正在播放的
+                }
+              });
+              _entity.playing = 1;
+              await _startPlayer(_entity.content['url']);
+              Future.delayed(Duration(milliseconds: _entity.content['duration']*1000), () async {
+                if (_alive) {
+                  setState(()  {
+                    _entity.playing = 0;
+                  });
+                  await  _stopPlayer();
+                }
+              });
+            }
+          }
+        });
   }
   Widget buildChatListItem(Message nextEntity, Message entity,String tfSender,
       {OnItemClick onResend, OnItemClick onItemClick}) {
@@ -1130,7 +1318,7 @@ class GroupChatState extends State<GroupChatPage> {
                         child: _contentWidget(entity,tfSender),
                         onTap: () {
                           if (null != onItemClick) {
-                            //onItemClick(entity);
+                            onItemClick(entity);
                           }
                         },
                         onLongPress: () {
@@ -1201,9 +1389,9 @@ class GroupChatState extends State<GroupChatPage> {
                       GestureDetector(
                         child: _contentWidget(entity,tfSender),
                         onTap: () {
-                          //if (null != onItemClick) {
-                          //onItemClick(entity);
-                          //}
+                          if (null != onItemClick) {
+                          onItemClick(entity);
+                          }
                         },
                         onLongPress: () {
                           DialogUtil.buildToast('长按了消息');
@@ -1260,6 +1448,9 @@ class GroupChatState extends State<GroupChatPage> {
     } else if (entity.type == MessageType.MESSAGE_IMAGE) {
       //文本
       widget = buildImageWidget(entity,tfSender);
+    }else if (entity.type == MessageType.MESSAGE_AUDIO) {
+      //文本
+      widget = buildVoiceWidget(entity,tfSender);
     }else {
       widget = ClipRRect(
         borderRadius: BorderRadius.circular(12.w),
@@ -1500,9 +1691,83 @@ class GroupChatState extends State<GroupChatPage> {
       ),
     );
   }
-  Widget buildVoiceWidget(MessageEntity entity) {
+  Widget buildVoiceWidget(Message entity,String  tfSender) {
+    double width;
+    if (entity.content['duration'] < 5) {
+      width = 160.w;
+    } else if (entity.content['duration'] < 10) {
+      width = 240.w;
+    } else if (entity.content['duration'] < 20) {
+      width = 280.w;
+    } else {
+      width = 300.w;
+    }
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Container(
+              padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+              width: width,
+              color: entity.sender == tfSender
+                  ? Colors.white
+                  : Color.fromARGB(255, 158, 234, 106),
+              child: Row(
+                mainAxisAlignment: entity.sender == tfSender
+                    ? MainAxisAlignment.start
+                    : MainAxisAlignment.end,
+                children: <Widget>[
+                  entity.sender == tfSender
+                      ? Text('')
+                      : Text((entity.content['duration']).toString() + 's',
+                      style: TextStyle(fontSize: 18, color: Colors.black)),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  entity.playing == 1
+                      ? Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(top: 1, right: 1),
+                    width: 18.0,
+                    height: 18.0,
+                    child: SizedBox(
+                        width: 14.0,
+                        height: 14.0,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Colors.black),
+                          strokeWidth: 2,
+                        )),
+                  )
+                      : Image.asset(
+                    FileUtil.getImagePath('audio_player_3',
+                        dir: 'icon', format: 'png'),
+                    width: 18,
+                    height: 18,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  entity.sender == tfSender
+                      ? Text((entity.content['duration']).toString() + 's',
+                      style: TextStyle(fontSize: 18, color: Colors.black))
+                      : Text(''),
+                ],
+              )),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 60.h, bottom: 10.h),
+          width: width,
+          child: LinearProgressIndicator(
+            value: progress,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+            backgroundColor: Colors.white,
+          ),
+        ),
 
 
+      ],
+    );
   }
 
   Widget buildVideoWidget(MessageEntity entity) {
@@ -1522,7 +1787,11 @@ class GroupChatState extends State<GroupChatPage> {
   _removeUserFromBlackList(String username) {
 
   }
-
+  Future<File> _getLocalFile(String filename) async {
+    String dir = (await getTemporaryDirectory()).path;
+    File f = new File('$dir/$filename');
+    return f;
+  }
   //重发
   _onResend(Message entity) {
 
@@ -1573,10 +1842,10 @@ class GroupChatState extends State<GroupChatPage> {
 
   _buildVoiceMessage(File file, int length) {
 
-    setState(() {
-
-      _controller.clear();
-    });
+    //setState(() {
+    BlocProvider.of<GroupBloc>(context).add(EventGroupSendNewVoiceMessage(tfSender,widget.model.cid,file.path,length.floor()));
+    _controller.clear();
+    // });
 
   }
 

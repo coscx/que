@@ -1,7 +1,6 @@
 import 'package:flt_im_plugin/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_geen/views/pages/chat/view/message/audio.dart';
 import 'package:flutter_geen/views/pages/chat/view/message/image.dart';
 import 'package:flutter_geen/views/pages/chat/view/message/text.dart';
@@ -16,7 +15,6 @@ const int MessageRightAlign = 2;
 //压缩图片，图片对flutter内存的影响很大，压缩防止崩溃
 const String ImageSize = '?imageView2/2/w/200/h/200';
 
-AudioPlayer audioPlayer = AudioPlayer();
 
 /*
  * 单条消息 

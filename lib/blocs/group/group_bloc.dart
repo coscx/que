@@ -117,6 +117,23 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
       }
 
     }
+    if (event is EventGroupSendNewVoiceMessage) {
+      FltImPlugin im = FltImPlugin();
+      Map result = await im.sendGroupAudioMessage(
+          secret: false,
+          sender: event.currentUID,
+          receiver: event.peerUID,
+          path: event.path ??'',
+          second: event.second
+      );
+      List<Message> newMessage =[];
+      Map response = await im.loadData();
+      var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
+
+      newMessage.addAll(messages.reversed.toList());
+
+      yield GroupMessageSuccess(newMessage,event.peerUID);
+    }
     if (event is EventGroupReceiveNewMessageAck) {
 
       try {

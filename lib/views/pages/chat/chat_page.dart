@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flt_im_plugin/conversion.dart';
 import 'package:flt_im_plugin/flt_im_plugin.dart';
@@ -15,7 +13,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
-import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/pages/chat/view/emoji/emoji_picker.dart';
 import 'package:flutter_geen/views/pages/chat/view/util/ImMessage.dart';
 import 'package:flutter_geen/views/pages/chat/widget/Swipers.dart';
@@ -61,8 +58,6 @@ class ChatsState extends State<ChatsPage> {
   bool _isShowVoice = false; //是否显示语音输入栏
   bool _isShowFace = false; //是否显示表情栏
   bool _isShowTools = false; //是否显示工具栏
-  TextEditingController _controller = new TextEditingController();
-  FocusNode _textFieldNode = FocusNode();
   var voiceText = '按住 说话';
   var voiceBackground = ObjectUtil.getThemeLightColor();
   Color _headsetColor = ColorT.gray_99;
@@ -71,64 +66,42 @@ class ChatsState extends State<ChatsPage> {
   List<Widget> _guideFigureList = new List();
   List<Widget> _guideToolsList = new List();
   bool _isFaceFirstList = true;
-  List<Message> _messageList = new List();
-  bool _isLoadAll = false; //是否已经加载完本地数据
-  bool _first = false;
   bool _alive = false;
-  ScrollController _scrollController = new ScrollController();
   String _audioIconPath = '';
   String _voiceFilePath = '';
-  String _voiceFileName = '';
-  AudioCache _audioPlayer;
-  AudioPlayer _fixedPlayer;
   String tfSender="0" ;
   FltImPlugin im = FltImPlugin();
   FRefreshController controller3;
   bool _isLoading = false;
-   Permission _permission;
-   Timer _timer;
-   int voiceCount = 0;
+  Permission _permission;
+  Timer _timer;
+  int voiceCount = 0;
   StreamSubscription _recorderSubscription;
   StreamSubscription _playerSubscription;
-
   // StreamSubscription _dbPeakSubscription;
   FlutterSoundRecorder flutterSound;
-  String _recorderTxt = '00:00:00';
-  // String _playerTxt = '00:00:00';
-
-  double _dbLevel = 0.0;
+  TextEditingController _controller = new TextEditingController();
+  ScrollController _scrollController = new ScrollController();
+  FocusNode _textFieldNode = FocusNode();
   FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
   FlutterSoundPlayer playerModule = FlutterSoundPlayer();
 
-  var _path = "";
-  var _duration = 0.0;
-  var _maxLength = 59.0;
   @override
   void initState() {
     // TODO: implement initState
-    _first = true;
+    super.initState();
     _alive = true;
     tfSender =widget.model.memId;
-    super.initState();
-    _fixedPlayer = new AudioPlayer();
-    _audioPlayer = new AudioCache(fixedPlayer: _fixedPlayer);
+    controller3 = FRefreshController();
     _textFieldNode.addListener(_focusNodeListener); // 初始化一个listener
     _getLocalMessage();
     _initData();
     _checkBlackList();
     _getPermission();
-    controller3 = FRefreshController();
-    controller3.setOnStateChangedCallback((state) {
-      print('state = $state');
-    });
-    Future.delayed(Duration(milliseconds: 1)).then((e) async {
-      var memberId = await LocalStorage.get("memberId");
-      if(memberId != "" && memberId != null){
-        //tfSender=memberId.toString();
-      }
-
-    });
     _scrollController.addListener(() {
+      if (!mounted) {
+        return;
+      }
       if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent) {
 
         if (_isLoading) {
@@ -149,14 +122,8 @@ class ChatsState extends State<ChatsPage> {
             });
           }
         });
-
-
-
-
       }
     });
-
-
     init();
   }
   Future<void> _initializeExample(bool withUI) async {
@@ -190,9 +157,7 @@ class ChatsState extends State<ChatsPage> {
   void dispose() {
     // TODO: implement dispose
     _alive = false;
-    _fixedPlayer.stop();
     super.dispose();
-    _first = false;
     _textFieldNode.removeListener(_focusNodeListener); // 页面消失时必须取消这个listener！！
     _cancelRecorderSubscriptions();
     _cancelPlayerSubscriptions();
@@ -208,10 +173,6 @@ class ChatsState extends State<ChatsPage> {
     } catch (err) {
       print('stopRecorder error: $err');
     }
-    setState(() {
-      _dbLevel = 0.0;
-
-    });
   }
 
   /// 取消录音监听
