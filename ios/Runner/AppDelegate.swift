@@ -9,6 +9,13 @@ import Flutter
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
+    override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print(deviceToken)
+    }
+
+    override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print(error)
+    }
     // If you need to handle Push clicks, use the following code
     @available(iOS 10.0, *)
     override func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
@@ -16,4 +23,5 @@ import Flutter
         UmengAnalyticsPushFlutterIos.handleMessagePush(userInfo)
         completionHandler()
     }
+
 }

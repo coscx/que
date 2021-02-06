@@ -50,3 +50,12 @@ class EventGroupSendNewImageMessage extends GroupEvent {
   EventGroupSendNewImageMessage(this.currentUID,this.GroupUID,this.content,);
 
 }
+class EventGroupSendNewVoiceMessage extends GroupEvent {
+
+  final String currentUID;
+  final String peerUID;
+  final String path;
+  final int second;
+  EventGroupSendNewVoiceMessage(this.currentUID,this.peerUID,this.path,this.second);
+
+}

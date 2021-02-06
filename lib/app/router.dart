@@ -30,6 +30,7 @@ import 'package:flutter_geen/views/pages/setting/item_style_setting.dart';
 import 'package:flutter_geen/views/pages/setting/theme_color_setting.dart';
 import 'package:flutter_geen/views/pages/home/CreateUserPage.dart';
 import 'package:flutter_geen/views/items/select.dart';
+import 'package:flutter_geen/views/pages/user/User.dart';
 import 'package:flutter_geen/views/pages/widget_detail/widget_detail_page.dart';
 
 import 'package:flutter_geen/views/pages/setting/setting_page.dart';
@@ -78,6 +79,7 @@ class UnitRouter {
   static const String select_page ='SelectPage';
   static const String search_page_appoint ='SearchPageAppoint';
   static const String baidu_map ='BaiduMap';
+  static const String user ='User';
   static const String qr_view ='QrView';
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -107,7 +109,8 @@ class UnitRouter {
         return Right2LeftRouter(child: CodeStyleSettingPage());
       case item_style_setting:
         return Right2LeftRouter(child: ItemStyleSettingPage());
-
+      case user:
+        return Right2LeftRouter(child: UserPage());
       case version_info:
         return Right2LeftRouter(child: VersionInfo());
       case issues_point:

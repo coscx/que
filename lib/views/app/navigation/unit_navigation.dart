@@ -482,9 +482,9 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     BlocProvider.of<GroupBloc>(context).add(EventGroupReceiveNewMessage(message));
   }
   void onNewMessage(result, int error)async {
-    var count = 0;
-    Map response = await im.getConversations();
-    var  conversions = response["data"];
+    var count = 1;
+    //Map response = await im.getConversations();
+    //var  conversions = response["data"];
     // conversions.map((e) {
     //   if (e['unreadCount'] > 0){
     //     count=count+e['unreadCount'];

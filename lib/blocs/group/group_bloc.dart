@@ -88,8 +88,8 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
           } else if (state is LoadMoreGroupMessageSuccess){
               FltImPlugin im = FltImPlugin();
               var res = await im.createGroupConversion(
-                currentUID: event.message['receiver'].toString(),
-                groupUID: event.message['sender'].toString(),
+                currentUID: event.message['sender'].toString(),
+                groupUID: event.message['receiver'].toString(),
               );
               cunrrentId=event.message['sender'].toString();
               Map response = await im.loadData();
@@ -116,6 +116,23 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
         yield GetGroupFailed();
       }
 
+    }
+    if (event is EventGroupSendNewVoiceMessage) {
+      FltImPlugin im = FltImPlugin();
+      Map result = await im.sendGroupAudioMessage(
+          secret: false,
+          sender: event.currentUID,
+          receiver: event.peerUID,
+          path: event.path ??'',
+          second: event.second
+      );
+      List<Message> newMessage =[];
+      Map response = await im.loadData();
+      var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
+
+      newMessage.addAll(messages.reversed.toList());
+
+      yield GroupMessageSuccess(newMessage,event.peerUID);
     }
     if (event is EventGroupReceiveNewMessageAck) {
 
