@@ -855,7 +855,7 @@ class GroupChatState extends State<GroupChatPage> {
 
     if (paths.startsWith("http://localhost")) {
 
-      File f =   await _getLocalFile(path.basename(paths));
+      //File f =   await _getLocalFile(path.basename(paths));
       return _voiceFilePath;
 
     } else if(paths.startsWith("http")){
