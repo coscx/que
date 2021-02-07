@@ -279,7 +279,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ebae8b2450994977eb8b4c504af6041fcb742d5d
+      resolved-ref: bdb322f25bda350a1a3419ef6540d1491af2f6ce
       url: "https://github.com/coscx/lat.git"
     source: git
     version: "1.0.0"

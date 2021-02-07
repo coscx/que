@@ -1,20 +1,17 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter_geen/views/pages/chat/view/voice/voice.dart';
+import 'package:flutter_geen/views/pages/utils/common_util.dart';
+import 'package:flutter_geen/views/pages/utils/time_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flt_im_plugin/conversion.dart';
 import 'package:flt_im_plugin/flt_im_plugin.dart';
 import 'package:flt_im_plugin/message.dart';
-import 'package:flt_im_plugin/value_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
-import 'package:flutter_geen/components/imageview/image_preview_page.dart';
-import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/views/pages/chat/view/emoji/emoji_picker.dart';
-import 'package:flutter_geen/views/pages/chat/view/util/ImMessage.dart';
 import 'package:flutter_geen/views/pages/chat/widget/Swipers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/blocs/group/group_bloc.dart';
@@ -23,7 +20,6 @@ import 'package:flutter_geen/blocs/group/group_state.dart';
 import 'package:flutter_geen/views/pages/chat/widget/more_widgets.dart';
 import 'package:flutter_geen/views/pages/chat/widget/popupwindow_widget.dart';
 import 'package:flutter_geen/views/pages/resource/colors.dart';
-import 'package:flutter_geen/views/pages/utils/date_util.dart';
 import 'package:flutter_geen/views/pages/utils/dialog_util.dart';
 import 'package:flutter_geen/views/pages/utils/file_util.dart';
 import 'package:flutter_geen/views/pages/utils/functions.dart';
@@ -34,7 +30,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_sound/flutter_sound.dart';
-import 'package:path/path.dart' as path;
+
 /*
 *  发送聊天信息
 */
@@ -415,12 +411,12 @@ class GroupChatState extends State<GroupChatPage> {
 
   }
 
-  _body(BuildContext context, GroupState GroupState) {
+  _body(BuildContext context, GroupState groupState) {
     return Column(
         children: <Widget>[
       Flexible(
           child: InkWell(
-        child: _messageListView(context, GroupState),
+        child: _messageListView(context, groupState),
         onTap: () {
           _hideKeyBoard();
           if(_isShowVoice == true ||_isShowFace == true||_isShowTools == true){
@@ -616,8 +612,6 @@ class GroupChatState extends State<GroupChatPage> {
                           await _stopRecorder();
                         }
                         _startRecord();
-
-
                       },
                       onScaleEnd: (res) async {
                         if (_headsetColor == ObjectUtil.getThemeLightColor()) {
@@ -635,7 +629,7 @@ class GroupChatState extends State<GroupChatPage> {
                         } else {
                           if (recorderModule.isRecording) {
                             _stopRecorder();
-                            var  length = await _getDuration(_voiceFilePath);
+                            var  length = await CommonUtil.getDuration(_voiceFilePath);
                             File file = File(_voiceFilePath);
                             if (length*1000 < 1000) {
                               //小于1s不发送
@@ -711,34 +705,7 @@ class GroupChatState extends State<GroupChatPage> {
       ],
     );
   }
-  /// 获取录音文件秒数
-  Future<double> _getDuration( String _path) async {
-    Duration d = await flutterSoundHelper.duration(_path);
-    if (d ==null) return 0;
-    var _duration = d != null ? d.inMilliseconds / 1000.0: 0.00;
-    print("_duration == $_duration");
-    var minutes = d.inMinutes;
-    var seconds = d.inSeconds % 60;
-    var millSecond = d.inMilliseconds % 1000 ~/ 10;
-    var _recorderTxt = "";
-    if (minutes > 9) {
-      _recorderTxt = _recorderTxt + "$minutes";
-    } else {
-      _recorderTxt = _recorderTxt + "0$minutes";
-    }
-    if (seconds > 9) {
-      _recorderTxt = _recorderTxt + ":$seconds";
-    } else {
-      _recorderTxt = _recorderTxt + ":0$seconds";
-    }
-    if (millSecond > 9) {
-      _recorderTxt = _recorderTxt + ":$millSecond";
-    } else {
-      _recorderTxt = _recorderTxt + ":0$millSecond";
-    }
-    print(_recorderTxt);
-    return  d.inMilliseconds / 01000;
-  }
+
   _startRecord() async {
 
     Vibration.vibrate(duration: 50);
@@ -1136,8 +1103,7 @@ class GroupChatState extends State<GroupChatPage> {
   }
   Widget _buildContent(BuildContext context, GroupState state) {
     if (state is GroupMessageSuccess) {
-
-      return     ScrollConfiguration(
+      return ScrollConfiguration(
           behavior: DyBehaviorNull(),
           child:ListView.builder(
               padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 0,bottom: 0),
@@ -1155,8 +1121,7 @@ class GroupChatState extends State<GroupChatPage> {
           itemCount: state.messageList.length));
     }
     if (state is LoadMoreGroupMessageSuccess) {
-
-      return     ScrollConfiguration(
+      return ScrollConfiguration(
           behavior: DyBehaviorNull(),
           child: ListView.builder(
               padding: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 0),
@@ -1233,7 +1198,7 @@ class GroupChatState extends State<GroupChatPage> {
         _isShowTime = false;
       }
     }
-    showTime=chatTimeFormat(entity.timestamp);
+    showTime=TimeUtil.chatTimeFormat(entity.timestamp);
 
     return Container(
       child: Column(
@@ -1246,546 +1211,24 @@ class GroupChatState extends State<GroupChatPage> {
                 style: TextStyle(color: ColorT.transparent_80),
               ))
               : SizedBox(height: 0),
-          _chatItemWidget(entity, onResend, onItemClick,tfSender)
+              VoiceWidget(entity: entity, onResend: onResend, onItemClick:onItemClick,tfSender: tfSender)
         ],
       ),
-    );
-  }
-
-  String chatTimeFormat(int timestamp){
-    var showTime ;
-    int zeroTmp = DateTime.now().millisecondsSinceEpoch;
-    var today = DateTime.now();
-    var times =today.year.toString()+"-" +(today.month.toString().length ==2?today.month.toString():"0"+today.month.toString() )+"-"+(today.day.toString().length==2?today.day.toString():"0"+today.day.toString()) +" 00:00:00";
-    var dd =DateTime.parse(times).millisecondsSinceEpoch;
-    zeroTmp=dd;
-    int nows=zeroTmp - (zeroTmp + 8 * 3600 *1000) % (86400*1000);
-    //获取当前的时间,yyyy-MM-dd HH:mm
-    String nowTime = DateUtil.getDateStrByMs(new DateTime.now().millisecondsSinceEpoch, format: DateFormat.ZH_MONTH_DAY_HOUR_MINUTE);
-    //当前消息的时间,yyyy-MM-dd HH:mm
-    String indexTime = DateUtil.getDateStrByMs(timestamp*1000, format: DateFormat.ZH_YEAR_MONTH_DAY_HOUR_MINUTE);
-    String nowTime1 = DateUtil.getDateStrByMs(new DateTime.now().millisecondsSinceEpoch, format: DateFormat.ZH_NORMAL);
-    //当前消息的时间,yyyy-MM-dd HH:mm
-    String indexTime1 = DateUtil.getDateStrByMs(timestamp*1000, format: DateFormat.ZH_NORMAL);
-    if (DateUtil.formatDateTime1(indexTime1, DateFormat.YEAR) != DateUtil.formatDateTime1(nowTime1, DateFormat.YEAR)) {
-      //对比年份,不同年份，直接显示yyyy-MM-dd HH:mm
-      showTime = indexTime1;
-    } else if (DateUtil.formatDateTime1(indexTime1, DateFormat.ZH_YEAR_MONTH) != DateUtil.formatDateTime1(nowTime1, DateFormat.ZH_YEAR_MONTH)) {
-      //年份相同，对比年月,不同月或不同日，直接显示MM-dd HH:mm
-      if ((timestamp*1000)> nows ){
-        showTime=""+DateUtil.formatDateTime1(indexTime, DateFormat.ZH_HOUR_MINUTE).substring( "MM月dd日 ".length,);
-      } else if ((timestamp*1000> nows-1*24*3600*1000) && (timestamp*1000<nows)){
-        showTime="昨天 "+DateUtil.formatDateTime1(indexTime, DateFormat.ZH_HOUR_MINUTE).substring( "MM月dd日 ".length,);
-      }else if ((timestamp*1000> nows-2*24*3600*1000) && (timestamp*1000<1*24*3600*1000)){
-        showTime="前天 "+DateUtil.formatDateTime1(indexTime, DateFormat.ZH_HOUR_MINUTE).substring( "MM月dd日 ".length,);
-      } else if ((timestamp*1000) > nows-7*24*3600*1000 && (timestamp*1000) < nows-2*24*3600*1000){
-        showTime=DateUtil.getZHWeekDay(DateTime.fromMillisecondsSinceEpoch(timestamp*1000, isUtc: false))+" "+DateUtil.formatDateTime1(indexTime, DateFormat.ZH_HOUR_MINUTE).substring( "MM月dd日 ".length,);
-      } else{
-        showTime = DateUtil.formatDateTime1(indexTime, DateFormat.ZH_MONTH_DAY_HOUR_MINUTE);
-      }
-
-    }  else {
-      //否则HH:mm
-      showTime = DateUtil.formatDateTime1(indexTime, DateFormat.ZH_HOUR_MINUTE);
-    }
-
-    return showTime;
-  }
-
-
-
-
-  Widget _chatItemWidget(Message entity, OnItemClick onResend,
-      OnItemClick onItemClick,String tfSender) {
-    if (entity.sender == tfSender) {
-
-      //自己的消息
-      return Container(
-        margin: EdgeInsets.only(left: 40.w, right: 10.w, bottom: 6.h, top: 6.h),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: 0.w, right: 0.w, bottom: 0.h, top: 12.h),
-
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-
-                      SizedBox(height: 1.h),
-                      GestureDetector(
-                        child: _contentWidget(entity,tfSender),
-                        onTap: () {
-                          if (null != onItemClick) {
-                            onItemClick(entity);
-                          }
-                        },
-                        onLongPress: () {
-                          DialogUtil.buildToast('长按了消息');
-                        },
-                      ),
-                      //显示是否重发1、发送2中按钮，发送成功0或者null不显示
-                      // entity.flags == 11
-                      //     ? IconButton(
-                      //     icon: Icon(Icons.refresh, color: Colors.red, size: 18),
-                      //     onPressed: () {
-                      //       if (null != onResend) {
-                      //         onResend(entity);
-                      //       }
-                      //     })
-                      //     : (entity.flags == 10
-                      //     ? Container(
-                      //   alignment: Alignment.center,
-                      //   padding: EdgeInsets.only(top: 20, right: 20),
-                      //   width: 32.0,
-                      //   height: 32.0,
-                      //   child: SizedBox(
-                      //       width: 12.0,
-                      //       height: 12.0,
-                      //       child: CircularProgressIndicator(
-                      //         valueColor: AlwaysStoppedAnimation(
-                      //             ObjectUtil.getThemeSwatchColor()),
-                      //         strokeWidth: 2,
-                      //       )),
-                      // )
-                      //     : SizedBox(
-                      //   width: 0,
-                      //   height: 0,
-                      // )),
-                    ],
-                  ),
-                )),
-            SizedBox(width: 10),
-            _headPortrait('', 0),
-          ],
-        ),
-      );
-
-
-    } else {
-      //其他人的消息
-      return Container(
-        margin: EdgeInsets.only(left: 10.w, right: 40.w, bottom: 6.h, top: 6.h),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _headPortrait('', 1),
-            Container(
-            margin: EdgeInsets.only(left: 5.w, right: 0.w, bottom: 0.h, top: 26.h),
-            width: 20.w,
-              child:Text(
-              entity.sender,
-              style: new TextStyle(color: Colors.black, fontSize: 32.sp),
-              ),
-            ),
-            Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: 0.w, right: 0.w, bottom: 0.h, top: 12.h),
-
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      GestureDetector(
-                        child: _contentWidget(entity,tfSender),
-                        onTap: () {
-                          if (null != onItemClick) {
-                          onItemClick(entity);
-                          }
-                        },
-                        onLongPress: () {
-                          DialogUtil.buildToast('长按了消息');
-                        },
-                      ),
-                    ],
-                  ),
-                )),
-          ],
-        ),
-      );
-    }
-  }
-
-  /*
-  *  头像
-  */
-  Widget _headPortrait(String url, int owner) {
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(6.w),
-        child: url.isEmpty
-            ? Image.asset(
-            (owner == 1
-                ? FileUtil.getImagePath('img_headportrait',
-                dir: 'icon', format: 'png')
-                : FileUtil.getImagePath('logo',
-                dir: 'splash', format: 'png')),
-            width: 88.w,
-            height: 88.h)
-            : (ObjectUtil.isNetUri(url)
-            ? Image.network(
-          url,
-          width: 88.w,
-          height: 88.h,
-          fit: BoxFit.fill,
-        )
-            : Image.asset(url, width: 88, height: 88)));
-  }
-
-  /*
-  *  内容
-  */
-  Widget _contentWidget(Message entity,String tfSender) {
-    Widget widget;
-    if (entity.type == MessageType.MESSAGE_TEXT) {
-      //文本
-      if (entity.content['text'].contains('assets/images/face') ||
-          entity.content['text'].contains('assets/images/figure')) {
-        widget = buildImageWidget(entity,tfSender);
-      } else {
-        widget = buildTextWidget(entity,tfSender);
-      }
-
-    } else if (entity.type == MessageType.MESSAGE_IMAGE) {
-      //文本
-      widget = buildImageWidget(entity,tfSender);
-    }else if (entity.type == MessageType.MESSAGE_AUDIO) {
-      //文本
-      widget = buildVoiceWidget(entity,tfSender);
-    }else {
-      widget = ClipRRect(
-        borderRadius: BorderRadius.circular(12.w),
-        child: Container(
-          padding: EdgeInsets.all(15.h),
-          color: ObjectUtil.getThemeLightColor(),
-          child: Text(
-            '未知消息类型',
-            style: TextStyle(fontSize: 30.sp, color: Colors.black),
-          ),
-        ),
-      );
-    }
-    return widget;
-  }
-
-  Widget buildTextWidget(Message entity,String  tfSender) {
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16.w),
-      child: Container(
-        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 16.h, bottom: 16.h),
-        color: entity.sender == tfSender
-            ?Color.fromARGB(255, 158, 234, 106)
-            : Colors.white,
-        child: Text(
-          entity.content['text'],
-          style: TextStyle(fontSize: 32.sp, color: Colors.black),
-        ),
-      ),
-    );
-  }
-
-  Widget buildImageWidget(Message message,String  tfSender) {
-    int isFace =0;
-    //图像
-    double width = ValueUtil.toDouble(message.content['width']);
-    double height = ValueUtil.toDouble(message.content['height']);
-    String imageURL = ValueUtil.toStr(message.content['imageURL']);
-    if (imageURL == null || imageURL.length == 0) {
-      imageURL = ValueUtil.toStr(message.content['url']);
-    }
-    double size = 240.w;
-    Widget image;
-    if (message.type== MessageType.MESSAGE_TEXT&&
-        message.content['text'].contains('assets/images/face')) {
-      //assets/images/face中的表情
-      size = 50.w;
-      image = Image.asset(message.content['text'], width: size, height: size);
-      isFace=1;
-    } else if (message.type== MessageType.MESSAGE_TEXT &&
-        message.content['text'].contains('assets/images/figure')) {
-      //assets/images/figure中的表情
-      size = 120.w;
-      image = Image.asset(message.content['text'], width: size, height: size);
-      isFace=1;
-    }
-    return _buildWrapper(
-      isSelf: message.sender== tfSender,
-      message: message,
-      child: isFace==1?
-
-      ClipRRect(
-        borderRadius: BorderRadius.circular(8.w),
-        child: Container(
-          padding: EdgeInsets.all((message.content['text'].isNotEmpty &&
-              message.content['text'].contains('assets/images/face'))
-              ? 10.w
-              : 0),
-          color: message.sender == tfSender
-              ? Colors.white
-              : Color.fromARGB(255, 158, 234, 106),
-          child: image,
-        ),
-      ):
-
-      Container(
-        decoration: new BoxDecoration(
-          //背景Colors.transparent 透明
-          color: Colors.transparent,
-          //设置四周圆角 角度
-          borderRadius: BorderRadius.all(Radius.circular(4.w)),
-          //设置四周边框
-
-        ),
-
-        width: 190.w,
-        height: 220.h,
-        child: //Image.network(imageURL)
-        GestureDetector(
-           child:
-            //FutureBuilder(
-          //   future: getLocalCacheImage(url: imageURL),
-          //   builder: (context, snapshot) {
-          //     if (snapshot.connectionState != ConnectionState.done) {
-          //       return Container();
-          //     }
-          //     if (snapshot.hasData) {
-          //       return Image.memory(snapshot.data);
-          //     } else {
-          //       if (imageURL.startsWith("http://localhost")) {
-          //         return Container();
-          //       } else if (imageURL.startsWith('file:/')) {
-          //         return Image.file(File(imageURL));
-          //       }
-          //       return Image.network(imageURL);
-          //     }
-          //   },
-          // ),
-           buildLocalImageWidget(imageURL),
-           // Image.network(imageURL),
-          onTap: () {
-
-              ImagePreview.preview(
-                context,
-                images: List.generate(1, (index) {
-                  return ImageOptions(
-                    url: imageURL,
-                    tag: imageURL,
-                  );
-                }),
-                // bottomBarBuilder: (context, int index) {
-                //   if (index % 4 == 1) {
-                //     return SizedBox.shrink();
-                //   }
-                //   return Container(
-                //     height: index.isEven ? null : MediaQuery.of(context).size.height / 2,
-                //     padding: EdgeInsets.symmetric(
-                //       horizontal: 16,
-                //       vertical: 10,
-                //     ),
-                //     child: SafeArea(
-                //       top: false,
-                //       child: Column(
-                //         crossAxisAlignment: CrossAxisAlignment.start,
-                //         children: [
-                //           Text(
-                //             '测试标题',
-                //             style: TextStyle(
-                //               color: CupertinoDynamicColor.resolve(
-                //                 CupertinoColors.label,
-                //                 context,
-                //               ),
-                //             ),
-                //           ),
-                //           Text(
-                //             '测试内容',
-                //             style: TextStyle(
-                //               fontSize: 15,
-                //               color: CupertinoDynamicColor.resolve(
-                //                 CupertinoColors.secondaryLabel,
-                //                 context,
-                //               ),
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   );
-                // },
-              );
-
-          },
-          onLongPress: () {
-            DialogUtil.buildToast('长按了消息');
-          },
-        )
-
-      ),
-    );
-  }
-
-  Widget buildLocalImageWidget(String imageURL) {
-    if (imageURL.startsWith("http://localhost")) {
-      return FutureBuilder(
-        future: getLocalCacheImage(url: imageURL),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Container();
-          }
-          if (snapshot.hasData) {
-            return Image.memory(snapshot.data);
-          } else {
-            if (imageURL.startsWith("http://localhost")) {
-              return Container();
-            } else if (imageURL.startsWith('file:/')) {
-              return Image.file(File(imageURL));
-            }
-            return Image.network(imageURL);
-          }
-        },
-      );
-       } else if (imageURL.startsWith('file:/')) {
-              return Image.file(File(imageURL.substring(6)));
-       }
-              return CachedNetworkImage(
-                imageUrl: imageURL,
-               // placeholder: (context, url) => new CircularProgressIndicator(),
-                errorWidget: (context, url, error) => new Icon(Icons.error),
-              );
-
-                Image.network(imageURL);
-
-  }
-
-  Future<Uint8List> getLocalCacheImage({String url}) async {
-
-    Map result = await im.getLocalCacheImage(url: url);
-    NativeResponse response = NativeResponse.fromMap(result);
-    return response.data;
-  }
-  Future<Uint8List> getLocalMediaURL({String url}) async {
-
-    Map result = await im.getLocalMediaURL(url: url);
-    NativeResponse response = NativeResponse.fromMap(result);
-    return response.data;
-  }
-
-
-
-  // Future<File> _getLocalFile(String filename) async {
-  //   String dir = (await getExternalStorageDirectory()).path;
-  //   File f = new File('$dir/$filename');
-  //   return f;
-  // }
-  _buildWrapper({bool isSelf, Message message, Widget child}) {
-    return Container(
-      margin: EdgeInsets.all(1.w),
-      child: Row(
-        mainAxisAlignment: isSelf ? MainAxisAlignment.end : MainAxisAlignment.start,
-        children: [
-
-          Container(
-            child: child,
-          ),
-
-        ],
-      ),
-    );
-  }
-  Widget buildVoiceWidget(Message entity,String  tfSender) {
-    double width;
-    if (entity.content['duration'] < 5) {
-      width = 160.w;
-    } else if (entity.content['duration'] < 10) {
-      width = 240.w;
-    } else if (entity.content['duration'] < 20) {
-      width = 280.w;
-    } else {
-      width = 300.w;
-    }
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Container(
-              padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-              width: width,
-              color: entity.sender == tfSender
-                  ? Colors.white
-                  : Color.fromARGB(255, 158, 234, 106),
-              child: Row(
-                mainAxisAlignment: entity.sender == tfSender
-                    ? MainAxisAlignment.start
-                    : MainAxisAlignment.end,
-                children: <Widget>[
-                  entity.sender == tfSender
-                      ? Text('')
-                      : Text((entity.content['duration']).toString() + 's',
-                      style: TextStyle(fontSize: 18, color: Colors.black)),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  entity.playing == 1
-                      ? Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(top: 1, right: 1),
-                    width: 18.0,
-                    height: 18.0,
-                    child: SizedBox(
-                        width: 14.0,
-                        height: 14.0,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Colors.black),
-                          strokeWidth: 2,
-                        )),
-                  )
-                      : Image.asset(
-                    FileUtil.getImagePath('audio_player_3',
-                        dir: 'icon', format: 'png'),
-                    width: 18,
-                    height: 18,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  entity.sender == tfSender
-                      ? Text((entity.content['duration']).toString() + 's',
-                      style: TextStyle(fontSize: 18, color: Colors.black))
-                      : Text(''),
-                ],
-              )),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 60.h, bottom: 10.h),
-          width: width,
-          child: LinearProgressIndicator(
-            value: progress,
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-            backgroundColor: Colors.white,
-          ),
-        ),
-
-
-      ],
     );
   }
 
   Widget buildVideoWidget(MessageEntity entity) {
-
   }
   /*删除好友*/
   _deleteContact(String username) {
-
   }
 
   /*加入黑名单*/
   _addToBlackList(String isNeed, String username) {
-
   }
 
   /*移出黑名单*/
   _removeUserFromBlackList(String username) {
-
   }
   Future<File> _getLocalFile(String filename) async {
     String dir = (await getTemporaryDirectory()).path;
@@ -1794,84 +1237,47 @@ class GroupChatState extends State<GroupChatPage> {
   }
   //重发
   _onResend(Message entity) {
-
   }
 
   _buildTextMessage(String content) {
     BlocProvider.of<GroupBloc>(context).add(EventGroupSendNewMessage(tfSender,widget.model.cid,content));
-    //setState(() {
       _controller.clear();
       _isShowSend = false;
-    //});
-
   }
   sendTextMessage(String text) async {
     if (text == null || text.length == 0) {
-
       return;
     }
-
-
-
   }
   _willBuildImageMessage(File imageFile) {
     if (imageFile == null || imageFile.path.isEmpty) {
       return;
     }
     _buildImageMessage(imageFile, false);return;
-    DialogUtil.showBaseDialog(context, '是否发送原图？',
-        title: '', right: '原图', left: '压缩图', rightClick: (res) {
-      _buildImageMessage(imageFile, true);
-    }, leftClick: (res) {
-      _buildImageMessage(imageFile, false);
-    });
-
   }
 
   _buildImageMessage(File file, bool sendOriginalImage)  {
    file.readAsBytes().then((content) =>
        BlocProvider.of<GroupBloc>(context).add(EventGroupSendNewImageMessage(tfSender,widget.model.cid,content))
       );
-
-    //setState(() {
        _isShowTools = false;
       _controller.clear();
-    //});
-
   }
 
   _buildVoiceMessage(File file, int length) {
-
-    //setState(() {
     BlocProvider.of<GroupBloc>(context).add(EventGroupSendNewVoiceMessage(tfSender,widget.model.cid,file.path,length.floor()));
     _controller.clear();
-    // });
-
   }
 
   _buildVideoMessage(Map file) {
-
-
     setState(() {
-
       _controller.clear();
     });
 
   }
 
-  _sendMessage(Message messageEntity, {bool isResend = false}) {
-    if (isResend) {
-      setState(() {
-
-      });
-    }
-
-  }
-
-  @override
   void updateData(Message entity) {
     // TODO: implement updateData
-
   }
 }
 
