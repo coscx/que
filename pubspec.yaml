@@ -92,6 +92,7 @@ dependencies:
   image_gallery_saver: ^1.6.7
   dropdown_search: ^0.4.8
   logger: ^0.9.4
+  encrypt: ^4.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

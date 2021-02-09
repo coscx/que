@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/res/cons.dart';
+import 'package:flutter_geen/views/pages/utils/encrypt.dart';
 import 'peer_event.dart';
 import 'peer_state.dart';
 
@@ -37,14 +38,17 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
           secret: false,
           sender: event.currentUID,
           receiver: event.peerUID,
-          rawContent: event.content ?? 'hello world',
+          rawContent: encrypt.aes_enc(event.content) ?? 'hello world',
         );
           List<Message> newMessage =[];
           Map response = await im.loadData();
           var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
 
           newMessage.addAll(messages.reversed.toList());
-
+        newMessage.map((e) {
+          e.content['text'] = encrypt.aes_dec(e.content['text']);
+          return e;
+        }).toList();
         yield PeerMessageSuccess(newMessage,event.peerUID);
       }
     if (event is EventSendNewVoiceMessage) {
@@ -78,7 +82,10 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
       var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
 
       newMessage.addAll(messages.reversed.toList());
-
+      newMessage.map((e) {
+        e.content['text'] = encrypt.aes_dec(e.content['text']);
+        return e;
+      }).toList();
       yield PeerMessageSuccess(newMessage,event.peerUID);
     }
     if (event is EventReceiveNewMessage) {
@@ -127,7 +134,10 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
             newMessage.addAll(messages.reversed.toList());
           }
 
-
+          newMessage.map((e) {
+            e.content['text'] = encrypt.aes_dec(e.content['text']);
+            return e;
+          }).toList();
         yield PeerMessageSuccess(newMessage,cunrrentId);
       } catch (err) {
         print(err);
@@ -160,6 +170,11 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
           }).toList();
 
         newMessage.addAll(newMessages.reversed.toList());
+
+          newMessages.map((e) {
+            e.content['text'] = encrypt.aes_dec(e.content['text']);
+            return e;
+          }).toList();
         yield PeerMessageSuccess(newMessage,cunrrentId);
       } catch (err) {
         print(err);
@@ -180,7 +195,10 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
           );
           Map response = await im.loadData();
           var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap(ValueUtil.toMap(e))).toList().reversed.toList();
-
+        messages.map((e) {
+          e.content['text'] = encrypt.aes_dec(e.content['text']);
+        return e;
+        }).toList();
         yield PeerMessageSuccess(messages,event.peerUID);
       } catch (err) {
         print(err);
@@ -227,7 +245,10 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
 
             newMessages.addAll(messages);
           }
-
+           newMessages.map((e) {
+             e.content['text'] = encrypt.aes_dec(e.content['text']);
+             return e;
+           }).toList();
         yield LoadMorePeerMessageSuccess(newMessages,noMore);
       } catch (err) {
         print(err);

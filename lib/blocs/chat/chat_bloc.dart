@@ -11,7 +11,7 @@ import 'package:flutter_geen/app/enums.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/repositories/itf/widget_repository.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
-
+import 'package:flutter_geen/views/pages/utils/encrypt.dart';
 import 'chat_event.dart';
 import 'chat_state.dart';
 
@@ -55,7 +55,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           FltImPlugin im = FltImPlugin();
           Map response = await im.getConversations();
           var  conversions = ValueUtil.toArr(response["data"]).map((e) => Conversion.fromMap(ValueUtil.toMap(e))).toList();
-
+          conversions.map((e) {
+            e.detail= encrypt.aes_dec(e.detail);
+            return e;
+          }).toList();
         yield ChatMessageSuccess(conversions);
       } catch (err) {
         print(err);
@@ -69,7 +72,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         FltImPlugin im = FltImPlugin();
         Map response = await im.getConversations();
         var  conversions = ValueUtil.toArr(response["data"]).map((e) => Conversion.fromMap(ValueUtil.toMap(e))).toList();
-
+        conversions.map((e) {
+          e.detail= encrypt.aes_dec(e.detail);
+          return e;
+        }).toList();
         yield ChatMessageSuccess(conversions);
       } catch (err) {
         print(err);

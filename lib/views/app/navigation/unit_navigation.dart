@@ -251,7 +251,9 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
            //loadConversions();
            int error = ValueUtil.toInt(data['error']);
            onNewGroupMessage(result, error);
-         } else if (type == 'onSystemMessage') {
+         } else if (type == 'onGroupNotification') {
+           onGroupNotification(result);
+         }else if (type == 'onSystemMessage') {
           //loadConversions();
         } else if (type == 'onPeerMessageACK') {
           int error = ValueUtil.toInt(data['error']);
@@ -509,6 +511,10 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
      BlocProvider.of<ChatBloc>(context).add(EventNewMessage(result));
   }
 
+}
+
+void onGroupNotification(result) {
+  print(result);
 }
 
 
