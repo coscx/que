@@ -18,7 +18,10 @@ class EventFirstLoadMessage extends PeerEvent {
   EventFirstLoadMessage(this.currentUID,this.peerUID);
 
 }
-
+class EventDeleteMessage extends PeerEvent {
+  final String currentUID;
+  EventDeleteMessage(this.currentUID);
+}
 class EventLoadMoreMessage extends PeerEvent {
 
 }

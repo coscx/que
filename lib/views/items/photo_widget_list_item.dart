@@ -16,7 +16,7 @@ import 'package:flutter_geen/components/permanent/circle_image.dart';
 import 'package:flutter_geen/components/permanent/circle_text.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_geen/components/permanent/tag.dart';
-import 'package:flutter_geen/model/widget_model.dart';
+import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';

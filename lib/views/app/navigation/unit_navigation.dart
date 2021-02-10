@@ -9,6 +9,7 @@ import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
 import 'package:flutter_geen/views/pages/about/person_center_page.dart';
 import 'package:flutter_geen/views/pages/search/serach_page.dart';
+import 'package:flutter_geen/views/pages/utils/event_bus.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_geen/app/res/cons.dart';
@@ -35,6 +36,7 @@ import 'dart:convert';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
 import 'package:package_info/package_info.dart';
 import 'package:umeng_analytics_push/umeng_analytics_push.dart';
+import 'package:event_bus/event_bus.dart';
 /// 说明: 主题结构 左右滑页 + 底部导航栏
 
 class UnitNavigation extends StatefulWidget {
@@ -50,6 +52,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
   FltImPlugin im = FltImPlugin();
   static String tfSender = "";
   CheckUpdate checkUpdate = CheckUpdate();
+
   @override
   void initState() {
     super.initState();
@@ -253,6 +256,8 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
            onNewGroupMessage(result, error);
          } else if (type == 'onGroupNotification') {
            onGroupNotification(result);
+         } else if (type == 'deletePeerMessageSuccess') {
+           deletePeerMessageSuccess(result,data['id']);
          }else if (type == 'onSystemMessage') {
           //loadConversions();
         } else if (type == 'onPeerMessageACK') {
@@ -413,7 +418,9 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     }
   }
   void onPeerMessageACK(result, int error) {
-    //BlocProvider.of<PeerBloc>(context).add(EventReceiveNewMessageAck(Map<String, dynamic>.from(result)));
+    Map<String, dynamic> message= Map<String, dynamic>.from(result);
+    //EventBusUtil.fire(PeerRecAckEvent(message['content']));
+    BlocProvider.of<PeerBloc>(context).add(EventReceiveNewMessageAck(Map<String, dynamic>.from(result)));
   }
   onPeerMessageFailure(Map result) {
     // IMMessage
@@ -516,7 +523,11 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     BlocProvider.of<GroupBloc>(context).add(EventGroupReceiveNewMessage(message));
     onNewGroupMessage(result,0);
   }
-
+  void deletePeerMessageSuccess(result,id) async {
+    print(result);
+    BlocProvider.of<PeerBloc>(context).add(EventDeleteMessage(id));
+    onNewMessage(result,0);
+  }
 }
 
 

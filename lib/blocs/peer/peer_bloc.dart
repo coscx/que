@@ -45,11 +45,21 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
           var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
 
           newMessage.addAll(messages.reversed.toList());
-        newMessage.map((e) {
+          newMessage.map((e) {
           e.content['text'] = encrypt.aes_dec(e.content['text']);
           return e;
         }).toList();
-        yield PeerMessageSuccess(newMessage,event.peerUID);
+        List<Message> newMessageList =[];
+        for(var i=0; i< newMessage.length;i++){
+          if (i == 0){
+               newMessage[i].flags = 1;
+               newMessageList.add(newMessage[i]);
+            }else{
+              newMessageList.add(newMessage[i]);
+           }
+        }
+
+        yield PeerMessageSuccess(newMessageList,event.peerUID);
       }
     if (event is EventSendNewVoiceMessage) {
       FltImPlugin im = FltImPlugin();
@@ -87,6 +97,25 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
         return e;
       }).toList();
       yield PeerMessageSuccess(newMessage,event.peerUID);
+    }
+    if (event is EventDeleteMessage) {
+      FltImPlugin im = FltImPlugin();
+      List<Message> oldMessage =state.props.elementAt(0);
+      var peerUID =state.props.elementAt(1);
+      List<Message> newMessage =[];
+      // Map response = await im.loadData();
+      // var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
+      oldMessage.forEach((e) {
+        if(e.content["uUID"]==event.currentUID){
+          print(e.content["uUID"]);
+        }else{
+          e.content['text'] = encrypt.aes_dec(e.content['text']);
+          newMessage.add(e);
+        }
+
+      });
+
+      yield PeerMessageSuccess(newMessage,"0");
     }
     if (event is EventReceiveNewMessage) {
 

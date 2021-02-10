@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_geen/views/pages/chat/view/voice/peer_chat_item.dart';
 import 'package:flutter_geen/views/pages/utils/common_util.dart';
+import 'package:flutter_geen/views/pages/utils/event_bus.dart';
 import 'package:flutter_geen/views/pages/utils/time_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -32,12 +33,14 @@ import 'package:flutter_geen/views/pages/utils/file_util.dart';
 import 'package:flutter_geen/views/pages/utils/functions.dart';
 import 'package:flutter_geen/views/pages/utils/image_util.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
+import 'package:flutter_geen/views/pages/chat/view/voice/peer_chat_item.dart';
 import 'package:frefresh/frefresh.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_sound/flutter_sound.dart';
-import 'package:path/path.dart' as path;
+import 'dart:convert';
+import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 /*
 *  发送聊天信息
 */
@@ -89,6 +92,9 @@ class ChatsState extends State<ChatsPage> {
   FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
   FlutterSoundPlayer playerModule = FlutterSoundPlayer();
   double progress = 0;
+  Map<String ,GlobalKey<PeerChatItemWidgetState>> globalKeyMap = Map();
+  StreamSubscription<PeerRecAckEvent> _peerAckSubscription;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -131,6 +137,22 @@ class ChatsState extends State<ChatsPage> {
       }
     });
     init();
+    _peerAckSubscription=EventBusUtil.listen((event) {
+      if (event is PeerRecAckEvent){
+        print(event.uuid);
+        Map<String , dynamic> uuid =json.decode(event.uuid);
+        globalKeyMap.forEach((key, value) {
+          if(uuid['uuid'] == key){
+            value.currentState.freshChatAck(status: 1);
+          }
+
+        });
+
+      }
+
+    });
+
+
   }
   Future<void> _initializeExample(bool withUI) async {
 
@@ -168,6 +190,7 @@ class ChatsState extends State<ChatsPage> {
     _cancelRecorderSubscriptions();
     _cancelPlayerSubscriptions();
     _releaseFlauto();
+    _peerAckSubscription.cancel();
   }
   /// 取消录音监听
   /// 结束录音
@@ -1113,13 +1136,17 @@ class ChatsState extends State<ChatsPage> {
 
   }
   Widget _buildContent(BuildContext context, PeerState state) {
+
     if (state is PeerMessageSuccess) {
       return ScrollConfiguration(
           behavior: DyBehaviorNull(),
           child:ListView.builder(
               padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 0,bottom: 0),
               itemBuilder: (BuildContext context, int index) {
+                String uuid=  state.messageList[index].content['uUID'];
                 if (index == state.messageList.length  -1) {
+                  GlobalKey<PeerChatItemWidgetState> key =  GlobalKey();
+                  globalKeyMap[uuid] = key;
                   return Column(
                     children: <Widget>[
                       Visibility(
@@ -1127,14 +1154,16 @@ class ChatsState extends State<ChatsPage> {
                         child:  _loadMoreWidget(state.messageList.length % 20 ==0),
                       ),
 
-                      _messageListViewItem(state.messageList,index,tfSender),
+                      _messageListViewItem(key,state.messageList,index,tfSender),
 
                     ],
                   );
                 } else {
+                  GlobalKey<PeerChatItemWidgetState> key =  GlobalKey();
+                  globalKeyMap[uuid] = key;
                   return Column(
                     children: <Widget>[
-                      _messageListViewItem(state.messageList,index,tfSender),
+                      _messageListViewItem(key,state.messageList,index,tfSender),
                     ],
                   );
                 }
@@ -1157,21 +1186,27 @@ class ChatsState extends State<ChatsPage> {
           child: ListView.builder(
               padding: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 0),
               itemBuilder: (BuildContext context, int index) {
-                if (index == state.messageList.length - 1) {
+                String uuid=  state.messageList[index].content['uUID'];
+                if (index == state.messageList.length  -1) {
+                  GlobalKey<PeerChatItemWidgetState> key =  GlobalKey();
+                  globalKeyMap[uuid] = key;
                   return Column(
                     children: <Widget>[
                       Visibility(
                         visible: !_isLoading,
                         child:  _loadMoreWidget(state.messageList.length % 20 ==0),
                       ),
-                      _messageListViewItem(state.messageList,index,tfSender),
+
+                      _messageListViewItem(key,state.messageList,index,tfSender),
 
                     ],
                   );
                 } else {
+                  GlobalKey<PeerChatItemWidgetState> key =  GlobalKey();
+                  globalKeyMap[uuid] = key;
                   return Column(
                     children: <Widget>[
-                      _messageListViewItem(state.messageList,index,tfSender),
+                      _messageListViewItem(key,state.messageList,index,tfSender),
                     ],
                   );
                 }
@@ -1224,14 +1259,19 @@ class ChatsState extends State<ChatsPage> {
       );
     }
   }
-  Widget _messageListViewItem(List<Message>messageList, int index,String tfSender) {
+  Widget _messageListViewItem(Key key,List<Message>messageList, int index,String tfSender) {
     //list最后一条消息（时间上是最老的），是没有下一条了
     Message _nextEntity = (index == messageList.length - 1) ? null : messageList[index + 1];
     Message _entity = messageList[index];
-    return buildChatListItem(_nextEntity, _entity,tfSender,
+    return buildChatListItem(key, _nextEntity, _entity,tfSender,
         onResend: (reSendEntity) {
           _onResend(reSendEntity);
         },
+        onItemLongClick: (entity) {
+          DialogUtil.buildToast('长按了消息');
+          _deletePeerMessage(context,entity);
+        },
+
         onItemClick: (onClickEntity) async {
           Message entity = onClickEntity;
           if (entity.type == MessageType.MESSAGE_AUDIO){
@@ -1263,8 +1303,29 @@ class ChatsState extends State<ChatsPage> {
           }
         });
   }
-  Widget buildChatListItem(Message nextEntity, Message entity,String tfSender,
-      {OnItemClick onResend, OnItemClick onItemClick}) {
+  _deletePeerMessage(BuildContext context,Message entity ) {
+    showDialog(
+        context: context,
+        builder: (ctx) => Dialog(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Container(
+            width: 50.w,
+            child: DeleteCategoryDialog(
+              title: '隐藏该用户',
+              content: '是否确定继续执行?',
+              onSubmit: () {
+                FltImPlugin im = FltImPlugin();
+                im.deletePeerMessage(id:entity.content['uUID']);
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+        ));
+  }
+  Widget buildChatListItem(Key key,Message nextEntity, Message entity,String tfSender,
+      {OnItemClick onResend, OnItemClick onItemClick, OnItemClick onItemLongClick}) {
     bool _isShowTime = true;
     var showTime; //最终显示的时间
     if (null == nextEntity) {
@@ -1290,7 +1351,7 @@ class ChatsState extends State<ChatsPage> {
                 style: TextStyle(color: ColorT.transparent_80),
               ))
               : SizedBox(height: 0),
-          PeerChatItemWidget(entity: entity, onResend: onResend, onItemClick:onItemClick,tfSender: tfSender)
+          PeerChatItemWidget(key: key  , entity: entity, onResend: onResend, onItemClick:onItemClick,onItemLongClick:onItemLongClick,tfSender: tfSender)
         ],
       ),
     );
@@ -1359,3 +1420,6 @@ class ChatsState extends State<ChatsPage> {
     // TODO: implement updateData
   }
 }
+
+
+

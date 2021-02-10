@@ -20,23 +20,24 @@ class PeerChatItemWidget extends StatefulWidget {
   final Message entity;
   final OnItemClick onResend;
   final OnItemClick onItemClick;
+  final OnItemClick onItemLongClick;
   final String  tfSender;
-  PeerChatItemWidget({@required this.entity,@required this.onResend, @required this.onItemClick,@required this.tfSender});
+  PeerChatItemWidget({Key key,@required this.entity,@required this.onResend, @required this.onItemClick,@required this.onItemLongClick,  @required this.tfSender}): super(key: key);
   @override
-  _PeerChatItemWidgetState createState() => _PeerChatItemWidgetState();
+  PeerChatItemWidgetState createState() => PeerChatItemWidgetState();
 }
 
-class _PeerChatItemWidgetState extends State<PeerChatItemWidget> {
+class PeerChatItemWidgetState extends State<PeerChatItemWidget> {
   FltImPlugin im = FltImPlugin();
 
   @override
   Widget build(BuildContext context) {
-    return _chatItemWidget(widget.entity,widget.onResend,widget.onItemClick,widget.tfSender);
+    return _chatItemWidget(widget.entity,widget.onResend,widget.onItemClick,widget.onItemLongClick,widget.tfSender);
   }
 
 
 
-  Widget _chatItemWidget(Message entity, OnItemClick onResend, OnItemClick onItemClick,String tfSender) {
+  Widget _chatItemWidget(Message entity, OnItemClick onResend, OnItemClick onItemClick,OnItemClick onItemLongClick,String tfSender) {
     if (entity.sender == tfSender) {
 
       //自己的消息
@@ -45,6 +46,34 @@ class _PeerChatItemWidgetState extends State<PeerChatItemWidget> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            //显示是否重发1、发送2中按钮，发送成功0或者null不显示
+            (entity.flags == 0 || entity.flags == 8)
+                ? IconButton(
+                icon: Icon(Icons.error, color: Colors.red, size: 18),
+                onPressed: () {
+                  if (null != onResend) {
+                    onResend(entity);
+                  }
+                })
+                : ((entity.flags == 1)
+                ? Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(top: 20, right: 20),
+              width: 32.0,
+              height: 32.0,
+              child: SizedBox(
+                  width: 12.0,
+                  height: 12.0,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(
+                        ObjectUtil.getThemeSwatchColor()),
+                    strokeWidth: 2,
+                  )),
+            )
+                : SizedBox(
+              width: 0,
+              height: 0,
+            )),
             Expanded(
                 child: Container(
                   margin: EdgeInsets.only(left: 0.w, right: 0.w, bottom: 0.h, top: 12.h),
@@ -62,37 +91,13 @@ class _PeerChatItemWidgetState extends State<PeerChatItemWidget> {
                           }
                         },
                         onLongPress: () {
-                          DialogUtil.buildToast('长按了消息');
+                          if (null != onItemClick) {
+                            onItemLongClick(entity);
+                          }
+
                         },
                       ),
-                      //显示是否重发1、发送2中按钮，发送成功0或者null不显示
-                      // entity.flags == 11
-                      //     ? IconButton(
-                      //     icon: Icon(Icons.refresh, color: Colors.red, size: 18),
-                      //     onPressed: () {
-                      //       if (null != onResend) {
-                      //         onResend(entity);
-                      //       }
-                      //     })
-                      //     : (entity.flags == 10
-                      //     ? Container(
-                      //   alignment: Alignment.center,
-                      //   padding: EdgeInsets.only(top: 20, right: 20),
-                      //   width: 32.0,
-                      //   height: 32.0,
-                      //   child: SizedBox(
-                      //       width: 12.0,
-                      //       height: 12.0,
-                      //       child: CircularProgressIndicator(
-                      //         valueColor: AlwaysStoppedAnimation(
-                      //             ObjectUtil.getThemeSwatchColor()),
-                      //         strokeWidth: 2,
-                      //       )),
-                      // )
-                      //     : SizedBox(
-                      //   width: 0,
-                      //   height: 0,
-                      // )),
+
                     ],
                   ),
                 )),
@@ -114,14 +119,6 @@ class _PeerChatItemWidgetState extends State<PeerChatItemWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _headPortrait('', 1),
-            Container(
-              margin: EdgeInsets.only(left: 5.w, right: 0.w, bottom: 0.h, top: 26.h),
-              width: 20.w,
-              child:Text(
-                entity.sender,
-                style: new TextStyle(color: Colors.black, fontSize: 32.sp),
-              ),
-            ),
             Expanded(
                 child: Container(
                   margin: EdgeInsets.only(left: 0.w, right: 0.w, bottom: 0.h, top: 12.h),
@@ -137,7 +134,10 @@ class _PeerChatItemWidgetState extends State<PeerChatItemWidget> {
                           }
                         },
                         onLongPress: () {
-                          DialogUtil.buildToast('长按了消息');
+                          if (null != onItemClick) {
+                            onItemLongClick(entity);
+                          }
+
                         },
                       ),
                     ],
@@ -148,6 +148,7 @@ class _PeerChatItemWidgetState extends State<PeerChatItemWidget> {
       );
     }
   }
+
 
   /*
   *  头像
@@ -539,6 +540,10 @@ class _PeerChatItemWidgetState extends State<PeerChatItemWidget> {
     );
   }
 
-
+  freshChatAck({int status}) {
+    setState(() {
+      widget.entity.flags =2;
+    });
+  }
 
 }
