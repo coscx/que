@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter_geen/views/pages/chat/view/voice/voice.dart';
+import 'package:flutter_geen/views/pages/chat/view/voice/group_chat_item.dart';
 import 'package:flutter_geen/views/pages/utils/common_util.dart';
 import 'package:flutter_geen/views/pages/utils/time_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
