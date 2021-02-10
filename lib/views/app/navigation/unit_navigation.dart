@@ -66,14 +66,14 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
 
         login(success: () {
           listenNative();
-          BlocProvider.of<ChatBloc>(context).add(EventNewMessage(null));
+          BlocProvider.of<ChatBloc>(context).add(EventNewMessage());
         });
 
       }else{
 
         loginByToken(ss,success: () {
           listenNative();
-          BlocProvider.of<ChatBloc>(context).add(EventNewMessage(null));
+          BlocProvider.of<ChatBloc>(context).add(EventNewMessage());
         });
       }
 
@@ -494,7 +494,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     // }).toList();
 
     BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
-    BlocProvider.of<ChatBloc>(context).add(EventNewMessage(result));
+    BlocProvider.of<ChatBloc>(context).add(EventNewMessage());
   }
   void onNewGroupMessage(result, int error)async {
     var count = 1;
@@ -508,14 +508,17 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
     // }).toList();
 
      BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
-     BlocProvider.of<ChatBloc>(context).add(EventNewMessage(result));
+     BlocProvider.of<ChatBloc>(context).add(EventNewMessage());
+  }
+  void onGroupNotification(result) async {
+    print(result);
+    Map<String, dynamic> message= Map<String, dynamic>.from(result);
+    BlocProvider.of<GroupBloc>(context).add(EventGroupReceiveNewMessage(message));
+    onNewGroupMessage(result,0);
   }
 
 }
 
-void onGroupNotification(result) {
-  print(result);
-}
 
 
 abstract class _DockedFloatingActionButtonLocation

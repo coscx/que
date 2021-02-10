@@ -32,7 +32,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   @override
   Stream<ChatState> mapEventToState(ChatEvent event) async* {
     if (event is EventNewMessage) {
-        Map<String,dynamic> message = event.message;
+        //Map<String,dynamic> message = event.message;
 
       try {
       //   var newUsers= users.where((element) =>

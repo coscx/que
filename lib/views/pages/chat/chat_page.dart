@@ -1818,7 +1818,7 @@ class ChatsState extends State<ChatsPage> {
   _buildVoiceMessage(File file, int length) {
 
     //setState(() {
-    BlocProvider.of<PeerBloc>(context).add(EventSendNewVoiceMessage(tfSender,widget.model.cid,file.path,length.floor()));
+    BlocProvider.of<PeerBloc>(context).add(EventSendNewVoiceMessage(tfSender,widget.model.cid,file.path,length.ceil()));
       _controller.clear();
    // });
 

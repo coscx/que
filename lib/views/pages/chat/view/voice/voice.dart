@@ -15,18 +15,18 @@ import 'package:flutter_geen/views/pages/utils/dialog_util.dart';
 import 'package:flutter_geen/views/pages/utils/file_util.dart';
 import 'package:flutter_geen/views/pages/utils/functions.dart';
 import 'package:flutter_geen/views/pages/utils/object_util.dart';
-
-class VoiceWidget extends StatefulWidget {
+import 'dart:convert';
+class GroupChatItemWidget extends StatefulWidget {
   final Message entity;
   final OnItemClick onResend;
   final OnItemClick onItemClick;
   final String  tfSender;
-  VoiceWidget({@required this.entity,@required this.onResend, @required this.onItemClick,@required this.tfSender});
+  GroupChatItemWidget({@required this.entity,@required this.onResend, @required this.onItemClick,@required this.tfSender});
   @override
-  _VoiceWidgetState createState() => _VoiceWidgetState();
+  _GroupChatItemWidgetState createState() => _GroupChatItemWidgetState();
 }
 
-class _VoiceWidgetState extends State<VoiceWidget> {
+class _GroupChatItemWidgetState extends State<GroupChatItemWidget> {
   FltImPlugin im = FltImPlugin();
 
   @override
@@ -103,7 +103,10 @@ class _VoiceWidgetState extends State<VoiceWidget> {
       );
 
 
-    } else {
+    } else if (entity.type == MessageType.MESSAGE_GROUP_NOTIFICATION) {
+      //文本
+      return buildGroupNotifitionWidget(entity,tfSender);
+    }else {
       //其他人的消息
       return Container(
         margin: EdgeInsets.only(left: 10.w, right: 40.w, bottom: 6.h, top: 6.h),
@@ -223,7 +226,33 @@ class _VoiceWidgetState extends State<VoiceWidget> {
       ),
     );
   }
+  Widget buildGroupNotifitionWidget(Message entity,String  tfSender) {
+    var type = entity.content['notificationType'];
+    //var raw = json.decode(entity.content['raw']);
+    String content ="";
+    if(type==7){
+      if(entity.content['mute']==1){
+        content =entity.content['member'].toString()+ "被管理员禁言";
+      }else{
+        content =entity.content['member'].toString()+ "被管理员解除禁言";
+      }
 
+
+    }
+
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16.w),
+      child: Container(
+        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 16.h, bottom: 16.h),
+        color:  Colors.transparent,
+        child: Text(
+          content,
+          style: TextStyle(fontSize: 28.sp, color: Colors.black45),
+        ),
+      ),
+    );
+  }
   Widget buildImageWidget(Message message,String  tfSender) {
     int isFace =0;
     //图像

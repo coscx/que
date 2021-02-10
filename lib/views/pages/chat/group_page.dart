@@ -97,7 +97,7 @@ class GroupChatState extends State<GroupChatPage> {
       if (!mounted) {
         return;
       }
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent+100.h) {
 
         if (_isLoading) {
           return;
@@ -109,6 +109,9 @@ class GroupChatState extends State<GroupChatPage> {
           });
         }
 
+
+
+        BlocProvider.of<GroupBloc>(context).add(EventGroupLoadMoreMessage());
         Future.delayed(Duration(milliseconds: 150), () {
           _onRefresh();
           if (mounted) {
@@ -359,7 +362,7 @@ class GroupChatState extends State<GroupChatPage> {
                 padding: EdgeInsets.only(right: 15.w, left: 15.w),
                 child: Icon(
                   Icons.more_horiz,
-                  size: 22.sp,
+                  size: 60.sp,
                   color: Colors.black,
                 )),
             onTap: () {
@@ -1108,7 +1111,27 @@ class GroupChatState extends State<GroupChatPage> {
           child:ListView.builder(
               padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 0,bottom: 0),
           itemBuilder: (BuildContext context, int index) {
-            return _messageListViewItem(state.messageList,index,tfSender);
+            if (index == state.messageList.length  -1) {
+              return Column(
+                children: <Widget>[
+                  Visibility(
+                    visible: !_isLoading,
+                    child:  _loadMoreWidget(state.messageList.length % 20 ==0),
+                  ),
+
+                    _messageListViewItem(state.messageList,index,tfSender),
+
+                ],
+              );
+            } else {
+              return Column(
+                children: <Widget>[
+                  _messageListViewItem(state.messageList,index,tfSender),
+                ],
+              );
+            }
+
+
           },
           //倒置过来的ListView，这样数据多的时候也会显示“底部”（其实是顶部），
           //因为正常的listView数据多的时候，没有办法显示在顶部最后一条
@@ -1117,7 +1140,7 @@ class GroupChatState extends State<GroupChatPage> {
           //所以应该让listView高度由内容决定
           shrinkWrap: true,
           controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: state.messageList.length));
     }
     if (state is LoadMoreGroupMessageSuccess) {
@@ -1125,9 +1148,28 @@ class GroupChatState extends State<GroupChatPage> {
           behavior: DyBehaviorNull(),
           child: ListView.builder(
               padding: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 0),
-          itemBuilder: (BuildContext context, int index) {
-            return _messageListViewItem(state.messageList,index,tfSender);
-          },
+              itemBuilder: (BuildContext context, int index) {
+                if (index == state.messageList.length - 1) {
+                  return Column(
+                    children: <Widget>[
+                      Visibility(
+                        visible: !_isLoading,
+                        child:  _loadMoreWidget(state.messageList.length % 20 ==0),
+                      ),
+                      _messageListViewItem(state.messageList,index,tfSender),
+
+                    ],
+                  );
+                } else {
+                  return Column(
+                    children: <Widget>[
+                      _messageListViewItem(state.messageList,index,tfSender),
+                    ],
+                  );
+                }
+
+
+              },
           //倒置过来的ListView，这样数据多的时候也会显示“底部”（其实是顶部），
           //因为正常的listView数据多的时候，没有办法显示在顶部最后一条
           reverse: true,
@@ -1135,16 +1177,45 @@ class GroupChatState extends State<GroupChatPage> {
           //所以应该让listView高度由内容决定
           shrinkWrap: true,
           controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: state.messageList.length));
     }
     return Container();
   }
   Future<Null> _onRefresh() async {
 
-    BlocProvider.of<GroupBloc>(context).add(EventGroupLoadMoreMessage());
-  }
 
+  }
+//加载中的圈圈
+  Widget _loadMoreWidget(bool haveMore) {
+    if (haveMore) {
+      return Container();
+      //还有更多数据可以加载
+      // return Center(
+      //   child: Padding(
+      //     padding: EdgeInsets.all(10),
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       crossAxisAlignment: CrossAxisAlignment.center,
+      //       children: <Widget>[
+      //         Text("加载中......"),
+      //         CircularProgressIndicator(
+      //           strokeWidth: 1,
+      //         )
+      //       ],
+      //     ),
+      //   ),
+      // );
+    } else {
+      //当没有更多数据可以加载的时候，
+      return Center(
+        child:   Text(
+          "没有更多数据了",
+          style: new TextStyle(color: Colors.black54, fontSize: 26.sp),
+        ),
+      );
+    }
+  }
   Widget _messageListViewItem(List<Message>messageList, int index,String tfSender) {
     //list最后一条消息（时间上是最老的），是没有下一条了
     Message _nextEntity = (index == messageList.length - 1) ? null : messageList[index + 1];
@@ -1211,7 +1282,7 @@ class GroupChatState extends State<GroupChatPage> {
                 style: TextStyle(color: ColorT.transparent_80),
               ))
               : SizedBox(height: 0),
-              VoiceWidget(entity: entity, onResend: onResend, onItemClick:onItemClick,tfSender: tfSender)
+          GroupChatItemWidget(entity: entity, onResend: onResend, onItemClick:onItemClick,tfSender: tfSender)
         ],
       ),
     );

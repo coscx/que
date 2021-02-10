@@ -14,8 +14,8 @@ abstract class ChatEvent extends Equatable {
 
 
 class EventNewMessage extends ChatEvent {
-  final Map<String,dynamic> message;
-  EventNewMessage(this.message);
+  //final Map<String,dynamic> message;
+  EventNewMessage();
 
 }
 
