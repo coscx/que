@@ -3,6 +3,7 @@ library refresh_loadmore;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 
 class CustomerRefreshLoadmore extends StatefulWidget {
   /// callback function on pull down to refresh | 下拉刷新时的回调函数

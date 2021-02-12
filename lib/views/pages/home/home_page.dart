@@ -20,6 +20,7 @@ import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/common/empty_page.dart';
 import 'package:flutter_geen/views/items/home_item_support.dart';
 import 'package:flutter_geen/views/pages/home/toly_app_bar.dart';
+import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -1041,13 +1042,3 @@ class DYrefreshFooter extends StatelessWidget {
   }
 }
 
-class DyBehaviorNull extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
-    if (Platform.isAndroid || Platform.isFuchsia) {
-      return child;
-    } else {
-      return super.buildViewportChrome(context,child,axisDirection);
-    }
-  }
-}

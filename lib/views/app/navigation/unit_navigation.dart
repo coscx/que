@@ -1,42 +1,33 @@
 import 'dart:math';
 import 'dart:math' as math;
-import 'package:flt_im_plugin/flt_im_plugin.dart';
-import 'package:flt_im_plugin/value_util.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
 import 'package:flutter_geen/views/pages/about/person_center_page.dart';
 import 'package:flutter_geen/views/pages/search/serach_page.dart';
-import 'package:flutter_geen/views/pages/utils/event_bus.dart';
-import 'package:flutter_gifimage/flutter_gifimage.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_geen/views/app/navigation/unit_bottom_bar.dart';
+import 'package:flutter_geen/views/pages/category/home_right_drawer.dart';
+import 'package:flutter_geen/views/pages/chat/conversation_list.dart';
+import 'package:flutter_geen/views/pages/chat/view/util/ImMessage.dart';
+import 'package:flutter_geen/views/pages/home/home_drawer.dart';
+import 'package:flutter_geen/views/pages/home/home_page.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/components/permanent/overlay_tool_wrapper.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
-import 'package:flutter_geen/views/app/navigation/unit_bottom_bar.dart';
-import 'package:flutter_geen/views/pages/category/collect_page.dart';
-import 'package:flutter_geen/views/pages/category/home_right_drawer.dart';
-import 'package:flutter_geen/views/pages/chat/conversation_list.dart';
-import 'package:flutter_geen/views/pages/chat/view/util/ImMessage.dart';
-import 'package:flutter_geen/views/pages/data/big.dart';
-import 'package:flutter_geen/views/pages/data/card.dart';
-import 'package:flutter_geen/views/pages/data/info.dart';
-import 'package:flutter_geen/views/pages/home/home_drawer.dart';
-import 'package:flt_im_plugin/conversion.dart';
-import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:flt_im_plugin/flt_im_plugin.dart';
+import 'package:flt_im_plugin/value_util.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
-import 'dart:io';
 import 'package:flutter_xupdate/flutter_xupdate.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'dart:convert';
-import 'package:flutter_geen/views/dialogs/user_detail.dart';
 import 'package:package_info/package_info.dart';
 import 'package:umeng_analytics_push/umeng_analytics_push.dart';
-import 'package:event_bus/event_bus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 /// 说明: 主题结构 左右滑页 + 底部导航栏
 
 class UnitNavigation extends StatefulWidget {
@@ -428,6 +419,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
 
   /// OutboxObserver
   onImageUploadSuccess(Map result, String url) {
+    print(url);
     ///IMessage
   }
   onAudioUploadSuccess(Map result, String url) {

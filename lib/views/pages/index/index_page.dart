@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/views/pages/data/big.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 

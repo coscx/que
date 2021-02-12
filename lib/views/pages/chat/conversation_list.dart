@@ -14,6 +14,7 @@ import 'package:flutter_geen/blocs/peer/peer_state.dart';
 import 'package:flutter_geen/views/pages/chat/view/util/date.dart';
 import 'package:flutter_geen/views/pages/chat/widget/more_widgets.dart';
 import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:flutter_geen/views/pages/utils/dialog_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';

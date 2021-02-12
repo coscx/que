@@ -11,6 +11,7 @@ import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/blocs/peer/peer_bloc.dart';
 import 'package:flutter_geen/blocs/peer/peer_event.dart';
 import 'package:flt_im_plugin/conversion.dart';
+import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 // 页面总结构
 class UserPage extends StatefulWidget {
 
