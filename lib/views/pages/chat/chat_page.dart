@@ -1309,7 +1309,12 @@ class ChatsState extends State<ChatsPage> {
               content: '是否确定继续执行?',
               onSubmit: () {
                 FltImPlugin im = FltImPlugin();
-                im.deletePeerMessage(id:entity.content['uUID']);
+                if (Platform.isAndroid == true) {
+                  im.deletePeerMessage(id:entity.content['uUID']);
+                }else{
+                  im.deletePeerMessage(id:entity.content['uuid']);
+                }
+
                 Navigator.of(context).pop();
               },
             ),

@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:io';
 import 'package:flt_im_plugin/flt_im_plugin.dart';
 import 'package:flt_im_plugin/message.dart';
 import 'package:flt_im_plugin/value_util.dart';
@@ -123,12 +123,23 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
       // Map response = await im.loadData();
       // var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
       oldMessage.forEach((e) {
-        if(e.content["uUID"]==event.currentUID){
-          print(e.content["uUID"]);
+
+        if (Platform.isAndroid == true) {
+          if(e.content["uUID"]==event.currentUID){
+            print(e.content["uUID"]);
+          }else{
+            e.content['text'] = encrypt.aes_dec(e.content['text']);
+            newMessage.add(e);
+          }
         }else{
-          e.content['text'] = encrypt.aes_dec(e.content['text']);
-          newMessage.add(e);
+          if(e.content["uuid"]==event.currentUID){
+            print(e.content["uuid"]);
+          }else{
+            e.content['text'] = encrypt.aes_dec(e.content['text']);
+            newMessage.add(e);
+          }
         }
+
 
       });
 
