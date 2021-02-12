@@ -24,6 +24,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+#  amap_map_fluttify: ^0.30.1
   sqflite: ^1.2.1 #数据库
   toggle_rotate: ^0.0.5
   flutter_star: ^0.1.2 # 星星组件
@@ -43,6 +44,9 @@ dependencies:
   flt_im_plugin:
     git:
       url: https://github.com/coscx/lat.git
+  flutter_ad_plugin:
+    git:
+      url: https://github.com/coscx/money.git
   flutter_plugin_android_lifecycle: ^1.0.2
   badges: ^1.1.0
   video_player: ^1.0.1
@@ -87,7 +91,7 @@ dependencies:
   package_info: ^0.4.3+2
   device_info: ^1.0.0
   bot_toast: ^3.0.5
-  amap_map_fluttify: ^0.30.1
+#
   flutter_qr_reader: ^1.0.3
   image_gallery_saver: ^1.6.7
   dropdown_search: ^0.4.8

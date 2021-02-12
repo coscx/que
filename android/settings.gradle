@@ -1,5 +1,6 @@
 include ':app'
-
+include ':dy-task-sdk-2.0.5'
+include ':oaid_sdk_1.0.25'
 def flutterProjectRoot = rootProject.projectDir.parentFile.toPath()
 
 def plugins = new Properties()

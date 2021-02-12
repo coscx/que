@@ -26,6 +26,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'background.dart';
 import 'package:flutter_qr_reader/flutter_qr_reader.dart';
+import 'package:flutter_ad_plugin/flutter_ad_plugin.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -216,7 +217,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 ),
                 onPressed: (){
                   //Navigator.of(context).pushNamed(UnitRouter.qr_view);
-                  _scan();
+                 // _scan();
+                  FlutterAdPlugin.jumpAdList;
                 },
               ),
             ),
