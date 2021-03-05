@@ -206,6 +206,18 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
           actions:<Widget> [
 
             Container(
+
+              child: IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.black87,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, UnitRouter.search);
+                },
+              ),
+            ),SizedBox(width: 20),
+            Container(
               height: 20,
               width: 20,
               child: IconButton(
@@ -217,8 +229,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 ),
                 onPressed: (){
                   //Navigator.of(context).pushNamed(UnitRouter.qr_view);
-                 // _scan();
-                  FlutterAdPlugin.jumpAdList;
+                  _scan();
+                  //FlutterAdPlugin.jumpAdList;
                 },
               ),
             ),

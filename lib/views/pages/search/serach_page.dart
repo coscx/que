@@ -43,9 +43,13 @@ class _SearchPageState extends State<SearchPage> {
       appBar:  AppBar(
         backgroundColor: Colors.white,
         elevation: 0, //去掉Appbar底部阴影
-        leadingWidth: 250.w,
-        leading: Container(
-        padding: EdgeInsets.only(left: 30.w,top: 30.w,bottom: 0),
+        leadingWidth: 150.w,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Container(
+        padding: EdgeInsets.only(left: 0.w,top: 0.w,bottom: 0),
         child:Text("用户搜索",
                 style:TextStyle(
                   fontFamily: "Quicksand",
@@ -134,7 +138,7 @@ class _SearchPageState extends State<SearchPage> {
     return SliverAppBar(
       backgroundColor: Colors.white,
       pinned: true,
-      leadingWidth: 50.w,
+      leadingWidth: 20.w,
       title: Container(
         padding: EdgeInsets.only(left: 0.w,top: 0.w),
     child:AppSearchBar()),

@@ -43,7 +43,6 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
           List<Message> newMessage =[];
           Map response = await im.loadData();
           var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
-
           newMessage.addAll(messages.reversed.toList());
           newMessage.map((e) {
           e.content['text'] = encrypt.aes_dec(e.content['text']);
@@ -148,7 +147,6 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
     if (event is EventReceiveNewMessage) {
 
       try {
-
           String cunrrentId;
           List<Message> newMessage =[];
           if (state is PeerMessageSuccess){
@@ -163,7 +161,6 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
               newMessage.add(mess);
               newMessage.addAll(history);
             }
-
 
           } else
 

@@ -393,7 +393,8 @@ class IssuesApi {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     var data={'token':token};
-    Response<dynamic> rep = await dio.post('/admin/data/infoflu.html',queryParameters:data );
+    Dio dioA= Dio();
+    Response<dynamic> rep = await dioA.post('http://bigd.gugu2019.com/admin/data/infoflu.html',queryParameters:data );
     var datas = json.decode(rep.data);
     return datas;
   }
@@ -401,7 +402,8 @@ class IssuesApi {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     var data={'token':token};
-    Response<dynamic> rep = await dio.post('/admin/data/datamenuflu.html',queryParameters:data );
+    Dio dioA= Dio();
+    Response<dynamic> rep = await dioA.post('http://bigd.gugu2019.com/admin/data/datamenuflu.html',queryParameters:data );
     var datas = json.decode(rep.data);
     return datas;
   }

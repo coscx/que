@@ -17,7 +17,7 @@ class _IndexPagesState extends State<IndexPages> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3);
+    _tabController = TabController(vsync: this, length: 1);
   }
 
   @override
@@ -54,10 +54,10 @@ class _IndexPagesState extends State<IndexPages> with TickerProviderStateMixin {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: ScreenUtil().setWidth(10),right: ScreenUtil().setWidth(380) ),
+                        padding: EdgeInsets.only(left: ScreenUtil().setWidth(0),right: ScreenUtil().setWidth(380) ),
                         child: TabBar(
                           labelColor:Colors.black ,
-                          labelStyle: TextStyle(fontSize: 23, fontWeight: FontWeight.bold,color: Colors.black,backgroundColor: Colors.white),
+                          labelStyle: TextStyle(fontSize: 28, fontWeight: FontWeight.bold,color: Colors.black,backgroundColor: Colors.white),
                           unselectedLabelStyle: TextStyle(fontSize: 16,color: Colors.black12),
                           indicator: UnderlineTabIndicator(),
                           indicatorColor: Colors.orange, // 下面那条横线的颜色
@@ -67,30 +67,30 @@ class _IndexPagesState extends State<IndexPages> with TickerProviderStateMixin {
                           controller: _tabController,
                           tabs: [
                             Tab(
-                              text: '发现',
+                              text: '大数据',
                             ),
-                            Tab(
-                              text: '我的',
-                            ),
-                            Tab(
-                              text: '动态',
-                            ),
+                            // Tab(
+                            //   text: '我的',
+                            // ),
+                            // Tab(
+                            //   text: '动态',
+                            // ),
                           ],
                         ),
                       ),
                       SizedBox(width: 50),
-                      Positioned(
-                        right: 50.w,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.search,
-                            color: Colors.black87,
-                          ),
-                          onPressed: () {
-
-                          },
-                        ),
-                      ),
+                      // Positioned(
+                      //   right: 50.w,
+                      //   child: IconButton(
+                      //     icon: Icon(
+                      //       Icons.search,
+                      //       color: Colors.black87,
+                      //     ),
+                      //     onPressed: () {
+                      //
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
                   SizedBox(height: 20),
@@ -101,8 +101,8 @@ class _IndexPagesState extends State<IndexPages> with TickerProviderStateMixin {
                       controller: _tabController,
                       children: [
                         FocusPage(),
-                        FocusPage(),
-                        FocusPage()
+                        // FocusPage(),
+                        // FocusPage()
                       ],
                     )),
                   ),

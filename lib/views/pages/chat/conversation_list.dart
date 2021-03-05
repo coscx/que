@@ -226,7 +226,6 @@ class ImConversationListPage extends StatelessWidget{
                   listener: (ctx, state) {
                     if (state is ChatMessageSuccess) {
 
-
                     }
 
                   },child:BlocBuilder<ChatBloc, ChatState>(builder: _buildContent)),
@@ -237,8 +236,6 @@ class ImConversationListPage extends StatelessWidget{
           ),
         ],
       ),
-
-
 
     ));
   }
@@ -429,7 +426,6 @@ class ImConversationListPage extends StatelessWidget{
 
                   },
                   onLongPress: (){
-
                     MoreWidgets.buildConversionMessagePop(context, _popString,
                         onItemClick: (res) {
                           switch (res) {

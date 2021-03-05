@@ -7,7 +7,8 @@ import 'package:flutter_geen/big_data_menu_entity.dart';
 import 'package:flutter_geen/blocs/bigdata/big_data_bloc.dart';
 import 'package:flutter_geen/blocs/bigdata/big_data_state.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
-import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:flutter_geen/storage/dao/local_storage.dart';
+import 'package:flutter_geen/views/items/web_brows.dart';
 import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 
 // 去除安卓滚动视图水波纹
@@ -64,9 +65,20 @@ class _FocusPage extends State<FocusPage> with DYBase, TickerProviderStateMixin 
     var list = menu.data;
     for (int i = 0; i < list.length; i++) {
       res.add(InkWell(
-        onTap: (){
-          BlocProvider.of<DataBloc>(context).add(EventGetData());
-          Navigator.pushNamed(context, UnitRouter.index_page);
+        onTap: () async {
+          // BlocProvider.of<DataBloc>(context).add(EventGetData());
+          // Navigator.pushNamed(context, UnitRouter.index_page);
+          var ss = await LocalStorage.get("token");
+          var sss =ss.toString();
+          int coordinates = await Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+            return  WebViewPageUI(
+              title: list[i].name,
+              url: list[i].url+"?token="+sss,
+            );
+          }));
+          if(coordinates==100){
+            ///这里填上当接收回调成功后要执行的操作
+          }
         },
         child:Container(
             margin: EdgeInsets.only(top: (10), left: (10), right: (10)),
@@ -160,12 +172,12 @@ class _FocusPage extends State<FocusPage> with DYBase, TickerProviderStateMixin 
     ),
     ),
     child:Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("大数据",style: TextStyle(color: Colors.black, fontSize: 25,fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
+      // appBar: AppBar(
+      //   centerTitle: true,
+      //   title: Text("大数据",style: TextStyle(color: Colors.black, fontSize: 25,fontWeight: FontWeight.bold)),
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      // ),
       body: BlocBuilder<BigDataBloc, BigDataState>(builder: _buildContent),
 
 
