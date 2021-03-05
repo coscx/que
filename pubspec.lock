@@ -286,7 +286,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "19befcdc1003367c3e6cc6d29b5cc3a3f78887ca"
+      resolved-ref: d50c01d8ef75e40859bda864d7a0038cc3b8035e
       url: "https://github.com/coscx/money.git"
     source: git
     version: "0.0.1"
