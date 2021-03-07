@@ -86,6 +86,10 @@ android {
     buildTypes {
         release {
             // Signing with the debug keys for now, so `flutter run --release` works.
+            //关闭混淆
+            minifyEnabled false //删除无用代码
+            useProguard true    //代码压缩设置
+            shrinkResources false //删除无用资源
             signingConfig signingConfigs.release
         }
         debug {

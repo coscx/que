@@ -65,7 +65,7 @@ dependencies:
   getwidget: ^1.2.4
   flutter_screenutil: ^4.0.0
   flutter_easyrefresh: ^2.1.7
-  flutter_svg: ^0.18.1
+  flutter_svg: ^0.19.3
   modal_bottom_sheet: ^1.0.0+1
   flutter_gifimage: ^1.0.0
   frefresh: ^1.1.0
