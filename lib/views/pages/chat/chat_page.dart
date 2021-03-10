@@ -662,8 +662,13 @@ class ChatsState extends State<ChatsPage> {
                               file.delete();
                               DialogUtil.buildToast('你说话时间太短啦~');
                             } else {
-                              //发送语音
-                              _buildVoiceMessage(file, length.floor());
+                              Future.delayed(const Duration(milliseconds: 500), () {
+
+                                //发送语音
+                                _buildVoiceMessage(file, length.floor());
+
+                              });
+
                             }
                             voiceCount= 0;
                             _timer.cancel();

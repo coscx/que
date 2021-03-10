@@ -226,8 +226,13 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
         newMessage.addAll(newMessages.reversed.toList());
 
           newMessages.map((e) {
-            e.content['text'] = encrypt.aes_dec(e.content['text']);
-            return e;
+            if(e.type==MessageType.MESSAGE_TEXT){
+              e.content['text'] = encrypt.aes_dec(e.content['text']);
+              return e;
+            }else{
+              return e;
+            }
+
           }).toList();
         yield PeerMessageSuccess(newMessage,cunrrentId);
       } catch (err) {
