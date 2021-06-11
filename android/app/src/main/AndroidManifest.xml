@@ -35,7 +35,7 @@
         android:required="true" />
     <application
         android:name="com.coscx.que.MyFlutterApplication"
-        android:label="鹊桥"
+        android:label="鹊桥ERP"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/logo"
         android:allowBackup="true"
