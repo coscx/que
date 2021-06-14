@@ -119,8 +119,8 @@ class UnitRouter {
         return Right2LeftRouter(child: ScanView());
       case login:
         return Right2LeftRouter(child: LoginPage());
-      // case baidu_map:
-      //   return Right2LeftRouter(child: SelectLocationFromMapPage());
+      case baidu_map:
+        return Right2LeftRouter(child: SelectLocationFromMapPage());
 
       case galley:
         return Right2LeftRouter(child: GalleryPage());

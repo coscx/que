@@ -10,7 +10,7 @@ import 'package:flutter_geen/views/items/SearchParamModel.dart';
 import 'package:city_pickers/modal/result.dart';
 
 import '../router.dart';
-const kBaseUrl = 'https://ctx.gugu2019.com';
+const kBaseUrl = 'https://core.queqiaochina.com';
 
 class IssuesApi {
   /// 自定义Header
@@ -36,7 +36,7 @@ class IssuesApi {
     var data={'username':username,'password':password};
     Response<dynamic> rep;
     try {
-       rep = await dio.post('/api/v1/auth/login', queryParameters: data);
+       rep = await dio.post('/api/v1/auth/loginApp', queryParameters: data);
        //var datas = json.decode(rep.data);
        return rep.data;
     } on DioError catch(e){
