@@ -32,9 +32,14 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
         if(res.state =="wechat_sdk_demo_bind") {
           var result = await IssuesApi.bindAppWeChat(res.code);
           if (result['code'] == 200) {
+            await LocalStorage.save("openid",result['data']['openid']);
+            setState(() {
+              bind="已绑定微信";
+            });
             _showToast(context, "绑定成功", false);
+
           } else {
-            _showToast(context, "绑定成功", false);
+            _showToast(context, result['message'], false);
           }
         }
       }
