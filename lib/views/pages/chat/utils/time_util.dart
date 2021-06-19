@@ -1,4 +1,4 @@
-import 'package:flutter_geen/views/pages/utils/date_util.dart';
+import 'package:flutter_geen/views/pages/chat/utils/date_util.dart';
 
 class TimeUtil {
 

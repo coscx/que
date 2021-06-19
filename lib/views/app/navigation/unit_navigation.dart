@@ -463,7 +463,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
 
 
     //_showNotification(title,content);
-    BlocProvider.of<PeerBloc>(context).add(EventReceiveNewMessage(message));
+   BlocProvider.of<PeerBloc>(context).add(EventReceiveNewMessage(message));
   }
 
   void onPeerSecretMessage(result) {

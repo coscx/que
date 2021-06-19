@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/res/cons.dart';
-import 'package:flutter_geen/views/pages/utils/encrypt.dart';
+import 'package:flutter_geen/views/pages/chat/utils/encrypt.dart';
 import 'peer_event.dart';
 import 'peer_state.dart';
 
@@ -162,9 +162,7 @@ class PeerBloc extends Bloc<PeerEvent, PeerState> {
               newMessage.addAll(history);
             }
 
-          } else
-
-            if (state is LoadMorePeerMessageSuccess){
+          } else if (state is LoadMorePeerMessageSuccess){
               FltImPlugin im = FltImPlugin();
               var res = await im.createConversion(
                 currentUID: event.message['receiver'].toString(),

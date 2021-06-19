@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/views/pages/chat/view/util/ImMessage.dart';
-import 'package:flutter_geen/views/pages/utils/dialog_util.dart';
-import 'package:flutter_geen/views/pages/utils/file_util.dart';
-import 'package:flutter_geen/views/pages/utils/functions.dart';
-import 'package:flutter_geen/views/pages/utils/object_util.dart';
+import 'package:flutter_geen/views/pages/chat/utils/dialog_util.dart';
+import 'package:flutter_geen/views/pages/chat/utils/file_util.dart';
+import 'package:flutter_geen/views/pages/chat/utils/functions.dart';
+import 'package:flutter_geen/views/pages/chat/utils/object_util.dart';
 import 'dart:convert';
 class GroupChatItemWidget extends StatefulWidget {
   final Message entity;
