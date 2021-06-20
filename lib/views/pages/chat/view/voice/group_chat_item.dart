@@ -20,8 +20,9 @@ class GroupChatItemWidget extends StatefulWidget {
   final Message entity;
   final OnItemClick onResend;
   final OnItemClick onItemClick;
+  final OnItemClick onItemLongClick;
   final String  tfSender;
-  GroupChatItemWidget({@required this.entity,@required this.onResend, @required this.onItemClick,@required this.tfSender});
+  GroupChatItemWidget({@required this.entity,@required this.onResend, @required this.onItemClick,@required this.onItemLongClick,@required this.tfSender});
   @override
   _GroupChatItemWidgetState createState() => _GroupChatItemWidgetState();
 }
@@ -31,12 +32,12 @@ class _GroupChatItemWidgetState extends State<GroupChatItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _chatItemWidget(widget.entity,widget.onResend,widget.onItemClick,widget.tfSender);
+    return _chatItemWidget(widget.entity,widget.onResend,widget.onItemClick,widget.onItemLongClick,widget.tfSender);
   }
 
 
 
-  Widget _chatItemWidget(Message entity, OnItemClick onResend, OnItemClick onItemClick,String tfSender) {
+  Widget _chatItemWidget(Message entity, OnItemClick onResend, OnItemClick onItemClick,OnItemClick onItemLongClick,String tfSender) {
     if (entity.sender == tfSender) {
 
       //自己的消息
@@ -91,7 +92,7 @@ class _GroupChatItemWidgetState extends State<GroupChatItemWidget> {
                         },
                         onLongPress: () {
                           if (null != onItemClick) {
-                            //onItemLongClick(entity);
+                            onItemLongClick(entity);
                           }
 
                         },

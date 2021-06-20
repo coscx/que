@@ -56,6 +56,30 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
         }
         yield GroupMessageSuccess(newMessageList,event.GroupUID);
       }
+    if (event is EventSendGroupRevokeMessage) {
+      FltImPlugin im = FltImPlugin();
+      Map result = await im.sendGroupRevokeMessage(
+        secret: false,
+        sender: event.currentUID,
+        receiver: event.GroupUID,
+        uuid: event.msg,
+      );
+      List<Message> newMessage =[];
+      Map response = await im.loadData();
+      var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
+
+      newMessage.addAll(messages.reversed.toList());
+      List<Message> newMessageList =[];
+      // for(var i=0; i< newMessage.length;i++){
+      //   if (i == 0){
+      //     newMessage[i].flags = 1;
+      //     newMessageList.add(newMessage[i]);
+      //   }else{
+      //     newMessageList.add(newMessage[i]);
+      //   }
+      // }
+      yield GroupMessageSuccess(newMessage,event.GroupUID);
+    }
     if (event is EventGroupSendNewImageMessage) {
       FltImPlugin im = FltImPlugin();
       Map result = await im.sendGroupImageMessage(
@@ -122,8 +146,16 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
               newMessage.addAll(history);
             }else{
               List<Message> history=state.props.elementAt(0);
-              newMessage.add(mess);
-              newMessage.addAll(history);
+              if(mess.type == MessageType.MESSAGE_REVOKE){
+                FltImPlugin im = FltImPlugin();
+                Map response = await im.loadData();
+                var  messages = ValueUtil.toArr(response["data"]).map((e) => Message.fromMap((e))).toList();
+
+                newMessage.addAll(messages.reversed.toList());
+              }else{
+                newMessage.add(mess);
+                newMessage.addAll(history);
+              }
             }
 
 

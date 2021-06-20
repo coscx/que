@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
 import 'package:flutter_geen/views/pages/chat/utils/common_util.dart';
 import 'package:flutter_geen/views/pages/chat/utils/time_util.dart';
@@ -1224,6 +1225,10 @@ class GroupChatState extends State<GroupChatPage> {
         onResend: (reSendEntity) {
           _onResend(reSendEntity);
         },
+        onItemLongClick: (entity) {
+          DialogUtil.buildToast('长按了消息');
+          _deletePeerMessage(context,entity);
+        },
         onItemClick: (onClickEntity) async {
           Message entity = onClickEntity;
           if (entity.type == MessageType.MESSAGE_AUDIO){
@@ -1255,8 +1260,36 @@ class GroupChatState extends State<GroupChatPage> {
           }
         });
   }
+  _deletePeerMessage(BuildContext context,Message entity ) {
+    showDialog(
+        context: context,
+        builder: (ctx) => Dialog(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Container(
+            width: 50.w,
+            child: DeleteCategoryDialog(
+              title: '隐藏该用户',
+              content: '是否确定继续执行?',
+              onSubmit: () {
+                FltImPlugin im = FltImPlugin();
+                if (Platform.isAndroid == true) {
+                  //im.deletePeerMessage(id:entity.content['uUID']);
+                  BlocProvider.of<GroupBloc>(context).add(EventSendGroupRevokeMessage(tfSender,widget.model.cid,entity.content['uUID']));
+                }else{
+                  im.deletePeerMessage(id:entity.content['uuid']);
+                }
+
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+        ));
+  }
+
   Widget buildChatListItem(Message nextEntity, Message entity,String tfSender,
-      {OnItemClick onResend, OnItemClick onItemClick}) {
+      {OnItemClick onResend, OnItemClick onItemClick, OnItemClick onItemLongClick}) {
     bool _isShowTime = true;
     var showTime; //最终显示的时间
     if (null == nextEntity) {
@@ -1282,7 +1315,7 @@ class GroupChatState extends State<GroupChatPage> {
                 style: TextStyle(color: ColorT.transparent_80),
               ))
               : SizedBox(height: 0),
-          GroupChatItemWidget(entity: entity, onResend: onResend, onItemClick:onItemClick,tfSender: tfSender)
+          GroupChatItemWidget(entity: entity, onResend: onResend, onItemClick:onItemClick,onItemLongClick:onItemLongClick,tfSender: tfSender)
         ],
       ),
     );
