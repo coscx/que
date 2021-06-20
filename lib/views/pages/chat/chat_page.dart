@@ -33,6 +33,7 @@ import 'package:vibration/vibration.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:w_popup_menu/w_popup_menu.dart';
 /*
 *  发送聊天信息
 */
@@ -1260,45 +1261,47 @@ class ChatsState extends State<ChatsPage> {
     //list最后一条消息（时间上是最老的），是没有下一条了
     Message _nextEntity = (index == messageList.length - 1) ? null : messageList[index + 1];
     Message _entity = messageList[index];
-    return buildChatListItem(key, _nextEntity, _entity,tfSender,
-        onResend: (reSendEntity) {
-          _onResend(reSendEntity);
-        },
-        onItemLongClick: (entity) {
-          DialogUtil.buildToast('长按了消息');
-          _deletePeerMessage(context,entity);
-        },
+     return buildChatListItem(key, _nextEntity, _entity,tfSender,
+              onResend: (reSendEntity) {
+                _onResend(reSendEntity);
+              },
+              onItemLongClick: (entity) {
+                DialogUtil.buildToast('长按了消息');
+                _deletePeerMessage(context,entity);
 
-        onItemClick: (onClickEntity) async {
-          Message entity = onClickEntity;
-          if (entity.type == MessageType.MESSAGE_AUDIO){
-            //点击了语音
-            if (_entity.playing == 1) {
-              //正在播放，就停止播放
-              await _stopPlayer();
-              setState(() {
-                _entity.playing = 0;
-              });
-            } else {
-              setState(()  {
-                for (Message other in messageList) {
-                  other.playing = 0;
-                  //停止其他正在播放的
+              },
+
+              onItemClick: (onClickEntity) async {
+                Message entity = onClickEntity;
+                if (entity.type == MessageType.MESSAGE_AUDIO){
+                  //点击了语音
+                  if (_entity.playing == 1) {
+                    //正在播放，就停止播放
+                    await _stopPlayer();
+                    setState(() {
+                      _entity.playing = 0;
+                    });
+                  } else {
+                    setState(()  {
+                      for (Message other in messageList) {
+                        other.playing = 0;
+                        //停止其他正在播放的
+                      }
+                    });
+                    _entity.playing = 1;
+                    await _startPlayer(_entity.content['url']);
+                    Future.delayed(Duration(milliseconds: _entity.content['duration']*1000), () async {
+                      if (_alive) {
+                        setState(()  {
+                          _entity.playing = 0;
+                        });
+                        await  _stopPlayer();
+                      }
+                    });
+                  }
                 }
               });
-              _entity.playing = 1;
-              await _startPlayer(_entity.content['url']);
-              Future.delayed(Duration(milliseconds: _entity.content['duration']*1000), () async {
-                if (_alive) {
-                  setState(()  {
-                    _entity.playing = 0;
-                  });
-                  await  _stopPlayer();
-                }
-              });
-            }
-          }
-        });
+
   }
   _deletePeerMessage(BuildContext context,Message entity ) {
     showDialog(
@@ -1310,7 +1313,7 @@ class ChatsState extends State<ChatsPage> {
           child: Container(
             width: 50.w,
             child: DeleteCategoryDialog(
-              title: '隐藏该用户',
+              title: '撤回消息',
               content: '是否确定继续执行?',
               onSubmit: () {
                 FltImPlugin im = FltImPlugin();

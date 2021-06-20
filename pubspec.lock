@@ -1117,6 +1117,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.4"
+  w_popup_menu:
+    dependency: "direct main"
+    description:
+      name: w_popup_menu
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   win32:
     dependency: transitive
     description:

@@ -91,7 +91,7 @@ dependencies:
   package_info: ^0.4.3+2
   device_info: ^1.0.0
   bot_toast: ^3.0.5
-
+  w_popup_menu: ^1.0.0
   flutter_qr_reader: ^1.0.3
   image_gallery_saver: ^1.6.7
   dropdown_search: ^0.4.8
@@ -114,6 +114,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - images/
     - assets/images/
     - assets/images/default/
     - assets/images/face/
