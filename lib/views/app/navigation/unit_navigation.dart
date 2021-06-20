@@ -418,7 +418,9 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
   void onPeerMessageACK(result, int error) {
     Map<String, dynamic> message= Map<String, dynamic>.from(result);
     //EventBusUtil.fire(PeerRecAckEvent(message['content']));
-    BlocProvider.of<PeerBloc>(context).add(EventReceiveNewMessageAck(Map<String, dynamic>.from(result)));
+    Map<String, dynamic> m =Map<String, dynamic>.from(result);
+
+    BlocProvider.of<PeerBloc>(context).add(EventReceiveNewMessageAck(m));
   }
   onPeerMessageFailure(Map result) {
     // IMMessage

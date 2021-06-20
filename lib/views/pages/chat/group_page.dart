@@ -1309,6 +1309,15 @@ class GroupChatState extends State<GroupChatPage> {
   //重发
   _onResend(Message entity) {
     print(entity);
+    if (entity.type == MessageType.MESSAGE_TEXT) {
+      BlocProvider.of<GroupBloc>(context).add(EventGroupSendNewMessage(tfSender,widget.model.cid,entity.content['text']));
+
+    } else if (entity.type == MessageType.MESSAGE_IMAGE) {
+
+    }else if (entity.type == MessageType.MESSAGE_AUDIO) {
+
+
+    }
   }
 
   _buildTextMessage(String content) {

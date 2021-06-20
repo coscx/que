@@ -1315,7 +1315,8 @@ class ChatsState extends State<ChatsPage> {
               onSubmit: () {
                 FltImPlugin im = FltImPlugin();
                 if (Platform.isAndroid == true) {
-                  im.deletePeerMessage(id:entity.content['uUID']);
+                  //im.deletePeerMessage(id:entity.content['uUID']);
+                  BlocProvider.of<PeerBloc>(context).add(EventSendPeerRevokeMessage(tfSender,widget.model.cid,entity.content['uUID']));
                 }else{
                   im.deletePeerMessage(id:entity.content['uuid']);
                 }
@@ -1379,6 +1380,7 @@ class ChatsState extends State<ChatsPage> {
   }
   //重发
   _onResend(Message entity) {
+
   }
 
   _buildTextMessage(String content) {

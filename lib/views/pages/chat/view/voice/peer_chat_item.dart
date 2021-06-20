@@ -38,8 +38,12 @@ class PeerChatItemWidgetState extends State<PeerChatItemWidget> {
 
 
   Widget _chatItemWidget(Message entity, OnItemClick onResend, OnItemClick onItemClick,OnItemClick onItemLongClick,String tfSender) {
+    if (entity.type == MessageType.MESSAGE_REVOKE) {
+      //文本
+      return buildRevokeWidget(entity,tfSender);
+    }
     if (entity.sender == tfSender) {
-
+   {
       //自己的消息
       return Container(
         margin: EdgeInsets.only(left: 40.w, right: 10.w, bottom: 6.h, top: 6.h),
@@ -106,12 +110,11 @@ class PeerChatItemWidgetState extends State<PeerChatItemWidget> {
           ],
         ),
       );
+    }
 
 
-    } else if (entity.type == MessageType.MESSAGE_GROUP_NOTIFICATION) {
-      //文本
-      return buildGroupNotifitionWidget(entity,tfSender);
-    }else {
+
+    } else {
       //其他人的消息
       return Container(
         margin: EdgeInsets.only(left: 10.w, right: 40.w, bottom: 6.h, top: 6.h),
@@ -182,10 +185,12 @@ class PeerChatItemWidgetState extends State<PeerChatItemWidget> {
     Widget widget;
     if (entity.type == MessageType.MESSAGE_TEXT) {
       //文本
-      if (entity.content['text'].contains('assets/images/face') ||
-          entity.content['text'].contains('assets/images/figure')) {
+      if ((entity.content['text'] != null && entity.content['text'].contains('assets/images/face') )||
+          (entity.content['text'] != null && entity.content['text'].contains('assets/images/figure'))) {
         widget = buildImageWidget(entity,tfSender);
       } else {
+        if(entity.content['text'] == null)
+        entity.content['text'] ="err";
         widget = buildTextWidget(entity,tfSender);
       }
 
@@ -195,7 +200,10 @@ class PeerChatItemWidgetState extends State<PeerChatItemWidget> {
     }else if (entity.type == MessageType.MESSAGE_AUDIO) {
       //文本
       widget = buildVoiceWidget(entity,tfSender);
-    }else {
+    }else if (entity.type == MessageType.MESSAGE_REVOKE) {
+      //文本
+      widget = buildRevokeWidget(entity,tfSender);
+    } else {
       widget = ClipRRect(
         borderRadius: BorderRadius.circular(12.w),
         child: Container(
@@ -210,7 +218,25 @@ class PeerChatItemWidgetState extends State<PeerChatItemWidget> {
     }
     return widget;
   }
+  Widget buildRevokeWidget(Message entity,String  tfSender) {
+    var type = entity.content['notificationType'];
+    //var raw = json.decode(entity.content['raw']);
+    String content ="";
 
+   content = entity.sender == tfSender ?"你撤回了一条消息" : entity.sender + "撤回了一条消息";
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16.w),
+      child: Container(
+        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 16.h, bottom: 16.h),
+        color:  Colors.transparent,
+        child: Text(
+          content,
+          style: TextStyle(fontSize: 28.sp, color: Colors.black45),
+        ),
+      ),
+    );
+  }
   Widget buildTextWidget(Message entity,String  tfSender) {
 
     return ClipRRect(
