@@ -61,7 +61,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
       if(memberId != "" && memberId != null){
         tfSender=memberId.toString();
       }
-      if(ss !="" || ss != null){
+      if(ss =="" || ss == null){
 
         login(success: () {
           listenNative();
@@ -265,6 +265,8 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
           onPeerSecretMessage(result);
         }  else if (type == 'onGroupMessage') {
            onGroupMessage(result);
+        } else if (type == 'onGroupMessageACK') {
+           onGroupMessageACK(result);
         } else if (type == 'onImageUploadSuccess') {
           String url = ValueUtil.toStr(data['URL']);
           onImageUploadSuccess(result, url);
@@ -486,6 +488,24 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
 
     //_showNotification(title,content);
     BlocProvider.of<GroupBloc>(context).add(EventGroupReceiveNewMessage(message));
+  }
+  void onGroupMessageACK(result) {
+    Map<String, dynamic> message= Map<String, dynamic>.from(result);
+    String title="通知";
+    String content="消息";
+    var type =message['type'];
+    if(type == "MESSAGE_TEXT"){
+      title="通知";
+      content= message['content']['text'];
+    }else{
+      title="通知";
+      content= '聊天消息';
+    }
+
+
+
+    //_showNotification(title,content);
+    BlocProvider.of<GroupBloc>(context).add(EventGroupReceiveNewMessageAck(message));
   }
   void onNewMessage(result, int error)async {
     var count = 1;

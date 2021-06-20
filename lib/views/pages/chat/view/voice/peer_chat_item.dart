@@ -49,7 +49,7 @@ class PeerChatItemWidgetState extends State<PeerChatItemWidget> {
             //显示是否重发1、发送2中按钮，发送成功0或者null不显示
             (entity.flags == 0 || entity.flags == 8)
                 ? IconButton(
-                icon: Icon(Icons.error, color: Colors.red, size: 18),
+                icon: Icon(Icons.error, color: Colors.red, size: 18.sp),
                 onPressed: () {
                   if (null != onResend) {
                     onResend(entity);
@@ -58,12 +58,12 @@ class PeerChatItemWidgetState extends State<PeerChatItemWidget> {
                 : ((entity.flags == 1)
                 ? Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 20, right: 20),
-              width: 32.0,
-              height: 32.0,
+              padding: EdgeInsets.only(top: 20.h, right: 20.w),
+              width: 32.w,
+              height: 32.h,
               child: SizedBox(
-                  width: 12.0,
-                  height: 12.0,
+                  width: 12.w,
+                  height: 12.h,
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(
                         ObjectUtil.getThemeSwatchColor()),

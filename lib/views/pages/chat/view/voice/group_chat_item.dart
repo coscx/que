@@ -45,6 +45,34 @@ class _GroupChatItemWidgetState extends State<GroupChatItemWidget> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            //显示是否重发1、发送2中按钮，发送成功0或者null不显示
+            (entity.flags == 0 || entity.flags == 8)
+                ? IconButton(
+                icon: Icon(Icons.error, color: Colors.red, size: 36.sp),
+                onPressed: () {
+                  if (null != onResend) {
+                    onResend(entity);
+                  }
+                })
+                : ((entity.flags == 1)
+                ? Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(top: 20.h, right: 20.w),
+              width: 32.w,
+              height: 32.h,
+              child: SizedBox(
+                  width: 12.w,
+                  height: 12.h,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(
+                        ObjectUtil.getThemeSwatchColor()),
+                    strokeWidth: 2,
+                  )),
+            )
+                : SizedBox(
+              width: 0,
+              height: 0,
+            )),
             Expanded(
                 child: Container(
                   margin: EdgeInsets.only(left: 0.w, right: 0.w, bottom: 0.h, top: 12.h),
@@ -62,37 +90,13 @@ class _GroupChatItemWidgetState extends State<GroupChatItemWidget> {
                           }
                         },
                         onLongPress: () {
-                          DialogUtil.buildToast('长按了消息');
+                          if (null != onItemClick) {
+                            //onItemLongClick(entity);
+                          }
+
                         },
                       ),
-                      //显示是否重发1、发送2中按钮，发送成功0或者null不显示
-                      // entity.flags == 11
-                      //     ? IconButton(
-                      //     icon: Icon(Icons.refresh, color: Colors.red, size: 18),
-                      //     onPressed: () {
-                      //       if (null != onResend) {
-                      //         onResend(entity);
-                      //       }
-                      //     })
-                      //     : (entity.flags == 10
-                      //     ? Container(
-                      //   alignment: Alignment.center,
-                      //   padding: EdgeInsets.only(top: 20, right: 20),
-                      //   width: 32.0,
-                      //   height: 32.0,
-                      //   child: SizedBox(
-                      //       width: 12.0,
-                      //       height: 12.0,
-                      //       child: CircularProgressIndicator(
-                      //         valueColor: AlwaysStoppedAnimation(
-                      //             ObjectUtil.getThemeSwatchColor()),
-                      //         strokeWidth: 2,
-                      //       )),
-                      // )
-                      //     : SizedBox(
-                      //   width: 0,
-                      //   height: 0,
-                      // )),
+
                     ],
                   ),
                 )),

@@ -1308,6 +1308,7 @@ class GroupChatState extends State<GroupChatPage> {
   }
   //重发
   _onResend(Message entity) {
+    print(entity);
   }
 
   _buildTextMessage(String content) {
