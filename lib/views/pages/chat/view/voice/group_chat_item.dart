@@ -38,6 +38,10 @@ class _GroupChatItemWidgetState extends State<GroupChatItemWidget> {
 
 
   Widget _chatItemWidget(Message entity, OnItemClick onResend, OnItemClick onItemClick,OnItemClick onItemLongClick,String tfSender) {
+    if (entity.type == MessageType.MESSAGE_REVOKE) {
+      //文本
+      return buildRevokeWidget(entity,tfSender);
+    }
     if (entity.sender == tfSender) {
 
       //自己的消息
@@ -199,7 +203,10 @@ class _GroupChatItemWidgetState extends State<GroupChatItemWidget> {
     }else if (entity.type == MessageType.MESSAGE_AUDIO) {
       //文本
       widget = buildVoiceWidget(entity,tfSender);
-    }else {
+    }else if (entity.type == MessageType.MESSAGE_REVOKE) {
+      //文本
+      widget = buildRevokeWidget(entity,tfSender);
+    } else {
       widget = ClipRRect(
         borderRadius: BorderRadius.circular(12.w),
         child: Container(
@@ -214,7 +221,25 @@ class _GroupChatItemWidgetState extends State<GroupChatItemWidget> {
     }
     return widget;
   }
+  Widget buildRevokeWidget(Message entity,String  tfSender) {
+    var type = entity.content['notificationType'];
+    //var raw = json.decode(entity.content['raw']);
+    String content ="";
 
+    content = entity.sender == tfSender ?"你撤回了一条消息" : entity.sender + "撤回了一条消息";
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16.w),
+      child: Container(
+        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 16.h, bottom: 16.h),
+        color:  Colors.transparent,
+        child: Text(
+          content,
+          style: TextStyle(fontSize: 28.sp, color: Colors.black45),
+        ),
+      ),
+    );
+  }
   Widget buildTextWidget(Message entity,String  tfSender) {
 
     return ClipRRect(

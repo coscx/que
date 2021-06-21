@@ -136,12 +136,12 @@ class PeerChatItemWidgetState extends State<PeerChatItemWidget> {
                             onItemClick(entity);
                           }
                         },
-                        onLongPress: () {
-                          if (null != onItemClick) {
-                            onItemLongClick(entity);
-                          }
-
-                        },
+                        // onLongPress: () {
+                        //   if (null != onItemClick) {
+                        //     onItemLongClick(entity);
+                        //   }
+                        //
+                        // },
                       ),
                     ],
                   ),
