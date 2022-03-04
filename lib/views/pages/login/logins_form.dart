@@ -161,7 +161,6 @@ class _LoginFromState extends State<LoginPhoneFrom> {
                     hintStyle: TextStyle(color: Colors.grey),
                   ),
                   inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter.digitsOnly,//只输入数字
                     LengthLimitingTextInputFormatter(11)//限制长度
                   ],
                   onChanged: (str) {

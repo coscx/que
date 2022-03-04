@@ -25,7 +25,7 @@ class _BrowerState extends State<Brower> {
         backgroundColor: Colors.white,
         brightness: Brightness.dark,
         textTheme: TextTheme(
-          title: TextStyle(
+          subtitle1: TextStyle(
             color: Colors.white,
             fontSize: 18,
           ),

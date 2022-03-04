@@ -40,15 +40,15 @@ class _TimelinePageState extends State<TimelinePage> {
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.format_align_left),
-                title: Text("左"),
+
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.format_align_center),
-                title: Text("中"),
+
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.format_align_right),
-                title: Text("右"),
+
               ),
             ]),
         appBar: AppBar(
@@ -109,7 +109,7 @@ class _TimelinePageState extends State<TimelinePage> {
                 ),
                 Text(
                   doodle.content,
-                  style: textTheme.title,
+                  style: textTheme.bodyText1,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(
@@ -137,7 +137,7 @@ class _TimelinePageState extends State<TimelinePage> {
                       ),
                       Text(
                         doodle.user.userName,
-                        style: textTheme.title,
+                        style: textTheme.headline6,
                         textAlign: TextAlign.center,
                       ),
                     ],

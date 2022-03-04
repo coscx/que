@@ -100,6 +100,10 @@ class SettingPage extends StatelessWidget {
                   var memberId = await LocalStorage.remove("memberId");
                   var sss = await LocalStorage.remove("token");
                   Navigator.pushNamed(context, UnitRouter.login);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    'login',
+                        (route) => route == null,
+                  );
                 });
                 // Navigator.of(context).pushAndRemoveUntil(
                 //     new MaterialPageRoute(builder: (context) => LoginPage()

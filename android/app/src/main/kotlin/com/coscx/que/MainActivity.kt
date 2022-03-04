@@ -16,7 +16,7 @@ import io.flutter.plugins.GeneratedPluginRegistrant.registerWith
 
 
 class MainActivity: FlutterActivity() {
-    var handler: Handler = Handler(Looper.myLooper())
+    var handler: Handler = Handler(Looper.myLooper()!!)
 
     //通讯名称,回到手机桌面
     private val CHANNEL = "android/back/desktop"
@@ -42,7 +42,7 @@ class MainActivity: FlutterActivity() {
         super.onResume()
         UmengAnalyticsPushFlutterAndroid.androidOnResume(this)
         if (getIntent().getExtras() != null) {
-            var message = getIntent().getExtras().getString("message")
+            var message = getIntent().getExtras()?.getString("message")
             if (message != null && message != "") {
                 // To start the interface, wait for the engine to load, and send it to the interface with a delay of 5 seconds
                 handler.postDelayed(object : Runnable {

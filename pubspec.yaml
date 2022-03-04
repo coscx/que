@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.0+1
+version: 1.2.0
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
@@ -44,9 +44,7 @@ dependencies:
   flt_im_plugin:
     git:
       url: https://github.com/coscx/lat.git
-  flutter_ad_plugin:
-    git:
-      url: https://github.com/coscx/money.git
+
   flutter_plugin_android_lifecycle: ^1.0.2
   badges: ^1.1.0
   video_player: ^1.0.1
@@ -61,7 +59,7 @@ dependencies:
   flutter_swiper: ^1.1.6
   timeline_list: ^0.0.5
   flare_flutter: ^2.0.6
-  umeng_analytics_push: ^1.2.5
+  umeng_analytics_push: ^2.1.3
   getwidget: ^1.2.4
   flutter_screenutil: ^4.0.0
   flutter_easyrefresh: ^2.1.7
@@ -78,7 +76,7 @@ dependencies:
   flutter_easyloading: ^2.2.2
   flutter_picker: ^1.1.5
   date_time_picker: "^1.1.1"
-  city_pickers: 0.2.0
+  city_pickers: 1.0.1
   cupertino_range_slider: ^1.0.1
   select_form_field: "^1.1.0"
   flutter_my_picker: ^1.0.3
