@@ -11,6 +11,7 @@ import 'package:fluwx/fluwx.dart';
 import 'unit_paint.dart';
 /// 说明: app 闪屏页
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:umeng_analytics_push/umeng_analytics_push.dart';
 class UnitSplash extends StatefulWidget {
   final double size;
 
@@ -48,6 +49,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _initFluwx();
+    UmengAnalyticsPush.initUmeng(false, true);
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     _factor=0;
@@ -80,6 +82,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
       setState(() {
         _animEnd = true;
         Future.delayed(Duration(milliseconds: 1000)).then((e) async {
+
           var ss = await LocalStorage.get("token");
           var sss =ss.toString();
           if(sss == "" || ss == null || ss == "null"){

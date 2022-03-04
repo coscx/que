@@ -21,17 +21,32 @@ import 'package:flutter_geen/views/common/empty_page.dart';
 import 'package:flutter_geen/views/items/home_item_support.dart';
 import 'package:flutter_geen/views/pages/home/toly_app_bar.dart';
 import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
+import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'background.dart';
 import 'package:flutter_qr_reader/flutter_qr_reader.dart';
+class SortCondition {
+  String name;
+  bool isSelected;
+
+  SortCondition({this.name, this.isSelected}) {}
+}
+var _scaffoldKey = new GlobalKey<ScaffoldState>();
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+  List<String> _dropDownHeaderItemStrings1 = ['全城', '品牌', '价格低', '筛选'];
+  List<SortCondition> _brandSortConditions = [];
+  List<SortCondition> _distanceSortConditions = [];
+  SortCondition _selectBrandSortCondition;
+  SortCondition _selectDistanceSortCondition;
+  GZXDropdownMenuController _dropdownMenuController = GZXDropdownMenuController();
+  GlobalKey _stackKey = GlobalKey();
   QrReaderViewController _controller;
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   bool _showPop = false;
@@ -189,6 +204,11 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     ),
     ),
     child:Scaffold(
+      key: _scaffoldKey,
+        endDrawer: Container(
+          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width / 4, top: 0),
+          color: Colors.white,
+        ),
         appBar: AppBar(
           titleSpacing:40.w,
           leadingWidth: 0,
@@ -238,28 +258,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             )
           ],
 
-          bottom: DropMenuHeader(
-            selectedIndex: _selectedIndex,
-            items: [
-              ButtonModel(
-                  text: _dropDownHeaderItemStrings[1],
-
-                  onTap: (bool selected) {
-                    _showFilter = selected;
-                    _showSort = false;
-                    _showPopView(0);
-                  }),
-              ButtonModel(
-                  text: _leftSelectedModel.name,
-                  onTap: (bool selected) {
-                    _showSort = selected;
-                    _showFilter = false;
-                    _showPopView(0);
-                  }),
-
-            ],
-            height: 60.h,
-          ),
+         //bottom: bar(),
         ),
         body:  BlocListener<HomeBloc, HomeState>(
         listener: (ctx, state) {
@@ -312,8 +311,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
       return Stack(
             children: <Widget>[
               //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
+
               Container(
-                //padding:  EdgeInsets.only(top: 25.h),
+                padding:  EdgeInsets.only(top: 75.h),
                 child: ScrollConfiguration(
                     behavior: DyBehaviorNull(),
                     child:
@@ -371,6 +371,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 ),
               ),
               buildPopView(),
+              bar(),
             ],
           );
     }
@@ -1054,4 +1055,304 @@ class DYrefreshFooter extends StatelessWidget {
     );
   }
 }
+class bar extends StatelessWidget implements PreferredSizeWidget{
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(580.h);
+  @override
+  Widget build(BuildContext context) {
+    return   Column(
+      children: [
+        Expanded(child: AppBarComponent()),
+      ],
+    );
+  }
+}
 
+class AppBarComponent extends StatefulWidget {
+  @override
+  _AppBarComponentState createState() => _AppBarComponentState();
+
+
+}
+
+class _AppBarComponentState extends State<AppBarComponent> {
+  final String title = "";
+  final Color bgColor = Colors.black;
+  final Color textColor = Colors.redAccent;
+  List<String> _dropDownHeaderItemStrings = ['全城', '品牌', '价格低', '筛选'];
+  List<SortCondition> _brandSortConditions = [];
+  List<SortCondition> _distanceSortConditions = [];
+  SortCondition _selectBrandSortCondition;
+  SortCondition _selectDistanceSortCondition;
+  GZXDropdownMenuController _dropdownMenuController = GZXDropdownMenuController();
+
+  GlobalKey _stackKey = GlobalKey();
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    _brandSortConditions.add(SortCondition(name: '全部', isSelected: true));
+    _brandSortConditions.add(SortCondition(name: '金逸影城', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '中影国际城我比较长，你看我选择后是怎么显示的', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '星美国际城', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '博纳国际城', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '大地影院', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '嘉禾影城', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '太平洋影城', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城1', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城2', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城3', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城4', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城5', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城6', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城7', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城8', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '万达影城9', isSelected: false));
+    _selectBrandSortCondition = _brandSortConditions[0];
+
+    _distanceSortConditions.add(SortCondition(name: '距离近', isSelected: true));
+    _distanceSortConditions.add(SortCondition(name: '价格低', isSelected: false));
+    _selectDistanceSortCondition = _distanceSortConditions[0];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Stack(
+        key: _stackKey,
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+
+//              SizedBox(height: 20,),
+              GZXDropDownHeader(
+                items: [
+                  GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
+                  GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
+                  GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
+                  GZXDropDownHeaderItem(
+                      _dropDownHeaderItemStrings[3], iconSize: 18),
+                ],
+                stackKey: _stackKey,
+                controller: _dropdownMenuController,
+                onItemTap: (index) {
+                  if (index == 3) {
+                    _scaffoldKey.currentState.openEndDrawer();
+                    _dropdownMenuController.hide();
+                  }
+                },
+              ),
+
+            ],
+          ),
+          GZXDropDownMenu(
+            controller: _dropdownMenuController,
+            menus: [
+              GZXDropdownMenuBuilder(
+                  dropDownHeight: 40 * 8.0,
+                  dropDownWidget: _buildQuanChengWidget((selectValue) {
+                    _dropDownHeaderItemStrings[0] = selectValue;
+                    _dropdownMenuController.hide();
+                    setState(() {});
+                  })),
+              GZXDropdownMenuBuilder(
+                  dropDownHeight: 40 * 8.0,
+                  dropDownWidget: _buildConditionListWidget(
+                      _brandSortConditions, (value) {
+                    _selectBrandSortCondition = value;
+                    _dropDownHeaderItemStrings[1] =
+                    _selectBrandSortCondition.name == '全部'
+                        ? '品牌'
+                        : _selectBrandSortCondition.name;
+                    _dropdownMenuController.hide();
+                    setState(() {});
+                  })),
+              GZXDropdownMenuBuilder(
+                  dropDownHeight: 40.0 * _distanceSortConditions.length,
+                  dropDownWidget: _buildConditionListWidget(
+                      _distanceSortConditions, (value) {
+                    _dropDownHeaderItemStrings[2] =
+                        _selectDistanceSortCondition.name;
+                    _selectDistanceSortCondition = value;
+                    _dropdownMenuController.hide();
+                    setState(() {});
+                  })),
+            ],
+          ),
+
+//          Positioned(
+//              width: 200,
+//              height: 200,
+//              left: 0,
+//              top: 0,
+//              child: Container(
+//                color: Colors.red,
+//                width: 200,
+//                height: 300,
+//              ))
+        ],
+      ),
+    );
+  }
+
+
+  int _selectTempFirstLevelIndex = 0;
+  int _selectFirstLevelIndex = 0;
+
+  int _selectSecondLevelIndex = -1;
+
+  _buildQuanChengWidget(void itemOnTap(String selectValue)) {
+//    List firstLevels = new List<int>.filled(15, 0);
+    List firstLevels = new List<String>.generate(15, (int index) {
+      if (index == 0) {
+        return '全部';
+      }
+      return '$index区';
+    });
+
+    List secondtLevels = new List<String>.generate(15, (int index) {
+      if (index == 0) {
+        return '全部';
+      }
+      return '$_selectTempFirstLevelIndex$index街道办';
+    });
+
+    return Row(
+      children: <Widget>[
+        Container(
+          width: 100,
+          child: ListView(
+            children: firstLevels.map((item) {
+              int index = firstLevels.indexOf(item);
+              return GestureDetector(
+                onTap: () {
+                  _selectTempFirstLevelIndex = index;
+
+                  if (_selectTempFirstLevelIndex == 0) {
+                    itemOnTap('全城');
+                    return;
+                  }
+                  setState(() {});
+                },
+                child: Container(
+                    height: 40,
+                    color: _selectTempFirstLevelIndex == index ? Colors
+                        .grey[200] : Colors.white,
+                    alignment: Alignment.center,
+                    child: _selectTempFirstLevelIndex == index
+                        ? Text(
+                      '${item}',
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    )
+                        : Text('${item}')),
+              );
+            }).toList(),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: Colors.grey[200],
+            child: _selectTempFirstLevelIndex == 0
+                ? Container()
+                : ListView(
+              children: secondtLevels.map((item) {
+                int index = secondtLevels.indexOf(item);
+                return GestureDetector(
+                    onTap: () {
+                      _selectSecondLevelIndex = index;
+                      _selectFirstLevelIndex = _selectTempFirstLevelIndex;
+                      if (_selectSecondLevelIndex == 0) {
+                        itemOnTap(firstLevels[_selectFirstLevelIndex]);
+                      } else {
+                        itemOnTap(item);
+                      }
+                    },
+                    child: Container(
+                      height: 40,
+                      alignment: Alignment.centerLeft,
+                      child: Row(children: <Widget>[
+                        SizedBox(
+                          width: 20,
+                        ),
+                        _selectFirstLevelIndex == _selectTempFirstLevelIndex &&
+                            _selectSecondLevelIndex == index
+                            ? Text(
+                          '${item}',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        )
+                            : Text('${item}'),
+                      ]),
+                    ));
+              }).toList(),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  _buildConditionListWidget(items, void itemOnTap(SortCondition)) {
+    return ListView.separated(
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      itemCount: items.length,
+      // item 的个数
+      separatorBuilder: (BuildContext context, int index) =>
+          Divider(height: 1.0),
+      // 添加分割线
+      itemBuilder: (BuildContext context, int index) {
+        SortCondition goodsSortCondition = items[index];
+        return GestureDetector(
+          onTap: () {
+            for (var value in items) {
+              value.isSelected = false;
+            }
+            goodsSortCondition.isSelected = true;
+
+            itemOnTap(goodsSortCondition);
+          },
+          child: Container(
+//            color: Colors.blue,
+            height: 40,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: Text(
+                    goodsSortCondition.name,
+                    style: TextStyle(
+                      color: goodsSortCondition.isSelected ? Colors.red : Colors
+                          .black,
+                    ),
+                  ),
+                ),
+                goodsSortCondition.isSelected
+                    ? Icon(
+                  Icons.check,
+                  color: Theme
+                      .of(context)
+                      .primaryColor,
+                  size: 16,
+                )
+                    : SizedBox(),
+                SizedBox(
+                  width: 16,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+}
