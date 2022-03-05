@@ -79,6 +79,31 @@ class IssuesApi {
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     Map<String,dynamic> searchParm={};
+    selectItems.map((e) {
+      if (e.type == 100) {
+
+          searchParm['store_id'] = e.id;
+      }
+      if (e.type == 120) {
+        if (e.id == "1"){
+          searchParm['status'] = 1;
+        }
+        if (e.id == "2"){
+          searchParm['status'] = 2;
+        }
+        if (e.id == "30"){
+          searchParm['status'] = 30;
+        }
+        if (e.id == "100"){
+          searchParm['status'] = 0;
+        }
+      }
+      if (e.type == 130) {
+
+          searchParm['connect'] = e.id;
+
+      }
+    } ).toList();
     // search.list.map((e) {
     //   if (e.paramCode=="customerLevel"){
     //     if(e.selected != null)

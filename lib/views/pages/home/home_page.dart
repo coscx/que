@@ -31,8 +31,9 @@ import 'package:flutter_qr_reader/flutter_qr_reader.dart';
 class SortCondition {
   String name;
   bool isSelected;
-
-  SortCondition({this.name, this.isSelected}) {}
+  int id;
+  bool all ;
+  SortCondition({this.name, this.id,this.isSelected,this.all}) {}
 }
 class StoreSelect {
   String name;
@@ -1130,28 +1131,28 @@ class _AppBarComponentState extends State<AppBarComponent> {
   void initState() {
     // TODO: implement initState
 
-    _brandSortConditions.add(SortCondition(name: '客户状态', isSelected: true));
-    _brandSortConditions.add(SortCondition(name: 'A级客户', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: 'B级客户', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: 'C级客户', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: 'D级客户', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '客户状态',id: 0, isSelected: true,all: true));
+    _brandSortConditions.add(SortCondition(name: 'A级客户',id: 2,  isSelected: false,all: true));
+    _brandSortConditions.add(SortCondition(name: 'B级客户',id: 1,  isSelected: false,all: true));
+    _brandSortConditions.add(SortCondition(name: 'C级客户',id: 100,  isSelected: false,all: true));
+    _brandSortConditions.add(SortCondition(name: 'D级客户', id: 30, isSelected: false,all: true));
 
     _selectBrandSortCondition = _brandSortConditions[0];
 
-    _distanceSortConditions.add(SortCondition(name: '沟通状态', isSelected: true));
-    _distanceSortConditions.add(SortCondition(name: '1.新分未联系', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '2.号码无效', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '3.号码未接通', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '4.可继续沟通', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '5.有意向面谈', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '6.确定到店时间', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '7.已到店，意愿需跟进', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '8.已到店，考虑7天付款', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '9.高级会员，支付预付款', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '10.高级会员，费用已结清', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '11.毁单', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '12.放弃并放入公海', isSelected: false));
-    _distanceSortConditions.add(SortCondition(name: '13.放弃并放入D级', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '沟通状态', id: 0, isSelected: true,all: true));
+    _distanceSortConditions.add(SortCondition(name: '1.新分未联系', id: 1, isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '2.号码无效', id: 2, isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '3.号码未接通', id: 3, isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '4.可继续沟通', id: 4, isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '5.有意向面谈', id: 5, isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '6.确定到店时间',id: 6,  isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '7.已到店，意愿需跟进',id: 7,  isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '8.已到店，考虑7天付款', id: 8, isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '9.高级会员，支付预付款', id: 9, isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '10.高级会员，费用已结清', id: 10, isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '11.毁单',id: 11,  isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '12.放弃并放入公海',id: 12,  isSelected: false,all: true));
+    _distanceSortConditions.add(SortCondition(name: '13.放弃并放入D级', id: 13, isSelected: false,all: true));
 
 
 
@@ -1207,17 +1208,22 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   dropDownWidget: _buildQuanChengWidget((selectValue) {
                     _dropDownHeaderItemStrings[0] = selectValue.name;
                     _dropdownMenuController.hide();
-                   // setState(() {});
+                   setState(() {});
+                    if (selectValue.type ==101){
+
+                      return;
+                    }
                     int k=0;
                     for(int i=0;i<widget.selectItems.length;i++){
                       if (widget.selectItems[i].type == 100){
-                        k=i;
+                        widget.selectItems[i].id = selectValue.id.toString();
+                        k=1;
                         break;
                       }
 
                     }
                     if (k>0){
-                      widget.selectItems[k].id = selectValue.id.toString();
+
                     }else{
                       SelectItem s =SelectItem();
                       s.type =100;
@@ -1237,6 +1243,26 @@ class _AppBarComponentState extends State<AppBarComponent> {
                     _selectBrandSortCondition.name;
                     _dropdownMenuController.hide();
                     setState(() {});
+                    int k=0;
+                    for(int i=0;i<widget.selectItems.length;i++){
+                      if (widget.selectItems[i].type == 120){
+                        widget.selectItems[i].id = value.id.toString();
+                        k=1;
+                        break;
+                      }
+
+                    }
+                    if (k>0){
+
+                    }else{
+                      SelectItem s =SelectItem();
+                      s.type =120;
+                      s.id= value.id.toString();
+                      widget.selectItems.add(s);
+                    }
+                    var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+                    var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(null,widget.selectItems,sex,mode,false,0,0,""));
                   })),
               GZXDropdownMenuBuilder(
                   dropDownHeight: 40.0 * _distanceSortConditions.length,
@@ -1247,6 +1273,26 @@ class _AppBarComponentState extends State<AppBarComponent> {
                         _selectDistanceSortCondition.name;
                     _dropdownMenuController.hide();
                     setState(() {});
+                    int k=0;
+                    for(int i=0;i<widget.selectItems.length;i++){
+                      if (widget.selectItems[i].type == 130){
+                        widget.selectItems[i].id = value.id.toString();
+                        k=1;
+                        break;
+                      }
+
+                    }
+                    if (k>0){
+
+                    }else{
+                      SelectItem s =SelectItem();
+                      s.type =130;
+                      s.id= value.id.toString();
+                      widget.selectItems.add(s);
+                    }
+                    var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+                    var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(null,widget.selectItems,sex,mode,false,0,0,""));
                   })
               ),
             ],
@@ -1286,9 +1332,11 @@ class _AppBarComponentState extends State<AppBarComponent> {
     firstLevels.add(cc1);
 
     StoreSelect dd  = StoreSelect();
+    dd.id=110;
     dd.name = "全部";
     secondtLevels.add(dd);
     StoreSelect dd1  = StoreSelect();
+    dd1.id=1;
     dd1.name = "鹊桥缘遇";
     secondtLevels.add(dd1);
     return Row(
@@ -1344,7 +1392,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
                       if (_selectSecondLevelIndex == 0) {
                         SelectItem s = SelectItem();
                         s.type = 100;
-                        s.id = "0";
+                        s.id = "100";
                         s.name =item.name;
                         itemOnTap(s);
                       } else {
@@ -1397,6 +1445,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
             for (var value in items) {
               value.isSelected = false;
             }
+
             goodsSortCondition.isSelected = true;
 
             itemOnTap(goodsSortCondition);
