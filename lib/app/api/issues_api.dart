@@ -110,8 +110,8 @@ class IssuesApi {
       searchParm['endAge'] = _showAgeMax;
     }
     searchParm['gender'] = sex;
-    searchParm['is_passive'] = is_passive;
-    searchParm['store_id'] = 1;
+    //searchParm['is_passive'] = is_passive;
+    //searchParm['store_id'] = 1;
     searchParm['pageSize'] = 20;
     searchParm['currentPage'] = page;
     var data={'keywords':keyWord,'currentPage':page,'status':"all",'is_passive':is_passive,"store_id":1,"pageSize":20,'gender':sex};
@@ -124,7 +124,7 @@ class IssuesApi {
     }
     if(mode=="2"){//我的
       url="/api/v1/customer/personal/index";
-      searchParm['type'] = serveType;
+      //searchParm['type'] = serveType;
     }
     if(mode=="3"){//我的
       url="/api/v1/customer/public/index";

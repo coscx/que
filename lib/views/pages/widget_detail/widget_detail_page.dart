@@ -1278,27 +1278,27 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         children: [
           isVip ? Container(
 
-            width: 180.w,
-            height: 180.h,
+            width: 200.w,
+            height: 200.h,
             decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/radio_header_1.png"),
                   fit: BoxFit.cover,
                 ),
             ),
-            margin: EdgeInsets.only(left: 12.w),
+            margin: EdgeInsets.only(left: 0.w,top: 10.h),
           ):Container(),
           Container(
-           margin: EdgeInsets.only(left: 32.w),
+           margin: EdgeInsets.only(left: 30.w,top: 30.h),
 
             child: CircleAvatar(
-              radius:(75.w) ,
+              radius:(70.w) ,
               child: ClipOval(
                 child: Image.network(
                   url,
                    fit: BoxFit.cover,
-                  width: 150.w,
-                  height: 150.h,
+                  width: 140.w,
+                  height: 140.h,
                 ),
               ),
               backgroundColor: Colors.white,
@@ -1318,8 +1318,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       isVip=true;
     }
     return Container(
-      height: 140.h,
-      margin: EdgeInsets.only(top: 8.h,bottom: 10.h,left: 12.w),
+      height: 166.h,
+      margin: EdgeInsets.only(top: 0.h,bottom: 0.h,left: 12.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
@@ -1380,7 +1380,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       width: 60.h,
                       height: 60.h,
                       margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
-                      child:Lottie.asset('assets/packages/lottie_flutter/vip-crown.json'),
+                      child:Lottie.asset('assets/packages/lottie_flutter/vip-icon.json'),
                       ):Container(),
                   Container(
                       margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
@@ -1398,7 +1398,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               ),
               Row(
                 children: <Widget>[
-                  user['info']['native_place']==""?Container(margin: EdgeInsets.fromLTRB(20.w, 10.h, 5.w, 0.h),height: 40.h,) :Tag(
+                  user['info']['location_place']==""?Container(margin: EdgeInsets.fromLTRB(20.w, 10.h, 5.w, 0.h),height: 40.h,) :Tag(
                       color: Color.fromRGBO(241, 241, 241, 100),
                       borderColor:  Color.fromRGBO(241, 241, 241, 100),
                       borderWidth: 1,
@@ -1406,7 +1406,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       height: 40.h,
                       radius: 10.w,
                       text: Text(
-                        user['info']['native_place'].toString(),
+                        user['info']['location_place'].toString(),
                         style: TextStyle(
 
                           fontSize: 24.sp,

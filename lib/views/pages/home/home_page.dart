@@ -34,6 +34,21 @@ class SortCondition {
 
   SortCondition({this.name, this.isSelected}) {}
 }
+class StoreSelect {
+  String name;
+  int id;
+  bool isSelected;
+
+  StoreSelect({this.name, this.id,this.isSelected});
+}
+class CitySelect {
+  String name;
+  int id;
+  bool isSelected;
+
+  CitySelect({this.name, this.id,this.isSelected});
+}
+
 var _scaffoldKey = new GlobalKey<ScaffoldState>();
 class HomePage extends StatefulWidget {
   @override
@@ -61,7 +76,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   int _visibleCount = 0;
   bool _showChip = false;
   int _selectedIndex=999;
-  String serveType ="2";
+  String serveType ="1";
   String totalCount ="";
   String title="客户管理";
   static List<SortModel> _leftWidgets = [
@@ -684,8 +699,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
             buildHeadTxt(context,state),
             PopupMenuButton<String>(
+
               itemBuilder: (context) => buildItems(),
-              offset: Offset(0, 80.w),
+              offset: Offset(0, 0.w),
               color: Color(0xffF4FFFA),
               elevation: 1,
               shape: RoundedRectangleBorder(
@@ -732,10 +748,10 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   }
   List<PopupMenuItem<String>> buildItems() {
     final map = {
-      "全部": Icons.border_all,
-      "我的": Icons.mood_sharp,
+      "全部": Icons.margin,
+      "我的": Icons.person_outline,
       "良缘": Icons.wc,
-      "公海": Icons.sports_baseball_rounded,
+      "公海": Icons.album_outlined,
     };
     return map.keys
         .toList()
@@ -757,34 +773,34 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   Widget buildHeadTxt(BuildContext context, GlobalState state) {
     if(state.currentPhotoMode==0){
      return SizedBox(
-        width: 50,
+        width: 70.w,
         child: Text("全部"),
       );
 
     }
     if(state.currentPhotoMode==2){
       return SizedBox(
-        width: 50,
+        width: 70.w,
         child: Text("我的"),
       );
 
     }
     if(state.currentPhotoMode==1){
       return SizedBox(
-        width: 50,
+        width: 70.w,
         child: Text("良缘"),
       );
 
     }
     if(state.currentPhotoMode==3){
       return SizedBox(
-        width: 50,
+        width: 70.w,
         child: Text("公海"),
       );
 
     }
     return SizedBox(
-      width: 50,
+      width: 70.w,
       child: Text("全部"),
     );
   }
@@ -1139,6 +1155,8 @@ class _AppBarComponentState extends State<AppBarComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
+
+
       child: Stack(
         key: _stackKey,
         children: <Widget>[
@@ -1146,22 +1164,29 @@ class _AppBarComponentState extends State<AppBarComponent> {
             children: <Widget>[
 
 //              SizedBox(height: 20,),
-              GZXDropDownHeader(
-                items: [
-                  GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0],style: TextStyle()),
-                  GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
-                  GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
-                  GZXDropDownHeaderItem(
-                      _dropDownHeaderItemStrings[3], iconSize: 18),
-                ],
-                stackKey: _stackKey,
-                controller: _dropdownMenuController,
-                onItemTap: (index) {
-                  if (index == 3) {
-                    _scaffoldKey.currentState.openEndDrawer();
-                    _dropdownMenuController.hide();
-                  }
-                },
+              Container(
+                decoration: new BoxDecoration(
+
+
+                ),
+                child: GZXDropDownHeader(
+
+                  items: [
+                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0],style: TextStyle()),
+                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
+                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
+                    GZXDropDownHeaderItem(
+                        _dropDownHeaderItemStrings[3], iconSize: 18),
+                  ],
+                  stackKey: _stackKey,
+                  controller: _dropdownMenuController,
+                  onItemTap: (index) {
+                    if (index == 3) {
+                      _scaffoldKey.currentState.openEndDrawer();
+                      _dropdownMenuController.hide();
+                    }
+                  },
+                ),
               ),
 
             ],
@@ -1224,24 +1249,26 @@ class _AppBarComponentState extends State<AppBarComponent> {
 
   _buildQuanChengWidget(void itemOnTap(String selectValue)) {
 //    List firstLevels = new List<int>.filled(15, 0);
-    List firstLevels = new List<String>.generate(15, (int index) {
-      if (index == 0) {
-        return '全部';
-      }
-      return '$index区';
-    });
+    List<CitySelect> firstLevels = <CitySelect>[];
 
-    List secondtLevels = new List<String>.generate(15, (int index) {
-      if (index == 0) {
-        return '全部';
-      }
-      return '$_selectTempFirstLevelIndex$index街道办法国和德国发';
-    });
+    List<StoreSelect> secondtLevels =  <StoreSelect>[];
+    CitySelect cc  = CitySelect();
+    cc.name = "全部";
+    firstLevels.add(cc);
+    CitySelect cc1  = CitySelect();
+    cc1.name = "苏州市";
+    firstLevels.add(cc1);
 
+    StoreSelect dd  = StoreSelect();
+    dd.name = "全部";
+    secondtLevels.add(dd);
+    StoreSelect dd1  = StoreSelect();
+    dd1.name = "鹊桥缘遇";
+    secondtLevels.add(dd1);
     return Row(
       children: <Widget>[
         Container(
-          width: 100.w,
+          width: 200.w,
           child: ListView(
             children: firstLevels.map((item) {
               int index = firstLevels.indexOf(item);
@@ -1256,25 +1283,25 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   setState(() {});
                 },
                 child: Container(
-                    height: 40.h,
+                    height: 80.h,
                     color: _selectTempFirstLevelIndex == index ? Colors
-                        .grey[200] : Colors.white,
+                        .grey[100] : Colors.white,
                     alignment: Alignment.center,
                     child: _selectTempFirstLevelIndex == index
                         ? Text(
-                      '${item}',
+                      '${item.name}',
                       style: TextStyle(
                         color: Colors.red,
                       ),
                     )
-                        : Text('${item}')),
+                        : Text('${item.name}')),
               );
             }).toList(),
           ),
         ),
         Expanded(
           child: Container(
-            color: Colors.grey[200],
+            color: Colors.grey[100],
             child: _selectTempFirstLevelIndex == 0
                 ? Container()
                 : ListView(
@@ -1285,27 +1312,27 @@ class _AppBarComponentState extends State<AppBarComponent> {
                       _selectSecondLevelIndex = index;
                       _selectFirstLevelIndex = _selectTempFirstLevelIndex;
                       if (_selectSecondLevelIndex == 0) {
-                        itemOnTap(firstLevels[_selectFirstLevelIndex]);
+                        itemOnTap(firstLevels[_selectFirstLevelIndex].name);
                       } else {
-                        itemOnTap(item);
+                        itemOnTap(item.name);
                       }
                     },
                     child: Container(
-                      height: 40.h,
+                      height: 80.h,
                       alignment: Alignment.centerLeft,
                       child: Row(children: <Widget>[
                         SizedBox(
-                          width: 20.w,
+                          width: 40.w,
                         ),
                         _selectFirstLevelIndex == _selectTempFirstLevelIndex &&
                             _selectSecondLevelIndex == index
                             ? Text(
-                          '${item}',
+                          '${item.name}',
                           style: TextStyle(
                             color: Colors.red,
                           ),
                         )
-                            : Text('${item}'),
+                            : Text('${item.name}'),
                       ]),
                     ));
               }).toList(),
