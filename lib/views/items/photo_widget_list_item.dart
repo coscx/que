@@ -25,6 +25,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:left_scroll_actions/cupertinoLeftScroll.dart';
 import 'package:left_scroll_actions/leftScroll.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_geen/views/items/slide_menu_item.dart';
+
 class PhotoWidgetListItem extends StatelessWidget {
   final bool hasTopHole;
   final bool hasBottomHole;
@@ -41,37 +43,44 @@ class PhotoWidgetListItem extends StatelessWidget {
       });
 
   final List<int> colors = Cons.tabColors;
-
+  List<GlobalKey<SlideMenuItemState>> keyList = [];
   @override
   Widget build(BuildContext context) {
-    return CupertinoLeftScroll(
-      buttonWidth: 60.w,
-      bounce: true,
+    return Container(
+
+
       child: Container(
         //height: 60,
-        color: Colors.white,
+        //color: Colors.blue,
         alignment: Alignment.center,
+
         child: Container(
-          margin:  EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
+           // color: Colors.blue,
+          margin:  EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
           child: Stack(
               children: <Widget>[
-                Material(
-                    color: Theme.of(context).primaryColor.withAlpha(33),
-                    shape: true ? TechnoShapeBorder(color: Theme.of(context).primaryColor.withAlpha(100)) : null,
+                Container(
+                    //color: Theme.of(context).primaryColor.withAlpha(33),
+                    //shape: true ? TechnoShapeBorder(color: Theme.of(context).primaryColor.withAlpha(100)) : null,
+                    decoration: new BoxDecoration(
+//背景
+                      color: Color.fromRGBO(255, 255, 255, 100),
+                      //设置四周圆角 角度
+                      borderRadius: BorderRadius.all(Radius.circular(20.h)),
+                      //设置四周边框
+                      //border: new Border.all(width: 1, color: Colors.red),
+                    ),
                     child:
-                    isClip
-                        ? ClipPath(
-                      clipper: ShapeBorderClipper(
-                          shape: CouponShapeBorder(
-                              hasTopHole: hasTopHole,
-                              hasBottomHole: hasBottomHole,
-                              hasLine: false,
-                              edgeRadius: 25.w,
-                              lineRate: 0.20)),
-                      child: buildContent( context),
-                    )
-                        : Container(
+                    Container(
                         padding:  EdgeInsets.only(top: 10.h,bottom: 10.h,left: 10.w,right: 10.w),
+                        decoration: new BoxDecoration(
+//背景
+                          color: Color.fromRGBO(255, 255, 255, 100),
+                          //设置四周圆角 角度
+                          borderRadius: BorderRadius.all(Radius.circular(20.h)),
+                          //设置四周边框
+                          //border: new Border.all(width: 1, color: Colors.red),
+                        ),
                         child:
                         Column(
                           children: [
@@ -89,31 +98,30 @@ class PhotoWidgetListItem extends StatelessWidget {
                         ))
 
                 ),
-                _buildCollectTag(Theme.of(context).primaryColor, showBadge)
+               // _buildCollectTag(Theme.of(context).primaryColor, showBadge)
               ]
           )
       ),
       ),
-      buttons: <Widget>[
+      // buttons: <Widget>[
+      //
+      //   LeftScrollItem(
+      //     text: 'Delete',
+      //     color: Colors.red,
+      //     onTap: () {
+      //       print('delete');
+      //     },
+      //   ),
+      //   LeftScrollItem(
+      //     text: 'Edit',
+      //     color: Colors.orange,
+      //     onTap: () {
+      //       print('edit');
+      //     },
+      //   ),
+      // ],
 
-        LeftScrollItem(
-          text: 'Delete',
-          color: Colors.red,
-          onTap: () {
-            print('delete');
-          },
-        ),
-        LeftScrollItem(
-          text: 'Edit',
-          color: Colors.orange,
-          onTap: () {
-            print('edit');
-          },
-        ),
-      ],
-      onTap: () {
-        print('tap row');
-      },
+
     );
   }
 Widget buildCard (BuildContext context,Map<String,dynamic> img){
@@ -505,9 +513,21 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
     );
   }
   Widget buildContent(BuildContext context) => Container(
-        color: Colors.lightBlue.withAlpha(0),
+
+
+    decoration: new BoxDecoration(
+//背景
+      color: Color.fromRGBO(255, 255, 255, 0),
+      //设置四周圆角 角度
+      borderRadius: BorderRadius.all(Radius.circular(0.h)),
+
+
+      //设置四周边框
+      //border: new Border.all(width: 1, color: Colors.red),
+    ),
+
         height: 170.h,
-        padding:  EdgeInsets.only(top: 0.h, left: 0, right: 10.w, bottom: 10.h),
+        padding:  EdgeInsets.only(top: 20.h, left: 0, right: 10.w, bottom: 0.h),
         child: Column(
           children: [
             Row(
@@ -516,7 +536,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
 
                   Expanded(
                     child: Container(
-                      padding:  EdgeInsets.only(top: 0.h, left: 10.h, right: 0.w, bottom: 0.h),
+                      padding:  EdgeInsets.only(top: 0.h, left: 15.h, right: 0.w, bottom: 0.h),
                       child: Column(
                         //mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -538,7 +558,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       );
 
   Widget buildLeading() => Padding(
-        padding:  EdgeInsets.only(top: 10.h),
+        padding:  EdgeInsets.only(top: 0.h),
         child: Container(
           //tag: "hero_widget_image_${photo['uuid'].toString()}",
           child: (photo['head_img'] == "" || photo['head_img'] ==null)
@@ -548,18 +568,18 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                   color: Colors.transparent,
                   child: CircleText(
                     text: photo['name'],
-                    size: 130.h,
+                    size: 160.sp,
                     fontSize: 50.sp,
                     color: invColor,
-                    shadowColor: Colors.transparent,
+                    //shadowColor: Colors.transparent,
                   ),
                 )
               : Container(
             child: Container(
-              padding:  EdgeInsets.only(left: 10.w, bottom: 1.h, top: 1.h,right: 10.w),
+              padding:  EdgeInsets.only(left: 0.w, bottom: 0.h, top: 0.h,right: 0.w),
               child: CircleAvatar(
                 foregroundColor: Colors.white10,
-                radius:(70.w) ,
+                radius:(70.sp) ,
                 child: ClipOval(
                   child: photo['head_img'] ==null ?Container():CachedNetworkImage(imageUrl: photo['head_img'],
                     fit: BoxFit.cover,
@@ -576,7 +596,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       );
 
   Color get invColor {
-    return Colors.blue;
+    return Colors.lightBlue;
   }
 
   Widget _buildCollectTag(Color color,bool show) {
@@ -649,7 +669,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
 
   Widget _titleTop() {
     return Padding(
-      padding:  EdgeInsets.only(left: 1.w, bottom: 0.h, top: 5.h),
+      padding:  EdgeInsets.only(left: 1.w, bottom: 0.h, top: 0.h),
       child: Container(
         child: Text(photo['name']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+""+((photo['height']==0||photo['height']==null)?"": photo['height'].toString()+"cm")+" "+(photo['status']==0?"C级":(photo['status']==1?"B级":"A级")),
             overflow: TextOverflow.ellipsis,
@@ -668,7 +688,9 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       child: Container(
         child: Text(
           //尾部摘要
-          (photo['has_house']==null?"":_hasHouseLevel[photo['has_house']])+" "+(photo['has_car']==null?"":_hasCarLevel[photo['has_car']])+" " +(_marriageLevel[photo['marriage']]) +" 生日:" +(photo['birthday']==null ? "-":photo['birthday'].toString().substring(0,10)),
+          (photo['has_house']==null?"":_hasHouseLevel[photo['has_house']])+" "+(photo['has_car']==null?"":_hasCarLevel[photo['has_car']])+" " +(_marriageLevel[photo['marriage']]) +" 生日:" +
+
+              (photo['birthday']==null ? "-":(photo['birthday'].length > 10? photo['birthday'].toString().substring(0,10):"")),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontSize: 23.sp, shadows: [

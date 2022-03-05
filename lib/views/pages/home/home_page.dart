@@ -11,6 +11,7 @@ import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/components/permanent/overlay_tool_wrapper.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
 import 'package:flutter_geen/views/items/drop_menu_header.dart';
@@ -205,10 +206,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     ),
     child:Scaffold(
       key: _scaffoldKey,
-        endDrawer: Container(
-          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width / 4, top: 0),
-          color: Colors.white,
-        ),
+        endDrawer: GZXFilterGoodsPage(),
         appBar: AppBar(
           titleSpacing:40.w,
           leadingWidth: 0,
@@ -307,74 +305,88 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
        //});
       }
     },
-    child:BlocBuilder<HomeBloc, HomeState>(builder: (ctx, state) {
-      return Stack(
-            children: <Widget>[
-              //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
+    child:Container(
+      decoration: new BoxDecoration(
+//背景
+        color: Color.fromRGBO(247, 247, 247, 100),
+        //设置四周圆角 角度
+        borderRadius: BorderRadius.all(Radius.circular(0.h)),
 
-              Container(
-                padding:  EdgeInsets.only(top: 75.h),
-                child: ScrollConfiguration(
-                    behavior: DyBehaviorNull(),
-                    child:
-                    SmartRefresher(
-                      enablePullDown: true,
-                      enablePullUp: true,
-                      header: DYrefreshHeader(),
-                      footer: DYrefreshFooter(),
-                      controller: _refreshController,
-                      onRefresh: _onRefresh,
-                      onLoading: _onLoading,
-                      child:  CustomScrollView(
-                        physics: BouncingScrollPhysics(),
-                        slivers: <Widget>[
-                          // Container(
-                          //   child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
-                          // ),
-                          SliverToBoxAdapter(
-                            child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
+        //设置四周边框
+        //border: new Border.all(width: 1, color: Colors.red),
+      ),
+      child: BlocBuilder<HomeBloc, HomeState>(builder: (ctx, state) {
+        return Stack(
+              children: <Widget>[
+                //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
 
-                          ),
-                      SliverToBoxAdapter(
-                        child: Row(
-                          children: [
+                Container(
+                  padding:  EdgeInsets.only(top: 125.h),
+                  child: ScrollConfiguration(
+                      behavior: DyBehaviorNull(),
+                      child:
+                      SmartRefresher(
+                        enablePullDown: true,
+                        enablePullUp: true,
+                        header: DYrefreshHeader(),
+                        footer: DYrefreshFooter(),
+                        controller: _refreshController,
+                        onRefresh: _onRefresh,
+                        onLoading: _onLoading,
+                        child:  CustomScrollView(
+                          physics: BouncingScrollPhysics(),
+                          slivers: <Widget>[
                             // Container(
-                            //   height: 50.h,
-                            //   padding:  EdgeInsets.only(left: 35.w,top: 8.h),
-                            //   child: Text('筛选条件:'
-                            //
-                            //   ),
+                            //   child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
                             // ),
-                           Visibility(
-                             visible: _visible,
-                             child: Container(
-                                height: 50.h,
-                                width: 700.w,
-                                padding:  EdgeInsets.only(left: 30.w),
-                                child: ListView(
-                                  shrinkWrap: true ,
-                                    scrollDirection: Axis.horizontal,
-                                    children:<Widget>  [
-                                      ...buildLeftRightWidget(),
-                                    _showAge?buildAgeWidget():Container()
-                                    ],
-                                  ),
-                              ),
-                           ),
-                          ],
-                        )),
 
-                          _buildContent(ctx, state),
-                        ],
-                      ),
-                    )
+                        SliverToBoxAdapter(
+                          child: Row(
+                            children: [
+                              // Container(
+                              //   height: 50.h,
+                              //   padding:  EdgeInsets.only(left: 35.w,top: 8.h),
+                              //   child: Text('筛选条件:'
+                              //
+                              //   ),
+                              // ),
+                             Visibility(
+                               visible: _visible,
+                               child: Container(
+                                  height: 50.h,
+                                  width: 700.w,
+                                  padding:  EdgeInsets.only(left: 30.w),
+                                  child: ListView(
+                                    shrinkWrap: true ,
+                                      scrollDirection: Axis.horizontal,
+                                      children:<Widget>  [
+                                        ...buildLeftRightWidget(),
+                                      _showAge?buildAgeWidget():Container()
+                                      ],
+                                    ),
+                                ),
+                             ),
+                            ],
+                          )),
+
+                            _buildContent(ctx, state),
+                          ],
+                        ),
+                      )
+                  ),
                 ),
-              ),
-              buildPopView(),
-              bar(),
-            ],
-          );
-    }
+                buildPopView(),
+                Container(
+                  padding: EdgeInsets.only(top: 60.h),
+                  child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
+
+                ),
+                bar(),
+
+              ],
+            );
+      }
+      ),
     )
         )
     ));
@@ -1061,10 +1073,13 @@ class bar extends StatelessWidget implements PreferredSizeWidget{
   Size get preferredSize => Size.fromHeight(580.h);
   @override
   Widget build(BuildContext context) {
-    return   Column(
-      children: [
-        Expanded(child: AppBarComponent()),
-      ],
+    return   Container(
+      padding: EdgeInsets.only(left: 20.w,right: 20.w),
+      child: Column(
+        children: [
+          Expanded(child: AppBarComponent()),
+        ],
+      ),
     );
   }
 }
@@ -1080,7 +1095,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
   final String title = "";
   final Color bgColor = Colors.black;
   final Color textColor = Colors.redAccent;
-  List<String> _dropDownHeaderItemStrings = ['全城', '品牌', '价格低', '筛选'];
+  List<String> _dropDownHeaderItemStrings = ['门店', '客户状态', '沟通状态', '筛选'];
   List<SortCondition> _brandSortConditions = [];
   List<SortCondition> _distanceSortConditions = [];
   SortCondition _selectBrandSortCondition;
@@ -1092,28 +1107,31 @@ class _AppBarComponentState extends State<AppBarComponent> {
   void initState() {
     // TODO: implement initState
 
-    _brandSortConditions.add(SortCondition(name: '全部', isSelected: true));
-    _brandSortConditions.add(SortCondition(name: '金逸影城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '中影国际城我比较长，你看我选择后是怎么显示的', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '星美国际城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '博纳国际城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '大地影院', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '嘉禾影城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '太平洋影城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城1', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城2', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城3', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城4', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城5', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城6', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城7', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城8', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城9', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: '客户状态', isSelected: true));
+    _brandSortConditions.add(SortCondition(name: 'A级客户', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: 'B级客户', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: 'C级客户', isSelected: false));
+    _brandSortConditions.add(SortCondition(name: 'D级客户', isSelected: false));
+
     _selectBrandSortCondition = _brandSortConditions[0];
 
-    _distanceSortConditions.add(SortCondition(name: '距离近', isSelected: true));
-    _distanceSortConditions.add(SortCondition(name: '价格低', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '沟通状态', isSelected: true));
+    _distanceSortConditions.add(SortCondition(name: '1.新分未联系', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '2.号码无效', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '3.号码未接通', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '4.可继续沟通', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '5.有意向面谈', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '6.确定到店时间', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '7.已到店，意愿需跟进', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '8.已到店，考虑7天付款', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '9.高级会员，支付预付款', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '10.高级会员，费用已结清', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '11.毁单', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '12.放弃并放入公海', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '13.放弃并放入D级', isSelected: false));
+
+
+
     _selectDistanceSortCondition = _distanceSortConditions[0];
     super.initState();
   }
@@ -1130,7 +1148,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
 //              SizedBox(height: 20,),
               GZXDropDownHeader(
                 items: [
-                  GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
+                  GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0],style: TextStyle()),
                   GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
                   GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
                   GZXDropDownHeaderItem(
@@ -1150,6 +1168,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
           ),
           GZXDropDownMenu(
             controller: _dropdownMenuController,
+            animationMilliseconds: 350,
             menus: [
               GZXDropdownMenuBuilder(
                   dropDownHeight: 40 * 8.0,
@@ -1159,14 +1178,12 @@ class _AppBarComponentState extends State<AppBarComponent> {
                     setState(() {});
                   })),
               GZXDropdownMenuBuilder(
-                  dropDownHeight: 40 * 8.0,
+                  dropDownHeight: 40.0 * _brandSortConditions.length,
                   dropDownWidget: _buildConditionListWidget(
                       _brandSortConditions, (value) {
                     _selectBrandSortCondition = value;
                     _dropDownHeaderItemStrings[1] =
-                    _selectBrandSortCondition.name == '全部'
-                        ? '品牌'
-                        : _selectBrandSortCondition.name;
+                    _selectBrandSortCondition.name;
                     _dropdownMenuController.hide();
                     setState(() {});
                   })),
@@ -1174,12 +1191,13 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   dropDownHeight: 40.0 * _distanceSortConditions.length,
                   dropDownWidget: _buildConditionListWidget(
                       _distanceSortConditions, (value) {
+                    _selectDistanceSortCondition = value;
                     _dropDownHeaderItemStrings[2] =
                         _selectDistanceSortCondition.name;
-                    _selectDistanceSortCondition = value;
                     _dropdownMenuController.hide();
                     setState(() {});
-                  })),
+                  })
+              ),
             ],
           ),
 
@@ -1217,13 +1235,13 @@ class _AppBarComponentState extends State<AppBarComponent> {
       if (index == 0) {
         return '全部';
       }
-      return '$_selectTempFirstLevelIndex$index街道办';
+      return '$_selectTempFirstLevelIndex$index街道办法国和德国发';
     });
 
     return Row(
       children: <Widget>[
         Container(
-          width: 100,
+          width: 100.w,
           child: ListView(
             children: firstLevels.map((item) {
               int index = firstLevels.indexOf(item);
@@ -1232,13 +1250,13 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   _selectTempFirstLevelIndex = index;
 
                   if (_selectTempFirstLevelIndex == 0) {
-                    itemOnTap('全城');
+                    itemOnTap('全部');
                     return;
                   }
                   setState(() {});
                 },
                 child: Container(
-                    height: 40,
+                    height: 40.h,
                     color: _selectTempFirstLevelIndex == index ? Colors
                         .grey[200] : Colors.white,
                     alignment: Alignment.center,
@@ -1273,11 +1291,11 @@ class _AppBarComponentState extends State<AppBarComponent> {
                       }
                     },
                     child: Container(
-                      height: 40,
+                      height: 40.h,
                       alignment: Alignment.centerLeft,
                       child: Row(children: <Widget>[
                         SizedBox(
-                          width: 20,
+                          width: 20.w,
                         ),
                         _selectFirstLevelIndex == _selectTempFirstLevelIndex &&
                             _selectSecondLevelIndex == index

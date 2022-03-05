@@ -54,7 +54,7 @@ class CircleText extends StatelessWidget {
                   Shadow(
                     //阴影
                     color: Colors.grey,
-                    offset: Offset(1.0, 1.0), blurRadius: 1.0,
+                    offset: Offset(0.5, 0.5), blurRadius: 0.5,
                   )
                 ],
               ),

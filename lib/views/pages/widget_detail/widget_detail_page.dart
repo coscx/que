@@ -32,6 +32,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:flutter_geen/views/items/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 class WidgetDetailPage extends StatefulWidget {
 
 
@@ -142,6 +143,18 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       body: Builder(builder: _buildContent),
     ));
   }
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    // Use `Uri` to ensure that `phoneNumber` is properly URL-encoded.
+    // Just using 'tel:$phoneNumber' would create invalid URLs in some cases,
+    // such as spaces in the input, which would cause `launch` to fail on some
+    // platforms.
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launch(launchUri.toString());
+  }
+
   List<PopupMenuItem<String>> buildItems() {
     final map = {
       "移入良缘库": Icons.archive_outlined,
@@ -210,29 +223,30 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           child: Padding(
             padding:  EdgeInsets.only(top: 15.h),
             child: Container(
-              width: 80.h,
-              height: 80.h,
+              width: 60.h,
+              height: 60.h,
               margin: EdgeInsets.fromLTRB(10.w, 0.h, 0.w, 0.h),
-              child:Lottie.asset('assets/packages/lottie_flutter/share.json'),
+              child:Lottie.asset('assets/packages/lottie_flutter/phone-call.json'),
             ),
           ),
           onTap: () async {
-            showModalBottomSheet(
-              /**
-               * showModalBottomSheet常用属性
-               * shape 设置形状
-               * isScrollControlled：全屏还是半屏
-               * isDismissible：外部是否可以点击，false不可以点击，true可以点击，点击后消失
-               * backgroundColor : 设置背景色
-               */
-                backgroundColor: Colors.transparent,
-                context: context,
-                builder: (BuildContext context) {
-                  return ShareWidget(
-                    ShareInfo('Hello world','http://www.baidu.com',"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.mp.sohu.com%2Fupload%2F20170601%2Faf68bce89ac945e7ad00da688a25fb08.png&refer=http%3A%2F%2Fimg.mp.sohu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1613110527&t=2cdb6d82fcfc0482bb12ffd8cac9b01a",""),
-                    list: list,
-                  );
-                });
+            // showModalBottomSheet(
+            //   /**
+            //    * showModalBottomSheet常用属性
+            //    * shape 设置形状
+            //    * isScrollControlled：全屏还是半屏
+            //    * isDismissible：外部是否可以点击，false不可以点击，true可以点击，点击后消失
+            //    * backgroundColor : 设置背景色
+            //    */
+            //     backgroundColor: Colors.transparent,
+            //     context: context,
+            //     builder: (BuildContext context) {
+            //       return ShareWidget(
+            //         ShareInfo('Hello world','http://www.baidu.com',"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.mp.sohu.com%2Fupload%2F20170601%2Faf68bce89ac945e7ad00da688a25fb08.png&refer=http%3A%2F%2Fimg.mp.sohu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1613110527&t=2cdb6d82fcfc0482bb12ffd8cac9b01a",""),
+            //         list: list,
+            //       );
+            //     });
+            _makePhoneCall("15666035163");
           }
       ));
   Widget _buildCollectButton( BuildContext context) {
@@ -1275,16 +1289,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             margin: EdgeInsets.only(left: 12.w),
           ):Container(),
           Container(
-            margin: EdgeInsets.only(left: 42.w,top: 20.h),
+           margin: EdgeInsets.only(left: 32.w),
 
             child: CircleAvatar(
-              radius:(60.w) ,
+              radius:(75.w) ,
               child: ClipOval(
                 child: Image.network(
                   url,
                    fit: BoxFit.cover,
-                  width: 120.w,
-                  height: 120.h,
+                  width: 150.w,
+                  height: 150.h,
                 ),
               ),
               backgroundColor: Colors.white,
@@ -1333,7 +1347,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                  Container(
-                 margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                 margin: EdgeInsets.fromLTRB(20.w, 5.h, 5.w, 0.h),
                  child:
                  Text(
                   user['info']['name'],
@@ -1344,13 +1358,21 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                     ),
                   )),
                   Container(
-                      color: Colors.black12,
+                      //color: Colors.black12,
                       padding: EdgeInsets.fromLTRB(5.w, 0.h, 5.w, 0.h),
                       margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
                       alignment: Alignment.centerLeft,
-                      height: 24.h,
+                      height: 28.h,
+                      decoration: new BoxDecoration(
+//背景
+                        color: Color.fromRGBO(255, 255, 255, 100),
+                        //设置四周圆角 角度
+                        borderRadius: BorderRadius.all(Radius.circular(5.h)),
+                        //设置四周边框
+                        border: new Border.all(width: 1, color: Colors.red),
+                      ),
                       child: Text(
-                        user['info']['age'].toString(),
+                        user['info']['age'].toString()+"岁",
                         style: TextStyle(color: Colors.black, fontSize: 18.sp),
                       )),
 
@@ -1376,22 +1398,23 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               ),
               Row(
                 children: <Widget>[
-                   Tag(
-                      color: Colors.black12,
-                      borderColor: Colors.black12,
-                      borderWidth: 0,
+                  user['info']['native_place']==""?Container(margin: EdgeInsets.fromLTRB(20.w, 10.h, 5.w, 0.h),height: 40.h,) :Tag(
+                      color: Color.fromRGBO(241, 241, 241, 100),
+                      borderColor:  Color.fromRGBO(241, 241, 241, 100),
+                      borderWidth: 1,
                       margin: EdgeInsets.fromLTRB(10.w, 10.h, 5.w, 0.h),
                       height: 40.h,
+                      radius: 10.w,
                       text: Text(
                         user['info']['native_place'].toString(),
                         style: TextStyle(
-                          color: Colors.black,
+
                           fontSize: 24.sp,
                         ),
                       ),
 
                   ),
-                  Container(
+                  user['info']['serve_user'] !="" ? Container(
                       margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
                       child:
                       Text(
@@ -1401,8 +1424,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           fontWeight: FontWeight.w300,
                           fontSize: 25.sp,
                         ),
-                      )),
-                  Container(
+                      )):Container(margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),),
+                  user['info']['serve_user'] ==""? Container( margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),):Container(
                       margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
                       child:
                       Text(
@@ -2232,7 +2255,10 @@ FocusNode _remarkFieldNode = FocusNode();
 final _usernameController = TextEditingController(text: '');
 FocusNode _textPlaceFieldNode = FocusNode();
 final _placeController = TextEditingController(text: '');
-List<String> goals = ["请选择","1.新分未联系",  "2.号码无效", "3.号码未接通",  "4.可继续沟通", "5.有意向面谈",  "6.确定到店时间", "7.已到店，意愿需跟进", "8.已到店，考虑7天付款",  "9.高级会员,支付预付款",  "10.高级会员，费用已结清", "11.毁单",  "12.放弃"];
+List<String> goals = ["请选择","1.新分未联系",  "2.号码无效", "3.号码未接通",  "4.可继续沟通", "5.有意向面谈",
+  "6.确定到店时间", "7.已到店，意愿需跟进", "8.已到店，考虑7天付款",  "9.高级会员,支付预付款",  "10.高级会员，费用已结清", "11.毁单",  "12.放弃并放入公海",  "12.放弃并放入D级"
+
+];
 String goalValue = '4.可继续沟通';
 DateTime _date = new DateTime.now();
 DateTime _date1= _date.add(new Duration(days: 3));
@@ -2645,6 +2671,7 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
   goalValue=_getStatusIndex(connectStatus);
 
   showDialog(
+      barrierDismissible:false,
       context: context,
       builder: (ctx) => StatefulBuilder(
           builder: (context, state) {
