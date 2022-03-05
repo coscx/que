@@ -5,6 +5,7 @@ import 'package:flutter_geen/model/github/issue_comment.dart';
 import 'package:flutter_geen/model/github/issue.dart';
 import 'package:flutter_geen/model/github/repository.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
+import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
 import 'package:city_pickers/modal/result.dart';
@@ -73,37 +74,37 @@ class IssuesApi {
       return dd;
     }
   }
-  static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String mode,SearchParamList search ,bool _showAge, int _showAgeMax, int _showAgeMin,String serveType) async {
+  static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String mode,SearchParamList search ,bool _showAge, int _showAgeMax, int _showAgeMin,String serveType,final List<SelectItem> selectItems ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     Map<String,dynamic> searchParm={};
-    search.list.map((e) {
-      if (e.paramCode=="customerLevel"){
-        if(e.selected != null)
-        searchParm['status'] = e.selected;
-      }
-      if (e.paramCode=="from"){
-        if(e.selected != null)
-        searchParm['channel[]'] = e.selected;
-      }
-      if (e.paramCode=="graduate"){
-        if(e.selected != null)
-          searchParm['education[]'] = e.selected;
-      }
-      if (e.paramCode=="income"){
-        if(e.selected != null)
-          searchParm['income[]'] = e.selected;
-      }
-      if (e.paramCode=="house"){
-        if(e.selected != null)
-          searchParm['hashouse[]'] = e.selected;
-      }
-      if (e.paramCode=="appointment"){
-        if(e.selected != null)
-          searchParm['marriage[]'] = e.selected;
-      }
-    }).toList();
+    // search.list.map((e) {
+    //   if (e.paramCode=="customerLevel"){
+    //     if(e.selected != null)
+    //     searchParm['status'] = e.selected;
+    //   }
+    //   if (e.paramCode=="from"){
+    //     if(e.selected != null)
+    //     searchParm['channel[]'] = e.selected;
+    //   }
+    //   if (e.paramCode=="graduate"){
+    //     if(e.selected != null)
+    //       searchParm['education[]'] = e.selected;
+    //   }
+    //   if (e.paramCode=="income"){
+    //     if(e.selected != null)
+    //       searchParm['income[]'] = e.selected;
+    //   }
+    //   if (e.paramCode=="house"){
+    //     if(e.selected != null)
+    //       searchParm['hashouse[]'] = e.selected;
+    //   }
+    //   if (e.paramCode=="appointment"){
+    //     if(e.selected != null)
+    //       searchParm['marriage[]'] = e.selected;
+    //   }
+    // }).toList();
     String is_passive="all";
     if(_showAge){
       searchParm['startAge'] = _showAgeMin;

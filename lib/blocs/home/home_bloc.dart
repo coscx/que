@@ -169,7 +169,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is EventFresh) {
       try {
 
-        var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType);
+        var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType,event.selectItems);
         if  (result['message']=="Unauthenticated.") {
           yield Unauthenticated();
         }else{
@@ -192,7 +192,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is EventSearchErpUser) {
       try {
 
-        var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType);
+        var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType,event.selectItems);
         if  (result['message']=="Unauthenticated.") {
           yield Unauthenticated();
         }else{

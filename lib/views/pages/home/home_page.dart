@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   SortModel _leftSelectedModel = _leftWidgets[0];
   List<String> _dropDownHeaderItemStrings = [_leftWidgets[1].name, '筛选'];
   SearchParamList searchParamList= SearchParamList(list: []);
+  List<SelectItem> selectItems =  <SelectItem>[];
   void _showPopView(int select) {
     setState(() {
       if (_selectedIndex >0)
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     //BlocProvider.of<GlobalBloc>(context).add((EventSetIndexNum()));
     var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-    BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+    BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
     _refreshController.refreshCompleted();
   }
 
@@ -131,7 +132,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
     BlocProvider.of<GlobalBloc>(context).add(EventIndexPhotoPage(currentPage));
-    var result= await IssuesApi.searchErpUser('', (++currentPage).toString(),sex.toString(),mode.toString(),searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType);
+    var result= await IssuesApi.searchErpUser('', (++currentPage).toString(),sex.toString(),mode.toString(),searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems);
     if  (result['code']==200){
 
     } else{
@@ -221,7 +222,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     ),
     child:Scaffold(
       key: _scaffoldKey,
-        endDrawer: GZXFilterGoodsPage(),
+        endDrawer: GZXFilterGoodsPage(selectItems: [],),
         appBar: AppBar(
           titleSpacing:40.w,
           leadingWidth: 0,
@@ -396,7 +397,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                   child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
 
                 ),
-                bar(),
+                bar(selectItems: selectItems,),
 
               ],
             );
@@ -435,7 +436,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
               // });
                var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-               BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
+               BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
              },
              deleteIcon: Icon(Icons.delete),
              deleteIconColor: Colors.red,
@@ -494,7 +495,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
         var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
         var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-        BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
+        BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
 
       },
       deleteIcon: Icon(Icons.delete),
@@ -551,7 +552,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
               sureFun: () {
                 var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
                 var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
+                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
                 _visible=false;
                 _visibleCount=0;
                 searchParamList.list.map((e) {
@@ -600,7 +601,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
             if( mode== 2){
               var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-              BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
+              BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
             }
 
           });
@@ -635,9 +636,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
 
     if(searchParamList ==null){
-      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
     }else{
-      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,value,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
+      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,value,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
     }
 
   }
@@ -716,22 +717,22 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 if (e == '全部') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
                 }
                 if (e == '我的') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
                 }
                 if (e == '良缘') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
                 }
                 if (e == '公海') {
                   BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(3));
                   var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,3,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,3,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
                 }
 
               },
@@ -1084,6 +1085,8 @@ class DYrefreshFooter extends StatelessWidget {
   }
 }
 class bar extends StatelessWidget implements PreferredSizeWidget{
+  final List<SelectItem> selectItems ;
+  bar({@required this.selectItems, });
   @override
   // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(580.h);
@@ -1093,7 +1096,7 @@ class bar extends StatelessWidget implements PreferredSizeWidget{
       padding: EdgeInsets.only(left: 20.w,right: 20.w),
       child: Column(
         children: [
-          Expanded(child: AppBarComponent()),
+          Expanded(child: AppBarComponent(selectItems: selectItems,)),
         ],
       ),
     );
@@ -1101,6 +1104,10 @@ class bar extends StatelessWidget implements PreferredSizeWidget{
 }
 
 class AppBarComponent extends StatefulWidget {
+
+  final List<SelectItem> selectItems ;
+  AppBarComponent({@required this.selectItems, });
+
   @override
   _AppBarComponentState createState() => _AppBarComponentState();
 
@@ -1198,9 +1205,28 @@ class _AppBarComponentState extends State<AppBarComponent> {
               GZXDropdownMenuBuilder(
                   dropDownHeight: 40 * 8.0,
                   dropDownWidget: _buildQuanChengWidget((selectValue) {
-                    _dropDownHeaderItemStrings[0] = selectValue;
+                    _dropDownHeaderItemStrings[0] = selectValue.name;
                     _dropdownMenuController.hide();
-                    setState(() {});
+                   // setState(() {});
+                    int k=0;
+                    for(int i=0;i<widget.selectItems.length;i++){
+                      if (widget.selectItems[i].type == 100){
+                        k=i;
+                        break;
+                      }
+
+                    }
+                    if (k>0){
+                      widget.selectItems[k].id = selectValue.id.toString();
+                    }else{
+                      SelectItem s =SelectItem();
+                      s.type =100;
+                      s.id= selectValue.id.toString();
+                      widget.selectItems.add(s);
+                    }
+                    var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
+                    var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(null,widget.selectItems,sex,mode,false,0,0,""));
                   })),
               GZXDropdownMenuBuilder(
                   dropDownHeight: 40.0 * _brandSortConditions.length,
@@ -1247,7 +1273,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
 
   int _selectSecondLevelIndex = -1;
 
-  _buildQuanChengWidget(void itemOnTap(String selectValue)) {
+  _buildQuanChengWidget(void itemOnTap(SelectItem selectValue)) {
 //    List firstLevels = new List<int>.filled(15, 0);
     List<CitySelect> firstLevels = <CitySelect>[];
 
@@ -1277,7 +1303,11 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   _selectTempFirstLevelIndex = index;
 
                   if (_selectTempFirstLevelIndex == 0) {
-                    itemOnTap('全部');
+                    SelectItem s = SelectItem();
+                    s.type = 101;
+                    s.id = "1";
+                    s.name ="全部";
+                    itemOnTap(s);
                     return;
                   }
                   setState(() {});
@@ -1312,9 +1342,17 @@ class _AppBarComponentState extends State<AppBarComponent> {
                       _selectSecondLevelIndex = index;
                       _selectFirstLevelIndex = _selectTempFirstLevelIndex;
                       if (_selectSecondLevelIndex == 0) {
-                        itemOnTap(firstLevels[_selectFirstLevelIndex].name);
+                        SelectItem s = SelectItem();
+                        s.type = 100;
+                        s.id = "0";
+                        s.name =item.name;
+                        itemOnTap(s);
                       } else {
-                        itemOnTap(item.name);
+                        SelectItem s = SelectItem();
+                        s.type = 100;
+                        s.id = item.id.toString();
+                        s.name =item.name;
+                        itemOnTap(s);
                       }
                     },
                     child: Container(

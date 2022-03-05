@@ -20,13 +20,15 @@ class SelectItem {
   SelectItem({this.name, this.id, this.isSelect,this.type});
 }
 class GZXFilterGoodsPage extends StatefulWidget {
+  final List<SelectItem> selectItems ;
+  GZXFilterGoodsPage({@required this.selectItems, });
   @override
   _GZXFilterGoodsPageState createState() => _GZXFilterGoodsPageState();
 }
 
 class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
   List<ExpansionPanelItem> _expansionPanelItems;
-  List<SelectItem> selectItems = [];
+
 
   List<SelectItem> _value= [];
   List<SelectItem> _value1 = [];
@@ -179,7 +181,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
     return MultiChipFilters(data:items,avatarBuilder: (_, index) =>
         null,
       labelBuilder: (_, selected) => Text("234"),
-      onChange: _doSelectStart, selectedS: selectItems,);
+      onChange: _doSelectStart, selectedS: widget.selectItems,);
   }
   _doSelectStart(List<SelectItem> s) {
     print("-----------");

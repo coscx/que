@@ -4,6 +4,7 @@ import 'package:flutter_geen/app/enums.dart';
 import 'package:flutter_geen/storage/po/widget_po.dart';
 import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
+import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 
 
 abstract class HomeEvent extends Equatable {
@@ -19,13 +20,14 @@ class EventTabTap extends HomeEvent {
 
 class EventSearchErpUser extends HomeEvent {
   final SearchParamList search;
+  final List<SelectItem> selectItems ;
   final int sex;
   final int mode;
   final bool showAge;
   final int minAge;
   final int maxAge;
   final String serveType ;
-  EventSearchErpUser(this.search,this.sex,this.mode,this.showAge,this.maxAge,this.minAge,this.serveType);
+  EventSearchErpUser(this.search,this.selectItems,this.sex,this.mode,this.showAge,this.maxAge,this.minAge,this.serveType);
 
 }
 class EventTabPhoto extends HomeEvent {
@@ -62,7 +64,8 @@ class EventFresh extends HomeEvent {
   final int maxAge;
   final String serveType ;
   final SearchParamList search;
-  EventFresh(this.sex,this.mode,this.search,this.showAge,this.maxAge,this.minAge,this.serveType);
+  final List<SelectItem> selectItems ;
+  EventFresh(this.sex,this.mode,this.search,this.showAge,this.maxAge,this.minAge,this.serveType,this.selectItems);
 }
 class EventGetCreditId extends HomeEvent {
 
