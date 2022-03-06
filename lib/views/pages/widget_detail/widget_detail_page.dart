@@ -359,12 +359,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child: _item_detail(context,Colors.black,Icons.format_list_numbered,"编号",info['code'].toString(),false)),
                           GestureDetector(
                               onTap: (){
+
+                              },child: _item_detail(context,Colors.black,Icons.store,"门店",info['app_store_name'].toString(),false)),
+                          GestureDetector(
+                              onTap: (){
                                 _showEditDialog(context,"请输入姓名","",info['name'].toString(),"name",1,info);
-                              },child: _item_detail(context,Colors.black,Icons.backpack_outlined,"姓名",info['name'].toString(),true)),
+                              },child: _item_detail(context,Colors.black,Icons.drive_file_rename_outline,"姓名",info['name'].toString(),true)),
                           GestureDetector(
                               onTap: (){
                                 showPickerArray(context,[["未知","男生","女生"]],info['gender']==0?[1]:[info['gender']],"gender",info,"",true);
-                              },child:  _item_detail(context,Colors.black,Icons.support_agent,"性别",info['gender']==1?"男生":"女生",true)),
+                              },child:  _item_detail(context,Colors.black,Icons.rice_bowl_outlined,"性别",info['gender']==1?"男生":"女生",true)),
                           GestureDetector(
                               onTap: (){
                               },child: _item_detail(context,Colors.black,Icons.contact_page_outlined,"年龄",info['age']==0?"-":info['age'].toString()+"岁",false)),
@@ -1085,14 +1089,29 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             Visibility(
                                 visible: true,
                                 child: Container(
-                                  width: ScreenUtil().screenWidth*0.71,
-                                  child: Text(
-                                   content,
-                                    maxLines: 4,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 25.sp, color: Colors.black,fontWeight: FontWeight.w900),
-                                  ),
+                                  //width: ScreenUtil().screenWidth*0.71,
+                                  height:30.h,
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child:
+                                        Container(
+                                          width: ScreenUtil().screenWidth*0.7,
+                                            child: Text(
+                                              content,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 25.sp, color: Colors.black,fontWeight: FontWeight.w900),
+                                            ),
+                                          ),
+
+                                      ),
+                                    ],
+                                  )
+
+
+
                                 )),
                           ]),
                       //Visibility是控制子组件隐藏/可见的组件
@@ -1102,7 +1121,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             children: <Widget>[
                               Icon(
                                 Icons.arrow_forward_ios_outlined,
-                                size: 15.sp,
+                                size: 25.sp,
                                 color: Colors.black54,
                               )
 
@@ -1112,7 +1131,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   ),
 
                   Container(
-                    margin: EdgeInsets.only(left: 10.w,top: 10.h),
+                    margin: EdgeInsets.only(left: 0.w,top: 10.h),
                     child: Row(children: <Widget>[
 
                       SizedBox(
@@ -1594,7 +1613,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 }
 showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > select,String type,Map<String , dynamic> info,String title,bool isIndex) {
    Picker(
-      adapter: PickerDataAdapter<String>(pickerdata: pickerData, isArray: true),
+       itemExtent: 40,
+       magnification: 1.2,
+       selectionOverlay:CupertinoPickerDefaultSelectionOverlay(background: Colors.transparent,),
+       adapter: PickerDataAdapter<String>(pickerdata: pickerData, isArray: true),
       hideHeader: true,
       title: new Text("请选择"+title),
       cancelText: "取消",
@@ -1649,7 +1671,7 @@ _showToast(BuildContext ctx, String msg, bool collected) {
     backgroundColor: Colors.white,
     leading: (cancel) => Container(
       child: IconButton(
-        icon: Icon(Icons.error, color: Colors.redAccent),
+        icon: Icon(Icons.error, color: Colors.green),
         onPressed: cancel,
       )),
     title: (text)=>Container(
@@ -1676,8 +1698,11 @@ showPickerDateTime(BuildContext context,String date,String type,Map<String ,dyna
     dates=date;
   }
    Picker(
+       itemExtent: 40,
+       magnification: 1.2,
+       selectionOverlay:CupertinoPickerDefaultSelectionOverlay(background: Colors.transparent,),
       adapter:  DateTimePickerAdapter(
-        type: PickerDateTimeType.kYMDHM,
+        type: PickerDateTimeType.kYMD,
         isNumberMonth: true,
         //strAMPM: const["上午", "下午"],
         // yearSuffix: "年",
@@ -1690,21 +1715,21 @@ showPickerDateTime(BuildContext context,String date,String type,Map<String ,dyna
         maxHour: 23,
         // twoDigitYear: true,
       ),
-      title: new Text("选择时间"),
+      title: new Text("选择日期"),
        cancelText: "取消",
        confirmText: "确定",
        textAlign: TextAlign.center,
-      selectedTextStyle: TextStyle(color: Colors.blue),
+      selectedTextStyle: TextStyle(color: Colors.redAccent),
       delimiter: [
         PickerDelimiter(column: 4, child: Container(
-          width: 16.0,
+          width: 16.w,
           alignment: Alignment.center,
-          child: Text(':', style: TextStyle(fontWeight: FontWeight.bold)),
+          child: Text('', style: TextStyle(fontWeight: FontWeight.bold)),
           color: Colors.white,
         ))
       ],
       footer: Container(
-        height: 50.0,
+        height: 50.h,
         alignment: Alignment.center,
         child: Text(''),
       ),

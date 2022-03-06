@@ -39,8 +39,8 @@ class StoreSelect {
   String name;
   int id;
   bool isSelected;
-
-  StoreSelect({this.name, this.id,this.isSelected});
+  int city;
+  StoreSelect({this.name, this.id,this.city,this.isSelected});
 }
 class CitySelect {
   String name;
@@ -338,7 +338,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
 
                 Container(
-                  padding:  EdgeInsets.only(top: 125.h),
+                  padding:  EdgeInsets.only(top: 150.h),
                   child: ScrollConfiguration(
                       behavior: DyBehaviorNull(),
                       child:
@@ -394,7 +394,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 ),
                 buildPopView(),
                 Container(
-                  padding: EdgeInsets.only(top: 60.h),
+                  padding: EdgeInsets.only(top: 70.h),
                   child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
 
                 ),
@@ -1103,7 +1103,8 @@ class bar extends StatelessWidget implements PreferredSizeWidget{
     );
   }
 }
-
+List<CitySelect> firstLevels = <CitySelect>[];
+List<StoreSelect> all =  <StoreSelect>[];
 class AppBarComponent extends StatefulWidget {
 
   final List<SelectItem> selectItems ;
@@ -1125,7 +1126,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
   SortCondition _selectBrandSortCondition;
   SortCondition _selectDistanceSortCondition;
   GZXDropdownMenuController _dropdownMenuController = GZXDropdownMenuController();
-
+  List<StoreSelect> secondtLevels =  <StoreSelect>[];
   GlobalKey _stackKey = GlobalKey();
   @override
   void initState() {
@@ -1157,6 +1158,55 @@ class _AppBarComponentState extends State<AppBarComponent> {
 
 
     _selectDistanceSortCondition = _distanceSortConditions[0];
+
+    CitySelect ta  = CitySelect();
+    ta.name = "全部";
+    ta.id =0;
+    firstLevels.add(ta);
+
+    Future.delayed(Duration(milliseconds: 1)).then((e) async {
+      var result= await IssuesApi.getStoreList("1");
+      if  (result['code']==200){
+        List< dynamic> da = result['data'] ;
+         da.forEach((value) {
+           CitySelect cc1  = CitySelect();
+           cc1.name = value['name'];
+           cc1.id =int.parse(value['city_code']);
+           firstLevels.add(cc1);
+
+           List< dynamic> stores = value['data'] ;
+           stores.forEach((value) {
+             StoreSelect ddd1  = StoreSelect();
+             ddd1.id=value['id'];
+             ddd1.name = value['name'];
+             ddd1.city=cc1.id;
+             all.add(ddd1);
+
+           });
+
+
+
+         });
+
+        //
+        // CitySelect cc2  = CitySelect();
+        // cc2.name = "昆山";
+        // cc2.id =320501;
+        // firstLevels.add(cc2);
+
+
+        // StoreSelect ddd  = StoreSelect();
+        // ddd.id=6;
+        // ddd.name = "鹊桥缘遇昆山店";
+        // ddd.city=320501;
+        // all.add(ddd);
+
+
+
+      } else{
+
+      }
+    });
     super.initState();
   }
 
@@ -1210,11 +1260,16 @@ class _AppBarComponentState extends State<AppBarComponent> {
                     _dropdownMenuController.hide();
                    setState(() {});
                     if (selectValue.type ==101){
+                      if (selectValue.id =="1"){
+                        selectValue.id ="0";
+                      }else{
+                        return;
+                      }
 
-                      return;
                     }
                     int k=0;
                     for(int i=0;i<widget.selectItems.length;i++){
+
                       if (widget.selectItems[i].type == 100){
                         widget.selectItems[i].id = selectValue.id.toString();
                         k=1;
@@ -1321,24 +1376,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
 
   _buildQuanChengWidget(void itemOnTap(SelectItem selectValue)) {
 //    List firstLevels = new List<int>.filled(15, 0);
-    List<CitySelect> firstLevels = <CitySelect>[];
 
-    List<StoreSelect> secondtLevels =  <StoreSelect>[];
-    CitySelect cc  = CitySelect();
-    cc.name = "全部";
-    firstLevels.add(cc);
-    CitySelect cc1  = CitySelect();
-    cc1.name = "苏州市";
-    firstLevels.add(cc1);
-
-    StoreSelect dd  = StoreSelect();
-    dd.id=110;
-    dd.name = "全部";
-    secondtLevels.add(dd);
-    StoreSelect dd1  = StoreSelect();
-    dd1.id=1;
-    dd1.name = "鹊桥缘遇";
-    secondtLevels.add(dd1);
     return Row(
       children: <Widget>[
         Container(
@@ -1357,6 +1395,21 @@ class _AppBarComponentState extends State<AppBarComponent> {
                     s.name ="全部";
                     itemOnTap(s);
                     return;
+                  }else{
+                    secondtLevels=[];
+                    for(int i=0;i<all.length;i++){
+                      if (all[i].city == item.id){
+
+                        StoreSelect ddd1  = StoreSelect();
+                        ddd1.id=all[i].id;
+                        ddd1.name = all[i].name;
+                        ddd1.city=item.id;
+                        secondtLevels.add(ddd1);
+
+                      }
+
+                    }
+                    setState(() {});
                   }
                   setState(() {});
                 },
@@ -1392,10 +1445,11 @@ class _AppBarComponentState extends State<AppBarComponent> {
                       if (_selectSecondLevelIndex == 0) {
                         SelectItem s = SelectItem();
                         s.type = 100;
-                        s.id = "100";
+                        s.id = item.id.toString();
                         s.name =item.name;
                         itemOnTap(s);
                       } else {
+
                         SelectItem s = SelectItem();
                         s.type = 100;
                         s.id = item.id.toString();

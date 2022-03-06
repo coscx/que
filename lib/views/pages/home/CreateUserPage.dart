@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -624,8 +625,11 @@ class _CreateUserPageState extends State<CreateUserPage> {
       dates=date;
     }
     Picker(
+        selectionOverlay:CupertinoPickerDefaultSelectionOverlay(background: Colors.transparent,),
+        itemExtent: 40,
+        magnification: 1.2,
         adapter:  DateTimePickerAdapter(
-          type: PickerDateTimeType.kYMDHM,
+          type: PickerDateTimeType.kYMD,
           isNumberMonth: true,
           //strAMPM: const["上午", "下午"],
           // yearSuffix: "年",
@@ -638,21 +642,21 @@ class _CreateUserPageState extends State<CreateUserPage> {
           maxHour: 23,
           // twoDigitYear: true,
         ),
-        title: new Text("选择时间"),
+        title: new Text("选择生日"),
         cancelText: "取消",
         confirmText: "确定",
         textAlign: TextAlign.center,
-        selectedTextStyle: TextStyle(color: Colors.blue),
+        selectedTextStyle: TextStyle(color: Colors.redAccent,fontWeight: FontWeight.bold),
         delimiter: [
           PickerDelimiter(column: 4, child: Container(
-            width: 16.0,
+            width: 16.w,
             alignment: Alignment.center,
-            child: Text(':', style: TextStyle(fontWeight: FontWeight.bold)),
+            child: Text('', style: TextStyle(fontWeight: FontWeight.bold)),
             color: Colors.white,
           ))
         ],
         footer: Container(
-          height: 50.0,
+          height: 50.h,
           alignment: Alignment.center,
           child: Text(''),
         ),
@@ -696,6 +700,9 @@ class _CreateUserPageState extends State<CreateUserPage> {
   ];
   showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > select,String type,String title,bool isIndex) {
     Picker(
+        itemExtent: 40,
+        magnification: 1.2,
+        selectionOverlay:CupertinoPickerDefaultSelectionOverlay(background: Colors.transparent,),
         smooth: 50,
         adapter: PickerDataAdapter<String>(pickerdata: pickerData, isArray: true),
         hideHeader: true,

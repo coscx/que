@@ -19,6 +19,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
   final double _appBarHeight = 180.0;
   String name ="MSTAR";
   String bind="微信绑定";
+  String memberId="0";
   final String _userHead =
       'https://img.bosszhipin.com/beijin/mcs/useravatar/20171211/4d147d8bb3e2a3478e20b50ad614f4d02062e3aec7ce2519b427d24a3f300d68_s.jpg';
 
@@ -49,7 +50,13 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
       var openidF=  await LocalStorage.get("openid");
       var sss =ss.toString();
       var openids =openidF.toString();
+      var id=  await LocalStorage.get("memberId");
+     String  memberIds = id.toString();
+      setState(() {
+        memberId=memberIds;
+      });
       if(sss == "" || ss == null || ss == "null"){
+
       }else{
        setState(() {
          name=ss;
@@ -169,20 +176,36 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: ScreenUtil().setWidth(50),
+                        width: ScreenUtil().setWidth(80.w),
                       ),
                       Expanded(
-                        flex: 1,
-                        child: new Padding(
-                          padding:  EdgeInsets.only(
-                            top: 40.h,
-                            right: 30.w,
-                          ),
-                          child: Container(
-                            width: 100.h,
-                            height: 100.h,
-                            margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
-                            child:Lottie.asset('assets/packages/lottie_flutter/great.json'),
+                        //flex: 1,
+                        child: new Container(
+                          child: Stack(
+                            children: [
+
+                              _userHead==""? Container(): Container(
+                                margin: EdgeInsets.fromLTRB(15.w, 102.h, 0.w, 0.h),
+                                child: CircleAvatar(
+                                  radius:(70.w) ,
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      _userHead,
+                                      fit: BoxFit.cover,
+                                      width: 140.w,
+                                      height: 140.h,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                              Container(
+                                width: 302.h,
+                                height: 302.h,
+                                //margin: EdgeInsets.fromLTRB(1.w, 5.h, 5.w, 0.h),
+                                child:Lottie.asset('assets/packages/lottie_flutter/36535-avatar-pendant.json'),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -194,8 +217,8 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           children: [
                              Padding(
                               padding:  EdgeInsets.only(
-                                top: 40.h,
-                                left: 3.w,
+                                top: 0.h,
+                                left: 30.w,
                                 bottom: 5.h,
                               ),
                               child: new Text(
@@ -207,41 +230,52 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                               ),
                             ),
 
-                              Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/packages/images/bb_id.svg",
-                                  //color: Colors.black87,
+                              Container(
+
+                                padding:  EdgeInsets.only(
+                                  top: 0.h,
+                                  left: 30.w,
+                                  bottom: 0.h,
                                 ),
-                                Padding(
-                                  padding:  EdgeInsets.only(
-                                    left: 3.w,
+
+                                child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/packages/images/bb_id.svg",
+                                    //color: Colors.black87,
                                   ),
-                                  child: new Text(
-                                    '121.423.199',
-                                    style: new TextStyle(
-                                        color: Colors.grey, fontSize: 25.sp),
+                                  Container(
+                                    padding:  EdgeInsets.only(
+                                      top: 0.h,
+                                      left: 10.w,
+                                      bottom: 0.h,
+                                    ),
+                                    child: new Text(
+                                     "S001M00"+ memberId,
+                                      style: new TextStyle(
+                                          color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.bold,),
+                                    ),
                                   ),
-                                ),
-                                ]),
+                                  ]),
+                              ),
 
 
 
                           ],
                         ),
                       ),
-                      Padding(
-                          padding:  EdgeInsets.only(
-                            left: 0.0,
-                            right: 20.w,
-                            top: 40.h
-                          ),
-                          child:new Icon(
-                            Icons.chevron_right,
-                            color: Colors.grey,
-                          )
-                      ),
+                      // Padding(
+                      //     padding:  EdgeInsets.only(
+                      //       left: 0.0,
+                      //       right: 20.w,
+                      //       top: 0.h
+                      //     ),
+                      //     child:new Icon(
+                      //       Icons.chevron_right,
+                      //       color: Colors.grey,
+                      //     )
+                      // ),
                     ],
                   ),
                 ],
@@ -265,7 +299,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                       children: [
                         new ContactItem(
                           count: '696',
-                          title: '我的审批',
+                          title: '客户录入',
                         ),
                         new ContactItem(
                           count: '0',
@@ -295,123 +329,127 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                     margin: EdgeInsets.fromLTRB(30.w,20.h,30.w,0),
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.w),
-                        child: Row(
+                        child: Container(
 
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
+                          margin: EdgeInsets.fromLTRB(30.w,0.h,30.w,0),
+
+                          child: Row(
+
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
 //                交叉轴的布局方式，对于column来说就是水平方向的布局方式
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          //就是字child的垂直布局方向，向上还是向下
-                          verticalDirection: VerticalDirection.down,
-                          children: <Widget>[
-                            SizedBox(
-                              width: ScreenUtil().setWidth(10.w),
-                            ),
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.pushNamed(context, UnitRouter.create_user_page);
-                              },
-                                child: Container(
-                              padding:  EdgeInsets.only(
-                                  top: 15.h,
-                                  bottom: 15.h,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            //就是字child的垂直布局方向，向上还是向下
+                            verticalDirection: VerticalDirection.down,
+                            children: <Widget>[
+                              // SizedBox(
+                              //   width: ScreenUtil().setWidth(10.w),
+                              // ),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.pushNamed(context, UnitRouter.create_user_page);
+                                },
+                                  child: Container(
+                                padding:  EdgeInsets.only(
+                                     //top: 20.h,
+                                    // bottom: 15.h,
 
-                              ),
-                              child:  Column(children: <Widget>[
-                                Container(
-                                  height: 100.h,
-                                  width: 100.w,
-                                  alignment: FractionalOffset.topLeft,
-                                  child: Image.asset("assets/packages/images/tab_match.webp"),
                                 ),
-                                Text(
-                                  "我的审批",
-                                  style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
+                                child:  Column(children: <Widget>[
+                                  Container(
+                                    height: 150.h,
+                                    width: 150.w,
+                                    alignment: FractionalOffset.topLeft,
+                                    child: Lottie.asset('assets/packages/lottie_flutter/85263-plus-sky-theme.json'),
+                                  ),
+                                  // Text(
+                                  //   "客户录入",
+                                  //   style: new TextStyle(color: Colors.black54, fontSize: 28.sp),
+                                  // ),
+
+                                ]),
+                              )),
+
+
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.pushNamed(context, UnitRouter.select_page);
+                            },
+                            child:Container(
+                                padding:  EdgeInsets.only(
+
+
                                 ),
+                                child:  Column(children: <Widget>[
+                                  Container(
+                                    height: 150.h,
+                                    width: 150.w,
+                                    alignment: FractionalOffset.topLeft,
+                                    child: Lottie.asset('assets/packages/lottie_flutter/98042-robot.json'),
+                                  ),
+                                  // Text(
+                                  //   "已提交",
+                                  //   style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
+                                  // ),
 
-                              ]),
-                            )),
-
-
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.pushNamed(context, UnitRouter.select_page);
-                          },
-                          child:Container(
-                              padding:  EdgeInsets.only(
-                                  top: 10.h,
-                                  bottom: 10.h,
-
-                              ),
-                              child:  Column(children: <Widget>[
-                                Container(
-                                  height: 100.h,
-                                  width: 100.w,
-                                  alignment: FractionalOffset.topLeft,
-                                  child: Image.asset("assets/packages/images/tab_match.webp"),
-                                ),
-                                Text(
-                                  "已提交",
-                                  style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
-                                ),
-
-                              ]),
-                            )),
+                                ]),
+                              )),
 
                     GestureDetector(
                       onTap: (){
-                        //Navigator.pushNamed(context, UnitRouter.select_page);
-                        _userDetail(context);
+                          //Navigator.pushNamed(context, UnitRouter.select_page);
+                          _userDetail(context);
 
 
                       },
                       child:Container(
-                              padding:  EdgeInsets.only(
-                                  top: 10.h,
-                                  bottom: 10.h,
+                                padding:  EdgeInsets.only(
+                                    top: 0.h,
+                                    bottom: 0.h,
 
+                                ),
+                                child:  Column(children: <Widget>[
+                                  Container(
+                                    height: 150.h,
+                                    width: 150.w,
+                                    alignment: FractionalOffset.topLeft,
+                                    child: Lottie.asset('assets/packages/lottie_flutter/97568-graph.json'),
+                                  ),
+                                  // Text(
+                                  //   "用户管理",
+                                  //   style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
+                                  // ),
+
+                                ]),
+                              )),
+
+                              Container(
+                                padding:  EdgeInsets.only(
+                                    // top: 10.h,
+                                    // bottom: 10.h,
+
+                                ),
+                                child:  Column(children: <Widget>[
+                                  Container(
+                                    height: 150.h,
+                                    width: 150.w,
+                                    alignment: FractionalOffset.topLeft,
+                                    child: Lottie.asset('assets/packages/lottie_flutter/97577-instagram.json'),
+                                  ),
+                                  // Text(
+                                  //   "权限管理",
+                                  //   style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
+                                  // ),
+
+                                ]),
                               ),
-                              child:  Column(children: <Widget>[
-                                Container(
-                                  height: 100.h,
-                                  width: 100.w,
-                                  alignment: FractionalOffset.topLeft,
-                                  child: Image.asset("assets/packages/images/tab_match.webp"),
-                                ),
-                                Text(
-                                  "用户管理",
-                                  style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
-                                ),
 
-                              ]),
-                            )),
+                              // SizedBox(
+                              //   width: ScreenUtil().setWidth(10.w),
+                              // ),
 
-                            Container(
-                              padding:  EdgeInsets.only(
-                                  top: 10.h,
-                                  bottom: 10.h,
-
-                              ),
-                              child:  Column(children: <Widget>[
-                                Container(
-                                  height: 100.h,
-                                  width: 100.w,
-                                  alignment: FractionalOffset.topLeft,
-                                  child: Image.asset("assets/packages/images/tab_match.webp"),
-                                ),
-                                Text(
-                                  "权限管理",
-                                  style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
-                                ),
-
-                              ]),
-                            ),
-
-                            SizedBox(
-                              width: ScreenUtil().setWidth(10.w),
-                            ),
-
-                          ],
+                            ],
+                          ),
                         ))),
 
 

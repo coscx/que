@@ -568,7 +568,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
                   color: Colors.transparent,
                   child: CircleText(
                     text: photo['name'],
-                    size: 160.sp,
+                    size: 140.w,
                     fontSize: 50.sp,
                     color: invColor,
                     //shadowColor: Colors.transparent,

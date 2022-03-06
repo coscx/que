@@ -413,7 +413,7 @@ packages:
       name: flutter_picker
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.5"
+    version: "2.0.3"
   flutter_plugin_android_lifecycle:
     dependency: "direct main"
     description:
@@ -528,7 +528,7 @@ packages:
       name: fluwx
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.5.0+1"
+    version: "2.6.2"
   font_awesome_flutter:
     dependency: "direct main"
     description:
