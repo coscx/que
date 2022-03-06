@@ -20,7 +20,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
   String name ="MSTAR";
   String bind="微信绑定";
   String memberId="0";
-  final String _userHead =
+   String _userHead =
       'https://img.bosszhipin.com/beijin/mcs/useravatar/20171211/4d147d8bb3e2a3478e20b50ad614f4d02062e3aec7ce2519b427d24a3f300d68_s.jpg';
 
   @override
@@ -55,6 +55,13 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
       setState(() {
         memberId=memberIds;
       });
+
+      var avatar=  await LocalStorage.get("avatar");
+      String  avatars = avatar.toString();
+      setState(() {
+        _userHead=avatars;
+      });
+
       if(sss == "" || ss == null || ss == "null"){
 
       }else{
@@ -141,6 +148,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
         ),
       ),
       child:Scaffold(
+
       backgroundColor:  Colors.white,
         body:  CustomScrollView(
         physics:const BouncingScrollPhysics() ,
@@ -180,20 +188,20 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                       ),
                       Expanded(
                         //flex: 1,
-                        child: new Container(
+                        child:  Container(
                           child: Stack(
                             children: [
 
                               _userHead==""? Container(): Container(
-                                margin: EdgeInsets.fromLTRB(15.w, 102.h, 0.w, 0.h),
+                                margin: EdgeInsets.fromLTRB(16.w, 107.h, 0.w, 0.h),
                                 child: CircleAvatar(
-                                  radius:(70.w) ,
+                                  radius:(58.w) ,
                                   child: ClipOval(
                                     child: Image.network(
                                       _userHead,
                                       fit: BoxFit.cover,
-                                      width: 140.w,
-                                      height: 140.h,
+                                      width: 116.w,
+                                      height: 116.h,
                                     ),
                                   ),
                                   backgroundColor: Colors.white,
@@ -265,17 +273,27 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           ],
                         ),
                       ),
-                      // Padding(
-                      //     padding:  EdgeInsets.only(
-                      //       left: 0.0,
-                      //       right: 20.w,
-                      //       top: 0.h
-                      //     ),
-                      //     child:new Icon(
-                      //       Icons.chevron_right,
-                      //       color: Colors.grey,
-                      //     )
-                      // ),
+                      Padding(
+                          padding:  EdgeInsets.only(
+                            left: 0.0,
+                            right: 30.w,
+                            top: 0.h,
+                            bottom: 150.h
+                          ),
+                          child: GestureDetector(
+                            onTap: (){
+                              Navigator.pushNamed(context, UnitRouter.setting);
+                            },
+                            child: Container(
+                              width: 50.h,
+                              height: 50.h,
+                              //margin: EdgeInsets.fromLTRB(1.w, 5.h, 5.w, 0.h),
+                              child:Lottie.asset('assets/packages/lottie_flutter/6547-gear.json'),
+                            ),
+                          ),
+
+                      ),
+
                     ],
                   ),
                 ],

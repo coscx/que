@@ -7,13 +7,19 @@ import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/login/login_page.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('应用设置'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0, //去掉Appbar底部阴影
+        title: Text('应用设置',style: TextStyle(color: Colors.black, fontSize: 48.sp,fontWeight: FontWeight.normal)),
       ),
       body: ListView(
         children: <Widget>[
@@ -36,16 +42,16 @@ class SettingPage extends StatelessWidget {
             trailing: _nextIcon(context),
             onTap: () => Navigator.of(context).pushNamed(UnitRouter.font_setting),
           ),
-          Divider(),
-          ListTile(
-            leading: Icon(
-              TolyIcon.icon_item,
-              color: Theme.of(context).primaryColor,
-            ),
-            title: Text('item样式设置'),
-            trailing: _nextIcon(context),
-            onTap: () => Navigator.of(context).pushNamed(UnitRouter.item_style_setting),
-          ),
+          // Divider(),
+          // ListTile(
+          //   leading: Icon(
+          //     TolyIcon.icon_item,
+          //     color: Theme.of(context).primaryColor,
+          //   ),
+          //   title: Text('item样式设置'),
+          //   trailing: _nextIcon(context),
+          //   onTap: () => Navigator.of(context).pushNamed(UnitRouter.item_style_setting),
+          // ),
           Divider(),
           ListTile(
             leading: Icon(
