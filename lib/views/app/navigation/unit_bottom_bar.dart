@@ -180,10 +180,15 @@ class _UnitBottomBarState extends State<UnitBottomBar> with SingleTickerProvider
 
 
 
-        ):SvgPicture.asset(
-              i==0?"assets/packages/images/tab_msg.svg":"assets/packages/images/tab_discovery.svg",
+        ):i==0?SvgPicture.asset(
+              "assets/packages/images/tab_msg.svg",
         color: Colors.black87,
-        ))
+        ):SvgPicture.asset(
+              "assets/packages/images/tab_discovery.svg",
+              color: Colors.black87,
+            )
+
+            )
 
         ))),
       ),
