@@ -27,7 +27,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'background.dart';
-import 'package:flutter_qr_reader/flutter_qr_reader.dart';
+//import 'package:flutter_qr_reader/flutter_qr_reader.dart';
 
 class SortCondition {
   String name;
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage>
   GZXDropdownMenuController _dropdownMenuController =
       GZXDropdownMenuController();
   GlobalKey _stackKey = GlobalKey();
-  QrReaderViewController _controller;
+  //QrReaderViewController _controller;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   bool _showPop = false;

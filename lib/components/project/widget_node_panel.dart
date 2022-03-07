@@ -5,7 +5,7 @@ import 'package:flutter_geen/app/res/toly_icon.dart';
 import 'package:flutter_geen/components/permanent/circle.dart';
 import 'package:flutter_geen/components/permanent/code/code_widget.dart';
 import 'package:flutter_geen/components/permanent/panel.dart';
-import 'package:share/share.dart';
+
 import 'package:toggle_rotate/toggle_rotate.dart';
 
 import '../permanent/feedback_widget.dart';
@@ -145,7 +145,7 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
 
   //执行分享
   _doShare() {
-    Share.share(widget.code);
+    //Share.share(widget.code);
   }
 
   // 折叠代码面板

@@ -35,7 +35,7 @@ class MyFlow extends StatelessWidget  {
             color: Colors.white,
             child: Column(
                 children: <Widget>[
-                  _listTableHeader(),
+                  //_listTableHeader(),
                   _listTableInfo(context,liveData),
                 ]
             ),

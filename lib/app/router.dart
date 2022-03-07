@@ -115,8 +115,8 @@ class UnitRouter {
         return Right2LeftRouter(child: VersionInfo());
       case issues_point:
         return Right2LeftRouter(child: IssuesPointPage());
-      case qr_view:
-        return Right2LeftRouter(child: ScanView());
+      // case qr_view:
+      //   return Right2LeftRouter(child: ScanView());
       case login:
         return Right2LeftRouter(child: LoginPage());
       case baidu_map:

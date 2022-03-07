@@ -54,7 +54,7 @@ class GlobalState extends Equatable {
     this.bar3 =0,
     this.bar4 =0,
     this.creditId ="",
-    this.indexFlowPage =0
+    this.indexFlowPage =1
   });
 
   @override

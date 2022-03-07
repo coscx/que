@@ -130,6 +130,7 @@ class _FlowPageState extends State<FlowPage>
         BlocProvider.of<FlowBloc>(context).state.props.elementAt(0);
     var currentPage = BlocProvider.of<GlobalBloc>(context).state.indexFlowPage;
     BlocProvider.of<GlobalBloc>(context).add(EventIndexFlowPage(currentPage));
+    currentPage++;
     var result = await IssuesApi.getFlowData(currentPage);
     if (result['code'] == 200) {
     } else {
