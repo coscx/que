@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:city_pickers/city_pickers.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/components/permanent/circle.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
 import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_picker/Picker.dart';
@@ -34,6 +36,7 @@ import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:flutter_geen/views/items/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
+
 class WidgetDetailPage extends StatefulWidget {
 
 
@@ -47,6 +50,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   String memberId ;
   int connectStatus =4;
   int canEdit = 0;
+  String call ="";
   Map<String,dynamic>  userDetail;
   final List<ShareOpt> list = [
     ShareOpt(title:'微信', img:'assets/packages/images/login_wechat.svg',shareType:ShareType.SESSION,doAction:(shareType,shareInfo)async{
@@ -249,7 +253,24 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             //         list: list,
             //       );
             //     });
-            _makePhoneCall("15666035163");
+            //_makePhoneCall("15666035163");
+           // PhotoShareBottomSheet();
+            showAdaptiveActionSheet(
+
+              //bottomSheetColor: Colors.green,
+              context: context,
+              title:  Text('请选择',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal)),
+
+              actions: <BottomSheetAction>[
+                BottomSheetAction(title:  Text('查看号码',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal)), onPressed: () {}),
+                BottomSheetAction(title:  Text('拨打电话',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal)), onPressed: () {
+                  _makePhoneCall(call);
+                  Navigator.of(context).pop();
+
+                }),
+              ],
+              cancelAction: CancelAction(title:  Text('取消',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal))),// onPressed parameter is optional by default will dismiss the ActionSheet
+            );
           }
       ));
   Widget _buildCollectButton( BuildContext context) {
@@ -322,6 +343,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
     var info = userdetails['info'];
     canEdit= userdetails['can_edit'];
+    call = info['mobile'];
     userDetail=info;
     List<dynamic> connectList = connectLists['data'];
     List<dynamic> appointList = appointLists['data'];

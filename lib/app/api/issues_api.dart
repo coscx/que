@@ -51,7 +51,7 @@ class IssuesApi {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
-    var data={'name':keyWord,'currentPage':page,'status':"all",'is_passive':"all","store_id":1,"pageSize":20,'gender':sex};
+    var data={'name':keyWord,'currentPage':page,'status':"all",'is_passive':"all","pageSize":20,'gender':sex};
     try {
     Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
     return rep.data;

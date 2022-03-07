@@ -268,8 +268,6 @@ class MyFlow extends StatelessWidget  {
                   ),
                 ),
 
-
-
                 Container(
                   width: ScreenUtil().screenWidth/2 -50.w,
                   color: Colors.transparent,

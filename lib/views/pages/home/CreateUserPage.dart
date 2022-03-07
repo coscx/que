@@ -124,10 +124,20 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         children: <Widget>[
                           Hero(
                             tag: "topContainer",
-                            child: Material(
-                              type: MaterialType.transparency,
+                            child: Container(
+                              padding:  EdgeInsets.only(top: 0.h, left: 25.w, right: 25.w,bottom: 10.h),
+                             // type: MaterialType.transparency,
                               child: SingleChildScrollView(
-                                child: MyContainerTile(
+                                child: Container(
+                                  decoration: new BoxDecoration(
+//背景
+                                    color: Color.fromRGBO(255, 255, 255, 50),
+                                    //设置四周圆角 角度
+                                    borderRadius: BorderRadius.all(Radius.circular(20.h)),
+                                    //设置四周边框
+                                    //border: new Border.all(width: 1, color: Colors.red),
+                                  ),
+                                  padding:  EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w,bottom: 10.h),
                                   child: Column(
                                     children: <Widget>[
                                       //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildCredit),
@@ -138,7 +148,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                         child:  TextField(
                                             focusNode:_textFieldNode ,
                                             autofocus: false,
-                                            style: TextStyle(color: Colors.black, fontSize: 38.sp),
+                                            style: TextStyle(color: Colors.black, fontSize: 30.sp),
                                             controller: _usernameController,
                                             keyboardType: TextInputType.text,
                                             decoration: InputDecoration(
@@ -162,7 +172,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                               child:  TextField(
                                                   focusNode:_mobileFieldNode ,
                                                   autofocus: false,
-                                                  style: TextStyle(color: Colors.black, fontSize: 38.sp),
+                                                  style: TextStyle(color: Colors.black, fontSize: 30.sp),
                                                   controller: _mobileController,
                                                   keyboardType: TextInputType.text,
                                                   decoration: InputDecoration(
@@ -185,7 +195,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                           Expanded(
                                             child: Container(
                                               margin: EdgeInsets.symmetric(
-                                                  vertical: 12, horizontal: 6),
+                                                  vertical: 18.h, horizontal: 10.w),
                                               child: Material(
                                                 color: selectedGender ==
                                                         Gender.male
@@ -208,7 +218,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                                       style:
                                                       TextStyle(
                                                         fontFamily: "Poppins",
-                                                        fontWeight: FontWeight.w600,
+                                                        fontWeight: FontWeight.w100,
                                                         decoration: TextDecoration.none,
                                                         fontSize: 40.sp,
                                                         color: selectedGender ==
@@ -258,7 +268,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                                       style:
                                                       TextStyle(
                                                         fontFamily: "Poppins",
-                                                        fontWeight: FontWeight.w600,
+                                                        fontWeight: FontWeight.w100,
                                                         decoration: TextDecoration.none,
                                                         fontSize: 40.sp,
                                                         color: selectedGender ==
@@ -300,10 +310,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                             showPickerArray(context,[_fromLevel],[from],"from","",true);
                                           } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.whatshot,"来访渠道",_fromLevel[from],true)),
                                       Padding(
-                                        padding: EdgeInsets.only(top: 20.h, bottom: 15.h,left: 50.h,right: 50.h),
+                                        padding: EdgeInsets.only(top: 20.h, bottom: 270.h,left: 10.h,right: 10.h),
                                         child: Container(
-                                          width: ScreenUtil().screenWidth*0.8,
-                                          height: 90.h,
+                                          width: ScreenUtil().screenWidth*0.89,
+                                          height: 70.h,
                                           child: RaisedButton(
                                             elevation: 0,
                                             shape: RoundedRectangleBorder(
@@ -314,7 +324,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                               Navigator.of(context).pop();
                                             },
                                             child: Text("提交",
-                                                style: TextStyle(color: Colors.white, fontSize: 45.sp)),
+                                                style: TextStyle(color: Colors.white, fontSize: 40.sp)),
                                           ),
                                         ),
                                       ),
@@ -771,14 +781,14 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         Icon(
                           icon,
                           size: 50.sp,
-                          color: Colors.black54,
+                          color: Colors.blue,
                         ),
 
                         Container(
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 40.sp, color: Colors.grey,fontWeight: FontWeight.w900),
+                            style: TextStyle(fontSize: 35.sp, color: Colors.blue,fontWeight: FontWeight.w100),
                           ),
                         ),
                         SizedBox(
@@ -813,7 +823,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                   child: Text(
                                     "2021-01-12 15:35:30",
                                     style: TextStyle(
-                                        fontSize: 14.sp, color: Colors.grey),
+                                        fontSize: 24.sp, color: Colors.blue),
                                   )),
 
 
@@ -863,14 +873,14 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         Icon(
                           icon,
                           size: 50.sp,
-                          color: Colors.black54,
+                          color: Colors.blue,
                         ),
 
                         Container(
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 40.sp, color: Colors.grey,fontWeight: FontWeight.w900),
+                            style: TextStyle(fontSize: 35.sp, color: Colors.blue,fontWeight: FontWeight.w100),
                           ),
                         ),
                         SizedBox(
@@ -884,7 +894,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 answer,
                                 maxLines: 20,
                                 style: TextStyle(
-                                    fontSize: 40.sp, color: color),
+                                    fontSize: 35.sp, color: color),
                               ),
                             )),
                       ]),

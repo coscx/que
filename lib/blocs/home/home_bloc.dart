@@ -10,11 +10,8 @@ import 'dart:convert';
 import 'home_event.dart';
 import 'home_state.dart';
 
-
-
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final WidgetRepository repository;
-
   HomeBloc({@required this.repository});
 
   @override
