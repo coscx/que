@@ -115,6 +115,7 @@ flutter:
   assets:
     - images/
     - assets/images/
+    - assets/images/num/
     - assets/images/default/
     - assets/images/face/
     - assets/images/figure/

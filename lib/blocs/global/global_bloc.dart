@@ -77,6 +77,11 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
       page++;
       yield state.copyWith(indexPhotoPage: page);
     }
+    if (event is EventIndexFlowPage) {
+      var page = event.page;
+      page++;
+      yield state.copyWith(indexFlowPage: page);
+    }
     // 首页图片审核分页当前第几页
     if (event is EventSearchPhotoPage) {
       var page = event.page;
@@ -102,6 +107,9 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     // 首页图片审核分页当前第几页
     if (event is EventResetIndexPhotoPage) {
       yield state.copyWith(indexPhotoPage: 1);
+    }
+    if (event is EventResetIndexFlowPage) {
+      yield state.copyWith(indexFlowPage: 1);
     }
     if (event is EventSetIndexSex) {
       var sex = event.sex;

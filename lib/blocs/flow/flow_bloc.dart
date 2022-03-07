@@ -7,34 +7,34 @@ import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/utils/convert.dart';
 import 'package:flutter_geen/repositories/itf/widget_repository.dart';
 import 'dart:convert';
-import 'home_event.dart';
-import 'home_state.dart';
+import 'flow_event.dart';
+import 'flow_state.dart';
 
 
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
+class FlowBloc extends Bloc<FlowEvent, FlowState> {
   final WidgetRepository repository;
 
-  HomeBloc({@required this.repository});
+  FlowBloc({@required this.repository});
 
   @override
-  HomeState get initialState => WidgetsLoading();
+  FlowState get initialState => FlowWidgetsLoading();
 
   Color get activeHomeColor {
 
-    if (state is WidgetsLoaded) {
+    if (state is FlowWidgetsLoaded) {
       return Colors.grey;
     }
     return Color(Cons.tabColors[0]);
   }
 
   @override
-  Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    if (event is EventTabTap) {
+  Stream<FlowState> mapEventToState(FlowEvent event) async* {
+    if (event is FlowEventTabTap) {
 
       yield* _mapLoadWidgetToState();
     }
-    if (event is EventCheckUser) {
+    if (event is EventFlowCheckUser) {
 
       var user=event.user;
       List<dynamic> users =state.props.elementAt(2);
@@ -71,15 +71,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         }
 
-        yield CheckUserSuccess(photos: newUsers,Reason:reason);
+        yield FlowCheckUserSuccess(photos: newUsers,Reason:reason);
       } catch (err) {
         print(err);
-        yield WidgetsLoadFailed();
+        yield FlowWidgetsLoadFailed();
       }
 
     }
 
-    if (event is EventResetCheckUser) {
+    if (event is EventFlowResetCheckUser) {
 
       var user=event.user;
       List<dynamic> users =state.props.elementAt(2);
@@ -104,15 +104,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
 
 
-        yield CheckUserSuccess(photos: newUsers,Reason:reason);
+        yield FlowCheckUserSuccess(photos: newUsers,Reason:reason);
       } catch (err) {
         print(err);
-        yield WidgetsLoadFailed();
+        yield FlowWidgetsLoadFailed();
       }
 
     }
 
-    if (event is EventDelImg) {
+    if (event is EventFlowDelImg) {
 
       var img=event.user;
       List<dynamic> oldUsers = state.props.elementAt(2);
@@ -139,37 +139,37 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         } else{
 
         }
-        yield DelImgSuccess(photos: newUsers);
+        yield FlowDelImgSuccess(photos: newUsers);
       } catch (err) {
         print(err);
-        yield WidgetsLoadFailed();
+        yield FlowWidgetsLoadFailed();
       }
 
     }
-    if (event is EventGetCreditId) {
+    if (event is EventFlowGetCreditId) {
 
 
       try {
 
-        yield DelImgSuccess(photos: state.props.elementAt(2));
+        yield FlowDelImgSuccess(photos: state.props.elementAt(2));
       } catch (err) {
         print(err);
-        yield WidgetsLoadFailed();
+        yield FlowWidgetsLoadFailed();
       }
 
     }
-    if (event is EventLoadMore) {
+    if (event is EventFlowLoadMore) {
        var data =event.user01;
        var count = state.props.elementAt(1);
-      yield WidgetsLoaded(photos: data,count: count);
+      yield FlowWidgetsLoaded(photos: data,count: count);
 
     }
-    if (event is EventFresh) {
+    if (event is EventFlowFresh) {
       try {
 
-        var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType,event.selectItems);
+        var result= await IssuesApi.getFlowData(1);
         if  (result['message']=="Unauthenticated.") {
-          yield Unauthenticated();
+          yield FlowUnauthenticated();
         }else{
           if  (result['code']==200){
 
@@ -179,20 +179,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           }
         }
 
-        yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString() );
+        yield FlowWidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString() );
 
       } catch (err) {
         print(err);
-        yield WidgetsLoadFailed();
+        yield FlowWidgetsLoadFailed();
       }
 
     }
-    if (event is EventSearchErpUser) {
+    if (event is EventFlowSearchErpUser) {
       try {
 
-        var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType,event.selectItems);
+        var result= await IssuesApi.getFlowData(1);
         if  (result['message']=="Unauthenticated.") {
-          yield Unauthenticated();
+          yield FlowUnauthenticated();
         }else{
           if  (result['code']==200){
 
@@ -202,23 +202,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           }
         }
 
-        yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
+        yield FlowWidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
 
       } catch (err) {
         print(err);
-        yield WidgetsLoadFailed();
+        yield FlowWidgetsLoadFailed();
       }
 
     }
   }
 
-  Stream<HomeState> _mapLoadWidgetToState() async* {
-    yield WidgetsLoading();
+  Stream<FlowState> _mapLoadWidgetToState() async* {
+    yield FlowWidgetsLoading();
     try {
 
       var result= await IssuesApi.getPhoto('', '1','1','0');
       if  (result['message']=="Unauthenticated.") {
-        yield Unauthenticated();
+        yield FlowUnauthenticated();
       }else{
         if  (result['code']==200){
 
@@ -229,11 +229,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
 
 
-      yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
+      yield FlowWidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
 
     } catch (err) {
       print(err);
-      yield WidgetsLoadFailed();
+      yield FlowWidgetsLoadFailed();
     }
   }
 

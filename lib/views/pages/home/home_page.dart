@@ -28,58 +28,67 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'background.dart';
 import 'package:flutter_qr_reader/flutter_qr_reader.dart';
+
 class SortCondition {
   String name;
   bool isSelected;
   int id;
-  bool all ;
-  SortCondition({this.name, this.id,this.isSelected,this.all}) {}
+  bool all;
+
+  SortCondition({this.name, this.id, this.isSelected, this.all}) {}
 }
+
 class StoreSelect {
   String name;
   int id;
   bool isSelected;
   int city;
-  StoreSelect({this.name, this.id,this.city,this.isSelected});
+
+  StoreSelect({this.name, this.id, this.city, this.isSelected});
 }
+
 class CitySelect {
   String name;
   int id;
   bool isSelected;
 
-  CitySelect({this.name, this.id,this.isSelected});
+  CitySelect({this.name, this.id, this.isSelected});
 }
 
 var _scaffoldKey = new GlobalKey<ScaffoldState>();
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   List<String> _dropDownHeaderItemStrings1 = ['全城', '品牌', '价格低', '筛选'];
   List<SortCondition> _brandSortConditions = [];
   List<SortCondition> _distanceSortConditions = [];
   SortCondition _selectBrandSortCondition;
   SortCondition _selectDistanceSortCondition;
-  GZXDropdownMenuController _dropdownMenuController = GZXDropdownMenuController();
+  GZXDropdownMenuController _dropdownMenuController =
+      GZXDropdownMenuController();
   GlobalKey _stackKey = GlobalKey();
   QrReaderViewController _controller;
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   bool _showPop = false;
   bool _showFilter = false;
   bool _showSort = false;
-  bool _showRight =  false;
-  bool _showAge =  false;
-  int _showAgeMin =  16;
-  int _showAgeMax =  70;
-  bool _visible =  false;
+  bool _showRight = false;
+  bool _showAge = false;
+  int _showAgeMin = 16;
+  int _showAgeMax = 70;
+  bool _visible = false;
   int _visibleCount = 0;
   bool _showChip = false;
-  int _selectedIndex=999;
-  String serveType ="1";
-  String totalCount ="";
-  String title="客户管理";
+  int _selectedIndex = 999;
+  String serveType = "1";
+  String totalCount = "";
+  String title = "客户管理";
   static List<SortModel> _leftWidgets = [
     SortModel(name: "服务中", isSelected: true, code: "2"),
     SortModel(name: "跟进中", isSelected: false, code: "1"),
@@ -88,15 +97,16 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   ];
   SortModel _leftSelectedModel = _leftWidgets[0];
   List<String> _dropDownHeaderItemStrings = [_leftWidgets[1].name, '筛选'];
-  SearchParamList searchParamList= SearchParamList(list: []);
-  List<SelectItem> selectItems =  <SelectItem>[];
+  SearchParamList searchParamList = SearchParamList(list: []);
+  List<SelectItem> selectItems = <SelectItem>[];
+
   void _showPopView(int select) {
     setState(() {
-      if (_selectedIndex >0)
-      _selectedIndex=select;
+      if (_selectedIndex > 0) _selectedIndex = select;
       _showPop = (_showFilter || _showSort);
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -108,38 +118,53 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
       //_onRefresh();
     });
   }
+
   @override
   void dispose() {
     _refreshController?.dispose();
     super.dispose();
   }
 
-
   // 下拉刷新
   void _onRefresh() async {
     BlocProvider.of<GlobalBloc>(context).add(EventResetIndexPhotoPage());
     //BlocProvider.of<GlobalBloc>(context).add((EventSetIndexNum()));
-    var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-    var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-    BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
+    var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+    var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+    BlocProvider.of<HomeBloc>(context).add(EventFresh(
+        sex,
+        mode,
+        searchParamList,
+        _showAge,
+        _showAgeMax,
+        _showAgeMin,
+        serveType,
+        selectItems));
     _refreshController.refreshCompleted();
   }
 
   // 上拉加载
   void _onLoading() async {
-
-    List<dynamic> oldUsers = BlocProvider.of<HomeBloc>(context).state.props.elementAt(0);
-    var currentPage =BlocProvider.of<GlobalBloc>(context).state.indexPhotoPage;
-    var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-    var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+    List<dynamic> oldUsers =
+        BlocProvider.of<HomeBloc>(context).state.props.elementAt(0);
+    var currentPage = BlocProvider.of<GlobalBloc>(context).state.indexPhotoPage;
+    var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+    var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
     BlocProvider.of<GlobalBloc>(context).add(EventIndexPhotoPage(currentPage));
-    var result= await IssuesApi.searchErpUser('', (++currentPage).toString(),sex.toString(),mode.toString(),searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems);
-    if  (result['code']==200){
-
-    } else{
-
-    }
-    List<dynamic> newUsers =[];
+    var result = await IssuesApi.searchErpUser(
+        '',
+        (++currentPage).toString(),
+        sex.toString(),
+        mode.toString(),
+        searchParamList,
+        _showAge,
+        _showAgeMax,
+        _showAgeMin,
+        serveType,
+        selectItems);
+    if (result['code'] == 200) {
+    } else {}
+    List<dynamic> newUsers = [];
     oldUsers.forEach((element) {
       newUsers.add(element);
     });
@@ -147,6 +172,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     BlocProvider.of<HomeBloc>(context).add(EventLoadMore(newUsers));
     _refreshController.loadComplete();
   }
+
   Future _scan() async {
     await Permission.camera.request();
 
@@ -159,350 +185,375 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
         print(barcode);
         BotToast.showLoading();
         //BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(barcode));
-        var result= await IssuesApi.getUserDetail('a87ca69e-7092-493e-9f13-2955aeaf2d0f');
-        if  (result['code']==200){
-          _userDetail(context,result['data']);
-        } else{
-          _createUser(context,null);
+        var result = await IssuesApi.getUserDetail(
+            'a87ca69e-7092-493e-9f13-2955aeaf2d0f');
+        if (result['code'] == 200) {
+          _userDetail(context, result['data']);
+        } else {
+          _createUser(context, null);
         }
 
         BotToast.closeAllLoading();
-
       }
-
-    }
-    );
-
+    });
   }
-  _userDetail(BuildContext context,Map<String ,dynamic> user) {
-    showDialog(
-        context: context,
-        builder: (ctx) => UserDetailDialog(user)
 
-    );
-
-
-
+  _userDetail(BuildContext context, Map<String, dynamic> user) {
+    showDialog(context: context, builder: (ctx) => UserDetailDialog(user));
   }
-  _createUser(BuildContext context,Map<String,dynamic> img) {
+
+  _createUser(BuildContext context, Map<String, dynamic> img) {
     showDialog(
         context: context,
         builder: (ctx) => Dialog(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.w))),
-          child: Container(
-            width: 50.w,
-            child: DeleteCategoryDialog(
-              title: '未查到数据',
-              content: '是否录入？',
-              onSubmit: () {
-                Future.delayed(Duration(milliseconds: 500)).then((e) async {
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.w))),
+              child: Container(
+                width: 50.w,
+                child: DeleteCategoryDialog(
+                  title: '未查到数据',
+                  content: '是否录入？',
+                  onSubmit: () {
+                    Future.delayed(Duration(milliseconds: 500)).then((e) async {
+                      Navigator.pushNamed(context, UnitRouter.create_user_page);
+                    });
+                    Navigator.of(context).pop();
+                    //BlocProvider.of<DetailBloc>(context).add(EventDelDetailImg(img,detail['info']));
 
-                  Navigator.pushNamed(context, UnitRouter.create_user_page);
-
-                });
-                Navigator.of(context).pop();
-                //BlocProvider.of<DetailBloc>(context).add(EventDelDetailImg(img,detail['info']));
-
-                //
-              },
-            ),
-          ),
-        ));
+                    //
+                  },
+                ),
+              ),
+            ));
   }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     return Theme(
         data: ThemeData(
-        appBarTheme: AppBarTheme.of(context).copyWith(
-      brightness: Brightness.light,
-    ),
-    ),
-    child:Scaffold(
-      key: _scaffoldKey,
-        endDrawer: GZXFilterGoodsPage(selectItems: [],),
-        appBar: AppBar(
-          titleSpacing:40.w,
-          leadingWidth: 0,
-          title:  Row(
-            children: [
-              Text(title,style: TextStyle(color: Colors.black, fontSize: 48.sp,fontWeight: FontWeight.bold)),
-              totalCount==""?Container(): Text('      共:',style: TextStyle(color: Colors.black, fontSize: 30.sp,fontWeight: FontWeight.w200)),
-              Text(totalCount,style: TextStyle(color: Colors.redAccent, fontSize: 30.sp,fontWeight: FontWeight.normal)),
-            ],
+          appBarTheme: AppBarTheme.of(context).copyWith(
+            brightness: Brightness.light,
           ),
-          //leading:const Text('Demo',style: TextStyle(color: Colors.black, fontSize: 15)),
-          backgroundColor: Colors.white,
-          elevation: 0, //去掉Appbar底部阴影
-          actions:<Widget> [
-
-            Container(
-
-              child: IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.black87,
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, UnitRouter.search);
-                },
-              ),
-            ),SizedBox(width: 20),
-            Container(
-              height: 20,
-              width: 20,
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                icon: Icon(
-                  Icons.crop_free,
-                  size: 24.0,
-                  color: Colors.black,
-                ),
-                onPressed: (){
-                  //Navigator.of(context).pushNamed(UnitRouter.qr_view);
-                  _scan();
-                  //FlutterAdPlugin.jumpAdList;
-                },
-              ),
-            ),
-            SizedBox(
-              width: 60.w,
-            )
-          ],
-
-         //bottom: bar(),
         ),
-        body:  BlocListener<HomeBloc, HomeState>(
-        listener: (ctx, state) {
-      if (state is CheckUserSuccess) {
-
-        BlocProvider.of<GlobalBloc>(context).add((EventSetIndexNum()));
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text('审核成功'+state.Reason),
-          backgroundColor: Colors.green,
-        ));
-
-      }
-      if (state is DelImgSuccess) {
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text('删除成功'),
-          backgroundColor: Colors.blue,
-        ));
-
-      }
-      if (state is Unauthenticated) {
-        Navigator.of(context).pushReplacementNamed(UnitRouter.login);
-      }
-
-      if (state is WidgetsLoaded) {
-       var data =state.photos;
-      // print(data.toString());
-       var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-       if(mode == 0){
-         title= "客户管理";
-
-       }
-       if(mode == 1){
-         title= "缔结良缘库";
-
-       }
-       if(mode == 2){
-         title= "我的客户";
-
-       }
-       if(mode == 3){
-         title= "销售公海";
-
-       }
-       //setState(() {
-        totalCount =state.count;
-       //});
-      }
-    },
-    child:Container(
-      decoration: new BoxDecoration(
-//背景
-        color: Color.fromRGBO(247, 247, 247, 100),
-        //设置四周圆角 角度
-        borderRadius: BorderRadius.all(Radius.circular(0.h)),
-
-        //设置四周边框
-        //border: new Border.all(width: 1, color: Colors.red),
-      ),
-      child: BlocBuilder<HomeBloc, HomeState>(builder: (ctx, state) {
-        return Stack(
-              children: <Widget>[
-                //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
-
+        child: Scaffold(
+            key: _scaffoldKey,
+            endDrawer: GZXFilterGoodsPage(
+              selectItems: [],
+            ),
+            appBar: AppBar(
+              titleSpacing: 40.w,
+              leadingWidth: 0,
+              title: Row(
+                children: [
+                  Text(title,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 48.sp,
+                          fontWeight: FontWeight.bold)),
+                  totalCount == ""
+                      ? Container()
+                      : Text('      共:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30.sp,
+                              fontWeight: FontWeight.w200)),
+                  Text(totalCount,
+                      style: TextStyle(
+                          color: Colors.redAccent,
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.normal)),
+                ],
+              ),
+              //leading:const Text('Demo',style: TextStyle(color: Colors.black, fontSize: 15)),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              //去掉Appbar底部阴影
+              actions: <Widget>[
                 Container(
-                  padding:  EdgeInsets.only(top: 150.h),
-                  child: ScrollConfiguration(
-                      behavior: DyBehaviorNull(),
-                      child:
-                      SmartRefresher(
-                        enablePullDown: true,
-                        enablePullUp: true,
-                        header: DYrefreshHeader(),
-                        footer: DYrefreshFooter(),
-                        controller: _refreshController,
-                        onRefresh: _onRefresh,
-                        onLoading: _onLoading,
-                        child:  CustomScrollView(
-                          physics: BouncingScrollPhysics(),
-                          slivers: <Widget>[
-                            // Container(
-                            //   child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
-                            // ),
-
-                        SliverToBoxAdapter(
-                          child: Row(
-                            children: [
-                              // Container(
-                              //   height: 50.h,
-                              //   padding:  EdgeInsets.only(left: 35.w,top: 8.h),
-                              //   child: Text('筛选条件:'
-                              //
-                              //   ),
-                              // ),
-                             Visibility(
-                               visible: _visible,
-                               child: Container(
-                                  height: 50.h,
-                                  width: 700.w,
-                                  padding:  EdgeInsets.only(left: 30.w),
-                                  child: ListView(
-                                    shrinkWrap: true ,
-                                      scrollDirection: Axis.horizontal,
-                                      children:<Widget>  [
-                                        ...buildLeftRightWidget(),
-                                      _showAge?buildAgeWidget():Container()
-                                      ],
-                                    ),
-                                ),
-                             ),
-                            ],
-                          )),
-
-                            _buildContent(ctx, state),
-                          ],
-                        ),
-                      )
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.black87,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, UnitRouter.search);
+                    },
                   ),
                 ),
-                buildPopView(),
+                SizedBox(width: 20),
                 Container(
-                  padding: EdgeInsets.only(top: 70.h),
-                  child:  BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHead),
-
+                  height: 20,
+                  width: 20,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.crop_free,
+                      size: 24.0,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      //Navigator.of(context).pushNamed(UnitRouter.qr_view);
+                      _scan();
+                      //FlutterAdPlugin.jumpAdList;
+                    },
+                  ),
                 ),
-                bar(selectItems: selectItems,),
-
+                SizedBox(
+                  width: 60.w,
+                )
               ],
-            );
-      }
-      ),
-    )
-        )
-    ));
+
+              //bottom: bar(),
+            ),
+            body: BlocListener<HomeBloc, HomeState>(
+                listener: (ctx, state) {
+                  if (state is CheckUserSuccess) {
+                    BlocProvider.of<GlobalBloc>(context)
+                        .add((EventSetIndexNum()));
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text('审核成功' + state.Reason),
+                      backgroundColor: Colors.green,
+                    ));
+                  }
+                  if (state is DelImgSuccess) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text('删除成功'),
+                      backgroundColor: Colors.blue,
+                    ));
+                  }
+                  if (state is Unauthenticated) {
+                    Navigator.of(context)
+                        .pushReplacementNamed(UnitRouter.login);
+                  }
+
+                  if (state is WidgetsLoaded) {
+                    var data = state.photos;
+                    // print(data.toString());
+                    var mode = BlocProvider.of<GlobalBloc>(context)
+                        .state
+                        .currentPhotoMode;
+                    if (mode == 0) {
+                      title = "客户管理";
+                    }
+                    if (mode == 1) {
+                      title = "缔结良缘库";
+                    }
+                    if (mode == 2) {
+                      title = "我的客户";
+                    }
+                    if (mode == 3) {
+                      title = "销售公海";
+                    }
+                    //setState(() {
+                    totalCount = state.count;
+                    //});
+                  }
+                },
+                child: Container(
+                  decoration: new BoxDecoration(
+//背景
+                    color: Color.fromRGBO(247, 247, 247, 100),
+                    //设置四周圆角 角度
+                    borderRadius: BorderRadius.all(Radius.circular(0.h)),
+
+                    //设置四周边框
+                    //border: new Border.all(width: 1, color: Colors.red),
+                  ),
+                  child:
+                      BlocBuilder<HomeBloc, HomeState>(builder: (ctx, state) {
+                    return Stack(
+                      children: <Widget>[
+                        //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
+
+                        Container(
+                          padding: EdgeInsets.only(top: 150.h),
+                          child: ScrollConfiguration(
+                              behavior: DyBehaviorNull(),
+                              child: SmartRefresher(
+                                enablePullDown: true,
+                                enablePullUp: true,
+                                header: DYrefreshHeader(),
+                                footer: DYrefreshFooter(),
+                                controller: _refreshController,
+                                onRefresh: _onRefresh,
+                                onLoading: _onLoading,
+                                child: CustomScrollView(
+                                  physics: BouncingScrollPhysics(),
+                                  slivers: <Widget>[
+                                    // Container(
+                                    //   child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
+                                    // ),
+
+                                    SliverToBoxAdapter(
+                                        child: Row(
+                                      children: [
+                                        // Container(
+                                        //   height: 50.h,
+                                        //   padding:  EdgeInsets.only(left: 35.w,top: 8.h),
+                                        //   child: Text('筛选条件:'
+                                        //
+                                        //   ),
+                                        // ),
+                                        Visibility(
+                                          visible: _visible,
+                                          child: Container(
+                                            height: 50.h,
+                                            width: 700.w,
+                                            padding:
+                                                EdgeInsets.only(left: 30.w),
+                                            child: ListView(
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.horizontal,
+                                              children: <Widget>[
+                                                ...buildLeftRightWidget(),
+                                                _showAge
+                                                    ? buildAgeWidget()
+                                                    : Container()
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+
+                                    _buildContent(ctx, state),
+                                  ],
+                                ),
+                              )),
+                        ),
+                        buildPopView(),
+                        Container(
+                          padding: EdgeInsets.only(top: 70.h),
+                          child: BlocBuilder<GlobalBloc, GlobalState>(
+                              builder: _buildHead),
+                        ),
+                        bar(
+                          selectItems: selectItems,
+                        ),
+                      ],
+                    );
+                  }),
+                ))));
   }
+
   Widget getLeftRightWidget() {
-
-    return Container(padding:  EdgeInsets.only(right: 15.w),child:RawChip(
-      label: Text('老孟'),
-      onDeleted: (){
-        print('onDeleted');
-      },
-      deleteIcon: Icon(Icons.delete),
-      deleteIconColor: Colors.red,
-      deleteButtonTooltipMessage: '删除',
-    ));
+    return Container(
+        padding: EdgeInsets.only(right: 15.w),
+        child: RawChip(
+          label: Text('老孟'),
+          onDeleted: () {
+            print('onDeleted');
+          },
+          deleteIcon: Icon(Icons.delete),
+          deleteIconColor: Colors.red,
+          deleteButtonTooltipMessage: '删除',
+        ));
   }
+
   List<Widget> buildLeftRightWidget() {
-
-    var ll= searchParamList.list.where((element) =>  element.selected !=null)
+    var ll = searchParamList.list
+        .where((element) => element.selected != null)
         .map((e) {
-            if(e.selectName !=null){
-              _showChip=true;
-            }
-           return Container(padding:  EdgeInsets.only(right: 15.w,left: 1.w,top: 1.h,bottom: 1.h),child:RawChip(
-             label: Text(e.selectName==null?"0":e.selectName,style: TextStyle(color: Colors.black, fontSize: 30.sp),),
-             padding: EdgeInsets.only(left: 5.w,right: 5.w,top: 0.h,bottom: 5.h),
-             onDeleted: (){
-               //print('onDeleted');
-               //setState(() {
-                 deleteLeftRightWidget(e.selectName);
+      if (e.selectName != null) {
+        _showChip = true;
+      }
+      return Container(
+          padding:
+              EdgeInsets.only(right: 15.w, left: 1.w, top: 1.h, bottom: 1.h),
+          child: RawChip(
+            label: Text(
+              e.selectName == null ? "0" : e.selectName,
+              style: TextStyle(color: Colors.black, fontSize: 30.sp),
+            ),
+            padding:
+                EdgeInsets.only(left: 5.w, right: 5.w, top: 0.h, bottom: 5.h),
+            onDeleted: () {
+              //print('onDeleted');
+              //setState(() {
+              deleteLeftRightWidget(e.selectName);
               // });
-               var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-               var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-               BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
-             },
-             deleteIcon: Icon(Icons.delete),
-             deleteIconColor: Colors.red,
-             deleteButtonTooltipMessage: '删除',
-           ));
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+              var mode =
+                  BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+              BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
+                  searchParamList,
+                  selectItems,
+                  sex,
+                  mode,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType));
+            },
+            deleteIcon: Icon(Icons.delete),
+            deleteIconColor: Colors.red,
+            deleteButtonTooltipMessage: '删除',
+          ));
+    }).toList();
 
-
-       }).toList();
-
-     return ll;
+    return ll;
   }
 
-   deleteLeftRightWidget(String code ) {
-     _visible=false;
-     _visibleCount=0;
-     searchParamList.list
-        .map((e) {
-      if(e.selectName ==code) {
-        e.selected=null;
-        e.selectName=null;
+  deleteLeftRightWidget(String code) {
+    _visible = false;
+    _visibleCount = 0;
+    searchParamList.list.map((e) {
+      if (e.selectName == code) {
+        e.selected = null;
+        e.selectName = null;
         e.itemList.map((el) {
-          if(el.name ==code){
-             //el.isSelected =null;
-             el.isSelected = !el.isSelected;
+          if (el.name == code) {
+            //el.isSelected =null;
+            el.isSelected = !el.isSelected;
           }
           return el;
         }).toList();
         return e;
-      }else{
+      } else {
         return e;
       }
-
     }).toList();
 
-     searchParamList.list.map((e) {
-       if(e.selected !="" && e.selected !=null){
-         _visible=true;
-         _visibleCount++;
-       }
-
-     }).toList();
-
-
+    searchParamList.list.map((e) {
+      if (e.selected != "" && e.selected != null) {
+        _visible = true;
+        _visibleCount++;
+      }
+    }).toList();
   }
 
   Widget buildAgeWidget() {
+    return Container(
+        padding: EdgeInsets.only(right: 15.w),
+        child: RawChip(
+          label: Text(_showAgeMin.toString() + "-" + _showAgeMax.toString()),
+          onDeleted: () {
+            print('onDeleted');
+            _showAge = false;
+            if (_visibleCount == 0) {
+              _visible = false;
+            }
 
-    return Container(padding:  EdgeInsets.only(right: 15.w),child:RawChip(
-      label: Text(_showAgeMin.toString()+"-"+_showAgeMax.toString()),
-      onDeleted: (){
-        print('onDeleted');
-        _showAge =false;
-        if(_visibleCount ==0){
-          _visible=false;
-        }
-
-        var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-        var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-        BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
-
-      },
-      deleteIcon: Icon(Icons.delete),
-      deleteIconColor: Colors.red,
-      deleteButtonTooltipMessage: '删除',
-    ));
+            var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+            var mode =
+                BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+            BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
+                searchParamList,
+                selectItems,
+                sex,
+                mode,
+                _showAge,
+                _showAgeMax,
+                _showAgeMin,
+                serveType));
+          },
+          deleteIcon: Icon(Icons.delete),
+          deleteIconColor: Colors.red,
+          deleteButtonTooltipMessage: '删除',
+        ));
   }
 
   Widget buildPopView() {
@@ -512,11 +563,11 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             SearchParamList tempSearchParamList;
-            if (searchParamList!=null && searchParamList.list.length >0){
-              tempSearchParamList=searchParamList;
-            }else{
-              tempSearchParamList=snapshot.data as SearchParamList;
-              searchParamList =tempSearchParamList;
+            if (searchParamList != null && searchParamList.list.length > 0) {
+              tempSearchParamList = searchParamList;
+            } else {
+              tempSearchParamList = snapshot.data as SearchParamList;
+              searchParamList = tempSearchParamList;
             }
 
             return DropMenuRightWidget(
@@ -526,53 +577,59 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
               showAgeMin: _showAgeMin,
               clickCallBack:
                   (SearchParamModel pressModel, ParamItemModel pressItem) {
-                     searchParamList.list.map((e) {
-                      if (e.paramCode==pressModel.paramCode){
-                        if (pressItem.isSelected==true){
-                          e.selected=null;
-                          e.selectName=null;
-                        }else{
-                          e.selected=pressItem.code;
-                          e.selectName =pressItem.name;
-                        }
+                searchParamList.list.map((e) {
+                  if (e.paramCode == pressModel.paramCode) {
+                    if (pressItem.isSelected == true) {
+                      e.selected = null;
+                      e.selectName = null;
+                    } else {
+                      e.selected = pressItem.code;
+                      e.selectName = pressItem.name;
+                    }
 
-                        return e;
-                      }
-                    }).toList();
+                    return e;
+                  }
+                }).toList();
                 print('${pressItem.name}');
               },
-              clickSwith: (on , min,max){
-                _showAge=on;
-                _showAgeMax=max;
-                _showAgeMin=min;
+              clickSwith: (on, min, max) {
+                _showAge = on;
+                _showAgeMax = max;
+                _showAgeMin = min;
                 print(on);
                 print(min);
                 print(max);
               },
-
               sureFun: () {
-                var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
-                _visible=false;
-                _visibleCount=0;
+                var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+                var mode =
+                    BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
+                    searchParamList,
+                    selectItems,
+                    sex,
+                    mode,
+                    _showAge,
+                    _showAgeMax,
+                    _showAgeMin,
+                    serveType));
+                _visible = false;
+                _visibleCount = 0;
                 searchParamList.list.map((e) {
-                  if(e.selected!="" && e.selected !=null){
-                    _visible=true;
+                  if (e.selected != "" && e.selected != null) {
+                    _visible = true;
                     _visibleCount++;
                   }
-
                 }).toList();
-                if(_visibleCount==0){
-                  if(_showAge ==true){
-                    _visible=true;
-                  }else{
-                    _visible=false;
+                if (_visibleCount == 0) {
+                  if (_showAge == true) {
+                    _visible = true;
+                  } else {
+                    _visible = false;
                   }
-                }else{
-                  _visible=true;
+                } else {
+                  _visible = true;
                 }
-
 
                 print("sure click");
                 _showFilter = false;
@@ -596,15 +653,23 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
           print("select ${model.name}  ${model.code}");
 
           setState(() {
-            serveType= model.code;
+            serveType = model.code;
             _showSort = false;
             _showFilter = false;
-            var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-            if( mode== 2){
-              var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-              BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,sex,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
+            var mode =
+                BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+            if (mode == 2) {
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+              BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
+                  searchParamList,
+                  selectItems,
+                  sex,
+                  mode,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType));
             }
-
           });
         },
       );
@@ -614,10 +679,12 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
       );
     }
   }
+
   Future<String> _loadAStudentAsset(BuildContext context) async {
     return await DefaultAssetBundle.of(context)
         .loadString('assets/searchParam.json');
   }
+
   Future loadStudent(BuildContext context) async {
     String jsonString = await _loadAStudentAsset(context);
     final jsonResponse = json.decode(jsonString);
@@ -632,122 +699,171 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     }
     return paramList;
   }
+
   void _onValueChanged(int value) {
     BlocProvider.of<GlobalBloc>(context).add(EventSetIndexSex(value));
-    var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+    var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
 
-    if(searchParamList ==null){
-      BlocProvider.of<HomeBloc>(context).add(EventFresh(value,mode,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
-    }else{
-      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(searchParamList,selectItems,value,mode,_showAge,_showAgeMax,_showAgeMin,serveType));
+    if (searchParamList == null) {
+      BlocProvider.of<HomeBloc>(context).add(EventFresh(
+          value,
+          mode,
+          searchParamList,
+          _showAge,
+          _showAgeMax,
+          _showAgeMin,
+          serveType,
+          selectItems));
+    } else {
+      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
+          searchParamList,
+          selectItems,
+          value,
+          mode,
+          _showAge,
+          _showAgeMax,
+          _showAgeMin,
+          serveType));
     }
-
   }
 
   Widget _buildHead(BuildContext context, GlobalState state) {
-
     return Container(
-        child:  Container(child:
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
+        child: Container(
+            child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.max,
 //                交叉轴的布局方式，对于column来说就是水平方向的布局方式
-          crossAxisAlignment: CrossAxisAlignment.center,
-          //就是字child的垂直布局方向，向上还是向下
-          verticalDirection: VerticalDirection.down,
-          children: <Widget>[
-            SizedBox(
-              width: 1.w,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      //就是字child的垂直布局方向，向上还是向下
+      verticalDirection: VerticalDirection.down,
+      children: <Widget>[
+        SizedBox(
+          width: 1.w,
+        ),
+        Container(
+          width: 100.w,
+          child: Text(
+            "筛选:",
+            style: TextStyle(
+              fontSize: 32.sp,
+              color: Colors.black,
             ),
-            Container(
-              width: 100.w,
-              child: Text("筛选:",   style:  TextStyle(
-                fontSize: 32.sp,
-                color: Colors.black,
-              ),),
-            ),
-            CupertinoSegmentedControl<int>(
-              //unselectedColor: Colors.yellow,
-              //selectedColor: Colors.green,
-              //pressedColor: Colors.blue,
-              //borderColor: Colors.red,
-              groupValue: state.sex==0 ? 1: state.sex,
-              onValueChanged: _onValueChanged,
-              padding: EdgeInsets.only(right: 0.w),
-              children: {
-                1: state.sex ==1 ?Padding(
-                  padding: EdgeInsets.only(left: 50.w, right: 40.w),
-                  child: Text("男",style:  TextStyle(
-            fontSize: 30.sp,
-            color: Colors.white,
-            )),
-                ):Text("男",style:  TextStyle(
-                  fontSize: 30.sp,
-                  color: Colors.blue,
-                )),
-                2: state.sex ==2 ?Padding(
-                  padding: EdgeInsets.only(left: 50.w, right: 40.w),
-                  child: Text("女",style:  TextStyle(
-                    fontSize: 30.sp,
-                    color: Colors.white,
-                  )),
-                ):Text("女",style:  TextStyle(
-                  fontSize: 30.sp,
-                  color: Colors.blue,
-                )),
-              },
-            ),
-
-            buildHeadTxt(context,state),
-            PopupMenuButton<String>(
-
-              itemBuilder: (context) => buildItems(),
-              offset: Offset(0, 0.w),
-              color: Color(0xffF4FFFA),
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                    topRight: Radius.circular(5),
-                    bottomLeft: Radius.circular(5),
-                  )),
-              onSelected: (e) {
-                print(e);
-                if (e == '全部') {
-                  BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
-                  var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
-                }
-                if (e == '我的') {
-                  BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
-                  var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
-                }
-                if (e == '良缘') {
-                  BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
-                  var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
-                }
-                if (e == '公海') {
-                  BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(3));
-                  var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,3,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType,selectItems));
-                }
-
-              },
-              onCanceled: () => print('onCanceled'),
-            )
-
-          ],
+          ),
+        ),
+        CupertinoSegmentedControl<int>(
+          //unselectedColor: Colors.yellow,
+          //selectedColor: Colors.green,
+          //pressedColor: Colors.blue,
+          //borderColor: Colors.red,
+          groupValue: state.sex == 0 ? 1 : state.sex,
+          onValueChanged: _onValueChanged,
+          padding: EdgeInsets.only(right: 0.w),
+          children: {
+            1: state.sex == 1
+                ? Padding(
+                    padding: EdgeInsets.only(left: 50.w, right: 40.w),
+                    child: Text("男",
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Colors.white,
+                        )),
+                  )
+                : Text("男",
+                    style: TextStyle(
+                      fontSize: 30.sp,
+                      color: Colors.blue,
+                    )),
+            2: state.sex == 2
+                ? Padding(
+                    padding: EdgeInsets.only(left: 50.w, right: 40.w),
+                    child: Text("女",
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Colors.white,
+                        )),
+                  )
+                : Text("女",
+                    style: TextStyle(
+                      fontSize: 30.sp,
+                      color: Colors.blue,
+                    )),
+          },
+        ),
+        buildHeadTxt(context, state),
+        PopupMenuButton<String>(
+          itemBuilder: (context) => buildItems(),
+          offset: Offset(0, 0.w),
+          color: Color(0xffF4FFFA),
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            topRight: Radius.circular(5),
+            bottomLeft: Radius.circular(5),
+          )),
+          onSelected: (e) {
+            print(e);
+            if (e == '全部') {
+              BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+              BlocProvider.of<HomeBloc>(context).add(EventFresh(
+                  sex,
+                  0,
+                  searchParamList,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType,
+                  selectItems));
+            }
+            if (e == '我的') {
+              BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+              BlocProvider.of<HomeBloc>(context).add(EventFresh(
+                  sex,
+                  2,
+                  searchParamList,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType,
+                  selectItems));
+            }
+            if (e == '良缘') {
+              BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+              BlocProvider.of<HomeBloc>(context).add(EventFresh(
+                  sex,
+                  1,
+                  searchParamList,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType,
+                  selectItems));
+            }
+            if (e == '公海') {
+              BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(3));
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+              BlocProvider.of<HomeBloc>(context).add(EventFresh(
+                  sex,
+                  3,
+                  searchParamList,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType,
+                  selectItems));
+            }
+          },
+          onCanceled: () => print('onCanceled'),
         )
-
-
-
-        )
-    );
+      ],
+    )));
   }
+
   List<PopupMenuItem<String>> buildItems() {
     final map = {
       "全部": Icons.margin,
@@ -758,54 +874,51 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     return map.keys
         .toList()
         .map((e) => PopupMenuItem<String>(
-        value: e,
-        child: Wrap(
-          spacing: 10.w,
-          children: <Widget>[
-            Icon(
-              map[e],
-              color: Colors.blue,
-            ),
-            Text(e),
-          ],
-        )))
+            value: e,
+            child: Wrap(
+              spacing: 10.w,
+              children: <Widget>[
+                Icon(
+                  map[e],
+                  color: Colors.blue,
+                ),
+                Text(e),
+              ],
+            )))
         .toList();
   }
 
   Widget buildHeadTxt(BuildContext context, GlobalState state) {
-    if(state.currentPhotoMode==0){
-     return SizedBox(
+    if (state.currentPhotoMode == 0) {
+      return SizedBox(
         width: 70.w,
         child: Text("全部"),
       );
-
     }
-    if(state.currentPhotoMode==2){
+    if (state.currentPhotoMode == 2) {
       return SizedBox(
         width: 70.w,
         child: Text("我的"),
       );
-
     }
-    if(state.currentPhotoMode==1){
+    if (state.currentPhotoMode == 1) {
       return SizedBox(
         width: 70.w,
         child: Text("良缘"),
       );
-
     }
-    if(state.currentPhotoMode==3){
+    if (state.currentPhotoMode == 3) {
       return SizedBox(
         width: 70.w,
         child: Text("公海"),
       );
-
     }
     return SizedBox(
       width: 70.w,
       child: Text("全部"),
     );
   }
+
   Widget _buildPersistentHeader(List<String> num) => SliverPersistentHeader(
       pinned: true,
       delegate: FlexHeaderDelegate(
@@ -830,10 +943,11 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     }
     return Container();
   }
-  Widget _buildHeadNum(BuildContext context, GlobalState state) {
 
+  Widget _buildHeadNum(BuildContext context, GlobalState state) {
     return _buildPersistentHeader(state.headNum);
   }
+
   Widget _buildContent(BuildContext context, HomeState state) {
     if (state is WidgetsLoading) {
       return SliverToBoxAdapter(
@@ -842,129 +956,145 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     }
 
     if (state is WidgetsLoaded) {
-
-      List<dynamic>  photos=state.photos;
-      if (photos.isEmpty) return SliverToBoxAdapter(
-          child:EmptyPage());
-      return photos.isNotEmpty?SliverList(
-        delegate: SliverChildBuilderDelegate(
-            (_, int index) => _buildHomeItem(photos[index]),
-            childCount: photos.length),
-      ):SliverToBoxAdapter(
-          child:Center(child: Container(
-        alignment: FractionalOffset.center,
-        child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.airplay, color: Colors.orangeAccent, size: 120.0),
-            Container(
-              padding:  EdgeInsets.only(top: 16.0),
-              child:  Text(
-                "暂时没有用户了，(""^ _ ^)/~┴┴",
-                style:  TextStyle(
-                  fontSize: 40.sp,
-                  color: Colors.orangeAccent,
+      List<dynamic> photos = state.photos;
+      if (photos.isEmpty) return SliverToBoxAdapter(child: EmptyPage());
+      return photos.isNotEmpty
+          ? SliverList(
+              delegate: SliverChildBuilderDelegate(
+                  (_, int index) => _buildHomeItem(photos[index]),
+                  childCount: photos.length),
+            )
+          : SliverToBoxAdapter(
+              child: Center(
+              child: Container(
+                alignment: FractionalOffset.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.airplay,
+                        color: Colors.orangeAccent, size: 120.0),
+                    Container(
+                      padding: EdgeInsets.only(top: 16.0),
+                      child: Text(
+                        "暂时没有用户了，(" "^ _ ^)/~┴┴",
+                        style: TextStyle(
+                          fontSize: 40.sp,
+                          color: Colors.orangeAccent,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            )
-          ],
-        ),
-      ),));
+            ));
     }
 
     if (state is WidgetsLoadFailed) {
       return SliverToBoxAdapter(
         child: Container(
-          child: Center(child: Container(
-            alignment: FractionalOffset.center,
-            child:  Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Icon(Icons.event_busy, color: Colors.orangeAccent, size: 120.0),
-                Container(
-                  padding:  EdgeInsets.only(top: 16.0),
-                  child:  Text(
-                    "数据异常，(≡ _ ≡)/~┴┴",
-                    style:  TextStyle(
-                      fontSize: 20,
-                      color: Colors.orangeAccent,
+          child: Center(
+            child: Container(
+              alignment: FractionalOffset.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.event_busy,
+                      color: Colors.orangeAccent, size: 120.0),
+                  Container(
+                    padding: EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      "数据异常，(≡ _ ≡)/~┴┴",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.orangeAccent,
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),),
+          ),
         ),
       );
     }
     if (state is CheckUserSuccess) {
       List<WidgetModel> items = state.widgets;
-      List<dynamic>  photos=state.photos;
+      List<dynamic> photos = state.photos;
       if (items.isEmpty) return EmptyPage();
-      return photos.isNotEmpty?SliverList(
-        delegate: SliverChildBuilderDelegate(
-                (_, int index) => _buildHomeItem(photos[index]),
-            childCount: photos.length),
-      ):SliverToBoxAdapter(
-          child:Center(child: Container(
-        alignment: FractionalOffset.center,
-        child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.airplay, color: Colors.orangeAccent, size: 120.0),
-            Container(
-              padding:  EdgeInsets.only(top: 16.0),
-              child:  Text(
-                "暂时没有需要审核的用户了，(""^ _ ^)/~┴┴",
-                style:  TextStyle(
-                  fontSize: 20,
-                  color: Colors.orangeAccent,
+      return photos.isNotEmpty
+          ? SliverList(
+              delegate: SliverChildBuilderDelegate(
+                  (_, int index) => _buildHomeItem(photos[index]),
+                  childCount: photos.length),
+            )
+          : SliverToBoxAdapter(
+              child: Center(
+              child: Container(
+                alignment: FractionalOffset.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.airplay,
+                        color: Colors.orangeAccent, size: 120.0),
+                    Container(
+                      padding: EdgeInsets.only(top: 16.0),
+                      child: Text(
+                        "暂时没有需要审核的用户了，(" "^ _ ^)/~┴┴",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.orangeAccent,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            )
-          ],
-        ),
-      ),));
+            ));
     }
     if (state is DelImgSuccess) {
       List<WidgetModel> items = state.widgets;
-      List<dynamic>  photos=state.photos;
+      List<dynamic> photos = state.photos;
       if (items.isEmpty) return EmptyPage();
-      return photos.isNotEmpty?SliverList(
-        delegate: SliverChildBuilderDelegate(
-                (_, int index) => _buildHomeItem(photos[index]),
-            childCount: photos.length),
-      ):SliverToBoxAdapter(
-          child:Center(child: Container(
-        alignment: FractionalOffset.center,
-        child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.airplay, color: Colors.orangeAccent, size: 120.0),
-            Container(
-              padding:  EdgeInsets.only(top: 16.0),
-              child:  Text(
-                "暂时没有需要审核的用户了，(""^ _ ^)/~┴┴",
-                style:  TextStyle(
-                  fontSize: 20,
-                  color: Colors.orangeAccent,
+      return photos.isNotEmpty
+          ? SliverList(
+              delegate: SliverChildBuilderDelegate(
+                  (_, int index) => _buildHomeItem(photos[index]),
+                  childCount: photos.length),
+            )
+          : SliverToBoxAdapter(
+              child: Center(
+              child: Container(
+                alignment: FractionalOffset.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.airplay,
+                        color: Colors.orangeAccent, size: 120.0),
+                    Container(
+                      padding: EdgeInsets.only(top: 16.0),
+                      child: Text(
+                        "暂时没有需要审核的用户了，(" "^ _ ^)/~┴┴",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.orangeAccent,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            )
-          ],
-        ),
-      ),));
+            ));
     }
     return SliverToBoxAdapter(
       child: Container(),
     );
   }
 
-  Widget _buildHomeItem(Map<String,dynamic> photo) {
+  Widget _buildHomeItem(Map<String, dynamic> photo) {
     bool isVip;
     var vipExpireTime = photo['vip_expire_time'];
     if (vipExpireTime == null) {
@@ -972,14 +1102,14 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     } else {
       isVip = true;
     }
-   return HomeItemSupport.get(null, 6, photo,isVip);
-  }
-  _switchTab(int index, Color color) {
-    BlocProvider.of<HomeBloc>(context)
-        .add(EventTabTap());
+    return HomeItemSupport.get(null, 6, photo, isVip);
   }
 
-  _toDetailPage(WidgetModel model,Map<String,dynamic> photo) {
+  _switchTab(int index, Color color) {
+    BlocProvider.of<HomeBloc>(context).add(EventTabTap());
+  }
+
+  _toDetailPage(WidgetModel model, Map<String, dynamic> photo) {
     BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
     Navigator.pushNamed(context, UnitRouter.widget_detail, arguments: model);
   }
@@ -1034,7 +1164,6 @@ class DYrefreshHeader extends StatelessWidget {
         ),
       ),
       complete: Container(
-
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -1085,35 +1214,46 @@ class DYrefreshFooter extends StatelessWidget {
     );
   }
 }
-class bar extends StatelessWidget implements PreferredSizeWidget{
-  final List<SelectItem> selectItems ;
-  bar({@required this.selectItems, });
+
+class bar extends StatelessWidget implements PreferredSizeWidget {
+  final List<SelectItem> selectItems;
+
+  bar({
+    @required this.selectItems,
+  });
+
   @override
   // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(580.h);
+
   @override
   Widget build(BuildContext context) {
-    return   Container(
-      padding: EdgeInsets.only(left: 20.w,right: 20.w),
+    return Container(
+      padding: EdgeInsets.only(left: 20.w, right: 20.w),
       child: Column(
         children: [
-          Expanded(child: AppBarComponent(selectItems: selectItems,)),
+          Expanded(
+              child: AppBarComponent(
+            selectItems: selectItems,
+          )),
         ],
       ),
     );
   }
 }
-List<CitySelect> firstLevels = <CitySelect>[];
-List<StoreSelect> all =  <StoreSelect>[];
-class AppBarComponent extends StatefulWidget {
 
-  final List<SelectItem> selectItems ;
-  AppBarComponent({@required this.selectItems, });
+List<CitySelect> firstLevels = <CitySelect>[];
+List<StoreSelect> all = <StoreSelect>[];
+
+class AppBarComponent extends StatefulWidget {
+  final List<SelectItem> selectItems;
+
+  AppBarComponent({
+    @required this.selectItems,
+  });
 
   @override
   _AppBarComponentState createState() => _AppBarComponentState();
-
-
 }
 
 class _AppBarComponentState extends State<AppBarComponent> {
@@ -1125,68 +1265,83 @@ class _AppBarComponentState extends State<AppBarComponent> {
   List<SortCondition> _distanceSortConditions = [];
   SortCondition _selectBrandSortCondition;
   SortCondition _selectDistanceSortCondition;
-  GZXDropdownMenuController _dropdownMenuController = GZXDropdownMenuController();
-  List<StoreSelect> secondtLevels =  <StoreSelect>[];
+  GZXDropdownMenuController _dropdownMenuController =
+      GZXDropdownMenuController();
+  List<StoreSelect> secondtLevels = <StoreSelect>[];
   GlobalKey _stackKey = GlobalKey();
+
   @override
   void initState() {
     // TODO: implement initState
 
-    _brandSortConditions.add(SortCondition(name: '客户状态',id: 0, isSelected: true,all: true));
-    _brandSortConditions.add(SortCondition(name: 'A级客户',id: 2,  isSelected: false,all: true));
-    _brandSortConditions.add(SortCondition(name: 'B级客户',id: 1,  isSelected: false,all: true));
-    _brandSortConditions.add(SortCondition(name: 'C级客户',id: 100,  isSelected: false,all: true));
-    _brandSortConditions.add(SortCondition(name: 'D级客户', id: 30, isSelected: false,all: true));
+    _brandSortConditions
+        .add(SortCondition(name: '客户状态', id: 0, isSelected: true, all: true));
+    _brandSortConditions
+        .add(SortCondition(name: 'A级客户', id: 2, isSelected: false, all: true));
+    _brandSortConditions
+        .add(SortCondition(name: 'B级客户', id: 1, isSelected: false, all: true));
+    _brandSortConditions.add(
+        SortCondition(name: 'C级客户', id: 100, isSelected: false, all: true));
+    _brandSortConditions
+        .add(SortCondition(name: 'D级客户', id: 30, isSelected: false, all: true));
 
     _selectBrandSortCondition = _brandSortConditions[0];
 
-    _distanceSortConditions.add(SortCondition(name: '沟通状态', id: 0, isSelected: true,all: true));
-    _distanceSortConditions.add(SortCondition(name: '1.新分未联系', id: 1, isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '2.号码无效', id: 2, isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '3.号码未接通', id: 3, isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '4.可继续沟通', id: 4, isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '5.有意向面谈', id: 5, isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '6.确定到店时间',id: 6,  isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '7.已到店，意愿需跟进',id: 7,  isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '8.已到店，考虑7天付款', id: 8, isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '9.高级会员，支付预付款', id: 9, isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '10.高级会员，费用已结清', id: 10, isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '11.毁单',id: 11,  isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '12.放弃并放入公海',id: 12,  isSelected: false,all: true));
-    _distanceSortConditions.add(SortCondition(name: '13.放弃并放入D级', id: 13, isSelected: false,all: true));
-
-
+    _distanceSortConditions
+        .add(SortCondition(name: '沟通状态', id: 0, isSelected: true, all: true));
+    _distanceSortConditions.add(
+        SortCondition(name: '1.新分未联系', id: 1, isSelected: false, all: true));
+    _distanceSortConditions.add(
+        SortCondition(name: '2.号码无效', id: 2, isSelected: false, all: true));
+    _distanceSortConditions.add(
+        SortCondition(name: '3.号码未接通', id: 3, isSelected: false, all: true));
+    _distanceSortConditions.add(
+        SortCondition(name: '4.可继续沟通', id: 4, isSelected: false, all: true));
+    _distanceSortConditions.add(
+        SortCondition(name: '5.有意向面谈', id: 5, isSelected: false, all: true));
+    _distanceSortConditions.add(
+        SortCondition(name: '6.确定到店时间', id: 6, isSelected: false, all: true));
+    _distanceSortConditions.add(SortCondition(
+        name: '7.已到店，意愿需跟进', id: 7, isSelected: false, all: true));
+    _distanceSortConditions.add(SortCondition(
+        name: '8.已到店，考虑7天付款', id: 8, isSelected: false, all: true));
+    _distanceSortConditions.add(SortCondition(
+        name: '9.高级会员，支付预付款', id: 9, isSelected: false, all: true));
+    _distanceSortConditions.add(SortCondition(
+        name: '10.高级会员，费用已结清', id: 10, isSelected: false, all: true));
+    _distanceSortConditions.add(
+        SortCondition(name: '11.毁单', id: 11, isSelected: false, all: true));
+    _distanceSortConditions.add(SortCondition(
+        name: '12.放弃并放入公海', id: 12, isSelected: false, all: true));
+    _distanceSortConditions.add(SortCondition(
+        name: '13.放弃并放入D级', id: 13, isSelected: false, all: true));
 
     _selectDistanceSortCondition = _distanceSortConditions[0];
 
-    CitySelect ta  = CitySelect();
+    CitySelect ta = CitySelect();
     ta.name = "全部";
-    ta.id =0;
+    ta.id = 0;
     firstLevels.add(ta);
 
     Future.delayed(Duration(milliseconds: 1)).then((e) async {
-      var result= await IssuesApi.getStoreList("1");
-      if  (result['code']==200){
-        List< dynamic> da = result['data'] ;
-         da.forEach((value) {
-           CitySelect cc1  = CitySelect();
-           cc1.name = value['name'];
-           cc1.id =int.parse(value['city_code']);
-           firstLevels.add(cc1);
+      var result = await IssuesApi.getStoreList("1");
+      if (result['code'] == 200) {
+        List<dynamic> da = result['data'];
+        da.forEach((value) {
+          CitySelect cc1 = CitySelect();
+          cc1.name = value['name'];
+          cc1.id = int.parse(value['city_code']);
+          firstLevels.add(cc1);
 
-           List< dynamic> stores = value['data'] ;
-           stores.forEach((value) {
-             StoreSelect ddd1  = StoreSelect();
-             ddd1.id=value['id'];
-             ddd1.name = value['name'];
-             ddd1.city=cc1.id;
-             all.add(ddd1);
-
-           });
-
-
-
-         });
+          List<dynamic> stores = value['data'];
+          stores.forEach((value) {
+            StoreSelect ddd1 = StoreSelect();
+            ddd1.id = value['id'];
+            ddd1.name = value['name'];
+            ddd1.city = cc1.id;
+            all.add(ddd1);
+          });
+        });
 
         //
         // CitySelect cc2  = CitySelect();
@@ -1194,18 +1349,13 @@ class _AppBarComponentState extends State<AppBarComponent> {
         // cc2.id =320501;
         // firstLevels.add(cc2);
 
-
         // StoreSelect ddd  = StoreSelect();
         // ddd.id=6;
         // ddd.name = "鹊桥缘遇昆山店";
         // ddd.city=320501;
         // all.add(ddd);
 
-
-
-      } else{
-
-      }
+      } else {}
     });
     super.initState();
   }
@@ -1213,28 +1363,22 @@ class _AppBarComponentState extends State<AppBarComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
-
       child: Stack(
         key: _stackKey,
         children: <Widget>[
           Column(
             children: <Widget>[
-
 //              SizedBox(height: 20,),
               Container(
-                decoration: new BoxDecoration(
-
-
-                ),
+                decoration: new BoxDecoration(),
                 child: GZXDropDownHeader(
-
                   items: [
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0],style: TextStyle()),
+                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0],
+                        style: TextStyle()),
                     GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
                     GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
-                    GZXDropDownHeaderItem(
-                        _dropDownHeaderItemStrings[3], iconSize: 18),
+                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
+                        iconSize: 18),
                   ],
                   stackKey: _stackKey,
                   controller: _dropdownMenuController,
@@ -1246,7 +1390,6 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   },
                 ),
               ),
-
             ],
           ),
           GZXDropDownMenu(
@@ -1258,66 +1401,66 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   dropDownWidget: _buildQuanChengWidget((selectValue) {
                     _dropDownHeaderItemStrings[0] = selectValue.name;
                     _dropdownMenuController.hide();
-                   setState(() {});
-                    if (selectValue.type ==101){
-                      if (selectValue.id =="1"){
-                        selectValue.id ="0";
-                      }else{
+                    setState(() {});
+                    if (selectValue.type == 101) {
+                      if (selectValue.id == "1") {
+                        selectValue.id = "0";
+                      } else {
                         return;
                       }
-
                     }
-                    int k=0;
-                    for(int i=0;i<widget.selectItems.length;i++){
-
-                      if (widget.selectItems[i].type == 100){
+                    int k = 0;
+                    for (int i = 0; i < widget.selectItems.length; i++) {
+                      if (widget.selectItems[i].type == 100) {
                         widget.selectItems[i].id = selectValue.id.toString();
-                        k=1;
+                        k = 1;
                         break;
                       }
-
                     }
-                    if (k>0){
-
-                    }else{
-                      SelectItem s =SelectItem();
-                      s.type =100;
-                      s.id= selectValue.id.toString();
+                    if (k > 0) {
+                    } else {
+                      SelectItem s = SelectItem();
+                      s.type = 100;
+                      s.id = selectValue.id.toString();
                       widget.selectItems.add(s);
                     }
-                    var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                    var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(null,widget.selectItems,sex,mode,false,0,0,""));
+                    var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+                    var mode = BlocProvider.of<GlobalBloc>(context)
+                        .state
+                        .currentPhotoMode;
+                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
+                        null, widget.selectItems, sex, mode, false, 0, 0, ""));
                   })),
               GZXDropdownMenuBuilder(
                   dropDownHeight: 40.0 * _brandSortConditions.length,
-                  dropDownWidget: _buildConditionListWidget(
-                      _brandSortConditions, (value) {
+                  dropDownWidget:
+                      _buildConditionListWidget(_brandSortConditions, (value) {
                     _selectBrandSortCondition = value;
                     _dropDownHeaderItemStrings[1] =
-                    _selectBrandSortCondition.name;
+                        _selectBrandSortCondition.name;
                     _dropdownMenuController.hide();
                     setState(() {});
-                    int k=0;
-                    for(int i=0;i<widget.selectItems.length;i++){
-                      if (widget.selectItems[i].type == 120){
+                    int k = 0;
+                    for (int i = 0; i < widget.selectItems.length; i++) {
+                      if (widget.selectItems[i].type == 120) {
                         widget.selectItems[i].id = value.id.toString();
-                        k=1;
+                        k = 1;
                         break;
                       }
-
                     }
-                    if (k>0){
-
-                    }else{
-                      SelectItem s =SelectItem();
-                      s.type =120;
-                      s.id= value.id.toString();
+                    if (k > 0) {
+                    } else {
+                      SelectItem s = SelectItem();
+                      s.type = 120;
+                      s.id = value.id.toString();
                       widget.selectItems.add(s);
                     }
-                    var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                    var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(null,widget.selectItems,sex,mode,false,0,0,""));
+                    var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+                    var mode = BlocProvider.of<GlobalBloc>(context)
+                        .state
+                        .currentPhotoMode;
+                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
+                        null, widget.selectItems, sex, mode, false, 0, 0, ""));
                   })),
               GZXDropdownMenuBuilder(
                   dropDownHeight: 40.0 * _distanceSortConditions.length,
@@ -1328,28 +1471,28 @@ class _AppBarComponentState extends State<AppBarComponent> {
                         _selectDistanceSortCondition.name;
                     _dropdownMenuController.hide();
                     setState(() {});
-                    int k=0;
-                    for(int i=0;i<widget.selectItems.length;i++){
-                      if (widget.selectItems[i].type == 130){
+                    int k = 0;
+                    for (int i = 0; i < widget.selectItems.length; i++) {
+                      if (widget.selectItems[i].type == 130) {
                         widget.selectItems[i].id = value.id.toString();
-                        k=1;
+                        k = 1;
                         break;
                       }
-
                     }
-                    if (k>0){
-
-                    }else{
-                      SelectItem s =SelectItem();
-                      s.type =130;
-                      s.id= value.id.toString();
+                    if (k > 0) {
+                    } else {
+                      SelectItem s = SelectItem();
+                      s.type = 130;
+                      s.id = value.id.toString();
                       widget.selectItems.add(s);
                     }
-                    var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                    var mode =BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(null,widget.selectItems,sex,mode,false,0,0,""));
-                  })
-              ),
+                    var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+                    var mode = BlocProvider.of<GlobalBloc>(context)
+                        .state
+                        .currentPhotoMode;
+                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
+                        null, widget.selectItems, sex, mode, false, 0, 0, ""));
+                  })),
             ],
           ),
 
@@ -1367,7 +1510,6 @@ class _AppBarComponentState extends State<AppBarComponent> {
       ),
     );
   }
-
 
   int _selectTempFirstLevelIndex = 0;
   int _selectFirstLevelIndex = 0;
@@ -1392,22 +1534,19 @@ class _AppBarComponentState extends State<AppBarComponent> {
                     SelectItem s = SelectItem();
                     s.type = 101;
                     s.id = "1";
-                    s.name ="全部";
+                    s.name = "全部";
                     itemOnTap(s);
                     return;
-                  }else{
-                    secondtLevels=[];
-                    for(int i=0;i<all.length;i++){
-                      if (all[i].city == item.id){
-
-                        StoreSelect ddd1  = StoreSelect();
-                        ddd1.id=all[i].id;
+                  } else {
+                    secondtLevels = [];
+                    for (int i = 0; i < all.length; i++) {
+                      if (all[i].city == item.id) {
+                        StoreSelect ddd1 = StoreSelect();
+                        ddd1.id = all[i].id;
                         ddd1.name = all[i].name;
-                        ddd1.city=item.id;
+                        ddd1.city = item.id;
                         secondtLevels.add(ddd1);
-
                       }
-
                     }
                     setState(() {});
                   }
@@ -1415,16 +1554,17 @@ class _AppBarComponentState extends State<AppBarComponent> {
                 },
                 child: Container(
                     height: 80.h,
-                    color: _selectTempFirstLevelIndex == index ? Colors
-                        .grey[100] : Colors.white,
+                    color: _selectTempFirstLevelIndex == index
+                        ? Colors.grey[100]
+                        : Colors.white,
                     alignment: Alignment.center,
                     child: _selectTempFirstLevelIndex == index
                         ? Text(
-                      '${item.name}',
-                      style: TextStyle(
-                        color: Colors.red,
-                      ),
-                    )
+                            '${item.name}',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          )
                         : Text('${item.name}')),
               );
             }).toList(),
@@ -1436,47 +1576,47 @@ class _AppBarComponentState extends State<AppBarComponent> {
             child: _selectTempFirstLevelIndex == 0
                 ? Container()
                 : ListView(
-              children: secondtLevels.map((item) {
-                int index = secondtLevels.indexOf(item);
-                return GestureDetector(
-                    onTap: () {
-                      _selectSecondLevelIndex = index;
-                      _selectFirstLevelIndex = _selectTempFirstLevelIndex;
-                      if (_selectSecondLevelIndex == 0) {
-                        SelectItem s = SelectItem();
-                        s.type = 100;
-                        s.id = item.id.toString();
-                        s.name =item.name;
-                        itemOnTap(s);
-                      } else {
-
-                        SelectItem s = SelectItem();
-                        s.type = 100;
-                        s.id = item.id.toString();
-                        s.name =item.name;
-                        itemOnTap(s);
-                      }
-                    },
-                    child: Container(
-                      height: 80.h,
-                      alignment: Alignment.centerLeft,
-                      child: Row(children: <Widget>[
-                        SizedBox(
-                          width: 40.w,
-                        ),
-                        _selectFirstLevelIndex == _selectTempFirstLevelIndex &&
-                            _selectSecondLevelIndex == index
-                            ? Text(
-                          '${item.name}',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        )
-                            : Text('${item.name}'),
-                      ]),
-                    ));
-              }).toList(),
-            ),
+                    children: secondtLevels.map((item) {
+                      int index = secondtLevels.indexOf(item);
+                      return GestureDetector(
+                          onTap: () {
+                            _selectSecondLevelIndex = index;
+                            _selectFirstLevelIndex = _selectTempFirstLevelIndex;
+                            if (_selectSecondLevelIndex == 0) {
+                              SelectItem s = SelectItem();
+                              s.type = 100;
+                              s.id = item.id.toString();
+                              s.name = item.name;
+                              itemOnTap(s);
+                            } else {
+                              SelectItem s = SelectItem();
+                              s.type = 100;
+                              s.id = item.id.toString();
+                              s.name = item.name;
+                              itemOnTap(s);
+                            }
+                          },
+                          child: Container(
+                            height: 80.h,
+                            alignment: Alignment.centerLeft,
+                            child: Row(children: <Widget>[
+                              SizedBox(
+                                width: 40.w,
+                              ),
+                              _selectFirstLevelIndex ==
+                                          _selectTempFirstLevelIndex &&
+                                      _selectSecondLevelIndex == index
+                                  ? Text(
+                                      '${item.name}',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  : Text('${item.name}'),
+                            ]),
+                          ));
+                    }).toList(),
+                  ),
           ),
         )
       ],
@@ -1516,19 +1656,18 @@ class _AppBarComponentState extends State<AppBarComponent> {
                   child: Text(
                     goodsSortCondition.name,
                     style: TextStyle(
-                      color: goodsSortCondition.isSelected ? Colors.red : Colors
-                          .black,
+                      color: goodsSortCondition.isSelected
+                          ? Colors.red
+                          : Colors.black,
                     ),
                   ),
                 ),
                 goodsSortCondition.isSelected
                     ? Icon(
-                  Icons.check,
-                  color: Theme
-                      .of(context)
-                      .primaryColor,
-                  size: 16,
-                )
+                        Icons.check,
+                        color: Theme.of(context).primaryColor,
+                        size: 16,
+                      )
                     : SizedBox(),
                 SizedBox(
                   width: 16,
@@ -1540,5 +1679,4 @@ class _AppBarComponentState extends State<AppBarComponent> {
       },
     );
   }
-
 }

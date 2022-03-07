@@ -33,6 +33,11 @@ export 'home/home_bloc.dart';
 export 'home/home_state.dart';
 export 'home/home_event.dart';
 
+
+export 'flow/flow_bloc.dart';
+export 'flow/flow_state.dart';
+export 'flow/flow_event.dart';
+
 export 'chat/chat_bloc.dart';
 export 'chat/chat_state.dart';
 export 'chat/chat_event.dart';

@@ -2,31 +2,28 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_geen/app/res/style/shape/techno_shape.dart';
-import 'package:flutter_star/flutter_star.dart';
+
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/res/style/shape/coupon_shape_border.dart';
-import 'package:flutter_geen/blocs/collect/collect_bloc.dart';
-import 'package:flutter_geen/blocs/collect/collect_state.dart';
+
 import 'package:flutter_geen/blocs/detail/detail_bloc.dart';
 import 'package:flutter_geen/blocs/detail/detail_event.dart';
 import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/blocs/home/home_event.dart';
-import 'package:flutter_geen/components/permanent/circle_image.dart';
+
 import 'package:flutter_geen/components/permanent/circle_text.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
-import 'package:flutter_geen/components/permanent/tag.dart';
+
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/app/router.dart';
-import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
-import 'package:flutter_geen/views/pages/widget_detail/widget_detail_page.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:left_scroll_actions/cupertinoLeftScroll.dart';
-import 'package:left_scroll_actions/leftScroll.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:flutter_geen/views/items/slide_menu_item.dart';
-
+import 'package:flutter_geen/views/pages/utils/common.dart';
 class PhotoWidgetListItem extends StatelessWidget {
   final bool hasTopHole;
   final bool hasBottomHole;
@@ -620,12 +617,18 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   }
 
   Widget _buildTitle() {
+    String level = getLevel(photo['status']);
     return Expanded(
       child: Row(
         children: <Widget>[
            SizedBox(width: 1.w),
           Expanded(
-            child: Text(photo['name']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+""+((photo['height']==0||photo['height']==null)?"": photo['height'].toString()+"cm")+" "+(photo['status']==0?"C级":(photo['status']==1?"B级":"A级")),
+            child: Text(photo['name']+" "+(photo['gender']==1?"男":"女")+" "+
+
+                photo['age'].toString()+"岁 "+""
+
+                +((photo['height']==0||photo['height']==null)?"": photo['height'].toString()+"cm")+" "+level
+                ,
                 overflow: TextOverflow.ellipsis,
                 style:  TextStyle(
                     fontSize: 30.sp,
@@ -643,6 +646,11 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       ),
     );
   }
+
+
+
+
+
   List<String> _marriageLevel = [
     "未知",
     "未婚",
@@ -668,10 +676,12 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
   ];
 
   Widget _titleTop() {
+    String level = getLevel(photo['status']);
     return Padding(
       padding:  EdgeInsets.only(left: 1.w, bottom: 0.h, top: 0.h),
       child: Container(
-        child: Text(photo['name']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+""+((photo['height']==0||photo['height']==null)?"": photo['height'].toString()+"cm")+" "+(photo['status']==0?"C级":(photo['status']==1?"B级":"A级")),
+        child: Text(photo['name']+" "+(photo['gender']==1?"男":"女")+" "+photo['age'].toString()+"岁 "+""
+            +((photo['height']==0||photo['height']==null)?"": photo['height'].toString()+"cm")+" "+level,
             overflow: TextOverflow.ellipsis,
             style:  TextStyle(
                 fontSize: 30.sp,

@@ -12,7 +12,7 @@ import 'package:city_pickers/modal/result.dart';
 
 import '../router.dart';
 const kBaseUrl = 'https://cores.queqiaochina.com';
-
+const NewBaseUrl = 'https://erp.queqiaochina.com';
 class IssuesApi {
   /// 自定义Header
   static Map<String, dynamic> httpHeaders = {
@@ -44,6 +44,7 @@ class IssuesApi {
       var dd=e.response.data;
       return dd;
     }
+
 
   }
   static Future<Map<String,dynamic>> getPhoto( String keyWord, String page,String sex,String is_passive ) async {
@@ -299,7 +300,21 @@ class IssuesApi {
       return dd;
     }
   }
-
+  static Future<Map<String,dynamic>> getFlowData(int page) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    var data={'currentPage':page};
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
+    try {
+      Response<dynamic> rep = await dioA.post(NewBaseUrl+'/api/IPadCommonArticle',data: data );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
   static Future<Map<String,dynamic>> editCustomerAddress(String uuid, int type,Result result ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();

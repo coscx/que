@@ -18,7 +18,7 @@ class CategoryEndDrawer extends StatelessWidget {
     return Drawer(
       child: Container(
           child: ListView(padding: EdgeInsets.zero, children: <Widget>[
-        UnitDrawerHeader(color: Theme.of(context).primaryColor),
+        UnitDrawerHeader(color: Theme.of(context).primaryColor,id: "",),
         // Padding(
         //   padding: const EdgeInsets.all(10.0),
         //   child: Row(

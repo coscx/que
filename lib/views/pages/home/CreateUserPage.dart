@@ -313,7 +313,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
 
                                               Navigator.of(context).pop();
                                             },
-                                            child: Text("下一步",
+                                            child: Text("提交",
                                                 style: TextStyle(color: Colors.white, fontSize: 45.sp)),
                                           ),
                                         ),
@@ -662,7 +662,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
         ),
         onConfirm: (Picker picker, List value) async {
           setState(() {
-            birthday = picker.adapter.text.substring(0,19);
+            birthday = picker.adapter.text.substring(0,10);
           });
 
           // var result= await IssuesApi.editCustomerOnceString(info['uuid'],type,picker.adapter.text);
@@ -778,7 +778,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 40.sp, color: Colors.grey),
+                            style: TextStyle(fontSize: 40.sp, color: Colors.grey,fontWeight: FontWeight.w900),
                           ),
                         ),
                         SizedBox(
@@ -870,7 +870,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           margin: EdgeInsets.only(left: 15.w),
                           child: Text(
                             name,
-                            style: TextStyle(fontSize: 40.sp, color: Colors.grey),
+                            style: TextStyle(fontSize: 40.sp, color: Colors.grey,fontWeight: FontWeight.w900),
                           ),
                         ),
                         SizedBox(

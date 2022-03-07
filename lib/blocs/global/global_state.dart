@@ -35,7 +35,7 @@ class GlobalState extends Equatable {
   final int bar3;
   final int bar4;
   final String creditId;
-
+   final int indexFlowPage;
   const GlobalState({
     this.fontFamily = 'ComicNeue',
     this.themeColor = Colors.blue,
@@ -54,6 +54,7 @@ class GlobalState extends Equatable {
     this.bar3 =0,
     this.bar4 =0,
     this.creditId ="",
+    this.indexFlowPage =0
   });
 
   @override
@@ -74,7 +75,8 @@ class GlobalState extends Equatable {
         bar2,
         bar3,
         bar4,
-        creditId
+        creditId,
+        indexFlowPage
       ];
 
   GlobalState copyWith({
@@ -96,6 +98,7 @@ class GlobalState extends Equatable {
     int bar3,
     int bar4,
     String  creditId,
+    int  indexFlowPage,
   }) =>
       GlobalState(
         fontFamily: fontFamily ?? this.fontFamily,
@@ -114,8 +117,8 @@ class GlobalState extends Equatable {
           bar2:bar2??this.bar2,
           bar3:bar3??this.bar3,
           bar4:bar4??this.bar4,
-          creditId:creditId??this.creditId
-
+          creditId:creditId??this.creditId,
+          indexFlowPage:indexFlowPage??this.indexFlowPage
       );
 
   @override

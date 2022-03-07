@@ -65,7 +65,7 @@ class _BlocWrapperState extends State<BlocWrapper> {
           BlocProvider<UserBloc>(create: (_) => UserBloc()),
           BlocProvider<GroupBloc>(create: (_) => GroupBloc()),
           BlocProvider<TimeBloc>(create: (_) => TimeBloc()),
-
+          BlocProvider<FlowBloc>(create: (_) => FlowBloc(repository: repository)),
         ], child: widget.child);
   }
 
