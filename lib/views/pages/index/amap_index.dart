@@ -61,7 +61,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
         Container(
           margin: EdgeInsets.only(right: 10.w),
           child: IconButton(
-          icon: Icon(Icons.add_location_alt),
+          icon: Icon(Icons.add_circle_outline_rounded),
           onPressed: () {
             if (returnAddress ==""){
               BotToast.showSimpleNotification(title: returnAddress);

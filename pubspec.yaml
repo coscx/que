@@ -93,6 +93,7 @@ dependencies:
   vibration: ^1.7.2
   w_popup_menu: ^1.0.0
   adaptive_action_sheet: ^1.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

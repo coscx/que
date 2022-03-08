@@ -46,11 +46,24 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       } else{
 
       }
+      var actionList= await IssuesApi.getConnectList(event.photo['uuid'].toString(),"1");
+      if  (actionList['code']==200){
+
+      } else{
+
+      }
+
+      var callList= await IssuesApi.getCallList(event.photo['uuid'].toString(),"1");
+      if  (actionList['code']==200){
+
+      } else{
+
+      }
 
       if(result['data'].isEmpty){
         yield DetailEmpty();
       }else{
-        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data'],appointList:appointList['data']);
+        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data'],appointList:appointList['data'],actionList:actionList['data'],callList: callList['data']);
       }
     }
     if(event is EditDetailEventAddress){
@@ -239,11 +252,23 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       } else{
 
       }
+      var actionList= await IssuesApi.getActionList(photo['uuid'].toString(),"1");
+      if  (actionList['code']==200){
+
+      } else{
+
+      }
+      var callList= await IssuesApi.getCallList(photo['uuid'].toString(),"1");
+      if  (actionList['code']==200){
+
+      } else{
+
+      }
 
       if(result['data'].isEmpty){
         yield DetailEmpty();
       }else{
-        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data'],appointList:appointList['data']);
+        yield DetailWithData(userdetails: result['data'],connectList: resultConnectList['data'],appointList:appointList['data'],actionList:actionList['data'],callList:callList['data']);
       }
 
     } catch (e) {

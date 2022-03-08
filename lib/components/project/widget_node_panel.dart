@@ -10,7 +10,7 @@ import 'package:toggle_rotate/toggle_rotate.dart';
 
 import '../permanent/feedback_widget.dart';
 import '../permanent/code/highlighter_style.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 说明: 一个Widget的知识点对应的界面
 
@@ -21,14 +21,16 @@ class WidgetNodePanel extends StatefulWidget {
   final Widget show;
   final HighlighterStyle codeStyle;
   final String codeFamily;
-
+  final bool showMore;
   WidgetNodePanel(
       {this.text,
       this.subText,
       this.code,
       this.show,
       this.codeStyle,
-      this.codeFamily});
+      this.codeFamily,
+      this.showMore
+      });
 
   @override
   _WidgetNodePanelState createState() => _WidgetNodePanelState();
@@ -41,16 +43,16 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
 
   Color get themeColor => Theme.of(context).primaryColor;
   bool  show =false ;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(1),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           buildNodeTitle(),
           SizedBox(
-            height: 1,
+            height: 2.h,
           ),
           //_buildCode(context),
           Padding(
@@ -59,7 +61,15 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
                 visible:show,
                 replacement:Text('data'),
                 maintainState:true,
-                child:widget.show),
+                child:Column(
+                  children: [
+                    widget.show,
+                    widget.showMore ?Container(
+                        margin: EdgeInsets.only(left: 10.w, right: 20.w,top: 10.h,bottom: 10.h),
+                        child: Text("查看更多")
+                    ):Container()
+                  ],
+                )),
           ),
 
           //_buildNodeInfo(),
@@ -74,7 +84,7 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
       child:Row(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding:  EdgeInsets.symmetric(horizontal: 8.w),
             child: Circle(
               color: themeColor,
               radius: 5,
@@ -83,11 +93,11 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
           Expanded(
             child: Text(
               '${widget.text}',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.sp),
             ),
           ),
           //_buildShareButton(),
-          _buildCodeButton()
+          _buildCodeButton(show)
         ],
       ) ,
   );
@@ -97,13 +107,13 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
         child: Panel(
             child: Text(
           '${widget.subText}',
-          style: TextStyle(fontSize: 14),
+          style: TextStyle(fontSize: 14.sp),
         )),
       );
 
-  Widget _buildCodeButton() => Padding(
-        padding: const EdgeInsets.only(right: 10.0),
-        child:  Icon(
+  Widget _buildCodeButton(bool show ) => Padding(
+        padding:  EdgeInsets.only(right: 18.w),
+        child: Icon(
             TolyIcon.icon_code,
             color: themeColor,
           ),

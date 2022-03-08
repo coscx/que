@@ -7,6 +7,7 @@ import 'package:city_pickers/modal/result.dart';
 import 'package:flui/flui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_geen/app/router.dart';
@@ -14,7 +15,8 @@ import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
 import 'package:flutter_geen/components/permanent/circle.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
-import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
+import 'package:flutter_geen/views/dialogs/ww_dialog.dart';
+import 'package:flutter_geen/views/items/bottom_sheet.dart';
 import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_picker/Picker.dart';
@@ -51,6 +53,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   int connectStatus =4;
   int canEdit = 0;
   String call ="";
+  String uuid ="";
   Map<String,dynamic>  userDetail;
   final List<ShareOpt> list = [
     ShareOpt(title:'微信', img:'assets/packages/images/login_wechat.svg',shareType:ShareType.SESSION,doAction:(shareType,shareInfo)async{
@@ -65,6 +68,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       fluwx.shareToWeChat(model);
     }),
   ];
+
+  get sexConfirmCallback => null;
   @override
   void initState() {
     super.initState();
@@ -219,7 +224,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               _appoint(context,userDetail);
 
             }else{
-              _showToast(ctx, "权限不足", true);
+              _showToastRed(ctx, "权限不足", true);
             }
 
           }
@@ -237,6 +242,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             ),
           ),
           onTap: () async {
+
+            if(canEdit ==0){
+              _showToastRed(ctx, "暂无权限", true);
+              return;
+
+            }
             // showModalBottomSheet(
             //   /**
             //    * showModalBottomSheet常用属性
@@ -255,22 +266,77 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             //     });
             //_makePhoneCall("15666035163");
            // PhotoShareBottomSheet();
-            showAdaptiveActionSheet(
+           //  showAdaptiveActionSheet(
+           //
+           //    //bottomSheetColor: Colors.green,
+           //    context: context,
+           //    title:  Text('请选择',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal)),
+           //
+           //    actions: <BottomSheetAction>[
+           //      BottomSheetAction(title:  Text('查看号码',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal)), onPressed: () async {
+           //
+           //        var actionList= await IssuesApi.viewCall(uuid);
+           //        if  (actionList['code']==200){
+           //          BottomCustomAlterWidget(context, sexConfirmCallback, "请选择性别", '男', '女');
+           //          Navigator.of(context).pop();
+           //        } else{
+           //          _showToast(ctx, "暂无查看权限", true);
+           //        }
+           //
+           //
+           //      }),
+           //      BottomSheetAction(title:  Text('拨打电话',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal)), onPressed: () async {
+           //
+           //        var actionList= await IssuesApi.viewCall(uuid);
+           //        if  (actionList['code']==200){
+           //          _makePhoneCall(actionList['data']);
+           //          Navigator.of(context).pop();
+           //        } else{
+           //          _showToast(ctx, "暂无查看权限", true);
+           //        }
+           //
+           //
+           //      }),
+           //    ],
+           //    cancelAction: CancelAction(title:  Text('取消',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal))),// onPressed parameter is optional by default will dismiss the ActionSheet
+           //  );
 
-              //bottomSheetColor: Colors.green,
-              context: context,
-              title:  Text('请选择',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal)),
 
-              actions: <BottomSheetAction>[
-                BottomSheetAction(title:  Text('查看号码',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal)), onPressed: () {}),
-                BottomSheetAction(title:  Text('拨打电话',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal)), onPressed: () {
-                  _makePhoneCall(call);
-                  Navigator.of(context).pop();
 
-                }),
-              ],
-              cancelAction: CancelAction(title:  Text('取消',style: TextStyle(color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.normal))),// onPressed parameter is optional by default will dismiss the ActionSheet
+            WWDialog.showBottomDialog(
+                context,
+                content: '请选择',
+                contentColor: colorWithHex9,
+                contentFontSize:30.sp,
+                location: DiaLogLocation.bottom,
+                arrangeType: buttonArrangeType.column,
+                buttons: ['查看号码','拨打电话'],
+                otherButtonFontSize: 30.sp,
+                otherButtonFontWeight:FontWeight.w400,
+                onTap: (int index, BuildContext context) async {
+                  if(index == 0){
+                    var actionList= await IssuesApi.viewCall(uuid);
+                    if  (actionList['code']==200){
+                      showCupertinoAlertDialog(actionList['data']);
+                    } else{
+                      _showToast(ctx, "暂无权限", true);
+                    }
+                  }
+                  if(index == 1){
+                    var actionList= await IssuesApi.viewCall(uuid);
+                    if  (actionList['code']==200){
+                      _makePhoneCall(actionList['data']);
+
+                    } else{
+                      _showToast(ctx, "暂无权限", true);
+                    }
+                  }
+               }
+
             );
+
+
+
           }
       ));
   Widget _buildCollectButton( BuildContext context) {
@@ -283,7 +349,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         },
         child: FeedbackWidget(
           onPressed: () {
-            _comment(context,connectStatus,userDetail);
+            if(canEdit ==1){
+              _comment(context,connectStatus,userDetail);
+
+            }else{
+              _showToastRed(context, "暂无权限", true);
+            }
+
           } ,
           child: BlocBuilder<CollectBloc, CollectState>(
               builder: (_, s) => Padding(
@@ -297,7 +369,61 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   )),
         ));
   }
+  showBottomAlert(BuildContext context, confirmCallback, String title,
 
+      String option1, String option2) {
+
+    showCupertinoModalPopup(
+
+        context: context,
+
+        builder: (context) {
+
+          return BottomCustomAlterWidget(
+
+              confirmCallback, title, option1, option2);
+
+        });
+
+  }
+  void showCupertinoAlertDialog(String mobile) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text("手机号码"),
+            content: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Align(
+                  child: Text(mobile),
+                  alignment: Alignment(0, 0),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("取消"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  print("取消");
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text("复制"),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: mobile));
+                  _showToast(context, "复制成功", true);
+                  Navigator.pop(context);
+                  print("确定");
+                },
+              ),
+            ],
+          );
+        });
+  }
   final List<int> colors = Cons.tabColors;
   int _position = 0;
   Future<bool> _whenPop(BuildContext context) async {
@@ -314,14 +440,24 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         _item_appoint(context,e['username'],e['other_name']==null?"":e['other_name'],e['appointment_address'],e['appointment_time']==null?"":e['appointment_time'],e['can_write'].toString(),e['remark'].toString(),e['feedback1'].toString())
     ).toList();
   }
+  List<Widget> _listViewActionList(List<dynamic>connectList ){
+    return connectList.map((e) =>
+        _itemAction(context,e['username'],e['title']==null?"":e['title'],e['content']==null?"":e['content'],e['created_at'].toString())
+    ).toList();
+  }
+  List<Widget> _listViewCallList(List<dynamic>connectList ){
+    return connectList.map((e) =>
+        _itemCall(context,e['username'],e['count'].toString(),e['updated_at'].toString())
+    ).toList();
+  }
 
   Widget _buildDetail(BuildContext context, DetailState state) {
     //print('build---${state.runtimeType}---');
     if (state is DetailWithData  ) {
-     return _BuildStateDetail(context,state.userdetails,state.connectList,state.appointList);
+     return _BuildStateDetail(context,state.userdetails,state.connectList,state.appointList,state.actionList,state.callList);
     }
     if(state is DelSuccessData){
-      return _BuildStateDetail(context,state.userdetails,state.connectList,state.appointList);
+      return _BuildStateDetail(context,state.userdetails,state.connectList,state.appointList,state.actionList,state.callList);
     }
     if(state is DetailLoading){
 
@@ -339,14 +475,17 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       )),
     );
   }
-  Widget _BuildStateDetail(BuildContext context, Map<String,dynamic> userdetails, Map<String,dynamic> connectLists, Map<String,dynamic> appointLists){
+  Widget _BuildStateDetail(BuildContext context, Map<String,dynamic> userdetails, Map<String,dynamic> connectLists, Map<String,dynamic> appointLists,Map<String,dynamic> actionLists,Map<String,dynamic> callLists){
 
     var info = userdetails['info'];
     canEdit= userdetails['can_edit'];
     call = info['mobile'];
+    uuid = info['uuid'];
     userDetail=info;
     List<dynamic> connectList = connectLists['data'];
     List<dynamic> appointList = appointLists['data'];
+    List<dynamic> actionList = actionLists['data'];
+    List<dynamic> callList = callLists['data'];
     if (connectList.length>0){
       Map<String ,dynamic> e=connectList.first;
       if (e!=null)
@@ -354,6 +493,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     }
     List<Widget> list = _listViewConnectList(connectList);
     List<Widget> appointListView = _listViewAppointList(appointList);
+    List<Widget> actionListView = _listViewActionList(actionList);
+    List<Widget> callListView = _listViewCallList(callList);
 
     String level = getLevel(info['status']);
 
@@ -368,6 +509,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               //CustomsExpansionPanelList()
               //_item(context),
               WidgetNodePanel(
+                  showMore: false,
                   codeFamily: 'Inconsolata',
                   text: "基础资料",
                   code: "",
@@ -522,6 +664,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               //CustomsExpansionPanelList()
               //_item(context),
               WidgetNodePanel(
+                  showMore: false,
                   codeFamily: 'Inconsolata',
                   text: "学历工作及资产",
                   code: "",
@@ -613,6 +756,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               //CustomsExpansionPanelList()
               //_item(context),
               WidgetNodePanel(
+                  showMore: false,
                   codeFamily: 'Inconsolata',
                   text: "婚姻及父母家庭",
                   code: "",
@@ -686,6 +830,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               //CustomsExpansionPanelList()
               //_item(context),
               WidgetNodePanel(
+                  showMore: false,
                   codeFamily: 'Inconsolata',
                   text: "用户画像相关",
                   code: "",
@@ -744,6 +889,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               //CustomsExpansionPanelList()
               //_item(context),
               WidgetNodePanel(
+                  showMore: false,
                   codeFamily: 'Inconsolata',
                   text: "用户图片",
                   code: "",
@@ -778,6 +924,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               //CustomsExpansionPanelList()
               //_item(context),
               WidgetNodePanel(
+                  showMore: connectList.length ==20 ? true : false,
                   codeFamily: 'Inconsolata',
                   text: "客户沟通记录",
                   code: "",
@@ -808,6 +955,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               //CustomsExpansionPanelList()
               //_item(context),
               WidgetNodePanel(
+                  showMore: appointListView.length ==20 ? true : false,
                   codeFamily: 'Inconsolata',
                   text: "客户排约记录",
                   code: "",
@@ -826,6 +974,72 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                     ),
                   ):Container(child: Text("暂无排约"),)
               ),
+            ],
+          ),
+        ),
+
+        Container(
+          margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              //CustomsExpansionPanelList()
+              //_item(context),
+              WidgetNodePanel(
+                  showMore: actionListView.length ==20 ? true : false,
+                  codeFamily: 'Inconsolata',
+                  text: "客户操作记录",
+                  code: "",
+                  show: actionListView.length > 0 ?Container(
+                    width:  ScreenUtil().screenWidth*0.98,
+                    // height: 300,
+                    child:
+                    Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[
+                          ...actionListView
+                        ]
+                    ),
+                  ):Container(child: Text("暂无记录"),)
+              ),
+
+
+            ],
+          ),
+        ),
+
+        Container(
+          margin: EdgeInsets.only(left: 15.w, right: 5.w,bottom: 0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              //CustomsExpansionPanelList()
+              //_item(context),
+              WidgetNodePanel(
+                  showMore: callListView.length ==20 ? true : false,
+                  codeFamily: 'Inconsolata',
+                  text: "电话查看记录",
+                  code: "",
+                  show: callListView.length > 0 ?Container(
+                    width:  ScreenUtil().screenWidth*0.98,
+                    // height: 300,
+                    child:
+                    Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[
+                          ...callListView
+                        ]
+                    ),
+                  ):Container(child: Text("暂无记录"),)
+              ),
+
+
             ],
           ),
         ),
@@ -1169,7 +1383,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                       Expanded(
                                         child:
                                         Container(
-                                          width: ScreenUtil().screenWidth*0.7,
+                                          width: ScreenUtil().screenWidth*0.68,
                                             child: Text(
                                               content,
                                               maxLines: 1,
@@ -1301,7 +1515,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                   width: ScreenUtil().screenWidth*0.49,
                                   child: Text(
                                     remark,
-                                    maxLines: 3,
+                                    maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontSize: 25.sp, color: Colors.black,fontWeight: FontWeight.w900),
@@ -1354,6 +1568,229 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               style: TextStyle(
                                   fontSize: 20.sp, color: Colors.black54),
                             ),
+                          )),
+                    ]),
+                  ),
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+
+
+  Widget _itemAction(BuildContext context,String name ,String title,String content,String time) {
+    bool isDark = false;
+
+    return  Container(
+      padding:  EdgeInsets.only(
+          top: 10.h,
+          bottom: 0
+      ),
+      width: double.infinity,
+      //height: 180.h,
+      child:  Material(
+          color:  Colors.transparent ,
+          child: InkWell(
+            onTap: (){
+
+            },
+            child: Container(
+              margin: EdgeInsets.only(left: 15.w, right: 20.w),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                          children: <Widget>[
+                            Circle(
+                              //connectType 沟通类型 1-线上沟通 2-到店沟通
+                              color: Colors.grey,
+                              radius: 5,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 15.w),
+                              child: Text(
+                                name==null?"":name,
+                                style: TextStyle(fontSize: 30.sp, color: Colors.black),
+                              ),
+                            ),
+                            SizedBox(
+                              width: ScreenUtil().setWidth(10.w),
+                            ),
+                            Visibility(
+                                visible: true,
+                                child: Container(
+                                  //width: ScreenUtil().screenWidth*0.71,
+                                    height:30.h,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child:
+                                          Container(
+                                            width: ScreenUtil().screenWidth*0.63,
+                                            child: Text(
+                                              content,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 25.sp, color: Colors.black,fontWeight: FontWeight.w900),
+                                            ),
+                                          ),
+
+                                        ),
+                                      ],
+                                    )
+
+
+
+                                )),
+                          ]),
+                      //Visibility是控制子组件隐藏/可见的组件
+                      Visibility(
+                        visible: false,
+                        child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                size: 25.sp,
+                                color: Colors.black54,
+                              )
+
+                            ]),
+                      )
+                    ],
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.only(left: 0.w,top: 10.h),
+                    child: Row(children: <Widget>[
+
+                      SizedBox(
+                        width: ScreenUtil().setWidth(10.w),
+                      ),
+                      Visibility(
+                          visible: true,
+                          child: Text(
+                            "操作类型:"+(title==null?"":title),
+                            style: TextStyle(
+                                fontSize: 20.sp, color: Colors.black54),
+                          )),
+                      SizedBox(
+                        width: ScreenUtil().setWidth(10.w),
+                      ),
+
+                      Visibility(
+                          visible: true,
+                          child: Text(
+                            "操作时间:"+(time==null?"":time),
+                            style: TextStyle(
+                                fontSize: 20.sp, color: Colors.black54),
+                          )),
+                    ]),
+                  ),
+                ],
+              ),
+            ),
+          )),
+    );
+  }
+  Widget _itemCall(BuildContext context,String name ,String count,String time) {
+    bool isDark = false;
+
+    return  Container(
+      padding:  EdgeInsets.only(
+          top: 10.h,
+          bottom: 0
+      ),
+      width: double.infinity,
+      //height: 180.h,
+      child:  Material(
+          color:  Colors.transparent ,
+          child: InkWell(
+            onTap: (){
+
+            },
+            child: Container(
+              margin: EdgeInsets.only(left: 15.w, right: 20.w),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                          children: <Widget>[
+                            Circle(
+                              //connectType 沟通类型 1-线上沟通 2-到店沟通
+                              color: Colors.grey,
+                              radius: 5,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 15.w),
+                              child: Text(
+                                name==null?"":name,
+                                style: TextStyle(fontSize: 30.sp, color: Colors.black),
+                              ),
+                            ),
+                            SizedBox(
+                              width: ScreenUtil().setWidth(10.w),
+                            ),
+                            Visibility(
+                                visible: true,
+                                child: Container(
+                                  //width: ScreenUtil().screenWidth*0.71,
+                                    height:30.h,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child:
+                                          Container(
+                                            width: ScreenUtil().screenWidth*0.63,
+                                            child: Text(
+                                              "查看"+count+"次",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 25.sp, color: Colors.black,fontWeight: FontWeight.w900),
+                                            ),
+                                          ),
+
+                                        ),
+                                      ],
+                                    )
+
+
+
+                                )),
+                          ]),
+                      //Visibility是控制子组件隐藏/可见的组件
+                      Visibility(
+                        visible: false,
+                        child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                size: 25.sp,
+                                color: Colors.black54,
+                              )
+
+                            ]),
+                      )
+                    ],
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.only(left: 0.w,top: 10.h),
+                    child: Row(children: <Widget>[
+
+
+                      Visibility(
+                          visible: true,
+                          child: Text(
+                            "最后查看时间:"+(time==null?"":time),
+                            style: TextStyle(
+                                fontSize: 22.sp, color: Colors.black),
                           )),
                     ]),
                   ),
@@ -1771,7 +2208,7 @@ _showToast(BuildContext ctx, String msg, bool collected) {
     backgroundColor: Colors.white,
     leading: (cancel) => Container(
       child: IconButton(
-        icon: Icon(Icons.error, color: Colors.green),
+        icon: Icon(Icons.mood_sharp, color: Colors.green),
         onPressed: cancel,
       )),
     title: (text)=>Container(
@@ -3279,7 +3716,7 @@ _showAppointBottom(BuildContext context,String userName,String otherName,String 
 
                     Container(
                       child: Text(
-                        "约会地点:" + address,
+                        "约会地点:" + (address==null ?"":address),
                         textAlign: TextAlign.left,
                         style: TextStyle(fontSize: 28.sp,color:Colors.black,fontWeight: FontWeight.w800),
                       ),
