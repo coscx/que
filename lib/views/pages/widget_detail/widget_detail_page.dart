@@ -3202,6 +3202,7 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                                       MyPicker.showPicker(
                                           context: context,
                                           current: _date1,
+
                                           mode: MyPickerMode.dateTime,
                                           onConfirm: (v){
                                             //_change('yyyy-MM-dd HH:mm'),

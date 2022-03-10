@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/blocs/global/global_bloc.dart';
@@ -5,6 +6,8 @@ import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/blocs/home/home_event.dart';
 import 'package:flutter_geen/views/pages/home/multi_select.dart';
 import 'package:flutter_geen/views/pages/utils/gzx_style.dart';
+import 'package:flutter_my_picker/flutter_my_picker.dart';
+import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
@@ -28,6 +31,15 @@ class SelectItem {
 
   SelectItem({this.name, this.id, this.isSelect, this.type});
 }
+class StoreItem {
+  String name;
+  String id;
+  bool isSelect;
+  int index;
+  int type;
+
+  StoreItem({this.name, this.id, this.isSelect, this.index,this.type});
+}
 
 class GZXFilterGoodsPage extends StatefulWidget {
   final List<SelectItem> selectItems;
@@ -50,7 +62,8 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
   List<SelectItem> _valueIncome = [];
   List<SelectItem> _valueHouse = [];
   List<SelectItem> _valueMarriage = [];
-
+  List<String > pickerStoreData =[];
+  List<StoreItem > pickerStoreItem =[];
   List _value3 = ['65-5130', '5130-1.1万', '1.1万-1.5万'];
   List _value4 = ['10%的选择', '52%的选择', '23%的选择'];
   List<SelectItem> _value5 = [];
@@ -68,6 +81,14 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
   bool _isHideValue8 = true;
   bool _isHideValue9 = true;
   bool _isHideValue10 = true;
+  DateTime startBirthDay = DateTime.now();
+  DateTime endBirthDay = DateTime.now();
+  String startBirthDayTitle = "开始日期";
+  String endBirthDayTitle = "结束日期";
+  String startBirthDayValue = "";
+  String endBirthDayValue = "";
+  String store = "";
+  String storeName = "选择门店";
 
   @override
   void initState() {
@@ -117,6 +138,23 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
       _valueMarriage.add(ff);
     }
 
+    StoreItem ff = StoreItem();
+    ff.id = "1";
+    ff.type = 600;
+    ff.name = "鹊桥缘遇";
+    ff.index = 0;
+    ff.isSelect = false;
+    pickerStoreItem.add(ff);
+    pickerStoreData.add("鹊桥缘遇");
+
+    StoreItem ff1 = StoreItem();
+    ff1.id = "2";
+    ff1.type = 600;
+    ff1.name = "鹊桥缘遇昆山";
+    ff1.isSelect = false;
+    ff.index = 1;
+    pickerStoreItem.add(ff1);
+    pickerStoreData.add("鹊桥缘遇昆山");
     _expansionPanelItems = <ExpansionPanelItem>[
       ExpansionPanelItem(
           headerText: 'Panel A',
@@ -256,6 +294,243 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
       ],
     );
   }
+
+  Widget buildBirthday(String title){
+
+    for(int j=0;j< widget.selectItems.length;j++){
+      if (widget.selectItems[j].type == 500 ){
+        startBirthDayTitle  = widget.selectItems[j].id;
+        startBirthDayValue  = widget.selectItems[j].id;
+      }
+      if (widget.selectItems[j].type == 501 ){
+        endBirthDayTitle  = widget.selectItems[j].id;
+        endBirthDayValue  = widget.selectItems[j].id;
+      }
+    }
+
+
+
+    return Column(
+      children: [
+        Container(
+
+          padding:   EdgeInsets.only(left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
+          alignment: Alignment.centerLeft,
+          child: Text(title,
+              style: TextStyle(fontSize: 12, color: Color(0xFF6a6a6a))),
+        ),
+        Container(
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+
+              Container(
+                padding:   EdgeInsets.only(left: 10.w, top: 0.h, right: 0.w, bottom: 50.h),
+                child: ElevatedButton(
+
+                  onPressed: (){
+
+                    MyPicker.showPicker(
+                        context: context,
+                        current: startBirthDay,
+                        mode: MyPickerMode.date,
+                        onConfirm: (v){
+                          //_change('yyyy-MM-dd HH:mm'),
+                          print(v);
+                          setState(() {
+                            startBirthDay=v;
+                            startBirthDayTitle = startBirthDay.year.toString()+"-"+startBirthDay.month.toString()+"-"+startBirthDay.day.toString();
+                            startBirthDayValue = startBirthDayTitle;
+
+                            int j=0,k=0;
+                            for (int i = 0; i < widget.selectItems.length; i++) {
+                              if (widget.selectItems[i].type == 500) {
+                                j = 1;
+                                widget.selectItems[i].id=  startBirthDayValue;
+                                break;
+                              }
+                            }
+
+                            if (j == 0) {
+
+                              SelectItem s = SelectItem();
+                              s.type = 500;
+                              s.id = startBirthDayValue;
+                              widget.selectItems.add(s);
+                            }
+
+                          });
+                        }
+                    );
+                  },
+                  child: Text(startBirthDayTitle),
+                  style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.white,
+                      primary: Color(0xFF6a6a6a),
+                      shadowColor: Colors.black12,
+                      shape: StadiumBorder(),
+                      padding: EdgeInsets.symmetric(horizontal: 35.w,vertical: 10.h)),
+                ),
+              ),
+              Container(
+                padding:   EdgeInsets.only(left: 50.w, top: 0.h, right: 0.w, bottom: 0.h),
+                child: ElevatedButton(
+                  onPressed: (){
+                    MyPicker.showPicker(
+                        context: context,
+                        current: endBirthDay,
+                        mode: MyPickerMode.date,
+                        onConfirm: (v){
+                          //_change('yyyy-MM-dd HH:mm'),
+                          print(v);
+                          setState(() {
+                            endBirthDay=v;
+                            endBirthDayTitle = endBirthDay.year.toString()+"-"+endBirthDay.month.toString()+"-"+endBirthDay.day.toString();
+                            endBirthDayValue = endBirthDayTitle;
+                            int j=0,k=0;
+                            for (int i = 0; i < widget.selectItems.length; i++) {
+                              if (widget.selectItems[i].type == 501) {
+                                j = 1;
+                                widget.selectItems[i].id=  endBirthDayValue;
+                                break;
+                              }
+                            }
+
+                            if (j == 0) {
+
+                              SelectItem s = SelectItem();
+                              s.type = 501;
+                              s.id = endBirthDayValue;
+                              widget.selectItems.add(s);
+                            }
+                          });
+                        }
+                    );
+                  },
+                  child: Text(endBirthDayTitle),
+                  style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.white,
+                      primary: Color(0xFF6a6a6a),
+                      shadowColor: Colors.black12,
+                      shape: StadiumBorder(),
+                      padding: EdgeInsets.symmetric(horizontal: 35.w,vertical: 10.h)),
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ],
+    );
+
+
+  }
+  Widget buildStore(String title){
+    int storeId =0;
+    for(int j=0;j< widget.selectItems.length;j++){
+      if (widget.selectItems[j].type == 600 ){
+        storeId  = int.parse(widget.selectItems[j].id);
+        //storeName = widget.selectItems[j].name;
+      }
+    }
+    for(int j=0;j< pickerStoreItem.length;j++){
+      if (pickerStoreItem[j].id == storeId.toString() ){
+        storeId  = j;
+      }
+    }
+
+
+    return Column(
+      children: [
+        Container(
+
+          padding:   EdgeInsets.only(left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
+          alignment: Alignment.centerLeft,
+          child: Text(title,
+              style: TextStyle(fontSize: 12, color: Color(0xFF6a6a6a))),
+        ),
+        Container(
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+
+              Container(
+                padding:   EdgeInsets.only(left: 10.w, top: 0.h, right: 0.w, bottom: 50.h),
+                child: ElevatedButton(
+
+                  onPressed: (){
+
+
+                      new Picker(
+                           selecteds: [storeId],
+                           itemExtent:40,
+                          selectionOverlay:CupertinoPickerDefaultSelectionOverlay(background: Colors.transparent,),
+                          cancelText: "取消",
+                          confirmText: "确定",
+                          selectedTextStyle: TextStyle(fontSize: 40.sp, color: Colors.redAccent),
+                          textStyle: TextStyle(fontSize: 25.sp, color: Colors.black),
+                          adapter: PickerDataAdapter<String>(pickerdata: pickerStoreData),
+                          changeToFirst: true,
+                          hideHeader: false,
+                          onConfirm: (Picker picker, List value) {
+                            print(value.toString());
+                            print(picker.adapter.text);
+                            setState(() {
+                              store=pickerStoreItem[value[0]].id;
+                              storeName =pickerStoreItem[value[0]].name;
+                              int j=0,k=0;
+                              for (int i = 0; i < widget.selectItems.length; i++) {
+                                if (widget.selectItems[i].type == 600) {
+                                  j = 1;
+                                  widget.selectItems[i].id=  pickerStoreItem[value[0]].id;
+                                  break;
+                                }
+                              }
+
+                              if (j == 0) {
+
+                                SelectItem s = SelectItem();
+                                s.type = 600;
+                                s.id = pickerStoreItem[value[0]].id;
+                                widget.selectItems.add(s);
+                              }
+                            });
+
+
+
+                          }
+                      ).showModal(this.context); //_scaffoldKey.currentState);
+
+
+
+                  },
+                  child: Text(storeName==""?" ":storeName),
+                  style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.white,
+                      primary: Color(0xFF6a6a6a),
+                      shadowColor: Colors.black12,
+                      shape: StadiumBorder(),
+                      padding: EdgeInsets.symmetric(horizontal: 35.w,vertical: 10.h)),
+                ),
+              ),
+
+
+            ],
+          ),
+        ),
+      ],
+    );
+
+
+  }
+
+
   Widget buildRangerSlider(String title){
     return Column(
       children: [
@@ -730,7 +1005,9 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
               _buildGroup1('客户收入', false, _valueIncome, widget.selectItems),
               _buildGroup1('客户房产', false, _valueHouse, widget.selectItems),
               _buildGroup1('客户婚姻状况', false, _valueMarriage, widget.selectItems),
-              buildRangerSlider("年龄选择")
+                  buildBirthday("生日选择"),
+                  buildStore("门店选择")
+              //buildRangerSlider("年龄选择")
                   // _buildGroup2(),
               // _buildGroup3(),
               // _buildGroup4(),
@@ -799,6 +1076,12 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                         _valueMarriage[j].isSelect =false;
 
                       }
+                     widget.selectItems.removeWhere((e) => e.type ==500 || e.type ==501);
+                     startBirthDayTitle ="开始日期";
+                     endBirthDayTitle ="结束日期";
+                     startBirthDayValue ="";
+                     endBirthDayValue ="";
+
 
                      showToastBottom(context, "重置成功", true);
 

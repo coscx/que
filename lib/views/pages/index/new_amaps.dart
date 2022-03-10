@@ -178,7 +178,7 @@ class _AMapsState extends State<AMaps> {
                     shrinkWrap: true,
                     itemCount: _list.length,
                     separatorBuilder: (_, index) {
-                      return const Divider(height: 0.6);
+                      return  Divider(height: 1.2.h);
                     },
                     itemBuilder: (_, index) {
                       return InkWell(
@@ -199,8 +199,8 @@ class _AMapsState extends State<AMaps> {
                         },
                         child: Container(
                           alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          height: 50.0,
+                          padding:  EdgeInsets.symmetric(horizontal: 16.w),
+                          height: 100.h,
                           child: Row(
                             children: <Widget>[
                               Expanded(

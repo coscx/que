@@ -142,10 +142,10 @@ class IssuesApi {
         marriage.add(e.id);
       }
 
-      if (e.type == 300) {
+      if (e.type == 500) {
         startBirthday = e.id.toString();
       }
-      if (e.type == 301) {
+      if (e.type == 501) {
         endBirthday = e.id.toString();
       }
 
