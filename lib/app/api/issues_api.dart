@@ -101,6 +101,7 @@ class IssuesApi {
     var marriage = <String>[];
     var startBirthday ="";
     var endBirthday ="";
+    var storeId="0";
     selectItems.map((e) {
       if (e.type == 100) {
 
@@ -148,7 +149,9 @@ class IssuesApi {
       if (e.type == 501) {
         endBirthday = e.id.toString();
       }
-
+      if (e.type == 600) {
+        storeId = e.id;
+      }
 
     } ).toList();
     if (channel.length > 0){
@@ -179,7 +182,11 @@ class IssuesApi {
       searchParm['startBirthday'] = startBirthday;
       searchParm['endBirthday'] = endBirthday;
     }
+    if (storeId !=""){
 
+      searchParm['store_id'] = storeId;
+
+    }
 
     // search.list.map((e) {
     //   if (e.paramCode=="customerLevel"){

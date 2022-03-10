@@ -47,10 +47,10 @@ showToastBottom(BuildContext ctx, String msg, bool collected) {
   }
   Fluttertoast.showToast(
       msg: msg,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,  // 消息框弹出的位置
-      backgroundColor: Colors.transparent,
-      textColor: Colors.grey,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,  // 消息框弹出的位置
+      backgroundColor: Colors.grey,
+      textColor: Colors.white,
       fontSize: 30.sp
   );
 }
