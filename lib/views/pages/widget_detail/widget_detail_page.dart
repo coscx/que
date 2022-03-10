@@ -2876,9 +2876,9 @@ _appoint(BuildContext context,Map<String,dynamic> detail) {
                                         onPressed: (){
                                           Navigator.pushNamed(context, UnitRouter.baidu_map).then((value) {
                                              List<String> data = value.toString().split("#");
-                                              // appointment_address =data.elementAt(0)+"-"+data.elementAt(1)+"";
-                                              // address_lng=data.elementAt(2);
-                                              // address_lat=data.elementAt(3);
+                                              appointment_address =data.elementAt(1)+"";
+                                              address_lng=data.elementAt(2);
+                                              address_lat=data.elementAt(3);
 
                                              _placeController.text=appointment_address;
                                           });
