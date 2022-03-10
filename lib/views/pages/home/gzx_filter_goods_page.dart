@@ -497,6 +497,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
 
                                 SelectItem s = SelectItem();
                                 s.type = 600;
+                                s.name = pickerStoreItem[value[0]].name;
                                 s.id = pickerStoreItem[value[0]].id;
                                 widget.selectItems.add(s);
                               }
