@@ -38,7 +38,7 @@ import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:flutter_geen/views/items/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
-
+import 'package:flutter_geen/views/dialogs/common_dialog.dart';
 class WidgetDetailPage extends StatefulWidget {
 
 
@@ -218,13 +218,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           onTap: () async {
             // Navigator.of(context).pushNamed(UnitRouter.baidu_map).then((value) {
             //   if(value != null && value !="")
-            //   _showToast(ctx, value, true);
+            //   showToast(ctx, value, true);
             // });
             if(canEdit ==1){
               _appoint(context,userDetail);
 
             }else{
-              _showToastRed(ctx, "权限不足", true);
+              showToastRed(ctx, "权限不足", true);
             }
 
           }
@@ -244,7 +244,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           onTap: () async {
 
             if(canEdit ==0){
-              _showToastRed(ctx, "暂无权限", true);
+              showToastRed(ctx, "暂无权限", true);
               return;
 
             }
@@ -280,7 +280,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
            //          BottomCustomAlterWidget(context, sexConfirmCallback, "请选择性别", '男', '女');
            //          Navigator.of(context).pop();
            //        } else{
-           //          _showToast(ctx, "暂无查看权限", true);
+           //          showToast(ctx, "暂无查看权限", true);
            //        }
            //
            //
@@ -292,7 +292,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
            //          _makePhoneCall(actionList['data']);
            //          Navigator.of(context).pop();
            //        } else{
-           //          _showToast(ctx, "暂无查看权限", true);
+           //          showToast(ctx, "暂无查看权限", true);
            //        }
            //
            //
@@ -319,7 +319,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                     if  (actionList['code']==200){
                       showCupertinoAlertDialog(actionList['data']);
                     } else{
-                      _showToast(ctx, "暂无权限", true);
+                      showToast(ctx, "暂无权限", true);
                     }
                   }
                   if(index == 1){
@@ -328,7 +328,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                       _makePhoneCall(actionList['data']);
 
                     } else{
-                      _showToast(ctx, "暂无权限", true);
+                      showToast(ctx, "暂无权限", true);
                     }
                   }
                }
@@ -344,7 +344,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return BlocListener<DetailBloc, DetailState>(
         listener: (ctx, st) {
           if (st is DelSuccessData){
-              _showToast(ctx, st.reason, true);
+              showToast(ctx, st.reason, true);
           }
         },
         child: FeedbackWidget(
@@ -353,7 +353,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               _comment(context,connectStatus,userDetail);
 
             }else{
-              _showToastRed(context, "暂无权限", true);
+              showToastRed(context, "暂无权限", true);
             }
 
           } ,
@@ -415,7 +415,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                 child: Text("复制"),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(text: mobile));
-                  _showToast(context, "复制成功", true);
+                  showToast(context, "复制成功", true);
                   Navigator.pop(context);
                   print("确定");
                 },
@@ -538,12 +538,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child: _item_detail(context,Colors.black,Icons.store,"状态",level,false)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入姓名","",info['name'].toString(),"name",1,info);
                               },child: _item_detail(context,Colors.black,Icons.drive_file_rename_outline,"姓名",info['name'].toString(),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 showPickerArray(context,[["未知","男生","女生"]],info['gender']==0?[1]:[info['gender']],"gender",info,"",true);
                               },child:  _item_detail(context,Colors.black,Icons.rice_bowl_outlined,"性别",info['gender']==1?"男生":"女生",true)),
                           GestureDetector(
@@ -552,7 +552,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child: _item_detail(context,Colors.black,Icons.contact_page_outlined,"年龄",info['age']==0?"-":info['age'].toString()+"岁",false)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 showPickerDateTime(context,info['birthday']==null?"-":info['birthday'].toString(),"birthday",info);
                               },child:  _item_detail(context,Colors.black,Icons.broken_image_outlined,"生日",info['birthday']==null?"-":info['picker.adapter.text']!=""?info['birthday'].toString():info['birthday'].toString().substring(0,10)+"("+info['chinese_zodiac']+"-"+info['zodiac']+")",true)),
                           GestureDetector(
@@ -564,7 +564,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child:  _item_detail(context,Colors.orange,Icons.whatshot,"五行",info['wuxing'].toString(),false)),
                           GestureDetector(
                               onTap: () async {
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 Result result = await CityPickers.showCityPicker(
                                     context: context,
                                     locationCode: info['np_area_code'] =="" ? (info['np_city_code'] ==""? "320500":info['np_city_code'] ) :info['np_area_code'] ,
@@ -576,16 +576,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                   var results= await IssuesApi.editCustomerAddress(info['uuid'],1,result);
                                   if(results['code']==200){
                                     BlocProvider.of<DetailBloc>(context).add(EditDetailEventAddress(result,1));
-                                    _showToast(context,"编辑成功",false);
+                                    showToast(context,"编辑成功",false);
                                   }else{
 
-                                    _showToast(context,results['message'],false);
+                                    showToast(context,results['message'],false);
                                   }
                                 }
                               },child:  _item_detail(context,Colors.black,Icons.local_activity_outlined,"籍贯",info['native_place']==null?"-":(info['native_place']==""?"-":info['native_place'].toString()),true)),
                           GestureDetector(
                               onTap: () async {
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 Result result = await CityPickers.showCityPicker(
                                     context: context,
                                     locationCode: info['lp_area_code'] =="" ? (info['lp_city_code'] ==""? "320500":info['lp_city_code'] ) :info['lp_area_code'] ,
@@ -597,9 +597,9 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                   var results= await IssuesApi.editCustomerAddress(info['uuid'],2,result);
                                   if(results['code']==200){
                                     BlocProvider.of<DetailBloc>(context).add(EditDetailEventAddress(result,2));
-                                    _showToast(context,"编辑成功",false);
+                                    showToast(context,"编辑成功",false);
                                   }else{
-                                    _showToast(context,results['message'],false);
+                                    showToast(context,results['message'],false);
                                   }
                                 }
                               },child:  _item_detail(context,Colors.black,Icons.house_outlined,"居住",info['location_place']==null?"-":(info['location_place']==""?"-":info['location_place'].toString()),true)),
@@ -608,17 +608,17 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child:  _item_detail(context,Colors.black,Icons.point_of_sale,"销售",info['sale_user'].toString(),false)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_nationLevel],info['nation']==0?[1]:[info['nation']],"nation",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[nationLevel],info['nation']==0?[1]:[info['nation']],"nation",info,"",true);
                               },child: _item_detail(context,Colors.black,Icons.gamepad_outlined,"民族",info['nation']==""?"-":_getNationLevel((info['nation'])),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 showPickerArray(context,[_getHeightList()],info['height']==0?[70]:[_getIndexOfList(_getHeightList(),info['height'].toString())],"height",info,"身高(cm)",false);
                               },child:  _item_detail(context,Colors.black,Icons.height,"身高",info['height']==0?"-":info['height'].toString()+"cm",true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 showPickerArray(context,[_getWeightList()],info['weight']==0?[35]:[_getIndexOfList(_getWeightList(),info['weight'].toString())],"weight",info,"体重(kg)",false);
                               },child:  _item_detail(context,Colors.black,Icons.line_weight,"体重",info['weight']==0?"-":info['weight'].toString()+"kg",true)),
                           GestureDetector(
@@ -626,22 +626,22 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               },child:  _item_detail(context,Colors.black,Icons.design_services_outlined,"服务",info['serve_user']==""?"-":info['serve_user'].toString(),false)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入兴趣","",info['interest']==null?"-":(info['interest']==""?"-":info['interest'].toString()),"interest",5,info);
                               },child:  _item_detail(context,Colors.black,Icons.integration_instructions_outlined,"兴趣",info['interest']==""?"-":info['interest'].toString(),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_floodLevel],info['blood_type']==0?[3]:[info['blood_type']],"blood_type",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[floodLevel],info['blood_type']==0?[3]:[info['blood_type']],"blood_type",info,"",true);
                               },child:  _item_detail(context,Colors.black,Icons.blur_on_outlined,"血型",info['blood_type']==0?"-":_getFloodLevel(info['blood_type']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入择偶要求","",info['demands']==null?"":(info['demands']==""?"":info['demands'].toString()),"demands",5,info);
                               },child:   _item_detail(context,Colors.black,Icons.developer_mode,"择偶",info['demands']==null?"-":(info['demands']==""?"-":info['demands'].toString()),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入备注","",info['remark']==null?"":(info['remark']==""?"":info['remark'].toString()),"remark",5,info);
                               },child:    _item_detail(context,Colors.black,Icons.bookmarks_outlined,"备注",info['remark']==null?"-":(info['remark']==""?"-":info['remark'].toString()),true)),
 
@@ -680,63 +680,64 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         children: <Widget>[
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_EduLevel],info['education']==0?[1]:[info['education']],"education",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[EduLevel],info['education']==0?[1]:[info['education']],"education",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.menu_book,"个人学历",info['education']==0?"-":_getEduLevel(info['education']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入毕业院校","",info['school']==null?"":(info['school']==""?"":info['school'].toString()),"school",1,info);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.school,"毕业院校",info['school'].toString()==""?"-":info['school'].toString(),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入所学专业","",info['major']==null?"":(info['major']==""?"":info['major'].toString()),"major",1,info);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.tab,"所学专业",info['major']==""?"-":info['major'].toString(),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_companyTypeLevel],info['work']==0?[1]:[info['work']],"work",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[companyTypeLevel],info['work']==0?[1]:[info['work']],"work",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.reduce_capacity,"企业类型",info['work']==0?"-":_getCompanyLevel(info['work'])+"",true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_WorkTypeLevel],info['work_job']==0?[1]:[info['work_job']],"work_job",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[WorkTypeLevel],info['work_job']==0?[1]:[info['work_job']],"work_job",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.location_city,"所属行业",info['work_job']==""?"-":_getWorkType(info['work_job']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入职位描述","",info['work_industry']==null?"":(info['work_industry']==""?"":info['work_industry'].toString()),"work_industry",5,info);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.description_outlined,"职位描述",info['work_industry']==""?"-":info['work_industry'].toString(),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_WorkOverTimeLevel],info['work_overtime']==0?[1]:[info['work_overtime']],"work_overtime",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[WorkOverTimeLevel],info['work_overtime']==0?[1]:[info['work_overtime']],"work_overtime",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.more_outlined,"加班情况",info['work_overtime']==""?"-":_getWorkOverTime(info['work_overtime']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_IncomeLevel],info['income']==0?[1]:[info['income']],"income",info,"",true);
-                              } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":_getIncome(info['income']),true)),
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                               // showPickerArray(context,[IncomeLevel],info['income']==0?[1]:[info['income']],"income",info,"",true);
+                                _showEditDialog(context,"请输入收入","",info['income'].toString(),"income",1,info);
+                              } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.monetization_on_outlined,"收入情况",info['income']==0?"-":info['income'].toString()+"万",true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_hasHouseLevel],info['has_house']==0?[1]:[info['has_house']],"has_house",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[hasHouseLevel],info['has_house']==0?[1]:[info['has_house']],"has_house",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.redAccent,Icons.house_outlined,"是否有房",info['has_house']==0?"-":_getHasHouse(info['has_house']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_houseFutureLevel],info['loan_record']==0?[1]:[info['loan_record']],"loan_record",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[houseFutureLevel],info['loan_record']==0?[1]:[info['loan_record']],"loan_record",info,"",true);
                               } ,child: _item_detail_gradute(context,Colors.black,Icons.copyright_rounded,"房贷情况",info['loan_record']==0?"-":_getHouseFuture(info['loan_record']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_hasCarLevel],info['has_car']==0?[1]:[info['has_car']],"has_car",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[hasCarLevel],info['has_car']==0?[1]:[info['has_car']],"has_car",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.car_rental,"是否有车",info['has_car']==0?"-":_getHasCar(info['has_car']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_carLevelLevel],info['car_type']==0?[1]:[info['car_type']],"car_type",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[carLevelLevel],info['car_type']==0?[1]:[info['car_type']],"car_type",info,"",true);
                               } ,child: _item_detail_gradute(context,Colors.black,Icons.wb_auto_outlined,"车辆档次",info['car_type']==0?"-":_getCarLevel(info['car_type']),true)),
 
                         ]
@@ -772,48 +773,48 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         children: <Widget>[
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_marriageLevel],info['marriage']==0?[1]:[info['marriage']],"marriage",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[marriageLevel],info['marriage']==0?[1]:[info['marriage']],"marriage",info,"",true);
                               } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",info['marriage']==0?"-":_getMarriageLevel(info['marriage']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_childLevel],info['has_child']==0?[1]:[info['has_child']],"has_child",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[childLevel],info['has_child']==0?[1]:[info['has_child']],"has_child",info,"",true);
                               } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.child_care,"子女信息",info['has_child']==0?"-":_getChildLevel(info['has_child']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入子女备注","",info['child_remark']==null?"":(info['child_remark']==""?"":info['child_remark'].toString()),"child_remark",5,info);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.mark_chat_read_outlined,"子女备注",info['child_remark']==""?"-":info['child_remark'].toString(),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_onlyChildLevel],info['only_child']==0?[1]:[info['only_child']],"only_child",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[onlyChildLevel],info['only_child']==0?[1]:[info['only_child']],"only_child",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.looks_one_outlined,"独生子女",info['only_child']==0?"-":_getOnlyChildLevel(info['only_child'])+"",true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_parentLevel],info['parents']==0?[1]:[info['parents']],"parents",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[parentLevel],info['parents']==0?[1]:[info['parents']],"parents",info,"",true);
                               } ,child: _item_detail_gradute(context,Colors.black,Icons.watch_later_outlined,"父母状况",info['parents']==0?"-":_getParentLevel(info['parents']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入父亲职业","",info['father_work']==null?"":(info['father_work']==""?"":info['father_work'].toString()),"father_work",1,info);
                               } ,child: _item_detail_gradute(context,Colors.black,Icons.attribution_rounded,"父亲职业",info['father_work']==""?"-":info['father_work'].toString(),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入母亲职业","",info['mother_work']==null?"":(info['mother_work']==""?"":info['mother_work'].toString()),"mother_work",1,info);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.sports_motorsports_outlined,"母亲职业",info['mother_work']==""?"-":info['mother_work'].toString(),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
                                 _showEditDialog(context,"请输入父母收入","",info['parents_income']==null?"":(info['parents_income']==""?"":info['parents_income'].toString()),"parents_income",1,info);
                               } ,child: _item_detail_gradute(context,Colors.redAccent,Icons.monetization_on,"父母收入",info['parents_income']==""?"-":info['parents_income'].toString(),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_parentProtectLevel],info['parents_insurance']==0?[1]:[info['parents_insurance']],"parents_insurance",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[parentProtectLevel],info['parents_insurance']==0?[1]:[info['parents_insurance']],"parents_insurance",info,"",true);
                               } ,child: _item_detail_gradute(context,Colors.redAccent,Icons.nine_k,"父母社保",info['parents_insurance']==0?"-":_getParentProtectLevel(info['parents_insurance']),true)),
                         ]
                     ),
@@ -846,33 +847,33 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         children: <Widget>[
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_faithLevel],info['faith']==0?[0]:[info['faith']],"faith",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[faithLevel],info['faith']==0?[0]:[info['faith']],"faith",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.fastfood,"宗教信仰",info['faith']==0?"-":_getFaithLevel(info['faith']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_smokeLevel],info['smoke']==0?[0]:[info['smoke']],"smoke",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[smokeLevel],info['smoke']==0?[0]:[info['smoke']],"smoke",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.smoking_rooms,"是否吸烟",info['smoke']==0?"-":_getSmokeLevel(info['smoke']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_drinkLevel],info['drinkwine']==0?[0]:[info['drinkwine']],"drinkwine",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[drinkLevel],info['drinkwine']==0?[0]:[info['drinkwine']],"drinkwine",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.wine_bar,"是否喝酒",info['drinkwine']==0?"-":_getDrinkLevel(info['drinkwine']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_lifeLevel],info['live_rest']==0?[0]:[info['live_rest']],"live_rest",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[lifeLevel],info['live_rest']==0?[0]:[info['live_rest']],"live_rest",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.nightlife,"生活作息",info['live_rest']==0?"-":_getLifeLevel(info['live_rest'])+"",true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_creatLevel],info['want_child']==0?[0]:[info['want_child']],"want_child",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[creatLevel],info['want_child']==0?[0]:[info['want_child']],"want_child",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.child_friendly_outlined,"生育欲望",info['want_child']==0?"-":_getCreatLevel(info['want_child']),true)),
                           GestureDetector(
                               onTap: (){
-                                if(canEdit ==0){_showToastRed(context,"暂无权限修改",false);return;}
-                                showPickerArray(context,[_marriageDateLevel],info['marry_time']==0?[0]:[info['marry_time']],"marry_time",info,"",true);
+                                if(canEdit ==0){showToastRed(context,"暂无权限修改",false);return;}
+                                showPickerArray(context,[marriageDateLevel],info['marry_time']==0?[0]:[info['marry_time']],"marry_time",info,"",true);
                               } ,child:_item_detail_gradute(context,Colors.black,Icons.margin,"结婚预期",info['marry_time']==0?"-":_getMarriageDateLevel(info['marry_time']),true)),
                         ]
                     ),
@@ -2126,14 +2127,14 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                    var result= await IssuesApi.editCustomer(userdetail['info']['uuid'],"1",resultConnectList['data']);
                    if(result['code']==200){
                      BlocProvider.of<DetailBloc>(context).add(UploadImgSuccessEvent(userdetail,resultConnectList['data']));
-                     _showToast(context,"上传成功",false);
+                     showToast(context,"上传成功",false);
                    }else{
-                     _showToast(context,result['message'],false);
+                     showToast(context,result['message'],false);
                    }
                  } on DioError catch(e){
                    var dd=e.response.data;
                    EasyLoading.showSuccess(dd['message']);
-                   //_showToast(context,dd['message'],false);
+                   //showToast(context,dd['message'],false);
                  }
                  EasyLoading.dismiss();
                }
@@ -2181,91 +2182,15 @@ showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > s
         var result= await IssuesApi.editCustomerOnce(info['uuid'],type,values);
         if(result['code']==200){
           BlocProvider.of<DetailBloc>(context).add(EditDetailEvent(type,values));
-          _showToast(context,"编辑成功",false);
+          showToast(context,"编辑成功",false);
         }else{
 
-          _showToast(context,result['message'],false);
+          showToast(context,result['message'],false);
         }
       }
   ).showDialog(context);
 }
-_showToast(BuildContext ctx, String msg, bool collected) {
-  if (msg ==null){
-    msg="ti";
-  }
-  // Toasts.toast(
-  //   ctx,
-  //   msg,
-  //   duration: Duration(milliseconds:  5000 ),
-  //   action: collected
-  //       ? SnackBarAction(
-  //       textColor: Colors.white,
-  //       label: '收藏夹管理',
-  //       onPressed: () => Scaffold.of(ctx).openEndDrawer())
-  //       : null,
-  // );
-  BotToast.showNotification(
-    backgroundColor: Colors.white,
-    leading: (cancel) => Container(
-      child: IconButton(
-        icon: Icon(Icons.mood_sharp, color: Colors.green),
-        onPressed: cancel,
-      )),
-    title: (text)=>Container(
-        child: Text(msg,style: new TextStyle(
-        color: Colors.black, fontSize: 40.sp)),
-      ),
-    duration: const Duration(seconds: 5),
 
-    trailing: (cancel) => Container(
-      child: IconButton(
-       icon: Icon(Icons.cancel),
-      onPressed: cancel,
-      ),
-    ),
-    onTap: () {
-      //BotToast.showText(text: 'Tap toast');
-    },); //弹出简单通知Toast
-}
-
-_showToastRed(BuildContext ctx, String msg, bool collected) {
-  if (msg ==null){
-    msg="ti";
-  }
-  // Toasts.toast(
-  //   ctx,
-  //   msg,
-  //   duration: Duration(milliseconds:  5000 ),
-  //   action: collected
-  //       ? SnackBarAction(
-  //       textColor: Colors.white,
-  //       label: '收藏夹管理',
-  //       onPressed: () => Scaffold.of(ctx).openEndDrawer())
-  //       : null,
-  // );
-  BotToast.showNotification(
-    backgroundColor: Colors.white,
-    leading: (cancel) => Container(
-        child: IconButton(
-          icon: Icon(Icons.error, color: Colors.redAccent),
-          onPressed: cancel,
-        )),
-    title: (text)=>Container(
-      child: Text(msg,style: new TextStyle(
-          color: Colors.black, fontSize: 30.sp)),
-    ),
-    duration: const Duration(seconds: 5),
-
-    trailing: (cancel) => Container(
-      child: IconButton(
-        icon: Icon(Icons.cancel),
-        onPressed: cancel,
-      ),
-    ),
-    onTap: () {
-      //BotToast.showText(text: 'Tap toast');
-    },); //弹出简单通知Toast
-}
 
 
 showPickerDateTime(BuildContext context,String date,String type,Map<String ,dynamic> info) {
@@ -2315,10 +2240,10 @@ showPickerDateTime(BuildContext context,String date,String type,Map<String ,dyna
         var result= await IssuesApi.editCustomerOnceString(info['uuid'],type,picker.adapter.text);
         if(result['code']==200){
           BlocProvider.of<DetailBloc>(context).add(EditDetailEventString(type,picker.adapter.text));
-          _showToast(context,"编辑成功",false);
+          showToast(context,"编辑成功",false);
         }else{
 
-          _showToast(context,result['message'],false);
+          showToast(context,result['message'],false);
         }
         print(picker.adapter.text);
       },
@@ -2373,10 +2298,10 @@ _showEditDialog(BuildContext context,String title,String hintText ,String text,S
                   var result= await IssuesApi.editCustomerOnceString(info['uuid'],type,_controller.text);
                   if(result['code']==200){
                     BlocProvider.of<DetailBloc>(context).add(EditDetailEventString(type,_controller.text));
-                    //_showToast(context,"编辑成功",false);
+                    //showToast(context,"编辑成功",false);
                   }else{
 
-                    _showToast(context,result['message'],false);
+                    showToast(context,result['message'],false);
                   }
                   Navigator.pop(context);
 
@@ -2392,7 +2317,7 @@ _showEditDialog(BuildContext context,String title,String hintText ,String text,S
 _getEduLevel(info) {
 
   try {
-    return _EduLevel[info];
+    return EduLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2402,7 +2327,7 @@ _getWorkType(info) {
 
 
   try {
-    return _WorkTypeLevel[info];
+    return WorkTypeLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2412,7 +2337,7 @@ _getWorkOverTime(info) {
 
 
   try {
-    return _WorkOverTimeLevel[info];
+    return WorkOverTimeLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2421,7 +2346,7 @@ _getWorkOverTime(info) {
 _getIncome(info) {
 
   try {
-    return _IncomeLevel[info];
+    return IncomeLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2432,7 +2357,7 @@ _getHasHouse(info) {
 
 
   try {
-    return _hasHouseLevel[info];
+    return hasHouseLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2443,7 +2368,7 @@ _getHouseFuture(info) {
 
 
   try {
-    return _houseFutureLevel[info];
+    return houseFutureLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2454,7 +2379,7 @@ _getHasCar(info) {
 
 
   try {
-    return _hasCarLevel[info];
+    return hasCarLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2464,7 +2389,7 @@ _getCarLevel(info) {
 
 
   try {
-    return _carLevelLevel[info];
+    return carLevelLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2476,7 +2401,7 @@ _getMarriageLevel(info) {
 
 
   try {
-    return _marriageLevel[info];
+    return marriageLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2486,7 +2411,7 @@ _getChildLevel(info) {
 
 
   try {
-    return _childLevel[info];
+    return childLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2496,7 +2421,7 @@ _getOnlyChildLevel(info) {
 
 
   try {
-    return _onlyChildLevel[info];
+    return onlyChildLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2506,7 +2431,7 @@ _getParentLevel(info) {
 
 
   try {
-    return _parentLevel[info];
+    return parentLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2516,7 +2441,7 @@ _getParentProtectLevel(info) {
 
 
   try {
-    return _parentProtectLevel[info];
+    return parentProtectLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2526,7 +2451,7 @@ _getFaithLevel(info) {
 
 
   try {
-    return _faithLevel[info];
+    return faithLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2537,7 +2462,7 @@ _getSmokeLevel(info) {
 
 
   try {
-    return _smokeLevel[info];
+    return smokeLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2548,7 +2473,7 @@ _getDrinkLevel(info) {
 
 
   try {
-    return _drinkLevel[info];
+    return drinkLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2558,7 +2483,7 @@ _getLifeLevel(info) {
 
 
   try {
-    return _lifeLevel[info];
+    return lifeLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2567,7 +2492,7 @@ _getLifeLevel(info) {
 
 _getCreatLevel(info) {
   try {
-    return _creatLevel[info];
+    return creatLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2578,7 +2503,7 @@ _getMarriageDateLevel(info) {
 
 
   try {
-    return _marriageDateLevel[info];
+    return marriageDateLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2588,7 +2513,7 @@ _getFloodLevel(info) {
 
 
   try {
-    return _floodLevel[info];
+    return floodLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2599,7 +2524,7 @@ _getSexLevel(info) {
 
 
   try {
-    return _sexLevel[info];
+    return sexLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2609,7 +2534,7 @@ _getNationLevel(info) {
 
 
   try {
-    return _nationLevel[info];
+    return nationLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2619,7 +2544,7 @@ _getCompanyLevel(info) {
 
 
   try {
-    return _companyTypeLevel[info];
+    return companyTypeLevel[info];
   } catch (e) {
     return "未知";
   }
@@ -2654,188 +2579,6 @@ List<String> _getHeightList() {
   return height;
 }
 
-
-List<String> _nationLevel = [
-  "未知","汉族","蒙古族","回族","藏族","维吾尔族","苗族","彝族","壮族","布依族","朝鲜族","满族","侗族","瑶族","白族","土家族",
-  "哈尼族","哈萨克族","傣族","黎族","傈僳族","佤族","畲族","高山族","拉祜族","水族","东乡族","纳西族","景颇族","柯尔克孜族",
-  "土族","达斡尔族","仫佬族","羌族","布朗族","撒拉族","毛南族","仡佬族","锡伯族","阿昌族","普米族","塔吉克族","怒族", "乌孜别克族",
-  "俄罗斯族","鄂温克族","德昂族","保安族","裕固族","京族","塔塔尔族","独龙族","鄂伦春族","赫哲族","门巴族","珞巴族","基诺族"
-];
-List<String> _sexLevel = [
-  "未知",
-  "男生",
-  "女生",
-];
-List<String> _floodLevel = [
-  "未知",
-  "A型",
-  "B型",
-  "O型",
-  "AB型",
-
-
-];
-List<String> _EduLevel = [
-  "未知",
-  "高中及以下",
-  "大专",
-  "本科",
-  "硕士",
-  "博士及以上",
-  "国外留学",
-  "其他",
-
-];
-List<String> _WorkTypeLevel = [
-  "未知",
-  "企事业单位公务员",
-  "教育医疗",
-  "民营企业",
-  "私营业主",
-  "其他",
-
-];
-List<String> _companyTypeLevel = [
-  "未知",
-  "国企",
-  "外商独资",
-  "合资",
-  "民营",
-  "股份制企业",
-  "上市公司",
-  "国家机关",
-  "事业单位",
-  "银行",
-  "医院",
-  "学校",
-  "律师事务所",
-  "社会团体",
-  "港澳台公司",
-  "其他",
-];
-List<String> _WorkOverTimeLevel = [
-  "未知",
-  "不加班",
-  "偶尔加班",
-  "经常加班",
-
-];
-List<String> _IncomeLevel = [
-  "未知",
-  "5万及以下",
-  "5-10万",
-  "10-15万",
-  "15-20万",
-  "20-30万",
-  "30-50万",
-  "50-70万",
-  "70-100万",
-  "100万以上",
-];
-List<String> _hasHouseLevel = [
-  "未知",
-  "无房",
-  "1套房",
-  "2套房",
-  "3套房及以上",
-  "其他",
-];
-List<String> _houseFutureLevel = [
-  "未知",
-  "无房贷",
-  "已还清",
-  "在还贷",
-
-];
-List<String> _hasCarLevel = [
-  "未知",
-  "有车",
-  "无车",
-];
-List<String> _carLevelLevel = [
-  "未知",
-  "无车产",
-  "5-10万车",
-  "10-20万车",
-  "20-30万车",
-  "30-50万车",
-  "50万以上车",
-];
-List<String> _marriageLevel = [
-  "未知",
-  "未婚",
-  "离异带孩",
-  "离异单身",
-  "离异未育",
-  "丧偶",
-];
-List<String> _childLevel = [
-  "未知",
-  "有",
-  "无",
-];
-List<String> _onlyChildLevel = [
-  "未知",
-  "是",
-  "否",
-];
-List<String> _parentLevel = [
-  "未知",
-  "父母同在",
-  "父歿母在",
-  "父在母歿",
-  "父母同歿",
-];
-List<String> _parentProtectLevel = [
-  "未知",
-  "父亲有医保",
-  "母亲有医保",
-  "父母均有医保",
-];
-List<String> _faithLevel = [
-  "未知",
-  "无信仰",
-  "基督教",
-  "天主教",
-  "佛教",
-  "道教",
-  "伊斯兰教",
-  "其他宗教",
-
-];
-List<String> _smokeLevel = [
-  "未知",
-  "不吸烟",
-  "偶尔吸烟",
-  "经常吸烟",
-  "有戒烟计划",
-];
-List<String> _drinkLevel = [
-  "未知",
-  "不喝酒",
-  "偶尔喝",
-  "应酬喝",
-  "经常喝",
-  "有戒酒计划",
-];
-List<String> _lifeLevel = [
-  "未知",
-  "很规律",
-  "经常熬夜",
-];
-List<String> _creatLevel = [
-  "未知",
-  "想要孩子",
-  "可以考虑",
-  "想要孩子",
-];
-List<String> _marriageDateLevel = [
-  "未知",
-  "半年内",
-  "一年内",
-  "2年内",
-  "还没想好",
-];
 
 
 
@@ -3133,9 +2876,10 @@ _appoint(BuildContext context,Map<String,dynamic> detail) {
                                         onPressed: (){
                                           Navigator.pushNamed(context, UnitRouter.baidu_map).then((value) {
                                              List<String> data = value.toString().split("#");
-                                              appointment_address =data.elementAt(0)+"-"+data.elementAt(1)+"";
-                                              address_lng=data.elementAt(2);
-                                              address_lat=data.elementAt(3);
+                                              // appointment_address =data.elementAt(0)+"-"+data.elementAt(1)+"";
+                                              // address_lng=data.elementAt(2);
+                                              // address_lat=data.elementAt(3);
+
                                              _placeController.text=appointment_address;
                                           });
                                         },

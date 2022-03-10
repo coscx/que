@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'gzx_filter_goods_page.dart';
 
-typedef BoolWidgetBuilder = Widget Function(BuildContext context, bool selected);
+typedef BoolWidgetBuilder = Widget Function(BuildContext context, bool selected,String name);
 
 class MultiChipFilters extends StatefulWidget {
   final List<SelectItem> data;
@@ -50,12 +50,11 @@ class _MultiChipFilterState extends State<MultiChipFilters> {
       pressElevation: 5,
       elevation: 3,
       avatar: widget.avatarBuilder==null?null:widget.avatarBuilder(context,index),
-      label: widget.labelBuilder(context,selected),
+      label: widget.labelBuilder(context,selected,t.name),
       selected: selected,
       onSelected: (bool value) {
         setState(() {
           if (value) {
-
             widget.selectedS.add(t);
 
           } else {

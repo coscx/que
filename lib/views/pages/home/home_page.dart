@@ -72,6 +72,7 @@ class _HomePageState extends State<HomePage>
   GZXDropdownMenuController _dropdownMenuController =
       GZXDropdownMenuController();
   GlobalKey _stackKey = GlobalKey();
+
   //QrReaderViewController _controller;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -241,7 +242,7 @@ class _HomePageState extends State<HomePage>
         child: Scaffold(
             key: _scaffoldKey,
             endDrawer: GZXFilterGoodsPage(
-              selectItems: [],
+              selectItems: selectItems,
             ),
             appBar: AppBar(
               titleSpacing: 40.w,
@@ -284,25 +285,25 @@ class _HomePageState extends State<HomePage>
                   ),
                 ),
                 SizedBox(width: 20),
-                Container(
-                  height: 20,
-                  width: 20,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.crop_free,
-                      size: 24.0,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      //Navigator.of(context).pushNamed(UnitRouter.qr_view);
-                      _scan();
-                      //FlutterAdPlugin.jumpAdList;
-                    },
-                  ),
-                ),
+                // Container(
+                //   height: 20,
+                //   width: 20,
+                //   child: IconButton(
+                //     padding: EdgeInsets.zero,
+                //     icon: Icon(
+                //       Icons.crop_free,
+                //       size: 24.0,
+                //       color: Colors.black,
+                //     ),
+                //     onPressed: () {
+                //       //Navigator.of(context).pushNamed(UnitRouter.qr_view);
+                //       _scan();
+                //       //FlutterAdPlugin.jumpAdList;
+                //     },
+                //   ),
+                // ),
                 SizedBox(
-                  width: 60.w,
+                  width: 0.w,
                 )
               ],
 
@@ -1343,19 +1344,9 @@ class _AppBarComponentState extends State<AppBarComponent> {
           });
         });
 
-        //
-        // CitySelect cc2  = CitySelect();
-        // cc2.name = "昆山";
-        // cc2.id =320501;
-        // firstLevels.add(cc2);
+      } else {
 
-        // StoreSelect ddd  = StoreSelect();
-        // ddd.id=6;
-        // ddd.name = "鹊桥缘遇昆山店";
-        // ddd.city=320501;
-        // all.add(ddd);
-
-      } else {}
+      }
     });
     super.initState();
   }

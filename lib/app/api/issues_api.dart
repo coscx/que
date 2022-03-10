@@ -94,6 +94,13 @@ class IssuesApi {
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     Map<String,dynamic> searchParm={};
+    var channel = <String>[];
+    var education = <String>[];
+    var income = <String>[];
+    var house = <String>[];
+    var marriage = <String>[];
+    var startBirthday ="";
+    var endBirthday ="";
     selectItems.map((e) {
       if (e.type == 100) {
 
@@ -119,7 +126,61 @@ class IssuesApi {
           id;
 
       }
+      if (e.type == 0) {
+        channel.add(e.id);
+      }
+      if (e.type == 1) {
+       education.add(e.id);
+      }
+      if (e.type == 2) {
+        income.add(e.id);
+      }
+      if (e.type == 3) {
+        house.add(e.id);
+      }
+      if (e.type == 4) {
+        marriage.add(e.id);
+      }
+
+      if (e.type == 300) {
+        startBirthday = e.id.toString();
+      }
+      if (e.type == 301) {
+        endBirthday = e.id.toString();
+      }
+
+
     } ).toList();
+    if (channel.length > 0){
+    searchParm['channel_multi'] = channel.join(",");
+
+    }
+
+    if (education.length > 0){
+
+      searchParm['education_multi'] = education.join(",");
+    }
+
+    if (income.length > 0){
+
+      searchParm['income_multi'] = income.join(",");
+    }
+    if (house.length > 0){
+
+      searchParm['house_multi'] = house.join(",");
+    }
+
+    if (marriage.length > 0){
+
+      searchParm['marriage_multi'] = marriage.join(",");
+    }
+    if (startBirthday !=""&&endBirthday !=""){
+
+      searchParm['startBirthday'] = startBirthday;
+      searchParm['endBirthday'] = endBirthday;
+    }
+
+
     // search.list.map((e) {
     //   if (e.paramCode=="customerLevel"){
     //     if(e.selected != null)

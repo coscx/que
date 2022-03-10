@@ -6,6 +6,7 @@ import 'package:flutter_geen/blocs/global/global_bloc.dart';
 import 'package:flutter_geen/blocs/global/global_state.dart';
 import 'package:flutter_geen/views/items/horizontal_pickers.dart';
 import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
+import 'package:flutter_geen/views/pages/utils/common.dart';
 import 'package:flutter_geen/views/pages/utils/dynamaicTheme.dart';
 import 'package:flutter_geen/views/pages/utils/enums.dart';
 import 'package:flutter_geen/views/pages/utils/extractedWidgets.dart';
@@ -301,14 +302,14 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                           onTap: (){
                                             _textFieldNode.unfocus();
                                             _mobileFieldNode.unfocus();
-                                            showPickerArray(context,[_marriageLevel],[marriage],"marriage","",true);
-                                          } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",_marriageLevel[marriage],true)),
+                                            showPickerArray(context,[marriageLevel],[marriage],"marriage","",true);
+                                          } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.wc,"婚姻状态",marriageLevel[marriage],true)),
                                       GestureDetector(
                                           onTap: (){
                                             _textFieldNode.unfocus();
                                             _mobileFieldNode.unfocus();
-                                            showPickerArray(context,[_fromLevel],[from],"from","",true);
-                                          } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.whatshot,"来访渠道",_fromLevel[from],true)),
+                                            showPickerArray(context,[fromLevel],[from],"from","",true);
+                                          } ,child:  _item_detail_gradute(context,Colors.redAccent,Icons.whatshot,"来访渠道",fromLevel[from],true)),
                                       Padding(
                                         padding: EdgeInsets.only(top: 20.h, bottom: 270.h,left: 10.h,right: 10.h),
                                         child: Container(
@@ -692,22 +693,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
         }
     ).showDialog(context);
   }
-  List<String> _marriageLevel = [
-    "请选择",
-    "未婚",
-    "离异带孩",
-    "离异单身",
-    "离异未育",
-    "丧偶",
-  ];
-  List<String>  _fromLevel = [
-     "请选择",
-     "个人自带",
-     "线下活动",
-     "罗沈民提供名单",
-     "大家亲CRM系统",
-     "大家亲同城相亲圈",
-  ];
+
   showPickerArray(BuildContext context,List<List<String >> pickerData,List<int > select,String type,String title,bool isIndex) {
     Picker(
         itemExtent: 40,

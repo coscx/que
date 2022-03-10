@@ -700,7 +700,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
           //尾部摘要
           (photo['has_house']==null?"":_hasHouseLevel[photo['has_house']])+" "+(photo['has_car']==null?"":_hasCarLevel[photo['has_car']])+" " +(_marriageLevel[photo['marriage']]) +" 生日:" +
 
-              (photo['birthday']==null ? "-":(photo['birthday'].length > 10? photo['birthday'].toString().substring(0,10):"")),
+              (photo['birthday']==null ? "-":(photo['birthday'].length > 10? photo['birthday'].toString().substring(0,10):"")) +" 收入:"+photo['income'].toString()+"w",
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontSize: 23.sp, shadows: [

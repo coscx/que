@@ -164,7 +164,7 @@ class _UnitNavigationState extends State<UnitNavigation> with SingleTickerProvid
         return Scaffold(
           drawer: HomeDrawer(),
           //左滑页
-          endDrawer: HomeRightDrawer(),
+          //endDrawer: HomeRightDrawer(),
           //右滑页
           floatingActionButtonLocation:  const _CenterDockedFloatingActionButtonLocation(offset),
 

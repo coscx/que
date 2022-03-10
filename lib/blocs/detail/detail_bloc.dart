@@ -70,6 +70,10 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       Map<String ,dynamic> userdetails=state.props.elementAt(0);
       Map<String ,dynamic> connectList=state.props.elementAt(1);
       Map<String ,dynamic> appointList=state.props.elementAt(2);
+      Map<String ,dynamic> actionList=state.props.elementAt(3);
+      Map<String ,dynamic> callList=state.props.elementAt(4);
+
+
       //Map<String ,dynamic>  info = userdetails['info'];
       //if (event.value is int)
       Map<String ,dynamic> result = Map.from(userdetails);
@@ -92,24 +96,28 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         result['info']['location_place']=event.result.provinceName+event.result.cityName+event.result.areaName;
       }
 
-      yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList);
+      yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList,actionList: actionList,callList: callList);
 
     }
     if(event is EditDetailEvent){
          Map<String ,dynamic> userdetails=state.props.elementAt(0);
          Map<String ,dynamic> connectList=state.props.elementAt(1);
          Map<String ,dynamic> appointList=state.props.elementAt(2);
+         Map<String ,dynamic> actionList=state.props.elementAt(3);
+         Map<String ,dynamic> callList=state.props.elementAt(4);
          //Map<String ,dynamic>  info = userdetails['info'];
          //if (event.value is int)
          Map<String ,dynamic> result = Map.from(userdetails);
          result['info'][event.key] =event.value;
-        yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList);
+        yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList,actionList: actionList,callList: callList);
 
     }
     if(event is AddConnectEvent){
       Map<String ,dynamic> userdetails=state.props.elementAt(0);
       Map<String ,dynamic> connectList=state.props.elementAt(1);
       Map<String ,dynamic> appointList=state.props.elementAt(2);
+      Map<String ,dynamic> actionList=state.props.elementAt(3);
+      Map<String ,dynamic> callList=state.props.elementAt(4);
       Map<String ,dynamic> result = Map.from(connectList);
       List<dynamic> res = result['data'];
       Map<String ,dynamic> connect ={};
@@ -132,13 +140,15 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 
       var resultConnectList= await IssuesApi.addConnect(event.photo['uuid'],connect);
 
-      yield DetailWithData(userdetails: userdetails,connectList: result,appointList:appointList);
+      yield DetailWithData(userdetails: userdetails,connectList: result,appointList:appointList,actionList: actionList,callList: callList);
 
     }
     if(event is AddAppointEvent){
       Map<String ,dynamic> userdetails=state.props.elementAt(0);
       Map<String ,dynamic> connectList=state.props.elementAt(1);
       Map<String ,dynamic> appointList=state.props.elementAt(2);
+      Map<String ,dynamic> actionList=state.props.elementAt(3);
+      Map<String ,dynamic> callList=state.props.elementAt(4);
       Map<String ,dynamic> result = Map.from(appointList);
       List<dynamic> res = result['data'];
       Map<String ,dynamic> connect ={};
@@ -163,7 +173,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 
       var resultConnectList= await IssuesApi.addAppoint(event.photo['uuid'],connect);
 
-      yield DetailWithData(userdetails: userdetails,connectList: connectList,appointList:result);
+      yield DetailWithData(userdetails: userdetails,connectList: connectList,appointList:result,actionList: actionList,callList: callList);
 
     }
     if(event is UploadImgSuccessEvent){
@@ -171,6 +181,8 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       Map<String ,dynamic> userdetails=state.props.elementAt(0);
       Map<String ,dynamic> connectList=state.props.elementAt(1);
       Map<String ,dynamic> appointList=state.props.elementAt(2);
+      Map<String ,dynamic> actionList=state.props.elementAt(3);
+      Map<String ,dynamic> callList=state.props.elementAt(4);
       Map<String ,dynamic> result = Map.from(userdetails);
       //List<Map<String ,dynamic>>   ss = userdetails['pics'];
       Map<String ,dynamic> img ={};
@@ -179,7 +191,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       img["customer_id"] = 0;
       userdetails['pics'].add(img);
 
-      yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList);
+      yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList,actionList: actionList,callList: callList);
 
     }
 
@@ -187,20 +199,24 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       Map<String ,dynamic> userdetails=state.props.elementAt(0);
       Map<String ,dynamic> connectList=state.props.elementAt(1);
       Map<String ,dynamic> appointList=state.props.elementAt(2);
+      Map<String ,dynamic> actionList=state.props.elementAt(3);
+      Map<String ,dynamic> callList=state.props.elementAt(4);
       //Map<String ,dynamic>  info = userdetails['info'];
       //if (event.value is int)
       Map<String ,dynamic> result = Map.from(userdetails);
       result['info'][event.key] =event.value;
-      yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList);
+      yield DetailWithData(userdetails: result,connectList: connectList,appointList:appointList,actionList: actionList,callList: callList);
 
     }
     if(event is EventDelDetailImg){
       var result1= await IssuesApi.delPhoto(event.img['id'].toString());
       if  (result1['code']==200){
-            Map<String ,dynamic> userdetails=state.props.elementAt(0);
+            Map<String ,dynamic> userDetails=state.props.elementAt(0);
             Map<String ,dynamic> connectList=state.props.elementAt(1);
             Map<String ,dynamic> appointList=state.props.elementAt(2);
-            List<dynamic> res = userdetails['pics'];
+            Map<String ,dynamic> actionList=state.props.elementAt(3);
+            Map<String ,dynamic> callList=state.props.elementAt(4);
+            List<dynamic> res = userDetails['pics'];
             var imgR=  res.map((e) {
               if (e['id']==event.img['id']){
 
@@ -212,14 +228,17 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
             if (imgR == null){
 
             }
-            userdetails['pics']=imgR;
-            yield DetailWithData(userdetails: userdetails,connectList: connectList,appointList:appointList);
+            userDetails['pics']=imgR;
+            yield DetailWithData(userdetails: userDetails,connectList: connectList,appointList:appointList,actionList: actionList,callList: callList);
 
       } else{
         Map<String ,dynamic> userdetails=state.props.elementAt(0);
         Map<String ,dynamic> connectList=state.props.elementAt(1);
-        Map<String ,dynamic> appointList=state.props.elementAt(3);
-        yield DelSuccessData(userdetails: userdetails,connectList: connectList,appointList:appointList,reason:result1['message']);
+        Map<String ,dynamic> appointList=state.props.elementAt(2);
+        Map<String ,dynamic> actionList=state.props.elementAt(3);
+        Map<String ,dynamic> callList=state.props.elementAt(4);
+
+        yield DelSuccessData(userdetails: userdetails,connectList: connectList,appointList:appointList,reason:result1['message'],actionList: actionList,callList: callList);
       }
 
 

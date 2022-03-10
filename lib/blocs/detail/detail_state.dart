@@ -24,7 +24,7 @@ class DetailWithData extends DetailState {
   const DetailWithData({this.userdetails,this.connectList,this.appointList,this.actionList,this.callList});
 
   @override
-  List<Object> get props => [userdetails,connectList,appointList,actionList];
+  List<Object> get props => [userdetails,connectList,appointList,actionList,callList];
 
   @override
   String toString() {
@@ -43,7 +43,7 @@ class DelSuccessData extends DetailState {
   const DelSuccessData({this.userdetails,this.connectList,this.appointList,this.reason,this.actionList,this.callList});
 
   @override
-  List<Object> get props => [userdetails,connectList,reason];
+  List<Object> get props => [userdetails,connectList,reason,actionList,callList];
 
   @override
   String toString() {
