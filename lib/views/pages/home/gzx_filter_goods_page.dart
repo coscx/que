@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/blocs/global/global_bloc.dart';
 import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/blocs/home/home_event.dart';
@@ -55,9 +56,7 @@ class GZXFilterGoodsPage extends StatefulWidget {
 }
 
 class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
-  List<ExpansionPanelItem> _expansionPanelItems;
   int minValue;
-
   int maxValue;
   List<SelectItem> _value = [];
   List<SelectItem> _valueFrom = [];
@@ -69,23 +68,9 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
   List<StoreItem> pickerStoreItem = [];
   List _value3 = ['65-5130', '5130-1.1万', '1.1万-1.5万'];
   List _value4 = ['10%的选择', '52%的选择', '23%的选择'];
-  List<SelectItem> _value5 = [];
-  List<SelectItem> _value6 = [];
-  List<SelectItem> _value7 = [];
-
-  List<SelectItem> _value8 = [];
-
-  List<SelectItem> _value9 = [];
-  List<SelectItem> _value10 = [];
-
   bool _isHideValue1 = true;
-  bool _isHideOtherLocation = true;
-
-  bool _isHideValue8 = true;
-  bool _isHideValue9 = true;
-  bool _isHideValue10 = true;
-  DateTime startBirthDay = DateTime.now();
-  DateTime endBirthDay = DateTime.now();
+  DateTime startBirthDay = DateTime.parse("1995-01-01 00:00:00");
+  DateTime endBirthDay = DateTime.parse("2004-01-01 00:00:00");
   String startBirthDayTitle = "开始日期";
   String endBirthDayTitle = "结束日期";
   String startBirthDayValue = "";
@@ -141,83 +126,22 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
       _valueMarriage.add(ff);
     }
 
-    StoreItem ff = StoreItem();
-    ff.id = "1";
-    ff.type = 600;
-    ff.name = "鹊桥缘遇";
-    ff.index = 0;
-    ff.isSelect = false;
-    pickerStoreItem.add(ff);
-    pickerStoreData.add("鹊桥缘遇");
-
-    StoreItem ff1 = StoreItem();
-    ff1.id = "2";
-    ff1.type = 600;
-    ff1.name = "鹊桥缘遇昆山";
-    ff1.isSelect = false;
-    ff.index = 1;
-    pickerStoreItem.add(ff1);
-    pickerStoreData.add("鹊桥缘遇昆山");
-    _expansionPanelItems = <ExpansionPanelItem>[
-      ExpansionPanelItem(
-          headerText: 'Panel A',
-          // body: Container(
-          //
-          //   width: double.infinity,
-          //   child: Image.network('http://pic1.win4000.com/wallpaper/2019-02-15/5c664c46823f8.jpg'),
-          // ),
-          body: Container(
-            padding: EdgeInsets.all(16.0),
-            height: 200,
-            width: 200,
-            child: GridView.count(
-              crossAxisCount: 3,
-              reverse: false,
-              scrollDirection: Axis.vertical,
-              controller: ScrollController(
-                initialScrollOffset: 0.0,
-              ),
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 20.0,
-              childAspectRatio: 2,
-              physics: BouncingScrollPhysics(),
-              primary: false,
-              children: _value.map((i) {
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      i.id,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-          isExpanded: false),
-      ExpansionPanelItem(
-          headerText: 'Panel B',
-          body: Container(
-            padding: EdgeInsets.all(16.0),
-            width: double.infinity,
-            child: Image.network(
-                'http://pic1.win4000.com/wallpaper/2019-02-14/5c651084373de.jpg'),
-          ),
-          isExpanded: false),
-      ExpansionPanelItem(
-          headerText: 'Panel C',
-          body: Container(
-            padding: EdgeInsets.all(16.0),
-            width: double.infinity,
-            child: Image.network(
-                'http://pic1.win4000.com/wallpaper/2019-02-14/5c65107a0ee05.jpg'),
-          ),
-          isExpanded: false)
-    ];
+    Future.delayed(Duration(milliseconds: 1)).then((e) async {
+      var result = await IssuesApi.getOnlyStoreList();
+      if (result['code'] == 200) {
+        List<dynamic> da = result['data'];
+        da.forEach((value) {
+          StoreItem ff = StoreItem();
+          ff.id = value['id'].toString();
+          ff.type = 600;
+          ff.name = value['name'];
+          ff.index = 0;
+          ff.isSelect = false;
+          pickerStoreItem.add(ff);
+          pickerStoreData.add(value['name']);
+        });
+      } else {}
+    });
   }
 
   Widget _typeGridWidget(List<SelectItem> items, int type,
@@ -226,10 +150,20 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
       data: items,
       avatarBuilder: (_, index) => null,
       labelBuilder: (_, selected, name) {
-        return name == null ? Container() : Text(name);
+        return name == null
+            ? Container()
+            : Text(
+                name,
+                style: TextStyle(
+                    color: selected ? Colors.white : Colors.black,
+                    fontSize: 30.sp,
+                    fontWeight: FontWeight.normal),
+                overflow: TextOverflow.ellipsis,
+              );
       },
       onChange: _doSelectStart,
       selectedS: widget.selectItems,
+      childAspectRatio: 2.0,
     );
   }
 
@@ -362,10 +296,19 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                           });
                         });
                   },
-                  child: Text(startBirthDayTitle),
+                  child: Text(
+                    startBirthDayTitle == "" ? " " : startBirthDayTitle,
+                    style: TextStyle(
+                        fontSize: 30.sp,
+                        color: startBirthDayValue == ""
+                            ? Colors.black
+                            : Colors.white),
+                  ),
                   style: ElevatedButton.styleFrom(
                       onPrimary: Colors.white,
-                      primary: Color(0xFF6a6a6a),
+                      primary: startBirthDayValue == ""
+                          ? Colors.grey.withAlpha(33)
+                          : Colors.blue,
                       shadowColor: Colors.black12,
                       shape: StadiumBorder(),
                       padding: EdgeInsets.symmetric(
@@ -412,10 +355,19 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                           });
                         });
                   },
-                  child: Text(endBirthDayTitle),
+                  child: Text(
+                    endBirthDayTitle == "" ? " " : endBirthDayTitle,
+                    style: TextStyle(
+                        fontSize: 30.sp,
+                        color: endBirthDayValue == ""
+                            ? Colors.black
+                            : Colors.white),
+                  ),
                   style: ElevatedButton.styleFrom(
                       onPrimary: Colors.white,
-                      primary: Color(0xFF6a6a6a),
+                      primary: endBirthDayValue == ""
+                          ? Colors.grey.withAlpha(33)
+                          : Colors.blue,
                       shadowColor: Colors.black12,
                       shape: StadiumBorder(),
                       padding: EdgeInsets.symmetric(
@@ -510,10 +462,18 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                             })
                         .showModal(this.context); //_scaffoldKey.currentState);
                   },
-                  child: Text(storeName == "" ? " " : storeName),
+                  child: Text(
+                    storeName == "" ? " " : storeName,
+                    style: TextStyle(
+                        fontSize: 30.sp,
+                        color:
+                            storeName == "选择门店" ? Colors.black : Colors.white),
+                  ),
                   style: ElevatedButton.styleFrom(
                       onPrimary: Colors.white,
-                      primary: Color(0xFF6a6a6a),
+                      primary: storeName == "选择门店"
+                          ? Colors.grey.withAlpha(33)
+                          : Colors.blue,
                       shadowColor: Colors.black12,
                       shape: StadiumBorder(),
                       padding: EdgeInsets.symmetric(
@@ -986,38 +946,43 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
         children: <Widget>[
           Expanded(
             child: Container(
-              child:
-              ListView(primary: false, shrinkWrap: true,
-                 children: <Widget>[
-                _buildGroup1('来源渠道', false, _valueFrom, widget.selectItems),
-                _buildGroup1(
-                    '客户学历', false, _valueEducation, widget.selectItems),
-                _buildGroup1('客户收入', false, _valueIncome, widget.selectItems),
-                _buildGroup1('客户房产', false, _valueHouse, widget.selectItems),
-                _buildGroup1(
-                    '客户婚姻状况', false, _valueMarriage, widget.selectItems),
-                buildBirthday("生日选择"),
-                buildStore("门店选择")
-                //buildRangerSlider("年龄选择")
-                // _buildGroup2(),
-                // _buildGroup3(),
-                // _buildGroup4(),
-                // _buildGroup5('尺寸', _value8, _isHideValue8, () {
-                //   setState(() {
-                //     _isHideValue8 = !_isHideValue8;
-                //   });
-                // }),
-                // _buildGroup5('硬盘容量', _value9, _isHideValue9, () {
-                //   setState(() {
-                //     _isHideValue9 = !_isHideValue9;
-                //   });
-                // }),
-                // _buildGroup5('内存容量', _value10, _isHideValue10, () {
-                //   setState(() {
-                //     _isHideValue10 = !_isHideValue10;
-                //   });
-                //}),
-              ]),
+              child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  primary: false,
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    //
+                    // _buildGroup1('来源渠道', false, _valueFrom, widget.selectItems),
+                    _buildGroup1(
+                        '客户学历', false, _valueEducation, widget.selectItems),
+                    _buildGroup1(
+                        '客户收入', false, _valueIncome, widget.selectItems),
+                    _buildGroup1(
+                        '客户房产', false, _valueHouse, widget.selectItems),
+                    _buildGroup1(
+                        '客户婚姻状况', false, _valueMarriage, widget.selectItems),
+                    buildBirthday("生日选择"),
+                    //buildStore("门店选择")
+                    //buildRangerSlider("年龄选择")
+                    // _buildGroup2(),
+                    // _buildGroup3(),
+                    // _buildGroup4(),
+                    // _buildGroup5('尺寸', _value8, _isHideValue8, () {
+                    //   setState(() {
+                    //     _isHideValue8 = !_isHideValue8;
+                    //   });
+                    // }),
+                    // _buildGroup5('硬盘容量', _value9, _isHideValue9, () {
+                    //   setState(() {
+                    //     _isHideValue9 = !_isHideValue9;
+                    //   });
+                    // }),
+                    // _buildGroup5('内存容量', _value10, _isHideValue10, () {
+                    //   setState(() {
+                    //     _isHideValue10 = !_isHideValue10;
+                    //   });
+                    //}),
+                  ]),
             ),
           ),
           SizedBox(
@@ -1033,85 +998,88 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Container(
+                    GestureDetector(
+                      onTap: () {
+                        widget.selectItems.removeWhere((e) => e.type < 100);
+
+                        for (int j = 0; j < _valueFrom.length; j++) {
+                          _valueFrom[j].isSelect = false;
+                        }
+                        for (int j = 0; j < _valueEducation.length; j++) {
+                          _valueEducation[j].isSelect = false;
+                        }
+                        for (int j = 0; j < _valueIncome.length; j++) {
+                          _valueIncome[j].isSelect = false;
+                        }
+                        for (int j = 0; j < _valueHouse.length; j++) {
+                          _valueHouse[j].isSelect = false;
+                        }
+                        for (int j = 0; j < _valueMarriage.length; j++) {
+                          _valueMarriage[j].isSelect = false;
+                        }
+                        widget.selectItems
+                            .removeWhere((e) => e.type == 500 || e.type == 501);
+                        startBirthDayTitle = "开始日期";
+                        endBirthDayTitle = "结束日期";
+                        startBirthDayValue = "";
+                        endBirthDayValue = "";
+                        widget.selectItems.removeWhere((e) => e.type == 600);
+                        storeName = "选择门店";
+                        showToastBottom(context, "重置成功", true);
+
+                        setState(() {});
+                      },
+                      child: Container(
 //            margin: EdgeInsets.only(left: 6, right: 6),
-                      padding: EdgeInsets.only(
-                          left: 50.w, top: 6.h, right: 50.w, bottom: 6.h),
-                      height: 68.h,
+                        padding: EdgeInsets.only(
+                            left: 100.w, top: 6.h, right: 100.w, bottom: 6.h),
+                        height: 68.h,
 //                  width: 44,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFfea000),
-                        borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(34.w)),
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          widget.selectItems.removeWhere((e) => e.type < 100);
-
-                          for (int j = 0; j < _valueFrom.length; j++) {
-                            _valueFrom[j].isSelect = false;
-                          }
-                          for (int j = 0; j < _valueEducation.length; j++) {
-                            _valueEducation[j].isSelect = false;
-                          }
-                          for (int j = 0; j < _valueIncome.length; j++) {
-                            _valueIncome[j].isSelect = false;
-                          }
-                          for (int j = 0; j < _valueHouse.length; j++) {
-                            _valueHouse[j].isSelect = false;
-                          }
-                          for (int j = 0; j < _valueMarriage.length; j++) {
-                            _valueMarriage[j].isSelect = false;
-                          }
-                          widget.selectItems.removeWhere(
-                              (e) => e.type == 500 || e.type == 501);
-                          startBirthDayTitle = "开始日期";
-                          endBirthDayTitle = "结束日期";
-                          startBirthDayValue = "";
-                          endBirthDayValue = "";
-                          widget.selectItems.removeWhere(
-                                  (e) => e.type == 600);
-                          storeName="门店选择";
-                          showToastBottom(context, "重置成功", true);
-
-                          setState(() {});
-                        },
-                        child: Text(
-                          '重置',
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 30.sp),
-                          textAlign: TextAlign.center,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFfea000),
+                          borderRadius: BorderRadius.horizontal(
+                              left: Radius.circular(34.w)),
                         ),
+                        child: Container(
+                          child: Text(
+                            '重置',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 30.sp),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        alignment: Alignment.centerLeft,
                       ),
-                      alignment: Alignment.centerLeft,
                     ),
-                    Container(
+                    GestureDetector(
+                      onTap: () {
+                        var sex =
+                            BlocProvider.of<GlobalBloc>(context).state.sex;
+                        var mode = BlocProvider.of<GlobalBloc>(context)
+                            .state
+                            .currentPhotoMode;
+                        BlocProvider.of<HomeBloc>(context).add(
+                            EventSearchErpUser(null, widget.selectItems, sex,
+                                mode, false, 0, 0, ""));
+                        Navigator.pop(context);
+                      },
+                      child: Container(
 //            margin: EdgeInsets.only(left: 6, right: 6),
-                      padding: EdgeInsets.only(
-                          left: 50.w, top: 6.h, right: 50.w, bottom: 6.h),
-                      height: 68.h,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFfe7201),
-                        borderRadius: BorderRadius.horizontal(
-                            right: Radius.circular(34.w)),
+                        padding: EdgeInsets.only(
+                            left: 100.w, top: 6.h, right: 100.w, bottom: 6.h),
+                        height: 68.h,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFfe7201),
+                          borderRadius: BorderRadius.horizontal(
+                              right: Radius.circular(34.w)),
+                        ),
+                        child: Container(
+                          child: Text('确定',
+                              style: TextStyle(
+                                  fontSize: 30.sp, color: Colors.white)),
+                        ),
+                        alignment: Alignment.centerLeft,
                       ),
-                      child: GestureDetector(
-                        child: Text('确定',
-                            style: TextStyle(
-                                fontSize: 30.sp, color: Colors.white)),
-                        onTap: () {
-                          var sex =
-                              BlocProvider.of<GlobalBloc>(context).state.sex;
-                          var mode = BlocProvider.of<GlobalBloc>(context)
-                              .state
-                              .currentPhotoMode;
-                          BlocProvider.of<HomeBloc>(context).add(
-                              EventSearchErpUser(null, widget.selectItems, sex,
-                                  mode, false, 0, 0, ""));
-                          Navigator.pop(context);
-                        },
-                      ),
-                      alignment: Alignment.centerLeft,
                     ),
                   ],
                 ),

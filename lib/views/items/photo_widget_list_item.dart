@@ -651,29 +651,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
 
 
 
-  List<String> _marriageLevel = [
-    "未知",
-    "未婚",
-    "离异带孩",
-    "离异单身",
-    "离异未育",
-    "丧偶",
-  ];
 
-  List<String> _hasHouseLevel = [
-    "未知",
-    "无房",
-    "1套房",
-    "2套房",
-    "3套房及以上",
-    "其他",
-  ];
-
-  List<String> _hasCarLevel = [
-    "",
-    "有车",
-    "无车",
-  ];
 
   Widget _titleTop() {
     String level = getLevel(photo['status']);
@@ -698,7 +676,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       child: Container(
         child: Text(
           //尾部摘要
-          (photo['has_house']==null?"":_hasHouseLevel[photo['has_house']])+" "+(photo['has_car']==null?"":_hasCarLevel[photo['has_car']])+" " +(_marriageLevel[photo['marriage']]) +" 生日:" +
+          (photo['has_house']==null?"":hasHouseLevel[photo['has_house']])+" "+(photo['has_car']==null?"":hasCarLevel[photo['has_car']])+" " +(marriageLevel[photo['marriage']]) +" 生日:" +
 
               (photo['birthday']==null ? "-":(photo['birthday'].length > 10? photo['birthday'].toString().substring(0,10):"")) +" 收入:"+photo['income'].toString()+"w",
           maxLines: 3,

@@ -52,16 +52,16 @@ class SettingPage extends StatelessWidget {
           //   trailing: _nextIcon(context),
           //   onTap: () => Navigator.of(context).pushNamed(UnitRouter.item_style_setting),
           // ),
-          Divider(),
-          ListTile(
-            leading: Icon(
-              TolyIcon.icon_code,
-              color: Theme.of(context).primaryColor,
-            ),
-            title: Text('代码高亮样式'),
-            trailing: _nextIcon(context),
-            onTap: () => Navigator.of(context).pushNamed(UnitRouter.code_style_setting),
-          ),
+          // Divider(),
+          // ListTile(
+          //   leading: Icon(
+          //     TolyIcon.icon_code,
+          //     color: Theme.of(context).primaryColor,
+          //   ),
+          //   title: Text('代码高亮样式'),
+          //   trailing: _nextIcon(context),
+          //   onTap: () => Navigator.of(context).pushNamed(UnitRouter.code_style_setting),
+          // ),
           Divider(),
           _buildShowBg(context),
           Divider(),
@@ -123,18 +123,23 @@ class SettingPage extends StatelessWidget {
   Widget buildButton(BuildContext context,String txt,MaterialColor color){
     return    Column(
       children: [
-
-        RaisedButton(
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5))),
-          color: color,
-          onPressed: (){
+        ElevatedButton(
+          onPressed: () {
             _exit(context);
           },
-          child: Text(txt,
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+          child: Text(txt,style:TextStyle(
+              fontSize: 33.sp, color: Colors.white)),
+          style: ElevatedButton.styleFrom(
+              onPrimary: Colors.white,
+              primary: Theme
+                  .of(context)
+                  .primaryColor,
+              shadowColor: Colors.black12,
+              shape: StadiumBorder(),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 65.w, vertical: 15.h)),
         ),
+
       ],
     );
   }

@@ -49,8 +49,8 @@ showToastBottom(BuildContext ctx, String msg, bool collected) {
       msg: msg,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,  // 消息框弹出的位置
-      backgroundColor: Colors.grey,
-      textColor: Colors.white,
+      backgroundColor: Colors.grey.withAlpha(33),
+      textColor: Colors.black,
       fontSize: 30.sp
   );
 }

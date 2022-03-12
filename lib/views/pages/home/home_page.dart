@@ -251,7 +251,9 @@ class _HomePageState extends State<HomePage>
                 children: [
                   Text(title,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
                           fontSize: 48.sp,
                           fontWeight: FontWeight.bold)),
                   totalCount == ""
@@ -1347,7 +1349,11 @@ class _AppBarComponentState extends State<AppBarComponent> {
       } else {
 
       }
+
+
+
     });
+
     super.initState();
   }
 

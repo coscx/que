@@ -167,7 +167,9 @@ class _FlowPageState extends State<FlowPage>
                 children: [
                   Text(title,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
                           fontSize: 48.sp,
                           fontWeight: FontWeight.bold)),
 

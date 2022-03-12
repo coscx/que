@@ -109,7 +109,7 @@ class _SearchPageState extends State<SearchPage> {
                 shrinkWrap: true,
                 slivers: <Widget>[
                 _buildSliverAppBar(),
-                SliverToBoxAdapter(child: _buildStarFilter()),
+                //SliverToBoxAdapter(child: _buildStarFilter()),
                 BlocListener<SearchBloc, SearchState>(
                     listener: (ctx, state) {
                       if (state is CheckUserSuccesses) {

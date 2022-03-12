@@ -54,6 +54,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   int canEdit = 0;
   String call ="";
   String uuid ="";
+  int status =10;
   Map<String,dynamic>  userDetail;
   final List<ShareOpt> list = [
     ShareOpt(title:'微信', img:'assets/packages/images/login_wechat.svg',shareType:ShareType.SESSION,doAction:(shareType,shareInfo)async{
@@ -84,7 +85,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     ),
     ),
     child:Scaffold(
-      endDrawer: CategoryEndDrawer(),
+      //endDrawer: CategoryEndDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0, //去掉Appbar底部阴影
@@ -108,44 +109,54 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           _buildCollectButton(context),
           Container(
             margin: EdgeInsets.fromLTRB(0.w, 15.h, 0.w, 0.h),
-            child:1==1?Container(
+            child:false?Container(
               margin: EdgeInsets.fromLTRB(0.w, 0.h, 100.w, 0.h),
-            ): PopupMenuButton<String>(
-             icon: Icon(
-               Icons.addchart,
-                color: Colors.black,
-              ),
-              itemBuilder: (context) => buildItems(),
-              offset: Offset(0, 60),
-              color: Color(0xffF4FFFA),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                    topRight: Radius.circular(5),
-                    bottomLeft: Radius.circular(5),
-                  )),
-              onSelected: (e) {
-                print(e);
-                if (e == '移入良缘库') {
-                  //BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
-                 // var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  //BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,0,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
-                }
-                if (e == '移入公海') {
-                  //BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
-                  //var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  //BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,2, searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
-                }
-                if (e == '划分客户') {
-                  //BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
-                  //var sex =BlocProvider.of<GlobalBloc>(context).state.sex;
-                  //BlocProvider.of<HomeBloc>(context).add(EventFresh(sex,1,searchParamList,_showAge,_showAgeMax,_showAgeMin,serveType));
+            ):  GestureDetector(
+              onTap: (){
+                var buttons =['认领客户'];
+
+                if (status == 1 ||status ==2||status ==0){
+                  buttons =['划分客户'];
                 }
 
+                if (status ==-1){
+                  buttons =['认领客户'];
+                }
+                WWDialog.showBottomDialog(
+                    context,
+                    content: '请选择',
+                    contentColor: colorWithHex9,
+                    contentFontSize:30.sp,
+                    location: DiaLogLocation.bottom,
+                    arrangeType: buttonArrangeType.column,
+                    buttons: buttons,
+                    otherButtonFontSize: 30.sp,
+                    otherButtonFontWeight:FontWeight.w400,
+                    onTap: (int index, BuildContext context) async {
+                      if(index == 0){
+                        var actionList= await IssuesApi.claimCustomer(uuid);
+                        if  (actionList['code']==200){
+                          showToast(context, '认领成功', true);
+                          Map<String,dynamic> photo=Map();
+                          photo['uuid'] = uuid;
+                          BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
+                        } else{
+                          showToastRed(context, actionList['message'], true);
+                        }
+                      }
+
+                    }
+
+                );
+
               },
-              onCanceled: () => print('onCanceled'),
+              child: Container(
+                  margin: EdgeInsets.fromLTRB(20.w, 0.h, 30.w, 0.h),
+               child: Icon(
+                 Icons.wifi_tethering,
+                  color: Colors.black,
+                )
+              ),
             ),
           )
         ],
@@ -459,6 +470,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     if(state is DelSuccessData){
       return _BuildStateDetail(context,state.userdetails,state.connectList,state.appointList,state.actionList,state.callList);
     }
+
     if(state is DetailLoading){
 
     }
@@ -481,6 +493,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     canEdit= userdetails['can_edit'];
     call = info['mobile'];
     uuid = info['uuid'];
+    status = info['status'];
     userDetail=info;
     List<dynamic> connectList = connectLists['data'];
     List<dynamic> appointList = appointLists['data'];
@@ -3309,8 +3322,16 @@ _comment(BuildContext context,int connectStatus,Map<String,dynamic> detail) {
                                     }
 
 
-                                    if (detail != null)
-                                    BlocProvider.of<DetailBloc>(context).add(AddConnectEvent(detail,_Controller.text,connectStatus,time1,connect_type,time2));
+                                    if (detail != null){
+                                      if (connectStatus==12 || connectStatus==13){
+                                        Map<String,dynamic> photo=Map();
+                                        photo['uuid'] = detail["uuid"];
+                                        BlocProvider.of<DetailBloc>(context).add(AddConnectEventFresh(detail,_Controller.text,connectStatus,time1,connect_type,time2));
+                                      }else{
+                                        BlocProvider.of<DetailBloc>(context).add(AddConnectEvent(detail,_Controller.text,connectStatus,time1,connect_type,time2));
+                                      }
+                                    }
+
                                     goalValue = '1.新分未联系';
                                     _date = new DateTime.now();
                                     connect_type=1;

@@ -23,7 +23,18 @@ class FetchWidgetDetail extends DetailEvent {
     return 'FetchWidgetDetail{widgetModel: }';
   }
 }
+class FetchWidgetDetailNoFresh extends DetailEvent {
+  final Map<String,dynamic> photo;
+  const FetchWidgetDetailNoFresh(this.photo);
 
+  @override
+  List<Object> get props => [photo];
+
+  @override
+  String toString() {
+    return 'FetchWidgetDetailNoFresh{widgetModel: }';
+  }
+}
 class EditDetailEvent extends DetailEvent {
   final String key;
   final int value;
@@ -93,6 +104,23 @@ class AddConnectEvent extends DetailEvent {
     return 'FetchWidgetDetail{widgetModel: }';
   }
 }
+class AddConnectEventFresh extends DetailEvent {
+  final int connect_type;
+  final int connect_status;
+  final String connect_time;
+  final String subscribe_time;
+  final String connect_message;
+  final Map<String,dynamic> photo;
+  const AddConnectEventFresh(this.photo,this.connect_message,this.connect_status,this.connect_time,this.connect_type,this.subscribe_time);
+
+  @override
+  List<Object> get props => [photo,connect_message,connect_status,connect_time,connect_type,subscribe_time];
+
+  @override
+  String toString() {
+    return 'FetchWidgetDetail{widgetModel: }';
+  }
+}
 class AddAppointEvent extends DetailEvent {
   final String other_uuid ;
   final String appointment_time ;
@@ -117,7 +145,7 @@ class FreshDetailState extends DetailEvent {
   const FreshDetailState(this.photo);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [photo];
 
   @override
   String toString() {

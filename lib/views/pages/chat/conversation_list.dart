@@ -66,7 +66,9 @@ class ImConversationListPage extends StatelessWidget{
       appBar: AppBar(
         titleSpacing:60.w,
         leadingWidth: 0,
-        title:  Text('消息',style: TextStyle(color: Colors.black, fontSize: 50.sp,fontWeight: FontWeight.bold)),
+        title:  Text('消息',style: TextStyle(color: Theme
+            .of(context)
+            .primaryColor, fontSize: 50.sp,fontWeight: FontWeight.bold)),
         //leading:const Text('Demo',style: TextStyle(color: Colors.black, fontSize: 15)),
         backgroundColor: Colors.white,
         elevation: 0, //去掉Appbar底部阴影

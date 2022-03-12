@@ -26,27 +26,37 @@ class _MultiChipFilterState extends State<MultiChipFilters> {
     if(widget.childAspectRatio==null){
       widget.childAspectRatio =2.0;
     }
-    return GridView.count(
-      primary: false,
-      shrinkWrap: true,
-      crossAxisCount: 4,
-      mainAxisSpacing: 6.0,
-      crossAxisSpacing: 6.0,
-      childAspectRatio:widget.childAspectRatio,
-      padding: EdgeInsets.only(left: 6.w, right: 6.w, top: 6.h),
+    return Container(
+      padding: EdgeInsets.only(left: 30.w,right: 20.w),
+      alignment: Alignment.centerLeft,
+      child: Wrap(
+        runSpacing: 5.w,
+        spacing: 20.w,
+        // primary: false,
+        // shrinkWrap: true,
+        // crossAxisCount: 4,
+        // mainAxisSpacing: 6.h,
+        // crossAxisSpacing: 12.h,
+        // childAspectRatio:widget.childAspectRatio,
+        // padding: EdgeInsets.only(left: 6.w, right: 6.w, top: 6.h),
 //    padding: EdgeInsets.all(6),
-      children: widget.data.map((e) =>
-          _buildChild(context,widget.data.indexOf(e),e)).toList(),
+        children: widget.data.map((e) =>
+            _buildChild(context,widget.data.indexOf(e),e)).toList(),
+      ),
     );
   }
 
   Widget _buildChild(BuildContext context,int index,SelectItem t) {
     bool selected = t.isSelect;
-    return FilterChip(
-      selectedColor: Colors.orange.withAlpha(55),
-      labelPadding: EdgeInsets.only(left: 5.w,right: 5.w),
-      selectedShadowColor: Colors.blue,
-      shadowColor: Colors.orangeAccent,
+    return ChoiceChip(
+      backgroundColor: Colors.grey.withAlpha(33),
+      selectedColor: Theme
+          .of(context)
+          .primaryColor,
+      padding: EdgeInsets.only(left: 20.w,right: 20.w),
+      labelPadding: EdgeInsets.only(left: 0.w,right: 0.w),
+      selectedShadowColor: Colors.black,
+     shadowColor: Colors.transparent,
       pressElevation: 5,
       elevation: 3,
       avatar: widget.avatarBuilder==null?null:widget.avatarBuilder(context,index),

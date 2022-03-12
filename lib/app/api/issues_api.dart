@@ -182,38 +182,12 @@ class IssuesApi {
       searchParm['startBirthday'] = startBirthday;
       searchParm['endBirthday'] = endBirthday;
     }
-    if (storeId !=""){
+    // if (storeId !=""){
+    //
+    //   searchParm['store_id'] = storeId;
+    //
+    // }
 
-      searchParm['store_id'] = storeId;
-
-    }
-
-    // search.list.map((e) {
-    //   if (e.paramCode=="customerLevel"){
-    //     if(e.selected != null)
-    //     searchParm['status'] = e.selected;
-    //   }
-    //   if (e.paramCode=="from"){
-    //     if(e.selected != null)
-    //     searchParm['channel[]'] = e.selected;
-    //   }
-    //   if (e.paramCode=="graduate"){
-    //     if(e.selected != null)
-    //       searchParm['education[]'] = e.selected;
-    //   }
-    //   if (e.paramCode=="income"){
-    //     if(e.selected != null)
-    //       searchParm['income[]'] = e.selected;
-    //   }
-    //   if (e.paramCode=="house"){
-    //     if(e.selected != null)
-    //       searchParm['hashouse[]'] = e.selected;
-    //   }
-    //   if (e.paramCode=="appointment"){
-    //     if(e.selected != null)
-    //       searchParm['marriage[]'] = e.selected;
-    //   }
-    // }).toList();
     String is_passive="all";
     if(_showAge){
       searchParm['startAge'] = _showAgeMin;
@@ -430,6 +404,21 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> getOnlyStoreList(  ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'customer_uuid':"uuid"};
+
+    try {
+      Response<dynamic> rep = await dio.get('/api/v1/store/select',queryParameters:data );
+      return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
   static Future<Map<String,dynamic>> getActionList( String uuid, String page ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
@@ -507,6 +496,21 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> claimCustomer( String uuid ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'customer_uuids[0]':uuid};
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/public/claimCustomer',queryParameters:data );
+      return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+
   static Future<Map<String,dynamic>> uploadPhoto(  String type, ByteData byteData,Function fd) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
