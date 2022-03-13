@@ -23,6 +23,19 @@ class FetchWidgetDetail extends DetailEvent {
     return 'FetchWidgetDetail{widgetModel: }';
   }
 }
+class FetchWidgetDetailWithAction extends DetailEvent {
+  final Map<String,dynamic> photo;
+  const FetchWidgetDetailWithAction(this.photo);
+
+  @override
+  List<Object> get props => [photo];
+
+  @override
+  String toString() {
+    return 'FetchWidgetDetail{widgetModel: }';
+  }
+}
+
 class FetchWidgetDetailNoFresh extends DetailEvent {
   final Map<String,dynamic> photo;
   const FetchWidgetDetailNoFresh(this.photo);

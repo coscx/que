@@ -117,7 +117,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
           callList: callList);
     }
     if (event is AddConnectEvent) {
-      Map<String, dynamic> userdetails = state.props.elementAt(0);
+      Map<String, dynamic> userDetails = state.props.elementAt(0);
       Map<String, dynamic> connectList = state.props.elementAt(1);
       Map<String, dynamic> appointList = state.props.elementAt(2);
       Map<String, dynamic> actionList = state.props.elementAt(3);
@@ -140,9 +140,9 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       connect['customer_uuid'] = event.photo['uuid'];
 
       if (event.connect_status == 12) {
-        userdetails['status'] = -1;
+        userDetails['status'] = -1;
       } else if (event.connect_status == 13) {
-        userdetails['status'] = 30;
+        userDetails['status'] = 30;
       }
       res = res.reversed.toList();
       res.add(connect);
@@ -152,7 +152,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
           await IssuesApi.addConnect(event.photo['uuid'], connect);
 
       yield DetailWithData(
-          userdetails: userdetails,
+          userdetails: userDetails,
           connectList: result,
           appointList: appointList,
           actionList: actionList,
@@ -218,6 +218,60 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         yield DetailFailed();
       }
     }
+    if (event is FetchWidgetDetailWithAction) {
+      yield DetailLoading();
+
+      try {
+
+        var result =
+        await IssuesApi.getUserDetail(event.photo['uuid'].toString());
+        if (result['code'] == 200) {
+        } else {}
+
+        var resultConnectList =
+        await IssuesApi.getConnectList(event.photo['uuid'].toString(), "1");
+        if (resultConnectList['code'] == 200) {
+        } else {}
+
+        var appointList = await IssuesApi.getAppointmentList(
+            event.photo['uuid'].toString(), "1");
+        if (appointList['code'] == 200) {
+        } else {}
+        var actionList =
+        await IssuesApi.getConnectList(event.photo['uuid'].toString(), "1");
+        if (actionList['code'] == 200) {
+        } else {}
+
+        var callList =
+        await IssuesApi.getCallList(event.photo['uuid'].toString(), "1");
+        if (actionList['code'] == 200) {
+        } else {}
+
+
+
+        if (result['data'].isEmpty) {
+          yield DetailEmpty();
+        } else {
+
+          var claimCustomer= await IssuesApi.claimCustomer(event.photo['uuid']);
+          if  (claimCustomer['code']==200){
+            yield DetailWithData(
+                userdetails: result['data'],
+                connectList: resultConnectList['data'],
+                appointList: appointList['data'],
+                actionList: actionList['data'],
+                callList: callList['data']);
+          } else{
+            yield DetailWithActionFail(claimCustomer['message']);
+          }
+
+
+        }
+      } catch (e) {
+        yield DetailFailed();
+      }
+    }
+
     if (event is FetchWidgetDetailNoFresh) {
       //yield DetailLoading();
 

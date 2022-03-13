@@ -32,6 +32,17 @@ class DetailWithData extends DetailState {
   }
 
 }
+class DetailWithActionFail extends DetailState {
+  final String reason;
+  const DetailWithActionFail(this.reason);
+  @override
+  List<Object> get props => [reason];
+
+  @override
+  String toString() {
+    return 'FetchWidgetDetail{widgetModel: }';
+  }
+}
 class DelSuccessData extends DetailState {
 
   final Map<String,dynamic>  userdetails ;
