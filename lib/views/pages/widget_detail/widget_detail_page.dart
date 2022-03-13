@@ -121,6 +121,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   tooltip: '添加商品',
                   key: _addKey,
                   onPressed: (){
+                    if (status == 5){
+
+                      showToastRed(
+                          context, "暂无权限", true);
+                      return;
+                    }
                     showAddMenu(uuid);
                   },
                   icon: Icon(
@@ -207,7 +213,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     showPopupWindow<void>(
       context: context,
       isShowBg: true,
-      offset: Offset(button.size.width , -56.h),
+      offset: Offset(button.size.width-7.w , -15.h),
       anchor: button,
       child:  GoodsAddMenu(uuid: uuid,),
     );

@@ -4,7 +4,7 @@ import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/blocs/detail/detail_bloc.dart';
 import 'package:flutter_geen/blocs/detail/detail_event.dart';
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class GoodsAddMenu extends StatefulWidget {
   final String uuid;
   const GoodsAddMenu({
@@ -47,10 +47,9 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(right: 12.0),
-          child: Icon(
-            Icons.wifi_tethering,
-            color: Colors.black,
+          padding:  EdgeInsets.only(right: 24.w),
+          child: Image.asset('assets/images/jt.png', width: 32.w, height: 16.h,
+            color: Colors.white,
           ),
         ),
         SizedBox(
