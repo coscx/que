@@ -279,8 +279,8 @@ class MyFlow extends StatelessWidget  {
                         child: Row(
                             children: [
                               Container(
-
-                                padding: EdgeInsets.only(left: 0.w, right: 5.w),
+                                width: 80.w,
+                                padding: EdgeInsets.only(left: 0.w, right: 0.w),
                                 //width: 200.w,
                                 child: Text(
                                   item['customer_name'],

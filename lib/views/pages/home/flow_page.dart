@@ -64,7 +64,7 @@ class _FlowPageState extends State<FlowPage>
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
+   List<SelectItem> selectItems = <SelectItem>[];
   bool _showFilter = false;
   bool _showSort = false;
 
@@ -84,14 +84,14 @@ class _FlowPageState extends State<FlowPage>
   ];
 
   SearchParamList searchParamList = SearchParamList(list: []);
-  List<SelectItem> selectItems = <SelectItem>[];
+
 
 
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<FlowBloc>(context).add(EventFlowFresh(0, 0, null, null, 0, 0, "0", null));
+    BlocProvider.of<FlowBloc>(context).add(EventFlowFresh(0, 0, null, null, 0, 0, "0", []));
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       OverlayToolWrapper.of(context).showFloating();
     });
@@ -131,7 +131,7 @@ class _FlowPageState extends State<FlowPage>
     var currentPage = BlocProvider.of<GlobalBloc>(context).state.indexFlowPage;
     BlocProvider.of<GlobalBloc>(context).add(EventIndexFlowPage(currentPage));
     currentPage++;
-    var result = await IssuesApi.getFlowData(currentPage);
+    var result = await IssuesApi.getFlowData(currentPage,selectItems);
     if (result['code'] == 200) {
     } else {
 
@@ -187,7 +187,9 @@ class _FlowPageState extends State<FlowPage>
                       color: Colors.black87,
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, UnitRouter.search);
+                      Navigator.pushNamed(context, UnitRouter.wx_search,arguments: selectItems).then((value) {
+                        BlocProvider.of<FlowBloc>(context).add(EventFlowFresh(0, 0, null, null, 0, 0, "0", selectItems));
+                      });
                     },
                   ),
                 ),

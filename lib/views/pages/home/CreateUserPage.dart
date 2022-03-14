@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/blocs/global/global_bloc.dart';
 import 'package:flutter_geen/blocs/global/global_state.dart';
+import 'package:flutter_geen/views/dialogs/common_dialog.dart';
 import 'package:flutter_geen/views/items/horizontal_pickers.dart';
 import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
@@ -12,8 +13,7 @@ import 'package:flutter_geen/views/pages/utils/enums.dart';
 import 'package:flutter_geen/views/pages/utils/extractedWidgets.dart';
 import 'package:flutter_geen/views/pages/utils/textStyles.dart';
 import 'package:flutter_picker/Picker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_geen/views/pages/home/home_page.dart';
+import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CreateUserPage extends StatefulWidget {
   @override
@@ -320,9 +320,19 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(Radius.circular(40.w))),
                                             color: Colors.lightBlue,
-                                            onPressed: (){
+                                            onPressed: () async {
+                                              mobile = _mobileController.text;
+                                              name = _usernameController.text;
+                                              var result= await IssuesApi.addCustomer(mobile,name,gender,birthday,marriage,from);
+                                              if(result['code']==200){
 
-                                              Navigator.of(context).pop();
+                                                showToast(context,"创建成功",false);
+                                                Navigator.of(context).pop();
+                                              }else{
+
+                                                showToastRed(context,result['message'],false);
+                                              }
+
                                             },
                                             child: Text("提交",
                                                 style: TextStyle(color: Colors.white, fontSize: 40.sp)),

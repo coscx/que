@@ -251,6 +251,28 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> addCustomer(String mobile,String name,int gender,String birthday,int marriage,int channel,) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+
+    Map<String,dynamic> data={};
+    data['mobile']=mobile;
+    data['name']=name;
+    data['gender']=gender;
+    data['birthday']=birthday;
+    data['marriage']=marriage;
+    data['channel']=channel;
+
+    dio.options.headers['authorization']="Bearer "+token;
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/personal/addCustomer',queryParameters:data );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
   static Future<Map<String,dynamic>> addConnect(String uuid, Map<String,dynamic> data) async {
 
     var ss = await LocalStorage.get("token");
@@ -342,14 +364,35 @@ class IssuesApi {
       return dd;
     }
   }
-  static Future<Map<String,dynamic>> getFlowData(int page) async {
+  static Future<Map<String,dynamic>> getFlowData(int page,final List<SelectItem> selectItems) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    var data={'currentPage':page};
+    Map<String,dynamic> searchParm={};
+    searchParm['currentPage'] = page;
+
+    selectItems.map((e) {
+
+      if (e.type == 300) {
+        searchParm['start_age'] = e.id;
+      }
+      if (e.type == 301) {
+        searchParm['end_age'] = e.id;
+      }
+      if (e.type == 600) {
+        if (e.id !="0"){
+          searchParm['store_id'] = e.id;
+        }
+
+      }
+      if (e.type == 1000) {
+        searchParm['gender'] = e.id;
+      }
+    } ).toList();
+
     Dio dioA= Dio();
     dioA.options.headers['authorization']="Bearer "+token;
     try {
-      Response<dynamic> rep = await dioA.post(NewBaseUrl+'/api/IPadCommonArticle',data: data );
+      Response<dynamic> rep = await dioA.post(NewBaseUrl+'/api/IPadCommonArticle',data: searchParm );
       var dd=rep.data;
       return dd;
     } on DioError catch(e){
@@ -404,7 +447,7 @@ class IssuesApi {
       return dd;
     }
   }
-  static Future<Map<String,dynamic>> getOnlyStoreList(  ) async {
+  static Future<Map<String,dynamic>> getOnlyStoreList() async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;

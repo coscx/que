@@ -2287,9 +2287,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               radius: 5,
                             ),
                             Container(
+                             // width: ScreenUtil().screenWidth * 0.15,
                               margin: EdgeInsets.only(left: 15.w),
                               child: Text(
                                 name == null ? "" : name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 30.sp, color: Colors.black54),
                               ),
@@ -2408,9 +2411,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               radius: 5,
                             ),
                             Container(
+                             // width: ScreenUtil().screenWidth * 0.15,
                               margin: EdgeInsets.only(left: 15.w),
                               child: Text(
                                 name == null ? "" : name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 30.sp, color: Colors.black54),
                               ),
@@ -2426,20 +2432,23 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               ),
                             ),
                             Container(
+                              width: ScreenUtil().screenWidth * 0.14,
                               margin: EdgeInsets.only(left: 15.w),
                               child: Text(
                                 other_name == null ? "" : other_name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 30.sp, color: Colors.black54),
                               ),
                             ),
                             SizedBox(
-                              width: 5.w,
+                              width: 2.w,
                             ),
                             Visibility(
                                 visible: true,
                                 child: Container(
-                                  width: ScreenUtil().screenWidth * 0.49,
+                                  width: ScreenUtil().screenWidth * 0.46,
                                   child: Text(
                                     remark,
                                     maxLines: 1,
@@ -2540,6 +2549,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                               margin: EdgeInsets.only(left: 15.w),
                               child: Text(
                                 name == null ? "" : name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style:
                                     TextStyle(fontSize: 30.sp, color: Colors.black),
                               ),
@@ -2556,7 +2567,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                                       children: [
                                         Expanded(
                                           child: Container(
-                                            width: ScreenUtil().screenWidth * 0.63,
+                                            width: ScreenUtil().screenWidth * 0.70,
                                             child: Text(
                                               content,
                                               maxLines: 1,
@@ -3511,6 +3522,7 @@ _getStatusIndex(info) {
 
 _appoint(BuildContext context, Map<String, dynamic> detail) {
   showDialog(
+    barrierDismissible: false,
       context: context,
       builder: (ctx) => StatefulBuilder(builder: (context, state) {
             return GestureDetector(

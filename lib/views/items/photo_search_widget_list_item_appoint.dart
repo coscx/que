@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_geen/views/items/popular_card.dart';
+import 'package:flutter_geen/views/items/popular_card_appoint.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/res/style/shape/coupon_shape_border.dart';
@@ -414,7 +414,7 @@ class PhotoSearchAppointWidgetListItem extends StatelessWidget {
 
   Widget buildContent(BuildContext context) {
 
-      return PopularCard(photo: photo,);
+      return PopularCardAppoint(photo: photo,);
      return Container(
         color: Colors.white10.withAlpha(66),
         height: 95,

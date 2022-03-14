@@ -32,7 +32,7 @@ import 'package:flutter_geen/views/pages/home/CreateUserPage.dart';
 import 'package:flutter_geen/views/items/select.dart';
 import 'package:flutter_geen/views/pages/user/User.dart';
 import 'package:flutter_geen/views/pages/widget_detail/widget_detail_page.dart';
-
+import 'package:flutter_geen/views/pages/weixin/wx_search_page.dart';
 import 'package:flutter_geen/views/pages/setting/setting_page.dart';
 
 import 'utils/router_utils.dart';
@@ -42,6 +42,7 @@ class UnitRouter {
   static const String home = '/';
   static const String logo = 'logo';
   static const String search = 'search';
+  static const String wx_search = 'wx_search';
   static const String nav = 'nav';
   static const String widget_detail = 'WidgetDetail';
   static const String collect = 'CollectPage';
@@ -91,6 +92,8 @@ class UnitRouter {
 
       case search:
         return Right2LeftRouter(child: SearchPage());
+      case wx_search:
+        return Right2LeftRouter(child: WxSearchPage(selectItems: settings.arguments,));
       case search_page_appoint:
         return Right2LeftRouter(child: SearchPageAppoint());
       case select_page:

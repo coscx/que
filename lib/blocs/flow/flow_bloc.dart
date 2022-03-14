@@ -167,7 +167,7 @@ class FlowBloc extends Bloc<FlowEvent, FlowState> {
     if (event is EventFlowFresh) {
       try {
 
-        var result= await IssuesApi.getFlowData(1);
+        var result= await IssuesApi.getFlowData(1,event.selectItems);
         if  (result['message']=="Unauthenticated.") {
           yield FlowUnauthenticated();
         }else{
@@ -190,7 +190,7 @@ class FlowBloc extends Bloc<FlowEvent, FlowState> {
     if (event is EventFlowSearchErpUser) {
       try {
 
-        var result= await IssuesApi.getFlowData(1);
+        var result= await IssuesApi.getFlowData(1,[]);
         if  (result['message']=="Unauthenticated.") {
           yield FlowUnauthenticated();
         }else{

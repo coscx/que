@@ -13,7 +13,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
-import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
+
 
 typedef _CallBack = void Function(List<String> selectStr);
 
@@ -140,7 +140,9 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
           pickerStoreItem.add(ff);
           pickerStoreData.add(value['name']);
         });
-      } else {}
+      } else {
+
+      }
     });
   }
 
@@ -487,89 +489,6 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
     );
   }
 
-  Widget buildRangerSlider(String title) {
-    return Column(
-      children: [
-        Container(
-          padding:
-              EdgeInsets.only(left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
-          alignment: Alignment.centerLeft,
-          child: Text(title,
-              style: TextStyle(fontSize: 12, color: Color(0xFF6a6a6a))),
-        ),
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                  left: 20.w, top: 0.h, right: 0.w, bottom: 0.h),
-              child: Text(minValue.toString() + "岁",
-                  style: TextStyle(fontSize: 26.sp, color: Color(0xFF6a6a6a))),
-            ),
-            Container(
-              padding:
-                  EdgeInsets.only(left: 0.w, top: 0.h, right: 0.w, bottom: 0.h),
-              width: ScreenUtil().screenWidth * 0.55,
-              child: frs.RangeSlider(
-                min: 18.0,
-                max: 80.0,
-                lowerValue: minValue.toDouble(),
-                upperValue: maxValue.toDouble(),
-                divisions: 62,
-                showValueIndicator: true,
-                valueIndicatorMaxDecimals: 0,
-                onChanged: (double newLowerValue, double newUpperValue) {
-                  minValue = newLowerValue.round();
-                  maxValue = newUpperValue.round();
-                  int j = 0, k = 0;
-                  for (int i = 0; i < widget.selectItems.length; i++) {
-                    if (widget.selectItems[i].type == 300) {
-                      j = 1;
-                      widget.selectItems[i].id = minValue.toString();
-                      break;
-                    }
-                  }
-                  for (int i = 0; i < widget.selectItems.length; i++) {
-                    if (widget.selectItems[i].type == 301) {
-                      widget.selectItems[i].id = maxValue.toString();
-                      k = 1;
-                      break;
-                    }
-                  }
-                  if (j == 0) {
-                    SelectItem s = SelectItem();
-                    s.type = 300;
-                    s.id = minValue.toString();
-                    widget.selectItems.add(s);
-                  }
-                  if (k == 0) {
-                    SelectItem s = SelectItem();
-                    s.type = 301;
-                    s.id = maxValue.toString();
-                    widget.selectItems.add(s);
-                  }
-                  setState(() {});
-                },
-                onChangeStart:
-                    (double startLowerValue, double startUpperValue) {
-                  print(
-                      'Started with values: $startLowerValue and $startUpperValue');
-                },
-                onChangeEnd: (double newLowerValue, double newUpperValue) {
-                  print('Ended with values: $newLowerValue and $newUpperValue');
-                },
-              ),
-            ),
-            Container(
-              padding:
-                  EdgeInsets.only(left: 0.w, top: 0.h, right: 0.w, bottom: 0.h),
-              child: Text(maxValue.toString() + "岁",
-                  style: TextStyle(fontSize: 26.sp, color: Color(0xFF6a6a6a))),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 
   Widget _buildGroup1(String title, bool isShowExpansionIcon,
       List<SelectItem> items, List<SelectItem> sel) {

@@ -67,10 +67,7 @@ class _SearchPageState extends State<SearchPage> {
       body:
       WillPopScope(
         onWillPop: () async {
-          //返回时 情空搜索
-          BlocProvider.of<SearchBloc>(context).add(EventTextChanged(args: SearchArgs()));
-          BlocProvider.of<SearchBloc>(context).add(EventClearPage());
-          BlocProvider.of<GlobalBloc>(context).add(EventSearchPhotoPage(0));
+
           return true;
         },
         child: ScrollConfiguration(
@@ -137,6 +134,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget _buildSliverAppBar() {
     return SliverAppBar(
       backgroundColor: Colors.white,
+      elevation: 0,
       pinned: true,
       leadingWidth: 20.w,
       title: Container(

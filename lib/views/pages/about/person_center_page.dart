@@ -391,7 +391,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
 
                           GestureDetector(
                             onTap: (){
-                              Navigator.pushNamed(context, UnitRouter.select_page);
+                              //Navigator.pushNamed(context, UnitRouter.select_page);
                             },
                             child:Container(
                                 padding:  EdgeInsets.only(
@@ -416,7 +416,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                     GestureDetector(
                       onTap: (){
                           //Navigator.pushNamed(context, UnitRouter.select_page);
-                          _userDetail(context);
+                         // _userDetail(context);
 
 
                       },
