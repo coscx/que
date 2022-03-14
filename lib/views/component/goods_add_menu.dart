@@ -65,7 +65,7 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
                                   Map<String, dynamic> photo = Map();
                                   photo['uuid'] = widget.uuid;
                                   BlocProvider.of<DetailBloc>(context)
-                                      .add(FetchWidgetDetail(photo));
+                                      .add(FetchWidgetDetailNoFresh(photo));
                                 } else {
                                   showToastRed(
                                       context, actionList['message'], true);

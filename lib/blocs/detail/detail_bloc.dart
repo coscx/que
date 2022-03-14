@@ -40,7 +40,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       if (appointList['code'] == 200) {
       } else {}
       var actionList =
-          await IssuesApi.getConnectList(event.photo['uuid'].toString(), "1");
+          await IssuesApi.getActionList(event.photo['uuid'].toString(), "1");
       if (actionList['code'] == 200) {
       } else {}
 
@@ -139,10 +139,12 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       connect['connect_message'] = event.connect_message;
       connect['customer_uuid'] = event.photo['uuid'];
 
+      Map<String, dynamic> results = Map.from(userDetails);
+
       if (event.connect_status == 12) {
-        userDetails['status'] = -1;
+        results['info']['status'] = -1;
       } else if (event.connect_status == 13) {
-        userDetails['status'] = 30;
+        results['info']['status'] = 30;
       }
       res = res.reversed.toList();
       res.add(connect);
@@ -152,7 +154,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
           await IssuesApi.addConnect(event.photo['uuid'], connect);
 
       yield DetailWithData(
-          userdetails: userDetails,
+          userdetails: results,
           connectList: result,
           appointList: appointList,
           actionList: actionList,
@@ -193,7 +195,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         if (appointList['code'] == 200) {
         } else {}
         var actionList =
-            await IssuesApi.getConnectList(event.photo['uuid'].toString(), "1");
+            await IssuesApi.getActionList(event.photo['uuid'].toString(), "1");
         if (actionList['code'] == 200) {
         } else {}
 
@@ -202,13 +204,13 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         if (actionList['code'] == 200) {
         } else {}
 
-
-
+        Map<String, dynamic> results = Map.from(result);
+        results['info']['status'] = 0;
         if (result['data'].isEmpty) {
           yield DetailEmpty();
         } else {
           yield DetailWithData(
-              userdetails: result['data'],
+              userdetails: results,
               connectList: resultConnectList['data'],
               appointList: appointList['data'],
               actionList: actionList['data'],
@@ -238,7 +240,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         if (appointList['code'] == 200) {
         } else {}
         var actionList =
-        await IssuesApi.getConnectList(event.photo['uuid'].toString(), "1");
+        await IssuesApi.getActionList(event.photo['uuid'].toString(), "1");
         if (actionList['code'] == 200) {
         } else {}
 
@@ -292,7 +294,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         if (appointList['code'] == 200) {
         } else {}
         var actionList =
-        await IssuesApi.getConnectList(event.photo['uuid'].toString(), "1");
+        await IssuesApi.getActionList(event.photo['uuid'].toString(), "1");
         if (actionList['code'] == 200) {
         } else {}
 

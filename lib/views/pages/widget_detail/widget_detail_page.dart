@@ -4218,20 +4218,20 @@ _comment(BuildContext context, int connectStatus, Map<String, dynamic> detail) {
                                     }
 
                                     if (detail != null) {
-                                      if (connectStatus == 12 ||
-                                          connectStatus == 13) {
-                                        Map<String, dynamic> photo = Map();
-                                        photo['uuid'] = detail["uuid"];
-                                        showToast(context, '操作成功', true);
-                                        BlocProvider.of<DetailBloc>(context)
-                                            .add(AddConnectEventFresh(
-                                                detail,
-                                                _Controller.text,
-                                                connectStatus,
-                                                time1,
-                                                connect_type,
-                                                time2));
-                                      } else {
+                                      // if (connectStatus == 12 ||
+                                      //     connectStatus == 13) {
+                                      //   Map<String, dynamic> photo = Map();
+                                      //   photo['uuid'] = detail["uuid"];
+                                      //   showToast(context, '操作成功', true);
+                                      //   BlocProvider.of<DetailBloc>(context)
+                                      //       .add(AddConnectEventFresh(
+                                      //           detail,
+                                      //           _Controller.text,
+                                      //           connectStatus,
+                                      //           time1,
+                                      //           connect_type,
+                                      //           time2));
+                                      // } else {
                                         showToast(context, '操作成功', true);
                                         BlocProvider.of<DetailBloc>(context)
                                             .add(AddConnectEvent(
@@ -4241,7 +4241,7 @@ _comment(BuildContext context, int connectStatus, Map<String, dynamic> detail) {
                                                 time1,
                                                 connect_type,
                                                 time2));
-                                      }
+                                     // }
                                     }
 
                                     goalValue = '1.新分未联系';
