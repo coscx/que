@@ -28,7 +28,6 @@ import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_geen/components/permanent/panel.dart';
 import 'package:flutter_geen/components/project/widget_node_panel.dart';
-import 'package:flutter_geen/views/pages/widget_detail/category_end_drawer.dart';
 import 'package:flutter_geen/views/items/tag.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -3895,7 +3894,7 @@ _appoint(BuildContext context, Map<String, dynamic> detail) {
                                       address_lat = "";
                                       appointment_time =
                                           _date.toString().substring(0, 19);
-
+                                      showToast(context,"创建成功",false);
                                       Navigator.of(context).pop();
                                     },
                                     child: Text("提交",

@@ -14,19 +14,15 @@ import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
-import 'package:flutter_geen/views/items/drop_menu_header.dart';
 import 'package:flutter_geen/views/items/drop_menu_leftWidget.dart';
-import 'package:flutter_geen/views/items/drop_menu_rightWidget.dart';
 import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/common/empty_page.dart';
 import 'package:flutter_geen/views/items/home_item_support.dart';
-import 'package:flutter_geen/views/pages/home/toly_app_bar.dart';
 import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
-import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
+import 'package:flutter_geen/views/component/app_bar_component.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'background.dart';
 //import 'package:flutter_qr_reader/flutter_qr_reader.dart';
 
 class SortCondition {
@@ -64,29 +60,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
-  List<String> _dropDownHeaderItemStrings1 = ['全城', '品牌', '价格低', '筛选'];
-  List<SortCondition> _brandSortConditions = [];
-  List<SortCondition> _distanceSortConditions = [];
-  SortCondition _selectBrandSortCondition;
-  SortCondition _selectDistanceSortCondition;
-  GZXDropdownMenuController _dropdownMenuController =
-      GZXDropdownMenuController();
-  GlobalKey _stackKey = GlobalKey();
-
   //QrReaderViewController _controller;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  bool _showPop = false;
   bool _showFilter = false;
   bool _showSort = false;
-  bool _showRight = false;
   bool _showAge = false;
   int _showAgeMin = 16;
   int _showAgeMax = 70;
-  bool _visible = false;
   int _visibleCount = 0;
-  bool _showChip = false;
-  int _selectedIndex = 999;
   String serveType = "1";
   String totalCount = "";
   String title = "客户管理";
@@ -96,17 +78,9 @@ class _HomePageState extends State<HomePage>
     SortModel(name: "已签约", isSelected: false, code: "3"),
     SortModel(name: "即将过期", isSelected: false, code: "4"),
   ];
-  SortModel _leftSelectedModel = _leftWidgets[0];
-  List<String> _dropDownHeaderItemStrings = [_leftWidgets[1].name, '筛选'];
   SearchParamList searchParamList = SearchParamList(list: []);
   List<SelectItem> selectItems = <SelectItem>[];
 
-  void _showPopView(int select) {
-    setState(() {
-      if (_selectedIndex > 0) _selectedIndex = select;
-      _showPop = (_showFilter || _showSort);
-    });
-  }
 
   @override
   void initState() {
@@ -251,9 +225,7 @@ class _HomePageState extends State<HomePage>
                 children: [
                   Text(title,
                       style: TextStyle(
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                           fontSize: 48.sp,
                           fontWeight: FontWeight.bold)),
                   totalCount == ""
@@ -357,11 +329,10 @@ class _HomePageState extends State<HomePage>
                 },
                 child: Container(
                   decoration: new BoxDecoration(
-//背景
+                    //背景
                     color: Color.fromRGBO(247, 247, 247, 100),
                     //设置四周圆角 角度
                     borderRadius: BorderRadius.all(Radius.circular(0.h)),
-
                     //设置四周边框
                     //border: new Border.all(width: 1, color: Colors.red),
                   ),
@@ -370,7 +341,6 @@ class _HomePageState extends State<HomePage>
                     return Stack(
                       children: <Widget>[
                         //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
-
                         Container(
                           padding: EdgeInsets.only(top: 150.h),
                           child: ScrollConfiguration(
@@ -386,48 +356,11 @@ class _HomePageState extends State<HomePage>
                                 child: CustomScrollView(
                                   physics: BouncingScrollPhysics(),
                                   slivers: <Widget>[
-                                    // Container(
-                                    //   child: BlocBuilder<GlobalBloc, GlobalState>(builder: _buildHeadNum),
-                                    // ),
-
-                                    SliverToBoxAdapter(
-                                        child: Row(
-                                      children: [
-                                        // Container(
-                                        //   height: 50.h,
-                                        //   padding:  EdgeInsets.only(left: 35.w,top: 8.h),
-                                        //   child: Text('筛选条件:'
-                                        //
-                                        //   ),
-                                        // ),
-                                        Visibility(
-                                          visible: _visible,
-                                          child: Container(
-                                            height: 50.h,
-                                            width: 700.w,
-                                            padding:
-                                                EdgeInsets.only(left: 30.w),
-                                            child: ListView(
-                                              shrinkWrap: true,
-                                              scrollDirection: Axis.horizontal,
-                                              children: <Widget>[
-                                                ...buildLeftRightWidget(),
-                                                _showAge
-                                                    ? buildAgeWidget()
-                                                    : Container()
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )),
-
                                     _buildContent(ctx, state),
                                   ],
                                 ),
                               )),
                         ),
-                        buildPopView(),
                         Container(
                           padding: EdgeInsets.only(top: 70.h),
                           child: BlocBuilder<GlobalBloc, GlobalState>(
@@ -439,269 +372,12 @@ class _HomePageState extends State<HomePage>
                       ],
                     );
                   }),
-                ))));
+                )
+            )
+        )
+    );
   }
 
-  Widget getLeftRightWidget() {
-    return Container(
-        padding: EdgeInsets.only(right: 15.w),
-        child: RawChip(
-          label: Text('老孟'),
-          onDeleted: () {
-            print('onDeleted');
-          },
-          deleteIcon: Icon(Icons.delete),
-          deleteIconColor: Colors.red,
-          deleteButtonTooltipMessage: '删除',
-        ));
-  }
-
-  List<Widget> buildLeftRightWidget() {
-    var ll = searchParamList.list
-        .where((element) => element.selected != null)
-        .map((e) {
-      if (e.selectName != null) {
-        _showChip = true;
-      }
-      return Container(
-          padding:
-              EdgeInsets.only(right: 15.w, left: 1.w, top: 1.h, bottom: 1.h),
-          child: RawChip(
-            label: Text(
-              e.selectName == null ? "0" : e.selectName,
-              style: TextStyle(color: Colors.black, fontSize: 30.sp),
-            ),
-            padding:
-                EdgeInsets.only(left: 5.w, right: 5.w, top: 0.h, bottom: 5.h),
-            onDeleted: () {
-              //print('onDeleted');
-              //setState(() {
-              deleteLeftRightWidget(e.selectName);
-              // });
-              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-              var mode =
-                  BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-              BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
-                  searchParamList,
-                  selectItems,
-                  sex,
-                  mode,
-                  _showAge,
-                  _showAgeMax,
-                  _showAgeMin,
-                  serveType));
-            },
-            deleteIcon: Icon(Icons.delete),
-            deleteIconColor: Colors.red,
-            deleteButtonTooltipMessage: '删除',
-          ));
-    }).toList();
-
-    return ll;
-  }
-
-  deleteLeftRightWidget(String code) {
-    _visible = false;
-    _visibleCount = 0;
-    searchParamList.list.map((e) {
-      if (e.selectName == code) {
-        e.selected = null;
-        e.selectName = null;
-        e.itemList.map((el) {
-          if (el.name == code) {
-            //el.isSelected =null;
-            el.isSelected = !el.isSelected;
-          }
-          return el;
-        }).toList();
-        return e;
-      } else {
-        return e;
-      }
-    }).toList();
-
-    searchParamList.list.map((e) {
-      if (e.selected != "" && e.selected != null) {
-        _visible = true;
-        _visibleCount++;
-      }
-    }).toList();
-  }
-
-  Widget buildAgeWidget() {
-    return Container(
-        padding: EdgeInsets.only(right: 15.w),
-        child: RawChip(
-          label: Text(_showAgeMin.toString() + "-" + _showAgeMax.toString()),
-          onDeleted: () {
-            print('onDeleted');
-            _showAge = false;
-            if (_visibleCount == 0) {
-              _visible = false;
-            }
-
-            var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-            var mode =
-                BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-            BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
-                searchParamList,
-                selectItems,
-                sex,
-                mode,
-                _showAge,
-                _showAgeMax,
-                _showAgeMin,
-                serveType));
-          },
-          deleteIcon: Icon(Icons.delete),
-          deleteIconColor: Colors.red,
-          deleteButtonTooltipMessage: '删除',
-        ));
-  }
-
-  Widget buildPopView() {
-    if (_showFilter) {
-      return FutureBuilder(
-        future: loadStudent(context),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            SearchParamList tempSearchParamList;
-            if (searchParamList != null && searchParamList.list.length > 0) {
-              tempSearchParamList = searchParamList;
-            } else {
-              tempSearchParamList = snapshot.data as SearchParamList;
-              searchParamList = tempSearchParamList;
-            }
-
-            return DropMenuRightWidget(
-              paramList: tempSearchParamList,
-              showAgeMax: _showAgeMax,
-              showAge: _showAge,
-              showAgeMin: _showAgeMin,
-              clickCallBack:
-                  (SearchParamModel pressModel, ParamItemModel pressItem) {
-                searchParamList.list.map((e) {
-                  if (e.paramCode == pressModel.paramCode) {
-                    if (pressItem.isSelected == true) {
-                      e.selected = null;
-                      e.selectName = null;
-                    } else {
-                      e.selected = pressItem.code;
-                      e.selectName = pressItem.name;
-                    }
-
-                    return e;
-                  }
-                }).toList();
-                print('${pressItem.name}');
-              },
-              clickSwith: (on, min, max) {
-                _showAge = on;
-                _showAgeMax = max;
-                _showAgeMin = min;
-                print(on);
-                print(min);
-                print(max);
-              },
-              sureFun: () {
-                var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-                var mode =
-                    BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-                BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
-                    searchParamList,
-                    selectItems,
-                    sex,
-                    mode,
-                    _showAge,
-                    _showAgeMax,
-                    _showAgeMin,
-                    serveType));
-                _visible = false;
-                _visibleCount = 0;
-                searchParamList.list.map((e) {
-                  if (e.selected != "" && e.selected != null) {
-                    _visible = true;
-                    _visibleCount++;
-                  }
-                }).toList();
-                if (_visibleCount == 0) {
-                  if (_showAge == true) {
-                    _visible = true;
-                  } else {
-                    _visible = false;
-                  }
-                } else {
-                  _visible = true;
-                }
-
-                print("sure click");
-                _showFilter = false;
-                _showSort = false;
-                _showPopView(2);
-              },
-              resetFun: () {
-                print("reset click");
-              },
-            );
-          } else {
-            return Text("");
-          }
-        },
-      );
-    } else if (_showSort) {
-      return DropMenuLeftWidget(
-        dataSource: _leftWidgets,
-        onSelected: (SortModel model) {
-          _leftSelectedModel = model;
-          print("select ${model.name}  ${model.code}");
-
-          setState(() {
-            serveType = model.code;
-            _showSort = false;
-            _showFilter = false;
-            var mode =
-                BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-            if (mode == 2) {
-              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-              BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
-                  searchParamList,
-                  selectItems,
-                  sex,
-                  mode,
-                  _showAge,
-                  _showAgeMax,
-                  _showAgeMin,
-                  serveType));
-            }
-          });
-        },
-      );
-    } else {
-      return SizedBox(
-        height: 0,
-      );
-    }
-  }
-
-  Future<String> _loadAStudentAsset(BuildContext context) async {
-    return await DefaultAssetBundle.of(context)
-        .loadString('assets/searchParam.json');
-  }
-
-  Future loadStudent(BuildContext context) async {
-    String jsonString = await _loadAStudentAsset(context);
-    final jsonResponse = json.decode(jsonString);
-    SearchParamList paramList = new SearchParamList.fromJson(jsonResponse);
-    for (SearchParamModel item in paramList.list) {
-      if (item.dateFlag == true) {
-        // item.itemList.add(new ParamItemModel(
-        //   name: "自定义时间",
-        //   code: "-1",
-        // ));
-      }
-    }
-    return paramList;
-  }
 
   void _onValueChanged(int value) {
     BlocProvider.of<GlobalBloc>(context).add(EventSetIndexSex(value));
@@ -807,7 +483,7 @@ class _HomePageState extends State<HomePage>
             bottomLeft: Radius.circular(5),
           )),
           onSelected: (e) {
-            print(e);
+            //print(e);
             if (e == '全部') {
               BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
               var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
@@ -922,34 +598,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildPersistentHeader(List<String> num) => SliverPersistentHeader(
-      pinned: true,
-      delegate: FlexHeaderDelegate(
-          minHeight: 25 + 56.0,
-          maxHeight: 120.0,
-          childBuilder: (offset, max, min) {
-            double dy = max - 25 - offset;
 
-            if (dy < min - 25) {
-              dy = min - 25;
-            }
-            return TolyAppBar(
-              maxHeight: dy,
-              onItemClick: _switchTab,
-              nums: num,
-            );
-          }));
-
-  Widget _buildBackground(BuildContext context, GlobalState state) {
-    if (state.showBackGround) {
-      return BackgroundShower();
-    }
-    return Container();
-  }
-
-  Widget _buildHeadNum(BuildContext context, GlobalState state) {
-    return _buildPersistentHeader(state.headNum);
-  }
 
   Widget _buildContent(BuildContext context, HomeState state) {
     if (state is WidgetsLoading) {
@@ -1112,10 +761,6 @@ class _HomePageState extends State<HomePage>
     BlocProvider.of<HomeBloc>(context).add(EventTabTap());
   }
 
-  _toDetailPage(WidgetModel model, Map<String, dynamic> photo) {
-    BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photo));
-    Navigator.pushNamed(context, UnitRouter.widget_detail, arguments: model);
-  }
 
   @override
   bool get wantKeepAlive => true;
@@ -1220,15 +865,12 @@ class DYrefreshFooter extends StatelessWidget {
 
 class bar extends StatelessWidget implements PreferredSizeWidget {
   final List<SelectItem> selectItems;
-
   bar({
     @required this.selectItems,
   });
-
   @override
   // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(580.h);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1238,6 +880,7 @@ class bar extends StatelessWidget implements PreferredSizeWidget {
           Expanded(
               child: AppBarComponent(
             selectItems: selectItems,
+                state:_scaffoldKey
           )),
         ],
       ),
@@ -1245,435 +888,4 @@ class bar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-List<CitySelect> firstLevels = <CitySelect>[];
-List<StoreSelect> all = <StoreSelect>[];
 
-class AppBarComponent extends StatefulWidget {
-  final List<SelectItem> selectItems;
-
-  AppBarComponent({
-    @required this.selectItems,
-  });
-
-  @override
-  _AppBarComponentState createState() => _AppBarComponentState();
-}
-
-class _AppBarComponentState extends State<AppBarComponent> {
-  final String title = "";
-  final Color bgColor = Colors.black;
-  final Color textColor = Colors.redAccent;
-  List<String> _dropDownHeaderItemStrings = ['门店', '客户状态', '沟通状态', '筛选'];
-  List<SortCondition> _brandSortConditions = [];
-  List<SortCondition> _distanceSortConditions = [];
-  SortCondition _selectBrandSortCondition;
-  SortCondition _selectDistanceSortCondition;
-  GZXDropdownMenuController _dropdownMenuController =
-      GZXDropdownMenuController();
-  List<StoreSelect> secondtLevels = <StoreSelect>[];
-  GlobalKey _stackKey = GlobalKey();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-
-    _brandSortConditions
-        .add(SortCondition(name: '客户状态', id: 0, isSelected: true, all: true));
-    _brandSortConditions
-        .add(SortCondition(name: 'A级客户', id: 2, isSelected: false, all: true));
-    _brandSortConditions
-        .add(SortCondition(name: 'B级客户', id: 1, isSelected: false, all: true));
-    _brandSortConditions.add(
-        SortCondition(name: 'C级客户', id: 100, isSelected: false, all: true));
-    _brandSortConditions
-        .add(SortCondition(name: 'D级客户', id: 30, isSelected: false, all: true));
-
-    _selectBrandSortCondition = _brandSortConditions[0];
-
-    _distanceSortConditions
-        .add(SortCondition(name: '沟通状态', id: 0, isSelected: true, all: true));
-    _distanceSortConditions.add(
-        SortCondition(name: '1.新分未联系', id: 1, isSelected: false, all: true));
-    _distanceSortConditions.add(
-        SortCondition(name: '2.号码无效', id: 2, isSelected: false, all: true));
-    _distanceSortConditions.add(
-        SortCondition(name: '3.号码未接通', id: 3, isSelected: false, all: true));
-    _distanceSortConditions.add(
-        SortCondition(name: '4.可继续沟通', id: 4, isSelected: false, all: true));
-    _distanceSortConditions.add(
-        SortCondition(name: '5.有意向面谈', id: 5, isSelected: false, all: true));
-    _distanceSortConditions.add(
-        SortCondition(name: '6.确定到店时间', id: 6, isSelected: false, all: true));
-    _distanceSortConditions.add(SortCondition(
-        name: '7.已到店，意愿需跟进', id: 7, isSelected: false, all: true));
-    _distanceSortConditions.add(SortCondition(
-        name: '8.已到店，考虑7天付款', id: 8, isSelected: false, all: true));
-    _distanceSortConditions.add(SortCondition(
-        name: '9.高级会员，支付预付款', id: 9, isSelected: false, all: true));
-    _distanceSortConditions.add(SortCondition(
-        name: '10.高级会员，费用已结清', id: 10, isSelected: false, all: true));
-    _distanceSortConditions.add(
-        SortCondition(name: '11.毁单', id: 11, isSelected: false, all: true));
-    _distanceSortConditions.add(SortCondition(
-        name: '12.放弃并放入公海', id: 12, isSelected: false, all: true));
-    _distanceSortConditions.add(SortCondition(
-        name: '13.放弃并放入D级', id: 13, isSelected: false, all: true));
-
-    _selectDistanceSortCondition = _distanceSortConditions[0];
-
-    CitySelect ta = CitySelect();
-    ta.name = "全部";
-    ta.id = 0;
-    firstLevels.add(ta);
-
-    Future.delayed(Duration(milliseconds: 1)).then((e) async {
-      var result = await IssuesApi.getStoreList("1");
-      if (result['code'] == 200) {
-        List<dynamic> da = result['data'];
-        da.forEach((value) {
-          CitySelect cc1 = CitySelect();
-          cc1.name = value['name'];
-          cc1.id = int.parse(value['city_code']);
-          firstLevels.add(cc1);
-
-          List<dynamic> stores = value['data'];
-          stores.forEach((value) {
-            StoreSelect ddd1 = StoreSelect();
-            ddd1.id = value['id'];
-            ddd1.name = value['name'];
-            ddd1.city = cc1.id;
-            all.add(ddd1);
-          });
-        });
-
-      } else {
-
-      }
-
-
-
-    });
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        key: _stackKey,
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-//              SizedBox(height: 20,),
-              Container(
-                decoration: new BoxDecoration(),
-                child: GZXDropDownHeader(
-                  items: [
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0],
-                        style: TextStyle()),
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
-                        iconSize: 18),
-                  ],
-                  stackKey: _stackKey,
-                  controller: _dropdownMenuController,
-                  onItemTap: (index) {
-                    if (index == 3) {
-                      _scaffoldKey.currentState.openEndDrawer();
-                      _dropdownMenuController.hide();
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-          GZXDropDownMenu(
-            controller: _dropdownMenuController,
-            animationMilliseconds: 350,
-            menus: [
-              GZXDropdownMenuBuilder(
-                  dropDownHeight: 40 * 8.0,
-                  dropDownWidget: _buildQuanChengWidget((selectValue) {
-                    _dropDownHeaderItemStrings[0] = selectValue.name;
-                    _dropdownMenuController.hide();
-                    setState(() {});
-                    if (selectValue.type == 101) {
-                      if (selectValue.id == "1") {
-                        selectValue.id = "0";
-                      } else {
-                        return;
-                      }
-                    }
-                    int k = 0;
-                    for (int i = 0; i < widget.selectItems.length; i++) {
-                      if (widget.selectItems[i].type == 100) {
-                        widget.selectItems[i].id = selectValue.id.toString();
-                        k = 1;
-                        break;
-                      }
-                    }
-                    if (k > 0) {
-                    } else {
-                      SelectItem s = SelectItem();
-                      s.type = 100;
-                      s.id = selectValue.id.toString();
-                      widget.selectItems.add(s);
-                    }
-                    var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-                    var mode = BlocProvider.of<GlobalBloc>(context)
-                        .state
-                        .currentPhotoMode;
-                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
-                        null, widget.selectItems, sex, mode, false, 0, 0, ""));
-                  })),
-              GZXDropdownMenuBuilder(
-                  dropDownHeight: 40.0 * _brandSortConditions.length,
-                  dropDownWidget:
-                      _buildConditionListWidget(_brandSortConditions, (value) {
-                    _selectBrandSortCondition = value;
-                    _dropDownHeaderItemStrings[1] =
-                        _selectBrandSortCondition.name;
-                    _dropdownMenuController.hide();
-                    setState(() {});
-                    int k = 0;
-                    for (int i = 0; i < widget.selectItems.length; i++) {
-                      if (widget.selectItems[i].type == 120) {
-                        widget.selectItems[i].id = value.id.toString();
-                        k = 1;
-                        break;
-                      }
-                    }
-                    if (k > 0) {
-                    } else {
-                      SelectItem s = SelectItem();
-                      s.type = 120;
-                      s.id = value.id.toString();
-                      widget.selectItems.add(s);
-                    }
-                    var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-                    var mode = BlocProvider.of<GlobalBloc>(context)
-                        .state
-                        .currentPhotoMode;
-                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
-                        null, widget.selectItems, sex, mode, false, 0, 0, ""));
-                  })),
-              GZXDropdownMenuBuilder(
-                  dropDownHeight: 40.0 * _distanceSortConditions.length,
-                  dropDownWidget: _buildConditionListWidget(
-                      _distanceSortConditions, (value) {
-                    _selectDistanceSortCondition = value;
-                    _dropDownHeaderItemStrings[2] =
-                        _selectDistanceSortCondition.name;
-                    _dropdownMenuController.hide();
-                    setState(() {});
-                    int k = 0;
-                    for (int i = 0; i < widget.selectItems.length; i++) {
-                      if (widget.selectItems[i].type == 130) {
-                        widget.selectItems[i].id = value.id.toString();
-                        k = 1;
-                        break;
-                      }
-                    }
-                    if (k > 0) {
-                    } else {
-                      SelectItem s = SelectItem();
-                      s.type = 130;
-                      s.id = value.id.toString();
-                      widget.selectItems.add(s);
-                    }
-                    var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-                    var mode = BlocProvider.of<GlobalBloc>(context)
-                        .state
-                        .currentPhotoMode;
-                    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
-                        null, widget.selectItems, sex, mode, false, 0, 0, ""));
-                  })),
-            ],
-          ),
-
-//          Positioned(
-//              width: 200,
-//              height: 200,
-//              left: 0,
-//              top: 0,
-//              child: Container(
-//                color: Colors.red,
-//                width: 200,
-//                height: 300,
-//              ))
-        ],
-      ),
-    );
-  }
-
-  int _selectTempFirstLevelIndex = 0;
-  int _selectFirstLevelIndex = 0;
-
-  int _selectSecondLevelIndex = -1;
-
-  _buildQuanChengWidget(void itemOnTap(SelectItem selectValue)) {
-//    List firstLevels = new List<int>.filled(15, 0);
-
-    return Row(
-      children: <Widget>[
-        Container(
-          width: 200.w,
-          child: ListView(
-            children: firstLevels.map((item) {
-              int index = firstLevels.indexOf(item);
-              return GestureDetector(
-                onTap: () {
-                  _selectTempFirstLevelIndex = index;
-
-                  if (_selectTempFirstLevelIndex == 0) {
-                    SelectItem s = SelectItem();
-                    s.type = 101;
-                    s.id = "1";
-                    s.name = "全部";
-                    itemOnTap(s);
-                    return;
-                  } else {
-                    secondtLevels = [];
-                    for (int i = 0; i < all.length; i++) {
-                      if (all[i].city == item.id) {
-                        StoreSelect ddd1 = StoreSelect();
-                        ddd1.id = all[i].id;
-                        ddd1.name = all[i].name;
-                        ddd1.city = item.id;
-                        secondtLevels.add(ddd1);
-                      }
-                    }
-                    setState(() {});
-                  }
-                  setState(() {});
-                },
-                child: Container(
-                    height: 80.h,
-                    color: _selectTempFirstLevelIndex == index
-                        ? Colors.grey[100]
-                        : Colors.white,
-                    alignment: Alignment.center,
-                    child: _selectTempFirstLevelIndex == index
-                        ? Text(
-                            '${item.name}',
-                            style: TextStyle(
-                              color: Colors.red,
-                            ),
-                          )
-                        : Text('${item.name}')),
-              );
-            }).toList(),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            color: Colors.grey[100],
-            child: _selectTempFirstLevelIndex == 0
-                ? Container()
-                : ListView(
-                    children: secondtLevels.map((item) {
-                      int index = secondtLevels.indexOf(item);
-                      return GestureDetector(
-                          onTap: () {
-                            _selectSecondLevelIndex = index;
-                            _selectFirstLevelIndex = _selectTempFirstLevelIndex;
-                            if (_selectSecondLevelIndex == 0) {
-                              SelectItem s = SelectItem();
-                              s.type = 100;
-                              s.id = item.id.toString();
-                              s.name = item.name;
-                              itemOnTap(s);
-                            } else {
-                              SelectItem s = SelectItem();
-                              s.type = 100;
-                              s.id = item.id.toString();
-                              s.name = item.name;
-                              itemOnTap(s);
-                            }
-                          },
-                          child: Container(
-                            height: 80.h,
-                            alignment: Alignment.centerLeft,
-                            child: Row(children: <Widget>[
-                              SizedBox(
-                                width: 40.w,
-                              ),
-                              _selectFirstLevelIndex ==
-                                          _selectTempFirstLevelIndex &&
-                                      _selectSecondLevelIndex == index
-                                  ? Text(
-                                      '${item.name}',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ),
-                                    )
-                                  : Text('${item.name}'),
-                            ]),
-                          ));
-                    }).toList(),
-                  ),
-          ),
-        )
-      ],
-    );
-  }
-
-  _buildConditionListWidget(items, void itemOnTap(SortCondition)) {
-    return ListView.separated(
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      itemCount: items.length,
-      // item 的个数
-      separatorBuilder: (BuildContext context, int index) =>
-          Divider(height: 1.0),
-      // 添加分割线
-      itemBuilder: (BuildContext context, int index) {
-        SortCondition goodsSortCondition = items[index];
-        return GestureDetector(
-          onTap: () {
-            for (var value in items) {
-              value.isSelected = false;
-            }
-
-            goodsSortCondition.isSelected = true;
-
-            itemOnTap(goodsSortCondition);
-          },
-          child: Container(
-//            color: Colors.blue,
-            height: 40,
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  child: Text(
-                    goodsSortCondition.name,
-                    style: TextStyle(
-                      color: goodsSortCondition.isSelected
-                          ? Colors.red
-                          : Colors.black,
-                    ),
-                  ),
-                ),
-                goodsSortCondition.isSelected
-                    ? Icon(
-                        Icons.check,
-                        color: Theme.of(context).primaryColor,
-                        size: 16,
-                      )
-                    : SizedBox(),
-                SizedBox(
-                  width: 16,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-}

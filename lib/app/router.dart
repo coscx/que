@@ -4,8 +4,7 @@ import 'package:flutter_geen/views/items/QrCode.dart';
 import 'package:flutter_geen/views/pages/about/about_me_page.dart';
 import 'package:flutter_geen/views/pages/about/about_app_page.dart';
 import 'package:flutter_geen/views/pages/about/person_center_page.dart';
-import 'package:flutter_geen/views/pages/about/recommendedCard.dart';
-import 'package:flutter_geen/views/pages/about/time_line.dart';
+
 import 'package:flutter_geen/views/pages/about/version_info.dart';
 import 'package:flutter_geen/views/pages/category/category_detail.dart';
 import 'package:flutter_geen/views/pages/category/collect_page.dart';
@@ -13,7 +12,7 @@ import 'package:flutter_geen/views/pages/chat/chat_page.dart';
 import 'package:flutter_geen/views/pages/chat/conversation_list.dart';
 import 'package:flutter_geen/views/pages/chat/group_page.dart';
 import 'package:flutter_geen/views/pages/data/brower.dart';
-import 'package:flutter_geen/views/pages/data/card.dart';
+
 import 'package:flutter_geen/views/pages/gallery/gallery_page.dart';
 import 'package:flutter_geen/views/pages/index/new_amaps.dart';
 import 'package:flutter_geen/views/pages/index/amap_index.dart';
@@ -140,19 +139,19 @@ class UnitRouter {
         return Right2LeftRouter(child: GroupChatPage(model: settings.arguments,));
       case point_detail:
         return Right2LeftRouter(child: IssuesDetailPage());
-      case index_page:
-        return Right2LeftRouter(child: IndexPage());
+      // case index_page:
+      //   return Right2LeftRouter(child: IndexPage());
       case login_phone:
         return Right2LeftRouter(child: LoginPhone());
-      case recommended_card:
-        return Right2LeftRouter(child: RecommendedCard(onDelete: () {}, title: ' ', child: Container(),));
+      // case recommended_card:
+      //   return Right2LeftRouter(child: RecommendedCard(onDelete: () {}, title: ' ', child: Container(),));
       case create_user_page:
         return Right2LeftRouter(child: CreateUserPage());
       case person_page:
         return Right2LeftRouter(child: MinePage());
 
-      case time_line:
-        return Right2LeftRouter(child: TimelinePage(title: settings.arguments,));
+      // case time_line:
+      //   return Right2LeftRouter(child: TimelinePage(title: settings.arguments,));
       case brower:
         return Right2LeftRouter(child: Brower(url: settings.arguments,));
       case chat_list:

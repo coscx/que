@@ -21,7 +21,6 @@ class FlutterGeen extends StatelessWidget {
   final botToastBuilder = BotToastInit();  //1.调用BotToastInit
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<GlobalBloc, GlobalState>(builder: (_, state) {
       return ScreenUtilInit(
           designSize: isPad?Size(1536,2048):Size(750, 1334),
