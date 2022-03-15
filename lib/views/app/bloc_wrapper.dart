@@ -63,7 +63,7 @@ class _BlocWrapperState extends State<BlocWrapper> {
           BlocProvider<ChatBloc>(create: (_) => ChatBloc()),
 
           BlocProvider<PeerBloc>(create: (_) => PeerBloc()),
-          //BlocProvider<UserBloc>(create: (_) => UserBloc()),
+          BlocProvider<UserBloc>(create: (_) => UserBloc()),
           BlocProvider<GroupBloc>(create: (_) => GroupBloc()),
           //BlocProvider<TimeBloc>(create: (_) => TimeBloc()),
           BlocProvider<FlowBloc>(create: (_) => FlowBloc(repository: repository)),
