@@ -22,9 +22,11 @@ bool select3 = false;
 
 class BuyVipPage extends StatefulWidget {
   final String uuid;
+
   BuyVipPage({
     @required this.uuid,
   });
+
   @override
   _BuyVipPagePageState createState() => _BuyVipPagePageState();
 }
@@ -40,18 +42,30 @@ class StoreItem {
   int index;
   int type;
 
-  StoreItem({this.name, this.id, this.isSelect, this.index, this.type, this.price, this.month, this.count, this.tag});
+  StoreItem(
+      {this.name,
+      this.id,
+      this.isSelect,
+      this.index,
+      this.type,
+      this.price,
+      this.month,
+      this.count,
+      this.tag});
 }
-class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserver {
+
+class _BuyVipPagePageState extends State<BuyVipPage>
+    with WidgetsBindingObserver {
   DateTime startBirthDay = DateTime.now();
   String startBirthDayTitle = "支付时间";
   String startBirthDayValue = "";
   String store = "";
   String storeName = "选择会员套餐";
-  String price= "";
-  String month= "";
-  String count= "";
-  String tag= "";
+  String price = "";
+  String month = "";
+  String count = "";
+  String tag = "";
+  int type =0;
   int minValue;
   int maxValue;
   int sexSelect = 0;
@@ -63,6 +77,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
   final _vipCountController = TextEditingController(text: '');
   final _tagController = TextEditingController(text: '');
   FocusNode _remarkFieldNode = FocusNode();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -105,15 +120,12 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
         ff1.isSelect = false;
         pickerStoreItem.add(ff1);
         pickerStoreData.add(ff1.name);
-      } else {
-
-      }
+      } else {}
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Theme(
         data: ThemeData(
           appBarTheme: AppBarTheme.of(context).copyWith(
@@ -153,8 +165,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                       .add(EventSearchPhotoPage(0));
                   return true;
                 },
-                child:
-                GestureDetector(
+                child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
                     // 触摸收起键盘
@@ -166,63 +177,81 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         children: <Widget>[
-
-                          // Row(
-                          //   children: [
-                          //     OriginAuthority(
-                          //       authorityChanged: (int value) {
-                          //
-                          //       }, isSelected: sexSelect,
-                          //     )
-                          //   ],
-                          // ),
-                          // buildRangerSlider("性别"),
                           buildStore("套餐选择:"),
                           buildVipPrice(),
                           buildVipMonth(),
                           buildVipCount(),
                           buildBirthday("支付时间"),
                           buildTag(),
-                          Padding(
-                            padding: EdgeInsets.only(top: 50.h, bottom: 0.h,left: 30.h,right: 30.h),
-                            child: Container(
-                              width: ScreenUtil().screenWidth*0.7,
-                              height: 70.h,
-                              child: RaisedButton(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(40.w))),
-                                color: Colors.lightBlue,
-                                onPressed: (){
-
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text("提交",
-                                    style: TextStyle(color: Colors.white, fontSize: 40.sp)),
-                              ),
-                            ),
-                          ),
+                          buildSubmit()
                         ],
-                      )
-                  ),
-                )
-            )
-        )
+                      )),
+                ))));
+  }
+
+  Widget buildSubmit() {
+    return Padding(
+      padding: EdgeInsets.only(top: 50.h, bottom: 0.h, left: 30.h, right: 30.h),
+      child: Container(
+        width: ScreenUtil().screenWidth * 0.7,
+        height: 70.h,
+        child: RaisedButton(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(40.w))),
+          color: Colors.lightBlue,
+          onPressed: () async {
+            var data = Map<String, dynamic>();
+            data['favorable'] = price;
+            data['store_id'] = 0;
+            data['time'] = month;
+            data['meet'] = count;
+            data['pay_time'] = startBirthDayValue;
+            data['description'] = tag;
+            data['name'] = "自定义套餐";
+            data['original'] = price;
+
+            var results = await IssuesApi.addMealFree(widget.uuid, data);
+            if (results['code'] == 200) {
+
+              var id = results['data']['id'];
+              var data1 = Map<String, dynamic>();
+              data1['pay_price'] = price;
+              data1['customer_uuid'] = widget.uuid;
+              data1['pay_time'] = startBirthDayValue;
+              data1['remark'] = tag;
+              data1['vip_id'] = id;
+              if(type==9999){
+                data1['free'] = 1;
+              }
+              var result = await IssuesApi.buyVip(widget.uuid, data1);
+              if (result['code'] == 200) {
+                print(result['data'] );
+              }
+
+            } else {}
+            Navigator.of(context).pop();
+          },
+          child: Text("提交",
+              style: TextStyle(color: Colors.white, fontSize: 40.sp)),
+        ),
+      ),
     );
   }
-  Widget buildVipPrice(){
+
+  Widget buildVipPrice() {
     return Column(
       children: [
         Row(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 0.h, bottom: 0.h,left: 30.h,right: 0.h),
+              padding: EdgeInsets.only(
+                  top: 0.h, bottom: 0.h, left: 30.h, right: 0.h),
               child: Text("套餐价格:",
                   style: TextStyle(color: Colors.black, fontSize: 30.sp)),
             ),
-
             Container(
-              width: ScreenUtil().screenWidth*0.5,
+              width: ScreenUtil().screenWidth * 0.5,
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.grey.withOpacity(0.5),
@@ -231,19 +260,15 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                 borderRadius: BorderRadius.circular(15.0),
               ),
               margin:
-              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
               child: Row(
                 children: <Widget>[
                   Padding(
                     padding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                    child: Container(
-
-                    ),
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                    child: Container(),
                   ),
-                  Container(
-
-                  ),
+                  Container(),
                   Expanded(
                     child: TextField(
                       enabled: _isButton1Disabled,
@@ -254,13 +279,10 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                       inputFormatters: <TextInputFormatter>[
-                        LengthLimitingTextInputFormatter(11)//限制长度
+                        LengthLimitingTextInputFormatter(11) //限制长度
                       ],
                       onChanged: (str) {
-                        setState(() {
-
-
-                        });
+                        setState(() {});
                       },
                     ),
                   )
@@ -268,7 +290,8 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 0.h, bottom: 0.h,left: 0.h,right: 0.h),
+              padding:
+                  EdgeInsets.only(top: 0.h, bottom: 0.h, left: 0.h, right: 0.h),
               child: Text("元",
                   style: TextStyle(color: Colors.black, fontSize: 30.sp)),
             ),
@@ -277,19 +300,20 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
       ],
     );
   }
-  Widget buildVipMonth(){
+
+  Widget buildVipMonth() {
     return Column(
       children: [
         Row(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 0.h, bottom: 0.h,left: 30.h,right: 0.h),
+              padding: EdgeInsets.only(
+                  top: 0.h, bottom: 0.h, left: 30.h, right: 0.h),
               child: Text("服务时长:",
                   style: TextStyle(color: Colors.black, fontSize: 30.sp)),
             ),
-
             Container(
-              width: ScreenUtil().screenWidth*0.5,
+              width: ScreenUtil().screenWidth * 0.5,
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.grey.withOpacity(0.5),
@@ -298,19 +322,15 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                 borderRadius: BorderRadius.circular(15.0),
               ),
               margin:
-              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
               child: Row(
                 children: <Widget>[
                   Padding(
                     padding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                    child: Container(
-
-                    ),
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                    child: Container(),
                   ),
-                  Container(
-
-                  ),
+                  Container(),
                   Expanded(
                     child: TextField(
                       enabled: _isButton1Disabled,
@@ -321,13 +341,10 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                       inputFormatters: <TextInputFormatter>[
-                        LengthLimitingTextInputFormatter(11)//限制长度
+                        LengthLimitingTextInputFormatter(11) //限制长度
                       ],
                       onChanged: (str) {
-                        setState(() {
-
-
-                        });
+                        setState(() {});
                       },
                     ),
                   )
@@ -335,7 +352,8 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 0.h, bottom: 0.h,left: 0.h,right: 0.h),
+              padding:
+                  EdgeInsets.only(top: 0.h, bottom: 0.h, left: 0.h, right: 0.h),
               child: Text("个月",
                   style: TextStyle(color: Colors.black, fontSize: 30.sp)),
             ),
@@ -344,19 +362,20 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
       ],
     );
   }
-  Widget buildVipCount(){
+
+  Widget buildVipCount() {
     return Column(
       children: [
         Row(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 0.h, bottom: 0.h,left: 30.h,right: 0.h),
+              padding: EdgeInsets.only(
+                  top: 0.h, bottom: 0.h, left: 30.h, right: 0.h),
               child: Text("排约次数:",
                   style: TextStyle(color: Colors.black, fontSize: 30.sp)),
             ),
-
             Container(
-              width: ScreenUtil().screenWidth*0.5,
+              width: ScreenUtil().screenWidth * 0.5,
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.grey.withOpacity(0.5),
@@ -365,19 +384,15 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                 borderRadius: BorderRadius.circular(15.0),
               ),
               margin:
-              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
               child: Row(
                 children: <Widget>[
                   Padding(
                     padding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                    child: Container(
-
-                    ),
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                    child: Container(),
                   ),
-                  Container(
-
-                  ),
+                  Container(),
                   Expanded(
                     child: TextField(
                       enabled: _isButton1Disabled,
@@ -388,12 +403,10 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                       inputFormatters: <TextInputFormatter>[
-                        LengthLimitingTextInputFormatter(11)//限制长度
+                        LengthLimitingTextInputFormatter(11) //限制长度
                       ],
                       onChanged: (str) {
-                        setState(() {
-
-                        });
+                        setState(() {});
                       },
                     ),
                   )
@@ -401,7 +414,8 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 0.h, bottom: 0.h,left: 0.h,right: 0.h),
+              padding:
+                  EdgeInsets.only(top: 0.h, bottom: 0.h, left: 0.h, right: 0.h),
               child: Text("次",
                   style: TextStyle(color: Colors.black, fontSize: 30.sp)),
             ),
@@ -410,23 +424,23 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
       ],
     );
   }
-  Widget buildTag(){
-    return  Column(
-      children: [
 
+  Widget buildTag() {
+    return Column(
+      children: [
         Container(
-          padding: EdgeInsets.only(top: 0.h, bottom: 0.h,left: 0.h,right: 0.h),
+          padding:
+              EdgeInsets.only(top: 0.h, bottom: 0.h, left: 0.h, right: 0.h),
           child: Text("支付备注",
               style: TextStyle(color: Colors.black, fontSize: 30.sp)),
         ),
         Column(
           children: [
-
             Container(
-              padding: EdgeInsets.only(top: 20.h, bottom: 0.h,left: 0.h,right: 0.h),
-              width: ScreenUtil().screenWidth*0.9,
+              padding: EdgeInsets.only(
+                  top: 20.h, bottom: 0.h, left: 0.h, right: 0.h),
+              width: ScreenUtil().screenWidth * 0.9,
               child: TextField(
-
                 controller: _tagController,
                 focusNode: _remarkFieldNode,
                 style: TextStyle(color: Colors.black),
@@ -441,9 +455,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                   hintText: "请输入...",
                   border: OutlineInputBorder(),
                 ),
-                onChanged: (v) {
-
-                },
+                onChanged: (v) {},
               ),
             ),
           ],
@@ -453,20 +465,18 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
   }
 
   Widget buildBirthday(String title) {
-
     return Container(
       padding: EdgeInsets.only(left: 20.w, top: 0.h, right: 0.w, bottom: 0.h),
       child: Column(
         children: [
-
           Container(
             child: Row(
-             //mainAxisAlignment: MainAxisAlignment.center,
+              //mainAxisAlignment: MainAxisAlignment.center,
               //crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding:
-                  EdgeInsets.only(left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
+                  padding: EdgeInsets.only(
+                      left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
                   alignment: Alignment.centerLeft,
                   child: Text(title,
                       style: TextStyle(fontSize: 30.sp, color: Colors.black)),
@@ -485,14 +495,10 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                             print(v);
                             setState(() {
                               startBirthDay = v;
-                              startBirthDayTitle = v.toString().substring(0,19)
-                              ;
-
-
+                              startBirthDayTitle =
+                                  v.toString().substring(0, 19);
 
                               startBirthDayValue = startBirthDayTitle;
-
-
                             });
                           });
                     },
@@ -515,7 +521,6 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                             horizontal: 35.w, vertical: 10.h)),
                   ),
                 ),
-
               ],
             ),
           ),
@@ -523,24 +528,22 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
       ),
     );
   }
+
   Widget buildStore(String title) {
     int storeId = 0;
 
-
     return Container(
-      padding:
-      EdgeInsets.only(left: 0.w, top: 20.h, right: 0.w, bottom: 0.h),
+      padding: EdgeInsets.only(left: 0.w, top: 20.h, right: 0.w, bottom: 0.h),
       child: Column(
         children: [
-
           Container(
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.start,
               //crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding:
-                  EdgeInsets.only(left: 30.w, top: 0.h, right: 0.w, bottom: 0.h),
+                  padding: EdgeInsets.only(
+                      left: 30.w, top: 0.h, right: 0.w, bottom: 0.h),
                   alignment: Alignment.center,
                   child: Text(title,
                       style: TextStyle(fontSize: 30.sp, color: Colors.black)),
@@ -551,54 +554,56 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
                   child: ElevatedButton(
                     onPressed: () {
                       new Picker(
-                          selecteds: [storeId],
-                          itemExtent: 40,
-                          selectionOverlay:
-                          CupertinoPickerDefaultSelectionOverlay(
-                            background: Colors.transparent,
-                          ),
-                          cancelText: "取消",
-                          confirmText: "确定",
-                          selectedTextStyle: TextStyle(
-                              fontSize: 40.sp, color: Colors.redAccent),
-                          textStyle:
-                          TextStyle(fontSize: 25.sp, color: Colors.black),
-                          adapter: PickerDataAdapter<String>(
-                              pickerdata: pickerStoreData),
-                          changeToFirst: true,
-                          hideHeader: false,
-                          onConfirm: (Picker picker, List value) {
-                            print(value.toString());
-                            print(picker.adapter.text);
-                            setState(() {
-                            storeName=  pickerStoreData[value[0]];
-                            price=  pickerStoreItem[value[0]].price;
-                            month=  pickerStoreItem[value[0]].month;
-                            count=  pickerStoreItem[value[0]].count;
-                            tag=  pickerStoreItem[value[0]].tag;
-                            _tagController.text= tag;
-                            _vipPriceController.text= price;
-                            _vipMonthController.text= month;
-                            _vipCountController.text= count;
-                            _isButton1Disabled = false;
-                            if (pickerStoreItem[value[0]].type==9999){
-                              _tagController.clear();
-                              _vipPriceController.clear();
-                              _vipMonthController.clear();
-                              _vipCountController.clear();
-                              _isButton1Disabled = true;
-
-                            }
-                            });
-                          })
-                          .showModal(this.context); //_scaffoldKey.currentState);
+                              selecteds: [storeId],
+                              itemExtent: 40,
+                              selectionOverlay:
+                                  CupertinoPickerDefaultSelectionOverlay(
+                                background: Colors.transparent,
+                              ),
+                              cancelText: "取消",
+                              confirmText: "确定",
+                              selectedTextStyle: TextStyle(
+                                  fontSize: 40.sp, color: Colors.redAccent),
+                              textStyle: TextStyle(
+                                  fontSize: 25.sp, color: Colors.black),
+                              adapter: PickerDataAdapter<String>(
+                                  pickerdata: pickerStoreData),
+                              changeToFirst: true,
+                              hideHeader: false,
+                              onConfirm: (Picker picker, List value) {
+                                print(value.toString());
+                                print(picker.adapter.text);
+                                setState(() {
+                                  storeName = pickerStoreData[value[0]];
+                                  price = pickerStoreItem[value[0]].price;
+                                  month = pickerStoreItem[value[0]].month;
+                                  count = pickerStoreItem[value[0]].count;
+                                  tag = pickerStoreItem[value[0]].tag;
+                                  _tagController.text = tag;
+                                  _vipPriceController.text = price;
+                                  _vipMonthController.text = month;
+                                  _vipCountController.text = count;
+                                  _isButton1Disabled = false;
+                                  type=pickerStoreItem[value[0]].type;
+                                  if (pickerStoreItem[value[0]].type == 9999) {
+                                    _tagController.clear();
+                                    _vipPriceController.clear();
+                                    _vipMonthController.clear();
+                                    _vipCountController.clear();
+                                    _isButton1Disabled = true;
+                                  }
+                                });
+                              })
+                          .showModal(
+                              this.context); //_scaffoldKey.currentState);
                     },
                     child: Text(
                       storeName == "" ? " " : storeName,
                       style: TextStyle(
                           fontSize: 30.sp,
-                          color:
-                          storeName == "选择会员套餐" ? Colors.black : Colors.white),
+                          color: storeName == "选择会员套餐"
+                              ? Colors.black
+                              : Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
                         onPrimary: Colors.white,
@@ -618,10 +623,8 @@ class _BuyVipPagePageState extends State<BuyVipPage>  with WidgetsBindingObserve
       ),
     );
   }
+
   Widget buildRangerSlider(String title) {
-
-
-
     return Container(
       padding: EdgeInsets.only(left: 20.w, top: 0.h, right: 0.w, bottom: 0.h),
       child: Column(
