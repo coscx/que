@@ -27,6 +27,8 @@ import 'package:flutter_geen/views/items/select.dart';
 import 'package:flutter_geen/views/pages/user/User.dart';
 import 'package:flutter_geen/views/pages/widget_detail/widget_detail_page.dart';
 import 'package:flutter_geen/views/pages/weixin/wx_search_page.dart';
+import 'package:flutter_geen/views/component/catetory_two_list.dart';
+import 'package:flutter_geen/views/component/buy_vip_page.dart';
 import 'package:flutter_geen/views/pages/setting/setting_page.dart';
 import 'utils/router_utils.dart';
 
@@ -72,7 +74,8 @@ class UnitRouter {
   static const String baidu_map = 'BaiduMap';
   static const String user = 'User';
   static const String qr_view = 'QrView';
-
+  static const String erp_user = 'ErpUser';
+  static const String buy_vip = 'BuyVip';
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       //根据名称跳转相应页面
@@ -124,6 +127,11 @@ class UnitRouter {
         return Right2LeftRouter(child: AboutMePage());
       case to_chat:
         return Right2LeftRouter(child: AboutMePage());
+      case erp_user:
+        return Right2LeftRouter(child: ErpUserPage(uuid:settings.arguments),durationMs: 200);
+      case buy_vip:
+        return Right2LeftRouter(child: BuyVipPage(uuid:settings.arguments),durationMs: 200);
+
       case to_chats:
         return Right2LeftRouter(
             child: ChatsPage(

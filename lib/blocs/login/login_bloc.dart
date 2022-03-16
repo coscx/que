@@ -35,6 +35,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
      if  (result['code']==200){
        var m = LoginModel.fromJson(result);
        LocalStorage.save("name", m.data.user.relname);
+       LocalStorage.save("uuid", m.data.user.uuid);
        LocalStorage.save("openid", m.data.user.openid);
        LocalStorage.save("token", m.data.token.accessToken);
        LocalStorage.save("fresh_token", m.data.token.refreshToken);
@@ -56,6 +57,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if  (result['code']==200){
           var m = LoginModel.fromJson(result);
           LocalStorage.save("name", m.data.user.relname);
+          LocalStorage.save("uuid", m.data.user.uuid);
           LocalStorage.save("openid", m.data.user.openid);
           LocalStorage.save("token", m.data.token.accessToken);
           LocalStorage.save("fresh_token", m.data.token.refreshToken);

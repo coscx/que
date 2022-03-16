@@ -116,6 +116,26 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
           actionList: actionList,
           callList: callList);
     }
+    if (event is HuaFenDetailEvent) {
+      Map<String, dynamic> userdetails = state.props.elementAt(0);
+      Map<String, dynamic> connectList = state.props.elementAt(1);
+      Map<String, dynamic> appointList = state.props.elementAt(2);
+      Map<String, dynamic> actionList = state.props.elementAt(3);
+      Map<String, dynamic> callList = state.props.elementAt(4);
+      //Map<String ,dynamic>  info = userdetails['info'];
+      //if (event.value is int)
+      Map<String, dynamic> result = Map.from(userdetails);
+      result['info']["user_id"] = event.value;
+      result['info']["sale_user"] = event.key;
+
+      yield DetailWithData(
+          userdetails: result,
+          connectList: connectList,
+          appointList: appointList,
+          actionList: actionList,
+          callList: callList);
+    }
+
     if (event is AddConnectEvent) {
       Map<String, dynamic> userDetails = state.props.elementAt(0);
       Map<String, dynamic> connectList = state.props.elementAt(1);

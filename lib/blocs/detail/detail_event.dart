@@ -60,6 +60,20 @@ class EditDetailEvent extends DetailEvent {
     return 'FetchWidgetDetail{widgetModel: }';
   }
 }
+
+class HuaFenDetailEvent extends DetailEvent {
+  final String key;
+  final int value;
+  const HuaFenDetailEvent(this.key,this.value);
+  @override
+  List<Object> get props => [key,value];
+
+  @override
+  String toString() {
+    return 'FetchWidgetDetail{widgetModel: }';
+  }
+}
+
 class EditDetailEventAddress extends DetailEvent {
   final int type;
   final Result result;

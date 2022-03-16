@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
+import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/blocs/detail/detail_bloc.dart';
 import 'package:flutter_geen/blocs/detail/detail_event.dart';
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
@@ -53,8 +54,8 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
           ),
         ),
         SizedBox(
-          width: 120.0,
-          height: 40.0,
+          width: 140.0,
+          height: 50.0,
           child: TextButton.icon(
             onPressed: () async {
                                 var actionList =
@@ -93,17 +94,56 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
             ),
           ),
         ),
-        Container(width: 120.0, height: 0.6, color: Colors.lightBlue),
+        //Container(width: 120.0, height: 0.6, color: Colors.black),
         SizedBox(
-          width: 120.0,
-          height: 40.0,
+          width: 140.0,
+          height: 50.0,
           child: TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+
+              Navigator.of(context).pop();
+              Navigator.pushNamed(context, UnitRouter.erp_user,arguments: widget.uuid).then((value) {
+                print(value);
+              });
+            },
             icon: Icon(
               Icons.add_to_drive,
               color: Colors.black,
             ),
             label: const Text('划分用户'),
+            style: TextButton.styleFrom(
+              primary: Theme.of(context).textTheme.bodyText2?.color,
+              onSurface: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  ?.color
+                  ?.withOpacity(0.12),
+              backgroundColor: backgroundColor,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(0.0),
+                    topRight: Radius.circular(0.0)),
+              ),
+            ),
+          ),
+        ),
+        //Container(width: 120.0, height: 0.6, color: Colors.black),
+        SizedBox(
+          width: 140.0,
+          height: 50.0,
+          child: TextButton.icon(
+            onPressed: () {
+
+              Navigator.of(context).pop();
+              Navigator.pushNamed(context, UnitRouter.buy_vip,arguments: widget.uuid).then((value) {
+                print(value);
+              });
+            },
+            icon: Icon(
+              Icons.monetization_on,
+              color: Colors.black,
+            ),
+            label: const Text('购买会员'),
             style: TextButton.styleFrom(
               primary: Theme.of(context).textTheme.bodyText2?.color,
               onSurface: Theme.of(context)

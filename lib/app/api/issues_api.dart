@@ -432,6 +432,42 @@ class IssuesApi {
       return dd;
     }
   }
+
+  static Future<Map<String,dynamic>> getErpUser() async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    Map<String,dynamic> searchParm={};
+    searchParm['pageSize'] = 1000;
+
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
+    try {
+      Response<dynamic> rep = await dioA.post(NewBaseUrl+'/api/UserList',data: searchParm );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+  static Future<Map<String,dynamic>> getStoreVips() async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    Map<String,dynamic> searchParm={};
+    searchParm['pageSize'] = 50;
+
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
+    try {
+      Response<dynamic> rep = await dioA.post(NewBaseUrl+'/api/GetStoreVips',data: searchParm );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+
   static Future<Map<String,dynamic>> getConnectList( String uuid, String page ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
@@ -553,7 +589,28 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> distribute( String uuid ,int type,String userUuid) async {
+    if (type == 0 ){
+      type = 1;
+    }else if (type == 1 ){
+      type =2;
+    }else{
+      type =1;
+    }
 
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    var data={'customer_uuids[0]':uuid,'type':type,'user_uuid':userUuid};
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/system/distribute',queryParameters:data );
+      return rep.data;
+
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
   static Future<Map<String,dynamic>> uploadPhoto(  String type, ByteData byteData,Function fd) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
