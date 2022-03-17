@@ -18,6 +18,7 @@ import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/app/router.dart';
 
 import 'package:flutter_geen/views/pages/home/PreviewImagesWidget.dart';
+import 'package:flutter_geen/views/pages/widget_detail/detail_item.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

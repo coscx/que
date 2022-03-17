@@ -98,7 +98,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
         da.forEach((value) {
           CitySelect cc1 = CitySelect();
           cc1.name = value['name'];
-          cc1.id = int.parse(value['city_code']);
+          cc1.id = value['city_code'] ==null?0 :int.parse(value['city_code']);
           firstLevels.add(cc1);
 
           List<dynamic> stores = value['data'];

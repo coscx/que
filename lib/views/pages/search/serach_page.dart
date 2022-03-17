@@ -18,7 +18,7 @@ import 'package:flutter_geen/views/pages/search/not_search_page.dart';
 import 'package:flutter_geen/components/permanent/multi_chip_filter.dart';
 import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:refresh_loadmore/refresh_loadmore.dart';
+import 'package:flutter_geen/views/component/refresh.dart';
 import 'empty_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

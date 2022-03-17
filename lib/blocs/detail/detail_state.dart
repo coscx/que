@@ -49,12 +49,12 @@ class DelSuccessData extends DetailState {
   final Map<String,dynamic>  connectList ;
   final Map<String,dynamic>  appointList ;
   final Map<String,dynamic>  actionList ;
-  final String  reason ;
   final Map<String,dynamic>  callList ;
+  final String  reason ;
   const DelSuccessData({this.userdetails,this.connectList,this.appointList,this.reason,this.actionList,this.callList});
 
   @override
-  List<Object> get props => [userdetails,connectList,reason,actionList,callList];
+  List<Object> get props => [userdetails,connectList,appointList,actionList,callList,callList,reason,];
 
   @override
   String toString() {

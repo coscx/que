@@ -21,7 +21,7 @@ class LoginFrom extends StatefulWidget {
   _LoginFromState createState() => _LoginFromState();
 }
 
-class _LoginFromState extends State<LoginFrom> {
+class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver{
   final _usernameController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
 
@@ -97,63 +97,70 @@ class _LoginFromState extends State<LoginFrom> {
 
 
   Widget _buildLoginByState(BuildContext context,LoginState state) {
-    return Stack(
-      children: [
-      Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text("ERP系统",style: TextStyle(fontSize: 40.sp),),
-        SizedBox(height: 15.h,),
-        Text("登录",style: TextStyle(color: Colors.grey),),
-        SizedBox(height:30.h,),
-        buildUsernameInput(),
-        Stack(
-          alignment: Alignment(0.8,0),
-          children: [
-            buildPasswordInput(),
-            FeedbackWidget(
-                onPressed: ()=> setState(() => _showPwd=!_showPwd),
-                child: Icon(_showPwd?TolyIcon.icon_show:TolyIcon.icon_hide)
-            )
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            Checkbox(value: true, onChanged: (e) => {}),
-            Text(
-              "自动登录",
-              style: TextStyle(color: Color(0xff444444), fontSize: 30.sp),
-            ),
-            Spacer(),
-            GestureDetector(
-              onTap: (){
-                _register(context);
-              },
-              child:
-            Text(
-              "如何注册?",
-              style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 25.sp,
-                  decoration: TextDecoration.underline),
-            ))
-          ],
-        ),
-        _buildBtn(state),
-        buildOtherLogin(),
-        Container(
-          child: state is LoginLoading
-              ? CircularProgressIndicator()
-              : null,
-        )
+    return  GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        // 触摸收起键盘
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Stack(
+        children: [
+        Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text("ERP系统",style: TextStyle(fontSize: 40.sp),),
+          SizedBox(height: 15.h,),
+          Text("登录",style: TextStyle(color: Colors.grey),),
+          SizedBox(height:30.h,),
+          buildUsernameInput(),
+          Stack(
+            alignment: Alignment(0.8,0),
+            children: [
+              buildPasswordInput(),
+              FeedbackWidget(
+                  onPressed: ()=> setState(() => _showPwd=!_showPwd),
+                  child: Icon(_showPwd?TolyIcon.icon_show:TolyIcon.icon_hide)
+              )
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Checkbox(value: true, onChanged: (e) => {}),
+              Text(
+                "自动登录",
+                style: TextStyle(color: Color(0xff444444), fontSize: 30.sp),
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: (){
+                  _register(context);
+                },
+                child:
+              Text(
+                "如何注册?",
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 25.sp,
+                    decoration: TextDecoration.underline),
+              ))
+            ],
+          ),
+          _buildBtn(state),
+          buildOtherLogin(),
+          Container(
+            child: state is LoginLoading
+                ? CircularProgressIndicator()
+                : null,
+          )
 
-      ],
-    ),
+        ],
+      ),
 
 
-      ],
+        ],
 
 
+      ),
     );
 
   }

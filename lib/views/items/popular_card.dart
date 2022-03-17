@@ -7,6 +7,7 @@ import 'package:flutter_geen/blocs/detail/detail_event.dart';
 import 'package:flutter_geen/components/permanent/circle_text.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
+import 'package:flutter_geen/views/pages/widget_detail/detail_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PopularCard extends StatelessWidget {

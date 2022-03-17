@@ -452,9 +452,9 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
             userdetails: userdetails,
             connectList: connectList,
             appointList: appointList,
-            reason: result1['message'],
             actionList: actionList,
-            callList: callList);
+            callList: callList,
+            reason: result1['message']);
       }
     }
   }

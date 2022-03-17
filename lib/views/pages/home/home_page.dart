@@ -18,6 +18,7 @@ import 'package:flutter_geen/views/items/drop_menu_leftWidget.dart';
 import 'package:flutter_geen/model/widget_model.dart';
 import 'package:flutter_geen/views/common/empty_page.dart';
 import 'package:flutter_geen/views/items/home_item_support.dart';
+import 'package:flutter_geen/views/component/refresh.dart';
 import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:flutter_geen/views/component/app_bar_component.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -647,19 +648,20 @@ class _HomePageState extends State<HomePage>
         child: Container(
           child: Center(
             child: Container(
+              padding: EdgeInsets.only(top: 150.h),
               alignment: FractionalOffset.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Icon(Icons.event_busy,
-                      color: Colors.orangeAccent, size: 120.0),
+                      color: Colors.orangeAccent, size: 200.sp),
                   Container(
-                    padding: EdgeInsets.only(top: 16.0),
+                    padding: EdgeInsets.only(top: 16.h),
                     child: Text(
                       "数据异常，(≡ _ ≡)/~┴┴",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 40.sp,
                         color: Colors.orangeAccent,
                       ),
                     ),
@@ -797,71 +799,7 @@ class FlexHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-// 下拉刷新头部、底部组件
-class DYrefreshHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return WaterDropHeader(
-      waterDropColor: Colors.blue,
-      refresh: SizedBox(
-        width: 25.0,
-        height: 25.0,
-        child: CircularProgressIndicator(
-          strokeWidth: 2.0,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-        ),
-      ),
-      complete: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.insert_emoticon,
-              color: Colors.blue,
-            ),
-            Container(
-              width: 15.0,
-            ),
-            Text(
-              '更新好啦~',
-              style: TextStyle(color: Colors.blue),
-            )
-          ],
-        ),
-      ),
-      idleIcon: Icon(
-        Icons.favorite,
-        size: 14.0,
-        color: Colors.white,
-      ),
-    );
-  }
-}
 
-class DYrefreshFooter extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ClassicFooter(
-      textStyle: TextStyle(color: Colors.blue),
-      loadingText: '我正在努力...',
-      failedText: '加载失败了~',
-      idleText: '上拉加载更多~',
-      canLoadingText: '释放加载更多~',
-      noDataText: '没有更多啦~',
-      failedIcon: Icon(Icons.insert_emoticon, color: Colors.blue),
-      canLoadingIcon: Icon(Icons.insert_emoticon, color: Colors.blue),
-      idleIcon: Icon(Icons.insert_emoticon, color: Colors.blue),
-      loadingIcon: SizedBox(
-        width: 25.0,
-        height: 25.0,
-        child: CircularProgressIndicator(
-          strokeWidth: 2.0,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-        ),
-      ),
-    );
-  }
-}
 
 class bar extends StatelessWidget implements PreferredSizeWidget {
   final List<SelectItem> selectItems;

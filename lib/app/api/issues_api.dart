@@ -11,8 +11,8 @@ import 'package:flutter_geen/views/items/SearchParamModel.dart';
 import 'package:city_pickers/modal/result.dart';
 
 import '../router.dart';
-const kBaseUrl = 'https://cores.queqiaochina.com';
-const NewBaseUrl = 'https://erp.queqiaochina.com';
+const kBaseUrl = 'https://coretest.queqiaochina.com';
+const NewBaseUrl = 'https://erptest.queqiaochina.com';
 class IssuesApi {
   /// 自定义Header
   static Map<String, dynamic> httpHeaders = {
@@ -208,7 +208,7 @@ class IssuesApi {
     }
     if(mode=="2"){//我的
       url="/api/v1/customer/personal/index";
-      //searchParm['type'] = serveType;
+      searchParm['type'] = serveType;
     }
     if(mode=="3"){//我的
       url="/api/v1/customer/public/index";
@@ -307,7 +307,7 @@ class IssuesApi {
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     try {
-      Response<dynamic> rep = await dio.post('/api/v1/customer/addAppointment',queryParameters:data );
+      Response<dynamic> rep = await dio.post('/api/v1/customer/buyVip',queryParameters:data );
       var dd=rep.data;
       return dd;
     } on DioError catch(e){
@@ -681,7 +681,7 @@ class IssuesApi {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
-    var data={'ids':imgId};
+    var data={'ids[0]':imgId};
     try {
       Response<dynamic> rep = await dio.post('/api/v1/customer/deleteResources',queryParameters:data );
       return rep.data;

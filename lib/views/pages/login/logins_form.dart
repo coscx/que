@@ -14,7 +14,7 @@ class LoginPhoneFrom extends StatefulWidget {
   _LoginFromState createState() => _LoginFromState();
 }
 
-class _LoginFromState extends State<LoginPhoneFrom> {
+class _LoginFromState extends State<LoginPhoneFrom> with WidgetsBindingObserver{
   final _usernameController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
 
@@ -54,31 +54,39 @@ class _LoginFromState extends State<LoginPhoneFrom> {
 
 
   Widget _buildLoginByState(BuildContext context,LoginState state) {
-    return Stack(
-      children: [
-      Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
+    return
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            // 触摸收起键盘
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+      child: Stack(
+        children: [
+        Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
 
-        SizedBox(height: 5,),
+          SizedBox(height: 5,),
 
-        SizedBox(height:20,),
-        buildUsernameInput(),
-        _buildBtn(state),
-        buildOtherLogin(),
-        Container(
-          child: state is LoginLoading
-              ? CircularProgressIndicator()
-              : null,
-        )
+          SizedBox(height:20,),
+          buildUsernameInput(),
+          _buildBtn(state),
+          buildOtherLogin(),
+          Container(
+            child: state is LoginLoading
+                ? CircularProgressIndicator()
+                : null,
+          )
 
-      ],
-    ),
-
-
-      ],
+        ],
+      ),
 
 
+        ],
+
+
+      ),
     );
 
   }

@@ -1,23 +1,216 @@
-String getLevel(int status){
-  if (status ==0){
-    return "C级";
+
+
+getEduLevel(info) {
+  try {
+    return EduLevel[info];
+  } catch (e) {
+    return "未知";
   }
-  if (status ==1){
-    return "B级";
+}
+
+getWorkType(info) {
+  try {
+    return WorkTypeLevel[info];
+  } catch (e) {
+    return "未知";
   }
-  if (status ==2){
-    return "A级";
+}
+
+getWorkOverTime(info) {
+  try {
+    return WorkOverTimeLevel[info];
+  } catch (e) {
+    return "未知";
   }
-  if (status ==30){
-    return "D级";
+}
+
+getIncome(info) {
+  try {
+    return IncomeLevel[info];
+  } catch (e) {
+    return "未知";
   }
-  if (status ==5){
-    return "M级";
+}
+
+getHasHouse(info) {
+  try {
+    return hasHouseLevel[info];
+  } catch (e) {
+    return "未知";
   }
-  if (status ==-1){
-    return "P级";
+}
+
+getHouseFuture(info) {
+  try {
+    return houseFutureLevel[info];
+  } catch (e) {
+    return "未知";
   }
-  return "";
+}
+
+getHasCar(info) {
+  try {
+    return hasCarLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getCarLevel(info) {
+  try {
+    return carLevelLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getMarriageLevel(info) {
+  try {
+    return marriageLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getChildLevel(info) {
+  try {
+    return childLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getOnlyChildLevel(info) {
+  try {
+    return onlyChildLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getParentLevel(info) {
+  try {
+    return parentLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getParentProtectLevel(info) {
+  try {
+    return parentProtectLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getFaithLevel(info) {
+  try {
+    return faithLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getSmokeLevel(info) {
+  try {
+    return smokeLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getDrinkLevel(info) {
+  try {
+    return drinkLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getLifeLevel(info) {
+  try {
+    return lifeLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getCreatLevel(info) {
+  try {
+    return creatLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getMarriageDateLevel(info) {
+  try {
+    return marriageDateLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getFloodLevel(info) {
+  try {
+    return floodLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getSexLevel(info) {
+  try {
+    return sexLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getNationLevel(info) {
+  try {
+    return nationLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+getCompanyLevel(info) {
+  try {
+    return companyTypeLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
+
+int getIndexOfList(List<String> orc, String input) {
+  var index = orc.indexOf(input);
+  return index;
+}
+
+List<String> getAgeList() {
+  List<String> age = [];
+  for (var i = 14; i < 99; i++) {
+    age.add(i.toString() + " 岁");
+  }
+  return age;
+}
+
+List<String> getWeightList() {
+  List<String> weight = [];
+  for (var i = 30; i < 200; i++) {
+    weight.add(i.toString());
+  }
+  return weight;
+}
+
+List<String> getHeightList() {
+  List<String> height = [];
+  for (var i = 100; i < 200; i++) {
+    height.add(i.toString());
+  }
+  return height;
 }
 
 List<String> nationLevel = [
@@ -127,7 +320,7 @@ List<String> carLevelLevel = [
   "50万以上车",
 ];
 List<String> marriageLevel = [
-  "未知",
+  "请选择",
   "未婚",
   "离异带孩",
   "离异单身",

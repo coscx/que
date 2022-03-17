@@ -15,16 +15,16 @@ import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
-
+import 'package:flutter_geen/views/dialogs/common_dialog.dart';
 bool select1 = false;
 bool select2 = false;
 bool select3 = false;
 
 class BuyVipPage extends StatefulWidget {
-  final String uuid;
+  final Map<String,dynamic> args;
 
   BuyVipPage({
-    @required this.uuid,
+    @required this.args,
   });
 
   @override
@@ -33,7 +33,7 @@ class BuyVipPage extends StatefulWidget {
 
 class StoreItem {
   String name;
-  String id;
+  int id;
   String price;
   String month;
   String count;
@@ -57,8 +57,8 @@ class StoreItem {
 class _BuyVipPagePageState extends State<BuyVipPage>
     with WidgetsBindingObserver {
   DateTime startBirthDay = DateTime.now();
-  String startBirthDayTitle = "支付时间";
-  String startBirthDayValue = "";
+  String startBirthDayTitle = DateTime.now().toString().substring(0,19);
+  String startBirthDayValue = DateTime.now().toString().substring(0,19);
   String store = "";
   String storeName = "选择会员套餐";
   String price = "";
@@ -66,6 +66,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>
   String count = "";
   String tag = "";
   int type =0;
+  int vipId=0;
   int minValue;
   int maxValue;
   int sexSelect = 0;
@@ -91,7 +92,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>
         List<dynamic> da = y['data'] as List;
 
         StoreItem ff = StoreItem();
-        ff.id = "0";
+        ff.id = 0;
         ff.type = 600;
         ff.name = "请选择";
         ff.index = 0;
@@ -100,7 +101,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>
         pickerStoreData.add(ff.name);
         da.forEach((value) {
           StoreItem ff = StoreItem();
-          ff.id = value['id'].toString();
+          ff.id = value['id'];
           ff.type = 600;
           ff.name = value['name'];
           ff.price = value['favorable'];
@@ -113,7 +114,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>
           pickerStoreData.add(value['name']);
         });
         StoreItem ff1 = StoreItem();
-        ff1.id = "9999";
+        ff1.id = 9999;
         ff1.type = 9999;
         ff1.name = "自定义套餐";
         ff1.index = 0;
@@ -202,35 +203,76 @@ class _BuyVipPagePageState extends State<BuyVipPage>
           color: Colors.lightBlue,
           onPressed: () async {
             var data = Map<String, dynamic>();
+            if (type == 9999) {
+              tag =_tagController.text;
+              price =_vipPriceController.text;
+              month =_vipMonthController.text;
+              count =_vipCountController.text;
+            }
+            if (vipId==0){
+              showToastRed(context, "请选择套餐" , true);
+              return;
+            }
+            if (price==""){
+              showToastRed(context, "请输入套餐价格" , true);
+              return;
+            }
+            if (month==""){
+              showToastRed(context, "请输入套餐时长" , true);
+              return;
+            }
+            if (count==""){
+              showToastRed(context, "请输入套餐次数" , true);
+              return;
+            }
+            if (startBirthDayValue==""){
+              showToastRed(context, "请选择支付时间" , true);
+              return;
+            }
+            if (tag==""){
+              showToastRed(context, "请输入支付备注" , true);
+              return;
+            }
+
             data['favorable'] = price;
-            data['store_id'] = 0;
+            data['store_id'] = widget.args['store_id'];
             data['time'] = month;
             data['meet'] = count;
             data['pay_time'] = startBirthDayValue;
             data['description'] = tag;
             data['name'] = "自定义套餐";
             data['original'] = price;
-
-            var results = await IssuesApi.addMealFree(widget.uuid, data);
+            data['services[0]'] = "";
+            var results = await IssuesApi.addMealFree(widget.args['uuid'], data);
             if (results['code'] == 200) {
 
               var id = results['data']['id'];
               var data1 = Map<String, dynamic>();
               data1['pay_price'] = price;
-              data1['customer_uuid'] = widget.uuid;
+              data1['customer_uuid'] = widget.args['uuid'];
               data1['pay_time'] = startBirthDayValue;
               data1['remark'] = tag;
-              data1['vip_id'] = id;
+              data1['vip_id'] = vipId;
               if(type==9999){
+                data1['vip_id'] = id['id'];
                 data1['free'] = 1;
               }
-              var result = await IssuesApi.buyVip(widget.uuid, data1);
+              data['services[0]'] = "";
+              var result = await IssuesApi.buyVip(widget.args['uuid'], data1);
               if (result['code'] == 200) {
-                print(result['data'] );
+                //print(result['data'] );
+                showToast(context, "购买成功" , true);
+                BlocProvider.of<DetailBloc>(context)
+                    .add(FetchWidgetDetail(widget.args));
+                Navigator.of(context).pop();
+              }else{
+                showToastRed(context, result['message'] , true);
               }
 
-            } else {}
-            Navigator.of(context).pop();
+            } else {
+              showToastRed(context, results['message'] , true);
+            }
+
           },
           child: Text("提交",
               style: TextStyle(color: Colors.white, fontSize: 40.sp)),
@@ -585,6 +627,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                                   _vipCountController.text = count;
                                   _isButton1Disabled = false;
                                   type=pickerStoreItem[value[0]].type;
+                                  vipId=pickerStoreItem[value[0]].id;
                                   if (pickerStoreItem[value[0]].type == 9999) {
                                     _tagController.clear();
                                     _vipPriceController.clear();

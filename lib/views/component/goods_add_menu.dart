@@ -7,9 +7,9 @@ import 'package:flutter_geen/blocs/detail/detail_event.dart';
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class GoodsAddMenu extends StatefulWidget {
-  final String uuid;
+  final Map<String,dynamic> args;
   const GoodsAddMenu({
-    Key key, this.uuid,
+    Key key, this.args,
   }) : super(key: key);
 
   @override
@@ -59,12 +59,12 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
           child: TextButton.icon(
             onPressed: () async {
                                 var actionList =
-                                    await IssuesApi.claimCustomer(widget.uuid);
+                                    await IssuesApi.claimCustomer(widget.args['uuid']);
                                 if (actionList['code'] == 200) {
                                   showToast(context, '认领成功', true);
 
                                   Map<String, dynamic> photo = Map();
-                                  photo['uuid'] = widget.uuid;
+                                  photo['uuid'] = widget.args['uuid'];
                                   BlocProvider.of<DetailBloc>(context)
                                       .add(FetchWidgetDetailNoFresh(photo));
                                 } else {
@@ -100,9 +100,8 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
           height: 50.0,
           child: TextButton.icon(
             onPressed: () {
-
               Navigator.of(context).pop();
-              Navigator.pushNamed(context, UnitRouter.erp_user,arguments: widget.uuid).then((value) {
+              Navigator.pushNamed(context, UnitRouter.erp_user,arguments: widget.args['uuid']).then((value) {
                 print(value);
               });
             },
@@ -135,7 +134,11 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
             onPressed: () {
 
               Navigator.of(context).pop();
-              Navigator.pushNamed(context, UnitRouter.buy_vip,arguments: widget.uuid).then((value) {
+              if(widget.args['status']!=0 && widget.args['status']!=1 && widget.args['status']!=30){
+                showToastRed(context, "当前用户状态不可购买会员套餐" , true);
+                return;
+              }
+              Navigator.pushNamed(context, UnitRouter.buy_vip,arguments: widget.args).then((value) {
                 print(value);
               });
             },
