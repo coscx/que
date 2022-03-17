@@ -88,7 +88,11 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="3fcovLraCVi0jKrouSN1gvLgNmx81kf9" />
-        <service android:name="com.amap.api.location.APSService"/>
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="a130ae881342a409182da1c28197bf8e"/>
+
     </application>
 
 </manifest>
