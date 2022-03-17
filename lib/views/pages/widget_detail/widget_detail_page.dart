@@ -165,6 +165,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       offset: Offset(button.size.width - 7.w, -15.h),
       anchor: button,
       child: GoodsAddMenu(
+
         args: args,
       ),
     );

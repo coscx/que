@@ -382,9 +382,9 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit){
                               "请输入兴趣",
                               "",
                               info['interest'] == null
-                                  ? "-"
+                                  ? ""
                                   : (info['interest'] == ""
-                                  ? "-"
+                                  ? ""
                                   : info['interest'].toString()),
                               "interest",
                               5,
