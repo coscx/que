@@ -34,25 +34,25 @@ class PhotoShareBottomSheet extends StatelessWidget {
 
                         Container(
                             padding:  EdgeInsets.only(
-                                top: 100.h,
+                                top: 80.h,
                                 left: 100.w,
                                 right: 100.w,
-                                bottom: 10.w
+                                bottom: 0.w
                             ),
                           child: Container(
-                            //height: 500.h,
-                            //width: 500.w,
-                            alignment: FractionalOffset.topLeft,
+                            height: 600.h,
+                            width: 600.w,
+
                             child: Image.asset(
                                 "assets/images/main_page/chat_matching_radar.png"),
                           )
                         ),
                         Container(
                             padding:  EdgeInsets.only(
-                                top: 32.h,
+                                top: 80.h,
                                 left: 100.w,
                                 right: 100.w,
-                                bottom: 10.w
+                                bottom: 0.w
                             ),
                             //height: 500.h,
                             child: Container(
