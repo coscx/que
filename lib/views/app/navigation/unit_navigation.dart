@@ -77,8 +77,8 @@ class _UnitNavigationState extends State<UnitNavigation>
       BlocProvider.of<GlobalBloc>(context).add(EventSetMemberId(tfSender));
 
       var count = 0;
-      Map response = await im.getConversations();
-      var conversions = response["data"];
+      // Map response = await im.getConversations();
+      // var conversions = response["data"];
       // conversions.map((e) {
       //   if (e['unreadCount'] > 0){
       //     count=count+e['unreadCount'];
@@ -129,9 +129,7 @@ class _UnitNavigationState extends State<UnitNavigation>
 
             return Scaffold(
                 //drawer: HomeDrawer(),
-                //左滑页
                 //endDrawer: HomeRightDrawer(),
-                //右滑页
                 floatingActionButtonLocation:
                     const _CenterDockedFloatingActionButtonLocation(offset),
                 floatingActionButton: _buildSearchButton(color),

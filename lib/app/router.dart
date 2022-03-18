@@ -76,6 +76,7 @@ class UnitRouter {
   static const String qr_view = 'QrView';
   static const String erp_user = 'ErpUser';
   static const String buy_vip = 'BuyVip';
+  static const String game = 'Game';
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       //根据名称跳转相应页面
