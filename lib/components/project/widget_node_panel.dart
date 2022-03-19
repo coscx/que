@@ -22,6 +22,7 @@ class WidgetNodePanel extends StatefulWidget {
   final HighlighterStyle codeStyle;
   final String codeFamily;
   final bool showMore;
+   bool showControl;
   WidgetNodePanel(
       {this.text,
       this.subText,
@@ -29,7 +30,7 @@ class WidgetNodePanel extends StatefulWidget {
       this.show,
       this.codeStyle,
       this.codeFamily,
-      this.showMore
+      this.showMore, this.showControl
       });
 
   @override
@@ -42,8 +43,13 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
   bool get isFirst => _crossFadeState == CrossFadeState.showFirst;
 
   Color get themeColor => Theme.of(context).primaryColor;
-  bool  show =false ;
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,18 +64,19 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 0),
             child:   Visibility(
-                visible:show,
+                visible:widget.showControl,
                 replacement:Text('data'),
                 maintainState:true,
                 child:Column(
                   children: [
                     widget.show,
-                    widget.showMore ?Container(
+                    widget.showMore ? Container(
                         margin: EdgeInsets.only(left: 10.w, right: 20.w,top: 10.h,bottom: 10.h),
                         child: Text("查看更多")
                     ):Container()
                   ],
-                )),
+                )
+            ),
           ),
 
           //_buildNodeInfo(),
@@ -97,7 +104,7 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
             ),
           ),
           //_buildShareButton(),
-          _buildCodeButton(show)
+          _buildCodeButton(widget.showControl)
         ],
       ) ,
   );
@@ -163,7 +170,7 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
     setState(() {
       _crossFadeState =
           !isFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond;
-          show =!show;
+      widget.showControl =!widget.showControl;
     });
   }
 }

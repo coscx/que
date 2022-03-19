@@ -53,8 +53,8 @@ String customer_uuid;
 
 
 
-appointDialog(BuildContext context, Map<String, dynamic> detail) {
-  showDialog(
+Future<bool> appointDialog(BuildContext context, Map<String, dynamic> detail) async {
+  var result = await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (ctx) => StatefulBuilder(builder: (context, state) {
@@ -429,7 +429,7 @@ appointDialog(BuildContext context, Map<String, dynamic> detail) {
                                   appointment_time =
                                       _date.toString().substring(0, 19);
                                   showToast(context,"创建成功",false);
-                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop(true);
                                 },
                                 child: Text("提交",
                                     style: TextStyle(
@@ -450,12 +450,13 @@ appointDialog(BuildContext context, Map<String, dynamic> detail) {
           ),
         );
       }));
+  return result;
 }
 
-commentDialog(BuildContext context, int connectStatus, Map<String, dynamic> detail) {
+Future<bool>  commentDialog(BuildContext context, int connectStatus, Map<String, dynamic> detail) async {
   goalValue = getStatusIndex(connectStatus);
 
-  showDialog(
+  var result = await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (ctx) => StatefulBuilder(builder: (context, state) {
@@ -791,7 +792,7 @@ commentDialog(BuildContext context, int connectStatus, Map<String, dynamic> deta
                                 time1 = time1s.substring(0, 19);
                                 time2 = time2s.substring(0, 19);
                                 _Controller.clear();
-                                Navigator.of(context).pop();
+                                Navigator.of(context).pop(true);
                               },
                               child: Text("提交",
                                   style: TextStyle(
@@ -811,4 +812,5 @@ commentDialog(BuildContext context, int connectStatus, Map<String, dynamic> deta
           ],
         );
       }));
+  return result;
 }

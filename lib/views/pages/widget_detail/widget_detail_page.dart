@@ -42,6 +42,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   String call = "";
   String uuid = "";
   int status = 10;
+  bool showBaseControl=false;
+  bool showEduControl=false;
+  bool showMarriageControl=false;
+  bool showSimilarControl=false;
+  bool showPhotoControl=false;
+  bool showAppointControl=false;
+  bool showConnectControl=false;
+  bool showActionControl=false;
+  bool showCallControl=false;
+
   Map<String, dynamic> userDetail;
   final List<ShareOpt> list = [
     ShareOpt(
@@ -239,7 +249,14 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           ),
           onTap: () async {
             if (canEdit == 1) {
-              appointDialog(context, userDetail);
+             var d = await appointDialog(context, userDetail);
+              if (d!=null){
+                if (d== true){
+                  setState(() {
+                    showAppointControl =true;
+                  });
+                }
+              }
             } else {
               showToastRed(ctx, "权限不足", true);
             }
@@ -294,9 +311,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
   Widget _buildConnectButton() {
     return FeedbackWidget(
-      onPressed: () {
+      onPressed: () async {
         if (canEdit == 1) {
-          commentDialog(context, connectStatus, userDetail);
+         var d = await commentDialog(context, connectStatus, userDetail);
+          if (d!=null){
+            if (d== true){
+              setState(() {
+                showConnectControl =true;
+              });
+            }
+          }
         } else {
           showToastRed(context, "暂无权限", true);
         }
@@ -470,15 +494,15 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        buildBase(context, info, canEdit),
-        buildEdu(context, info, canEdit),
-        buildMarriage(context, info, canEdit),
-        buildSimilar(context, info, canEdit),
-        buildPhoto(context, userDetails, canEdit),
-        buildConnect(connectListView),
-        buildAppoint(appointListView),
-        buildAction(actionListView),
-        buildCall(callListView),
+        buildBase(context, info, canEdit,showBaseControl),
+        buildEdu(context, info, canEdit,showEduControl),
+        buildMarriage(context, info, canEdit,showMarriageControl),
+        buildSimilar(context, info, canEdit,showSimilarControl),
+        buildPhoto(context, userDetails, canEdit,showPhotoControl),
+        buildConnect(connectListView,showConnectControl),
+        buildAppoint(appointListView,showAppointControl),
+        buildAction(actionListView,showActionControl),
+        buildCall(callListView,showCallControl),
       ],
     );
   }

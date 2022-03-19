@@ -22,7 +22,7 @@ import 'package:flutter_geen/views/pages/utils/common.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 
-Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit){
+Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl){
   String level = getLevel(info['status']);
 
   return Container(
@@ -33,6 +33,7 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit){
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
             text: "基础资料",
@@ -492,7 +493,7 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit){
   );
 }
 
-Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit){
+Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl){
  return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -501,6 +502,7 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit){
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
             text: "学历工作及资产",
@@ -838,7 +840,7 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit){
 }
 
 
-Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit){
+Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl){
 
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -848,6 +850,7 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit)
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
             text: "婚姻及父母家庭",
@@ -1113,7 +1116,7 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit)
   );
 }
 
-Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit){
+Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl){
 
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1123,6 +1126,7 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit){
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
             text: "用户画像相关",
@@ -1296,7 +1300,7 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit){
   );
 }
 
-Widget buildPhoto(BuildContext context, Map<String,dynamic> userdetails,int canEdit){
+Widget buildPhoto(BuildContext context, Map<String,dynamic> userdetails,int canEdit,bool showControl){
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1305,6 +1309,7 @@ Widget buildPhoto(BuildContext context, Map<String,dynamic> userdetails,int canE
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
             text: "用户图片",
@@ -1329,7 +1334,7 @@ Widget buildPhoto(BuildContext context, Map<String,dynamic> userdetails,int canE
   );
 }
 
-Widget buildConnect(List<Widget> connectList){
+Widget buildConnect(List<Widget> connectList,bool showControl){
   //_buildNodes(state.nodes, state.widgetModel.name)
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1339,6 +1344,7 @@ Widget buildConnect(List<Widget> connectList){
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            showControl: showControl,
             showMore: connectList.length == 20 ? true : false,
             codeFamily: 'Inconsolata',
             text: "客户沟通记录",
@@ -1362,7 +1368,7 @@ Widget buildConnect(List<Widget> connectList){
   );
 }
 
-Widget buildAppoint(List<Widget> appointListView){
+Widget buildAppoint(List<Widget> appointListView,bool showControl){
 
   //_buildNodes(state.nodes, state.widgetModel.name)
   return Container(
@@ -1373,6 +1379,7 @@ Widget buildAppoint(List<Widget> appointListView){
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            showControl: showControl,
             showMore: appointListView.length == 20 ? true : false,
             codeFamily: 'Inconsolata',
             text: "客户排约记录",
@@ -1390,14 +1397,15 @@ Widget buildAppoint(List<Widget> appointListView){
             )
                 : Container(
               child: Text("暂无排约"),
-            )),
+            )
+        ),
       ],
     ),
   );
 
 }
 
-Widget buildAction(List<Widget> actionListView){
+Widget buildAction(List<Widget> actionListView,bool showControl){
 
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1407,6 +1415,7 @@ Widget buildAction(List<Widget> actionListView){
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            showControl: showControl,
             showMore: actionListView.length == 20 ? true : false,
             codeFamily: 'Inconsolata',
             text: "客户操作记录",
@@ -1430,7 +1439,7 @@ Widget buildAction(List<Widget> actionListView){
   );
 }
 
-Widget buildCall(List<Widget> callListView){
+Widget buildCall(List<Widget> callListView,bool showControl){
 
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1440,6 +1449,7 @@ Widget buildCall(List<Widget> callListView){
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            showControl: showControl,
             showMore: callListView.length == 20 ? true : false,
             codeFamily: 'Inconsolata',
             text: "电话查看记录",
