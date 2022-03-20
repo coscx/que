@@ -1337,12 +1337,12 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                           //     info,
                           //     "",
                           //     true);
-                          showPickerDemandAge(context,info['wish_ages'],uuid);
+                          showPickerDemandAge(context,info['wish_ages'],uuid,canEdit);
                         },
                         child: item_detail_gradute(
                             context,
                             Colors.black,
-                            Icons.fastfood,
+                            Icons.contact_page_outlined,
                             "年龄",
                             info['wish_ages'] == ""
                                 ? "-"
@@ -1362,12 +1362,12 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                           //     info,
                           //     "",
                           //     true);
-                          showPickerDemandWeight(context,info['wish_weights'],uuid);
+                          showPickerDemandWeight(context,info['wish_weights'],uuid,canEdit);
                         },
                         child: item_detail_gradute(
                             context,
                             Colors.black,
-                            Icons.smoking_rooms,
+                            Icons.line_weight,
                             "体重",
                             info['wish_weights'] == ""
                                 ? "-"
@@ -1393,9 +1393,9 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                         child: item_detail_gradute(
                             context,
                             Colors.black,
-                            Icons.wine_bar,
+                            Icons.menu_book,
                             "学历",
-                            info['wish_education'] == 0
+                            info['wish_education'] == ""
                                 ? "-"
                                 : getEduLevel(int.parse(info['wish_education'])),
                             true)),
@@ -1415,12 +1415,12 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                           //     info,
                           //     "",
                           //     true);
-                          showPickerDemandHeight(context,info['wish_heights'],uuid);
+                          showPickerDemandHeight(context,info['wish_heights'],uuid,canEdit);
                         },
                         child: item_detail_gradute(
                             context,
                             Colors.black,
-                            Icons.nightlife,
+                            Icons.height,
                             "身高",
                             info['wish_heights'] == ""
                                 ? "-"
@@ -1466,7 +1466,7 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                         child: item_detail_gradute(
                             context,
                             Colors.black,
-                            Icons.child_friendly_outlined,
+                            Icons.local_activity_outlined,
                             "现居地",
                             info['wish_lp_city_name'] == ""
                                 ? "-"
@@ -1492,9 +1492,9 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                         child: item_detail_gradute(
                             context,
                             Colors.black,
-                            Icons.margin,
+                            Icons.wc,
                             "婚姻状况",
-                            info['wish_marriage'] == 0
+                            info['wish_marriage'] == ""
                                 ? "-"
                                 : getMarriageDateLevel(
                                 int.parse(info['wish_marriage'])),
@@ -1520,7 +1520,7 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                         child: item_detail_gradute(
                             context,
                             Colors.black,
-                            Icons.margin,
+                            Icons.monetization_on_outlined,
                             "年收入",
                             info['wish_income'] == ""
                                 ? "-"
@@ -1988,7 +1988,11 @@ String getLevel(int status){
   }
   return "";
 }
-showPickerDemandAge(BuildContext context,String data,String uuid) {
+showPickerDemandAge(BuildContext context,String data,String uuid,int canEdit) {
+  if (canEdit == 0) {
+    showToastRed(context, "暂无权限修改", false);
+    return;
+  }
   var f = data.split(",");
    var aa=0,bb=17;
   try{
@@ -2051,7 +2055,11 @@ showPickerDemandAge(BuildContext context,String data,String uuid) {
       }
   ).showDialog(context);
 }
-showPickerDemandHeight(BuildContext context,String data,String uuid) {
+showPickerDemandHeight(BuildContext context,String data,String uuid,int canEdit) {
+  if (canEdit == 0) {
+    showToastRed(context, "暂无权限修改", false);
+    return;
+  }
   var f = data.split(",");
   var aa=40,bb=60;
   try{
@@ -2114,7 +2122,11 @@ showPickerDemandHeight(BuildContext context,String data,String uuid) {
       }
   ).showDialog(context);
 }
-showPickerDemandWeight(BuildContext context,String data,String uuid) {
+showPickerDemandWeight(BuildContext context,String data,String uuid,int canEdit) {
+  if (canEdit == 0) {
+    showToastRed(context, "暂无权限修改", false);
+    return;
+  }
   var f = data.split("-");
   var aa=25,bb=30;
   try{
