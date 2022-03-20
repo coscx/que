@@ -60,7 +60,18 @@ class EditDetailEvent extends DetailEvent {
     return 'FetchWidgetDetail{widgetModel: }';
   }
 }
+class EditDetailDemandEvent extends DetailEvent {
+  final String key;
+  final String value;
+  const EditDetailDemandEvent(this.key,this.value);
+  @override
+  List<Object> get props => [key,value];
 
+  @override
+  String toString() {
+    return 'FetchWidgetDetail{widgetModel: }';
+  }
+}
 class HuaFenDetailEvent extends DetailEvent {
   final String key;
   final int value;
@@ -78,6 +89,18 @@ class EditDetailEventAddress extends DetailEvent {
   final int type;
   final Result result;
   const EditDetailEventAddress(this.result,this.type);
+  @override
+  List<Object> get props => [result,type];
+
+  @override
+  String toString() {
+    return 'FetchWidgetDetail{widgetModel: }';
+  }
+}
+class EditDetailEventDemandAddress extends DetailEvent {
+  final int type;
+  final Result result;
+  const EditDetailEventDemandAddress(this.result,this.type);
   @override
   List<Object> get props => [result,type];
 

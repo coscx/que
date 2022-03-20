@@ -1299,7 +1299,270 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
     ),
   );
 }
+Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl,String uuid){
 
+  return Container(
+    margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        //CustomsExpansionPanelList()
+        //_item(context),
+        WidgetNodePanel(
+            showControl: showControl,
+            showMore: false,
+            codeFamily: 'Inconsolata',
+            text: "择偶要求",
+            code: "",
+            show: Container(
+              width: ScreenUtil().screenWidth * 0.98,
+              // height: 300,
+              child: Wrap(
+                  alignment: WrapAlignment.start,
+                  direction: Axis.horizontal,
+                  spacing: 0,
+                  runSpacing: 0,
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          if (canEdit == 0) {
+                            showToastRed(context, "暂无权限修改", false);
+                            return;
+                          }
+                          // showPickerArray(
+                          //     context,
+                          //     [faithLevel],
+                          //     info['wish_ages'] == "" ? [0] : [info['wish_ages']],
+                          //     "wish_ages",
+                          //     info,
+                          //     "",
+                          //     true);
+                          showPickerDemandAge(context,info['wish_ages'],uuid);
+                        },
+                        child: item_detail_gradute(
+                            context,
+                            Colors.black,
+                            Icons.fastfood,
+                            "年龄",
+                            info['wish_ages'] == ""
+                                ? "-"
+                                : getAgeDemand(info['wish_ages']),
+                            true)),
+                    GestureDetector(
+                        onTap: () {
+                          if (canEdit == 0) {
+                            showToastRed(context, "暂无权限修改", false);
+                            return;
+                          }
+                          // showPickerArray(
+                          //     context,
+                          //     [smokeLevel],
+                          //     info['wish_weights'] == 0 ? [0] : [info['wish_weights']],
+                          //     "wish_weights",
+                          //     info,
+                          //     "",
+                          //     true);
+                          showPickerDemandWeight(context,info['wish_weights'],uuid);
+                        },
+                        child: item_detail_gradute(
+                            context,
+                            Colors.black,
+                            Icons.smoking_rooms,
+                            "体重",
+                            info['wish_weights'] == ""
+                                ? "-"
+                                : getWeightDemand(info['wish_weights']),
+                            true)),
+                    GestureDetector(
+                        onTap: () {
+                          if (canEdit == 0) {
+                            showToastRed(context, "暂无权限修改", false);
+                            return;
+                          }
+                          showPickerArrayDemand(
+                              context,
+                              [EduLevel],
+                              info['wish_education'] == ""
+                                  ? [0]
+                                  : [int.parse(info['wish_education'])],
+                              "wish_education",
+                              info,
+                              "",
+                              true,uuid);
+                        },
+                        child: item_detail_gradute(
+                            context,
+                            Colors.black,
+                            Icons.wine_bar,
+                            "学历",
+                            info['wish_education'] == 0
+                                ? "-"
+                                : getEduLevel(int.parse(info['wish_education'])),
+                            true)),
+                    GestureDetector(
+                        onTap: () {
+                          if (canEdit == 0) {
+                            showToastRed(context, "暂无权限修改", false);
+                            return;
+                          }
+                          // showPickerArray(
+                          //     context,
+                          //     [lifeLevel],
+                          //     info['wish_heights'] == 0
+                          //         ? [0]
+                          //         : [info['wish_heights']],
+                          //     "wish_heights",
+                          //     info,
+                          //     "",
+                          //     true);
+                          showPickerDemandHeight(context,info['wish_heights'],uuid);
+                        },
+                        child: item_detail_gradute(
+                            context,
+                            Colors.black,
+                            Icons.nightlife,
+                            "身高",
+                            info['wish_heights'] == ""
+                                ? "-"
+                                : getHeightDemand(info['wish_heights']) + "",
+                            true)),
+                    GestureDetector(
+                        onTap: () async {
+                          if (canEdit == 0) {
+                            showToastRed(context, "暂无权限修改", false);
+                            return;
+                          }
+                          Result result =
+                          await CityPickers.showCityPicker(
+                              context: context,
+                              locationCode: info['wish_lp_area_code'] == ""
+                                  ? (info['wish_lp_city_code'] == ""
+                                  ? "320500"
+                                  : info['wish_lp_city_code'])
+                                  : info['wish_lp_area_code'],
+                              cancelWidget: Text(
+                                "取消",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              confirmWidget: Text(
+                                "确定",
+                                style: TextStyle(color: Colors.black),
+                              ));
+                          print(result);
+                          if (result != null) {
+                            var results =
+                            await IssuesApi.editCustomerDemandAddress(
+                                uuid, 2, result);
+                            if (results['code'] == 200) {
+                              BlocProvider.of<DetailBloc>(context)
+                                  .add(EditDetailEventDemandAddress(result, 2));
+                              showToast(context, "编辑成功", false);
+                            } else {
+                              showToast(
+                                  context, results['message'], false);
+                            }
+                          }
+                        },
+                        child: item_detail_gradute(
+                            context,
+                            Colors.black,
+                            Icons.child_friendly_outlined,
+                            "现居地",
+                            info['wish_lp_city_name'] == ""
+                                ? "-"
+                                : (info['wish_lp_province_name']+info['wish_lp_city_name']+info['wish_lp_area_name']),
+                            true)),
+                    GestureDetector(
+                        onTap: () {
+                          if (canEdit == 0) {
+                            showToastRed(context, "暂无权限修改", false);
+                            return;
+                          }
+                          showPickerArrayDemand(
+                              context,
+                              [marriageDateLevel],
+                              info['wish_marriage'] == ""
+                                  ? [0]
+                                  : [int.parse(info['wish_marriage'])],
+                              "wish_marriage",
+                              info,
+                              "",
+                              true,uuid);
+                        },
+                        child: item_detail_gradute(
+                            context,
+                            Colors.black,
+                            Icons.margin,
+                            "婚姻状况",
+                            info['wish_marriage'] == 0
+                                ? "-"
+                                : getMarriageDateLevel(
+                                int.parse(info['wish_marriage'])),
+                            true)),
+
+                    GestureDetector(
+                        onTap: () {
+                          if (canEdit == 0) {
+                            showToastRed(context, "暂无权限修改", false);
+                            return;
+                          }
+                          showPickerArrayDemand(
+                              context,
+                              [IncomeLevel],
+                              info['wish_income'] == ""
+                                  ? [0]
+                                  : [int.parse(info['wish_income'])],
+                              "wish_income",
+                              info,
+                              "",
+                              true,uuid);
+                        },
+                        child: item_detail_gradute(
+                            context,
+                            Colors.black,
+                            Icons.margin,
+                            "年收入",
+                            info['wish_income'] == ""
+                                ? "-"
+                                : getIncome(
+                                int.parse(info['wish_income'])),
+                            true)),
+                    GestureDetector(
+                        onTap: () {
+                          if (canEdit == 0) {
+                            showToastRed(context, "暂无权限修改", false);
+                            return;
+                          }
+                          showEditDialogDemand(
+                              context,
+                              "请输入备注",
+                              "",
+                              info['description'] == null
+                                  ? ""
+                                  : (info['description'] == ""
+                                  ? ""
+                                  : info['description'].toString()),
+                              "description",
+                              5,
+                              info,uuid);
+                        },
+                        child: item_detail_gradute(
+                            context,
+                            Colors.black,
+                            Icons.margin,
+                            "理想中的TA",
+                            info['description'] == ""
+                                ? "-"
+                                : (
+                                info['description']),
+                            true)),
+
+                  ]),
+            )),
+      ],
+    ),
+  );
+}
 Widget buildPhoto(BuildContext context, Map<String,dynamic> userdetails,int canEdit,bool showControl){
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1472,7 +1735,39 @@ Widget buildCall(List<Widget> callListView,bool showControl){
     ),
   );
 }
+Widget buildSelect(List<Widget> selectListView,bool showControl){
 
+  return Container(
+    margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        //CustomsExpansionPanelList()
+        //_item(context),
+        WidgetNodePanel(
+            showControl: showControl,
+            showMore: selectListView.length == 20 ? true : false,
+            codeFamily: 'Inconsolata',
+            text: "电话查看记录",
+            code: "",
+            show: selectListView.length > 0
+                ? Container(
+              width: ScreenUtil().screenWidth * 0.98,
+              // height: 300,
+              child: Wrap(
+                  alignment: WrapAlignment.start,
+                  direction: Axis.horizontal,
+                  spacing: 0,
+                  runSpacing: 0,
+                  children: <Widget>[...selectListView]),
+            )
+                : Container(
+              child: Text("暂无记录"),
+            )),
+      ],
+    ),
+  );
+}
 Widget _item_detail(BuildContext context, Color color, IconData icon,
     String name, String answer, bool show) {
   bool isDark = false;
@@ -1614,7 +1909,64 @@ showEditDialog(BuildContext context, String title, String hintText,
         );
       });
 }
+showEditDialogDemand(BuildContext context, String title, String hintText,
+    String text, String type, int maxLine, Map<String, dynamic> info,uuid) {
+  TextEditingController _controller =
+  TextEditingController.fromValue(TextEditingValue(
+    text: '${text == null ? "" : text}', //判断keyword是否为空
+  ));
+  showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Container(
+            //elevation: 0.0,
+            child: Column(
+              children: <Widget>[
+                //Text(text),
+                TextField(
+                  minLines: maxLine,
+                  maxLines: maxLine,
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    hintText: hintText,
 
+                    //filled: true,
+                    //fillColor: Colors.white
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('取消'),
+            ),
+            Container(
+              child: CupertinoDialogAction(
+                onPressed: () async {
+                  var result = await IssuesApi.editCustomerDemandOnce(
+                      uuid, type, _controller.text);
+                  if (result['code'] == 200) {
+                    BlocProvider.of<DetailBloc>(context)
+                        .add(EditDetailDemandEvent(type, _controller.text));
+                    //showToast(context,"编辑成功",false);
+                  } else {
+                    showToast(context, result['message'], false);
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text('确定'),
+              ),
+            ),
+          ],
+        );
+      });
+}
 String getLevel(int status){
   if (status ==0){
     return "C级";
@@ -1636,7 +1988,193 @@ String getLevel(int status){
   }
   return "";
 }
-
+showPickerDemandAge(BuildContext context,String data,String uuid) {
+  var f = data.split(",");
+   var aa=0,bb=17;
+  try{
+    var a = int.parse(f[0]) - 18;
+    aa= a;
+    var b = int.parse(f[1]) - 18;
+    bb= b;
+  }catch(e){
+    print(e);
+  }
+  if (aa >80) aa =80;
+  if (bb >80) bb =80;
+  new Picker(
+      selecteds: [aa,bb],
+      itemExtent: 40,
+      magnification: 1.2,
+      selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
+        background: Colors.transparent,
+      ),
+      cancelText: "取消",
+      confirmText: "确定",
+      adapter: NumberPickerAdapter(data: [
+        NumberPickerColumn(begin: 18, end: 80),
+        NumberPickerColumn(begin: 18, end: 80),
+      ]),
+      selectedTextStyle: TextStyle(
+        fontSize: 40.sp,
+        color: Colors.redAccent,
+      ),
+      textStyle: TextStyle(
+        fontSize: 30.sp,
+        color: Colors.black,
+      ),
+      delimiter: [
+        PickerDelimiter(child: Container(
+          width: 30.w,
+          alignment: Alignment.center,
+          child: Icon(Icons.more_vert),
+        ))
+      ],
+      hideHeader: true,
+      title: new Text("请选择年龄"),
+      onConfirm: (Picker picker, List value) async {
+        print(value.toString());
+        print(picker.getSelectedValues());
+        var fg = picker.getSelectedValues();
+        var values= <String>[];
+        for(int i=0;i<fg.length;i++) {
+          values.add(fg[i].toString()) ;
+        }
+        var result =
+            await IssuesApi.editCustomerDemandOnce(uuid, "wish_ages", values.join(","));
+        if (result['code'] == 200) {
+          BlocProvider.of<DetailBloc>(context)
+              .add(EditDetailDemandEvent("wish_ages", values.join(",")));
+          showToast(context, "编辑成功", false);
+        } else {
+          showToast(context, result['message'], false);
+        }
+      }
+  ).showDialog(context);
+}
+showPickerDemandHeight(BuildContext context,String data,String uuid) {
+  var f = data.split(",");
+  var aa=40,bb=60;
+  try{
+    var a = int.parse(f[0]) - 120;
+    aa= a;
+    var b = int.parse(f[1]) - 120;
+    bb= b;
+  }catch(e){
+    print(e);
+  }
+  if (aa >200) aa =200;
+  if (bb >200) bb =200;
+  new Picker(
+      selecteds: [aa,bb],
+      itemExtent: 40,
+      magnification: 1.2,
+      selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
+        background: Colors.transparent,
+      ),
+      cancelText: "取消",
+      confirmText: "确定",
+      adapter: NumberPickerAdapter(data: [
+        NumberPickerColumn(begin: 120, end: 200),
+        NumberPickerColumn(begin: 120, end: 200),
+      ]),
+      selectedTextStyle: TextStyle(
+        fontSize: 40.sp,
+        color: Colors.redAccent,
+      ),
+      textStyle: TextStyle(
+        fontSize: 30.sp,
+        color: Colors.black,
+      ),
+      delimiter: [
+        PickerDelimiter(child: Container(
+          width: 30.w,
+          alignment: Alignment.center,
+          child: Icon(Icons.more_vert),
+        ))
+      ],
+      hideHeader: true,
+      title: new Text("请选择身高"),
+      onConfirm: (Picker picker, List value) async {
+        print(value.toString());
+        print(picker.getSelectedValues());
+        var fg = picker.getSelectedValues();
+        var values= <String>[];
+        for(int i=0;i<fg.length;i++) {
+          values.add(fg[i].toString()) ;
+        }
+        var result =
+            await IssuesApi.editCustomerDemandOnce(uuid, "wish_heights", values.join(","));
+        if (result['code'] == 200) {
+          BlocProvider.of<DetailBloc>(context)
+              .add(EditDetailDemandEvent("wish_heights", values.join(",")));
+          showToast(context, "编辑成功", false);
+        } else {
+          showToast(context, result['message'], false);
+        }
+      }
+  ).showDialog(context);
+}
+showPickerDemandWeight(BuildContext context,String data,String uuid) {
+  var f = data.split("-");
+  var aa=25,bb=30;
+  try{
+    var a = int.parse(f[0]) - 40;
+    aa= a;
+    var b = int.parse(f[1]) - 40;
+    bb= b;
+  }catch(e){
+    print(e);
+  }
+  new Picker(
+      selecteds: [aa,bb],
+      itemExtent: 40,
+      magnification: 1.2,
+      selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
+        background: Colors.transparent,
+      ),
+      cancelText: "取消",
+      confirmText: "确定",
+      adapter: NumberPickerAdapter(data: [
+        NumberPickerColumn(begin: 40, end: 200),
+        NumberPickerColumn(begin: 40, end: 200),
+      ]),
+      selectedTextStyle: TextStyle(
+        fontSize: 40.sp,
+        color: Colors.redAccent,
+      ),
+      textStyle: TextStyle(
+        fontSize: 30.sp,
+        color: Colors.black,
+      ),
+      delimiter: [
+        PickerDelimiter(child: Container(
+          width: 30.w,
+          alignment: Alignment.center,
+          child: Icon(Icons.more_vert),
+        ))
+      ],
+      hideHeader: true,
+      title: new Text("请选择体重"),
+      onConfirm: (Picker picker, List value) async {
+        print(value.toString());
+        print(picker.getSelectedValues());
+        var fg = picker.getSelectedValues();
+        var values= <String>[];
+        for(int i=0;i<fg.length;i++) {
+          values.add(fg[i].toString()) ;
+        }
+        var result =
+            await IssuesApi.editCustomerDemandOnce(uuid, "wish_weights", values.join("-"));
+        if (result['code'] == 200) {
+          BlocProvider.of<DetailBloc>(context)
+              .add(EditDetailDemandEvent("wish_weights", values.join("-")));
+          showToast(context, "编辑成功", false);
+        } else {
+          showToast(context, result['message'], false);
+        }
+      }
+  ).showDialog(context);
+}
 showPickerArray(
     BuildContext context,
     List<List<String>> pickerData,
@@ -1681,6 +2219,56 @@ showPickerArray(
         if (result['code'] == 200) {
           BlocProvider.of<DetailBloc>(context)
               .add(EditDetailEvent(type, values));
+          showToast(context, "编辑成功", false);
+        } else {
+          showToast(context, result['message'], false);
+        }
+      }).showDialog(context);
+}
+showPickerArrayDemand(
+    BuildContext context,
+    List<List<String>> pickerData,
+    List<int> select,
+    String type,
+    Map<String, dynamic> info,
+    String title,
+    bool isIndex,String uuid) {
+  Picker(
+      itemExtent: 40,
+      magnification: 1.2,
+      selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
+        background: Colors.transparent,
+      ),
+      adapter: PickerDataAdapter<String>(pickerdata: pickerData, isArray: true),
+      hideHeader: true,
+      title: new Text("请选择" + title),
+      cancelText: "取消",
+      confirmText: "确定",
+      selecteds: select,
+      // columnPadding: EdgeInsets.only(top: 50.h,bottom: 50.h,left: 50.w,right: 50.w),
+      selectedTextStyle: TextStyle(
+        fontSize: 34.sp,
+        color: Colors.redAccent,
+      ),
+      textStyle: TextStyle(
+        fontSize: 28.sp,
+        color: Colors.black,
+      ),
+      onConfirm: (Picker picker, List value) async {
+        print(value.toString());
+        print(picker.getSelectedValues());
+        String values;
+        if (isIndex) {
+          values = value.first.toString();
+        } else {
+          values = (picker.getSelectedValues().first.toString());
+        }
+
+        var result =
+        await IssuesApi.editCustomerDemandOnce(uuid, type, values);
+        if (result['code'] == 200) {
+          BlocProvider.of<DetailBloc>(context)
+              .add(EditDetailDemandEvent(type, values));
           showToast(context, "编辑成功", false);
         } else {
           showToast(context, result['message'], false);
@@ -1954,7 +2542,7 @@ Widget item_detail_gradute(BuildContext context, Color color, IconData icon,
                   Visibility(
                       visible: true,
                       child: Container(
-                        width: ScreenUtil().screenWidth * 0.6,
+                        width: ScreenUtil().screenWidth * 0.58,
                         child: Text(
                           answer,
                           maxLines: 20,

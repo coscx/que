@@ -99,6 +99,47 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
           actionList: actionList,
           callList: callList);
     }
+    if (event is EditDetailEventDemandAddress) {
+      Map<String, dynamic> userdetails = state.props.elementAt(0);
+      Map<String, dynamic> connectList = state.props.elementAt(1);
+      Map<String, dynamic> appointList = state.props.elementAt(2);
+      Map<String, dynamic> actionList = state.props.elementAt(3);
+      Map<String, dynamic> callList = state.props.elementAt(4);
+
+      //Map<String ,dynamic>  info = userdetails['info'];
+      //if (event.value is int)
+      Map<String, dynamic> result = Map.from(userdetails);
+      if (event.type == 1) {
+        result['demand']['wish_np_province_code'] = event.result.provinceId;
+        result['demand']['wish_np_province_name'] = event.result.provinceName;
+        result['demand']['wish_np_city_code'] = event.result.cityId;
+        result['demand']['wish_np_city_name'] = event.result.cityName;
+        result['demand']['wish_np_area_code'] = event.result.areaId;
+        result['demand']['wish_np_area_name'] = event.result.areaName;
+        result['demand']['wish_native_place'] = event.result.provinceName +
+            event.result.cityName +
+            event.result.areaName;
+      } else {
+        result['demand']['wish_lp_province_code'] = event.result.provinceId;
+        result['demand']['wish_lp_province_name'] = event.result.provinceName;
+        result['demand']['wish_lp_city_code'] = event.result.cityId;
+        result['demand']['wish_lp_city_name'] = event.result.cityName;
+        result['demand']['wish_lp_area_code'] = event.result.areaId;
+        result['demand']['wish_lp_area_name'] = event.result.areaName;
+        result['demand']['wish_location_place'] = event.result.provinceName +
+            event.result.cityName +
+            event.result.areaName;
+      }
+
+      yield DetailWithData(
+          userdetails: result,
+          connectList: connectList,
+          appointList: appointList,
+          actionList: actionList,
+          callList: callList);
+    }
+
+
     if (event is EditDetailEvent) {
       Map<String, dynamic> userdetails = state.props.elementAt(0);
       Map<String, dynamic> connectList = state.props.elementAt(1);
@@ -109,6 +150,24 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       //if (event.value is int)
       Map<String, dynamic> result = Map.from(userdetails);
       result['info'][event.key] = event.value;
+      yield DetailWithData(
+          userdetails: result,
+          connectList: connectList,
+          appointList: appointList,
+          actionList: actionList,
+          callList: callList);
+    }
+
+    if (event is EditDetailDemandEvent) {
+      Map<String, dynamic> userdetails = state.props.elementAt(0);
+      Map<String, dynamic> connectList = state.props.elementAt(1);
+      Map<String, dynamic> appointList = state.props.elementAt(2);
+      Map<String, dynamic> actionList = state.props.elementAt(3);
+      Map<String, dynamic> callList = state.props.elementAt(4);
+      //Map<String ,dynamic>  info = userdetails['info'];
+      //if (event.value is int)
+      Map<String, dynamic> result = Map.from(userdetails);
+      result['demand'][event.key] = event.value;
       yield DetailWithData(
           userdetails: result,
           connectList: connectList,

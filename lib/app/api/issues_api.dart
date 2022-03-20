@@ -377,6 +377,21 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> editCustomerDemandOnce(String uuid, String type, String answer ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    Map<String,dynamic> searchParam={};
+    searchParam[type]=answer;
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/editCustomerDemand/'+uuid,queryParameters:searchParam );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
   static Future<Map<String,dynamic>> editCustomerOnceString(String uuid, String type, String answer ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
@@ -460,7 +475,38 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> editCustomerDemandAddress(String uuid, int type,Result result ) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+    Map<String,dynamic> searchParam={};
+    if(type ==1){
+      searchParam['wish_np_province_code']=result.provinceId;
+      searchParam['wish_np_province_name']=result.provinceName;
+      searchParam['wish_np_city_code']=result.cityId;
+      searchParam['wish_np_city_name']=result.cityName;
+      searchParam['wish_np_area_code']=result.areaId;
+      searchParam['wish_np_area_name']=result.areaName;
+    }else{
+      searchParam['wish_lp_province_code']=result.provinceId;
+      searchParam['wish_lp_province_name']=result.provinceName;
+      searchParam['wish_lp_city_code']=result.cityId;
+      searchParam['wish_lp_city_name']=result.cityName;
+      searchParam['wish_lp_area_code']=result.areaId;
+      searchParam['wish_lp_area_name']=result.areaName;
 
+    }
+
+
+    try {
+      Response<dynamic> rep = await dio.post('/api/v1/customer/editCustomerDemand/'+uuid,queryParameters:searchParam );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
   static Future<Map<String,dynamic>> getErpUser() async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();

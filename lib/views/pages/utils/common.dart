@@ -184,6 +184,30 @@ getCompanyLevel(info) {
   }
 }
 
+getAgeDemand(String age) {
+  try {
+
+    return age.replaceAll(",", "-")+"岁";
+  } catch (e) {
+    return age;
+  }
+}
+getHeightDemand(String age) {
+  try {
+
+    return age.replaceAll(",", "-")+"cm";
+  } catch (e) {
+    return age;
+  }
+}
+getWeightDemand(String age) {
+  try {
+
+    return age+"kg";
+  } catch (e) {
+    return age;
+  }
+}
 int getIndexOfList(List<String> orc, String input) {
   var index = orc.indexOf(input);
   return index;

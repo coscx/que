@@ -471,6 +471,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       Map<String, dynamic> actionLists,
       Map<String, dynamic> callLists) {
     var info = userDetails['info'];
+    var demand = userDetails['demand'];
     canEdit = userDetails['can_edit'];
     call = info['mobile'];
     uuid = info['uuid'];
@@ -498,6 +499,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         buildEdu(context, info, canEdit,showEduControl),
         buildMarriage(context, info, canEdit,showMarriageControl),
         buildSimilar(context, info, canEdit,showSimilarControl),
+        buildUserSelect(context, demand, canEdit,showSimilarControl,info['uuid']),
         buildPhoto(context, userDetails, canEdit,showPhotoControl),
         buildConnect(connectListView,showConnectControl),
         buildAppoint(appointListView,showAppointControl),
