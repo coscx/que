@@ -7,6 +7,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_geen/components/imageview/primitive_navigation_bar.dart';
@@ -285,7 +286,8 @@ class _DefaultNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PrimitiveNavigationBar(
-      middle: Text('${currentIndex + 1}/$count'),
+      middle: Text('${currentIndex + 1}/$count',style: TextStyle(
+          fontSize: 20, color: Colors.white)),
       padding: EdgeInsetsDirectional.only(
         start: 10,
         end: 10,
