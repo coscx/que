@@ -1,4 +1,6 @@
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:city_pickers/city_pickers.dart';
@@ -22,7 +24,7 @@ import 'package:flutter_geen/views/pages/utils/common.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 
-Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl){
+Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl,void Function(String tag) callSetState,){
   String level = getLevel(info['status']);
 
   return Container(
@@ -86,12 +88,12 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                             info['name'].toString(),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await showPickerArray(
                               context,
                               [
                                 ["未知", "男生", "女生"]
@@ -103,6 +105,9 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("base");
+                          }
                         },
                         child: _item_detail(
                             context,
@@ -123,18 +128,21 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                                 : info['age'].toString() + "岁",
                             false)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerDateTime(
+                          var result=  await  showPickerDateTime(
                               context,
                               info['birthday'] == null
                                   ? "-"
                                   : info['birthday'].toString(),
                               "birthday",
                               info);
+                          if (result !=null){
+                            callSetState("base");
+                          }
                         },
                         child: _item_detail(
                             context,
@@ -144,7 +152,7 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                             info['birthday'] == null
                                 ? "-"
                                 : info['picker.adapter.text'] != ""
-                                ? info['birthday'].toString()
+                                ? info['birthday'].toString().substring(0, 10)
                                 : info['birthday']
                                 .toString()
                                 .substring(0, 10) +
@@ -278,12 +286,12 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                             info['sale_user'].toString(),
                             false)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await      showPickerArray(
                               context,
                               [nationLevel],
                               info['nation'] == 0
@@ -293,6 +301,9 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("base");
+                          }
                         },
                         child: _item_detail(
                             context,
@@ -304,12 +315,12 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                                 : getNationLevel((info['nation'])),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await     showPickerArray(
                               context,
                               [getHeightList()],
                               info['height'] == 0
@@ -322,6 +333,9 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                               info,
                               "身高(cm)",
                               false);
+                          if (result !=null){
+                            callSetState("base");
+                          }
                         },
                         child: _item_detail(
                             context,
@@ -333,12 +347,12 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                                 : info['height'].toString() + "cm",
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await        showPickerArray(
                               context,
                               [getWeightList()],
                               info['weight'] == 0
@@ -351,6 +365,9 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                               info,
                               "体重(kg)",
                               false);
+                          if (result !=null){
+                            callSetState("base");
+                          }
                         },
                         child: _item_detail(
                             context,
@@ -373,12 +390,12 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                                 : info['serve_user'].toString(),
                             false)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await     showEditDialog(
                               context,
                               "请输入兴趣",
                               "",
@@ -390,6 +407,9 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                               "interest",
                               5,
                               info);
+                          if (result !=null){
+                            callSetState("base");
+                          }
                         },
                         child: _item_detail(
                             context,
@@ -401,12 +421,12 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                                 : info['interest'].toString(),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await   showPickerArray(
                               context,
                               [floodLevel],
                               info['blood_type'] == 0
@@ -416,6 +436,9 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("base");
+                          }
                         },
                         child: _item_detail(
                             context,
@@ -427,12 +450,12 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                                 : getFloodLevel(info['blood_type']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await    showEditDialog(
                               context,
                               "请输入择偶要求",
                               "",
@@ -444,6 +467,9 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                               "demands",
                               5,
                               info);
+                          if (result !=null){
+                            callSetState("base");
+                          }
                         },
                         child: _item_detail(
                             context,
@@ -457,12 +483,12 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                                 : info['demands'].toString()),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await    showEditDialog(
                               context,
                               "请输入备注",
                               "",
@@ -474,6 +500,9 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
                               "remark",
                               5,
                               info);
+                          if (result !=null){
+                            callSetState("base");
+                          }
                         },
                         child: _item_detail(
                             context,
@@ -493,7 +522,7 @@ Widget buildBase(BuildContext context, Map<String,dynamic> info,int canEdit,bool
   );
 }
 
-Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl){
+Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl,void Function(String tag) callSetState,){
  return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -517,12 +546,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                   runSpacing: 0,
                   children: <Widget>[
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await    showPickerArray(
                               context,
                               [EduLevel],
                               info['education'] == 0
@@ -532,6 +561,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -543,12 +575,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : getEduLevel(info['education']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await     showEditDialog(
                               context,
                               "请输入毕业院校",
                               "",
@@ -560,6 +592,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               "school",
                               1,
                               info);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -571,12 +606,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : info['school'].toString(),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await       showEditDialog(
                               context,
                               "请输入所学专业",
                               "",
@@ -588,6 +623,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               "major",
                               1,
                               info);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -599,12 +637,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : info['major'].toString(),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await      showPickerArray(
                               context,
                               [companyTypeLevel],
                               info['work'] == 0 ? [1] : [info['work']],
@@ -612,6 +650,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -623,12 +664,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : getCompanyLevel(info['work']) + "",
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await      showPickerArray(
                               context,
                               [WorkTypeLevel],
                               info['work_job'] == 0
@@ -638,6 +679,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -649,12 +693,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : getWorkType(info['work_job']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await   showEditDialog(
                               context,
                               "请输入职位描述",
                               "",
@@ -666,6 +710,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               "work_industry",
                               5,
                               info);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -677,12 +724,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : info['work_industry'].toString(),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await     showPickerArray(
                               context,
                               [WorkOverTimeLevel],
                               info['work_overtime'] == 0
@@ -692,6 +739,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -703,13 +753,13 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : getWorkOverTime(info['work_overtime']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
                           // showPickerArray(context,[IncomeLevel],info['income']==0?[1]:[info['income']],"income",info,"",true);
-                          showEditDialog(
+                          var result=  await     showEditDialog(
                               context,
                               "请输入收入",
                               "",
@@ -717,6 +767,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               "income",
                               1,
                               info);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -728,12 +781,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : info['income'].toString() + "万",
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await      showPickerArray(
                               context,
                               [hasHouseLevel],
                               info['has_house'] == 0
@@ -743,6 +796,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -754,12 +810,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : getHasHouse(info['has_house']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await      showPickerArray(
                               context,
                               [houseFutureLevel],
                               info['loan_record'] == 0
@@ -769,6 +825,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -780,12 +839,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : getHouseFuture(info['loan_record']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await       showPickerArray(
                               context,
                               [hasCarLevel],
                               info['has_car'] == 0
@@ -795,6 +854,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -806,12 +868,12 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                                 : getHasCar(info['has_car']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await      showPickerArray(
                               context,
                               [carLevelLevel],
                               info['car_type'] == 0
@@ -821,6 +883,9 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("education");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -840,7 +905,7 @@ Widget buildEdu(BuildContext context, Map<String,dynamic> info,int canEdit,bool 
 }
 
 
-Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl){
+Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl,void Function(String tag) callSetState,){
 
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -865,12 +930,12 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                   runSpacing: 0,
                   children: <Widget>[
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await      showPickerArray(
                               context,
                               [marriageLevel],
                               info['marriage'] == 0
@@ -880,6 +945,9 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                               info,
                               "",
                               true);
+                          if (result !=null){
+                            callSetState("marriage");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -891,12 +959,12 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                 : getMarriageLevel(info['marriage']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await        showPickerArray(
                               context,
                               [childLevel],
                               info['has_child'] == 0
@@ -905,7 +973,9 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                               "has_child",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("marriage");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -917,12 +987,12 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                 : getChildLevel(info['has_child']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await    showEditDialog(
                               context,
                               "请输入子女备注",
                               "",
@@ -933,7 +1003,9 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                   : info['child_remark'].toString()),
                               "child_remark",
                               5,
-                              info);
+                              info); if (result !=null){
+                            callSetState("marriage");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -945,12 +1017,12 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                 : info['child_remark'].toString(),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await     showPickerArray(
                               context,
                               [onlyChildLevel],
                               info['only_child'] == 0
@@ -959,7 +1031,9 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                               "only_child",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("marriage");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -972,12 +1046,12 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                 "",
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await     showPickerArray(
                               context,
                               [parentLevel],
                               info['parents'] == 0
@@ -986,7 +1060,9 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                               "parents",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("marriage");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -998,12 +1074,12 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                 : getParentLevel(info['parents']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await    showEditDialog(
                               context,
                               "请输入父亲职业",
                               "",
@@ -1014,7 +1090,9 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                   : info['father_work'].toString()),
                               "father_work",
                               1,
-                              info);
+                              info); if (result !=null){
+                            callSetState("marriage");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1026,12 +1104,12 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                 : info['father_work'].toString(),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await     showEditDialog(
                               context,
                               "请输入母亲职业",
                               "",
@@ -1042,7 +1120,9 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                   : info['mother_work'].toString()),
                               "mother_work",
                               1,
-                              info);
+                              info); if (result !=null){
+                            callSetState("marriage");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1054,12 +1134,12 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                 : info['mother_work'].toString(),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialog(
+                          var result=  await         showEditDialog(
                               context,
                               "请输入父母收入",
                               "",
@@ -1071,7 +1151,9 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                   .toString()),
                               "parents_income",
                               1,
-                              info);
+                              info); if (result !=null){
+                            callSetState("marriage");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1083,12 +1165,12 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                                 : info['parents_income'].toString(),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await     showPickerArray(
                               context,
                               [parentProtectLevel],
                               info['parents_insurance'] == 0
@@ -1097,7 +1179,9 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
                               "parents_insurance",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("marriage");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1116,7 +1200,7 @@ Widget buildMarriage(BuildContext context, Map<String,dynamic> info,int canEdit,
   );
 }
 
-Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl){
+Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl,void Function(String tag) callSetState,){
 
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1141,19 +1225,21 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                   runSpacing: 0,
                   children: <Widget>[
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await   showPickerArray(
                               context,
                               [faithLevel],
                               info['faith'] == 0 ? [0] : [info['faith']],
                               "faith",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("similar");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1165,19 +1251,21 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                                 : getFaithLevel(info['faith']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await   showPickerArray(
                               context,
                               [smokeLevel],
                               info['smoke'] == 0 ? [0] : [info['smoke']],
                               "smoke",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("similar");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1189,12 +1277,12 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                                 : getSmokeLevel(info['smoke']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await      showPickerArray(
                               context,
                               [drinkLevel],
                               info['drinkwine'] == 0
@@ -1203,7 +1291,9 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                               "drinkwine",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("similar");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1215,12 +1305,12 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                                 : getDrinkLevel(info['drinkwine']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: ()async {
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await      showPickerArray(
                               context,
                               [lifeLevel],
                               info['live_rest'] == 0
@@ -1229,7 +1319,9 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                               "live_rest",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("similar");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1241,12 +1333,12 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                                 : getLifeLevel(info['live_rest']) + "",
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await     showPickerArray(
                               context,
                               [creatLevel],
                               info['want_child'] == 0
@@ -1255,7 +1347,9 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                               "want_child",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("similar");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1267,12 +1361,12 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                                 : getCreatLevel(info['want_child']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArray(
+                          var result=  await    showPickerArray(
                               context,
                               [marriageDateLevel],
                               info['marry_time'] == 0
@@ -1281,7 +1375,9 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
                               "marry_time",
                               info,
                               "",
-                              true);
+                              true); if (result !=null){
+                            callSetState("similar");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1299,7 +1395,7 @@ Widget buildSimilar(BuildContext context, Map<String,dynamic> info,int canEdit,b
     ),
   );
 }
-Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl,String uuid){
+Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdit,bool showControl,String uuid,void Function(String tag) callSetState,){
 
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1324,7 +1420,8 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                   runSpacing: 0,
                   children: <Widget>[
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
+
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
@@ -1337,7 +1434,10 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                           //     info,
                           //     "",
                           //     true);
-                          showPickerDemandAge(context,info['wish_ages'],uuid,canEdit);
+                         var result=  await showPickerDemandAge(context,info['wish_ages'],uuid,canEdit);
+                          if (result !=null){
+                            callSetState("select");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1349,7 +1449,7 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                                 : getAgeDemand(info['wish_ages']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
@@ -1362,7 +1462,10 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                           //     info,
                           //     "",
                           //     true);
-                          showPickerDemandWeight(context,info['wish_weights'],uuid,canEdit);
+                          var result=  await showPickerDemandWeight(context,info['wish_weights'],uuid,canEdit);
+                          if (result !=null){
+                            callSetState("select");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1374,12 +1477,12 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                                 : getWeightDemand(info['wish_weights']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArrayDemand(
+                          var result= showPickerArrayDemand(
                               context,
                               [EduLevel],
                               info['wish_education'] == ""
@@ -1389,6 +1492,9 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                               info,
                               "",
                               true,uuid);
+                          if (result !=null){
+                            callSetState("select");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1400,7 +1506,7 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                                 : getEduLevel(int.parse(info['wish_education'])),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
@@ -1415,7 +1521,10 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                           //     info,
                           //     "",
                           //     true);
-                          showPickerDemandHeight(context,info['wish_heights'],uuid,canEdit);
+                          var result=  await showPickerDemandHeight(context,info['wish_heights'],uuid,canEdit);
+                          if (result !=null){
+                            callSetState("select");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1473,14 +1582,14 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                                 : (info['wish_lp_province_name']+info['wish_lp_city_name']+info['wish_lp_area_name']),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArrayDemand(
+                          var result=  await showPickerArrayDemand(
                               context,
-                              [marriageDateLevel],
+                              [marriageLevel],
                               info['wish_marriage'] == ""
                                   ? [0]
                                   : [int.parse(info['wish_marriage'])],
@@ -1488,6 +1597,9 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                               info,
                               "",
                               true,uuid);
+                          if (result !=null){
+                            callSetState("select");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1496,17 +1608,17 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                             "婚姻状况",
                             info['wish_marriage'] == ""
                                 ? "-"
-                                : getMarriageDateLevel(
+                                : getMarriageLevel(
                                 int.parse(info['wish_marriage'])),
                             true)),
 
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showPickerArrayDemand(
+                          var result=  await  showPickerArrayDemand(
                               context,
                               [IncomeLevel],
                               info['wish_income'] == ""
@@ -1516,6 +1628,9 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                               info,
                               "",
                               true,uuid);
+                          if (result !=null){
+                            callSetState("select");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1528,12 +1643,12 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                                 int.parse(info['wish_income'])),
                             true)),
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async{
                           if (canEdit == 0) {
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          showEditDialogDemand(
+                          var result=  await showEditDialogDemand(
                               context,
                               "请输入备注",
                               "",
@@ -1545,6 +1660,9 @@ Widget buildUserSelect(BuildContext context, Map<String,dynamic> info,int canEdi
                               "description",
                               5,
                               info,uuid);
+                          if (result !=null){
+                            callSetState("select");
+                          }
                         },
                         child: item_detail_gradute(
                             context,
@@ -1988,10 +2106,10 @@ String getLevel(int status){
   }
   return "";
 }
-showPickerDemandAge(BuildContext context,String data,String uuid,int canEdit) {
+Future<bool> showPickerDemandAge(BuildContext context,String data,String uuid,int canEdit) async{
   if (canEdit == 0) {
     showToastRed(context, "暂无权限修改", false);
-    return;
+    return false;
   }
   var f = data.split(",");
    var aa=0,bb=17;
@@ -2005,7 +2123,7 @@ showPickerDemandAge(BuildContext context,String data,String uuid,int canEdit) {
   }
   if (aa >80) aa =80;
   if (bb >80) bb =80;
-  new Picker(
+  var result = await Picker(
       selecteds: [aa,bb],
       itemExtent: 40,
       magnification: 1.2,
@@ -2054,11 +2172,15 @@ showPickerDemandAge(BuildContext context,String data,String uuid,int canEdit) {
         }
       }
   ).showDialog(context);
+  if (result !=null){
+    return true;
+  }
+  return false;
 }
-showPickerDemandHeight(BuildContext context,String data,String uuid,int canEdit) {
+Future<bool> showPickerDemandHeight(BuildContext context,String data,String uuid,int canEdit) async{
   if (canEdit == 0) {
     showToastRed(context, "暂无权限修改", false);
-    return;
+    return false;
   }
   var f = data.split(",");
   var aa=40,bb=60;
@@ -2072,7 +2194,7 @@ showPickerDemandHeight(BuildContext context,String data,String uuid,int canEdit)
   }
   if (aa >200) aa =200;
   if (bb >200) bb =200;
-  new Picker(
+  var result = await  Picker(
       selecteds: [aa,bb],
       itemExtent: 40,
       magnification: 1.2,
@@ -2121,11 +2243,15 @@ showPickerDemandHeight(BuildContext context,String data,String uuid,int canEdit)
         }
       }
   ).showDialog(context);
+  if (result !=null){
+    return true;
+  }
+  return false;
 }
-showPickerDemandWeight(BuildContext context,String data,String uuid,int canEdit) {
+Future<bool> showPickerDemandWeight(BuildContext context,String data,String uuid,int canEdit) async{
   if (canEdit == 0) {
     showToastRed(context, "暂无权限修改", false);
-    return;
+    return false;
   }
   var f = data.split("-");
   var aa=25,bb=30;
@@ -2137,7 +2263,7 @@ showPickerDemandWeight(BuildContext context,String data,String uuid,int canEdit)
   }catch(e){
     print(e);
   }
-  new Picker(
+  var result = await  Picker(
       selecteds: [aa,bb],
       itemExtent: 40,
       magnification: 1.2,
@@ -2186,16 +2312,20 @@ showPickerDemandWeight(BuildContext context,String data,String uuid,int canEdit)
         }
       }
   ).showDialog(context);
+  if (result !=null){
+    return true;
+  }
+  return false;
 }
-showPickerArray(
+Future<bool> showPickerArray(
     BuildContext context,
     List<List<String>> pickerData,
     List<int> select,
     String type,
     Map<String, dynamic> info,
     String title,
-    bool isIndex) {
-  Picker(
+    bool isIndex) async{
+  var result = await Picker(
       itemExtent: 40,
       magnification: 1.2,
       selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
@@ -2236,16 +2366,20 @@ showPickerArray(
           showToast(context, result['message'], false);
         }
       }).showDialog(context);
+  if (result !=null){
+    return true;
+  }
+  return false;
 }
-showPickerArrayDemand(
+Future<bool> showPickerArrayDemand (
     BuildContext context,
     List<List<String>> pickerData,
     List<int> select,
     String type,
     Map<String, dynamic> info,
     String title,
-    bool isIndex,String uuid) {
-  Picker(
+    bool isIndex,String uuid) async{
+  var result = await Picker(
       itemExtent: 40,
       magnification: 1.2,
       selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
@@ -2286,17 +2420,21 @@ showPickerArrayDemand(
           showToast(context, result['message'], false);
         }
       }).showDialog(context);
+     if (result !=null){
+       return true;
+     }
+  return false;
 }
 
-showPickerDateTime(
-    BuildContext context, String date, String type, Map<String, dynamic> info) {
+Future<bool> showPickerDateTime(
+    BuildContext context, String date, String type, Map<String, dynamic> info) async{
   String dates = "";
   if (date == "-") {
     dates = "1999-01-01 08:00:00";
   } else {
     dates = date;
   }
-  Picker(
+  var result = await Picker(
       itemExtent: 40,
       magnification: 1.2,
       selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
@@ -2351,6 +2489,10 @@ showPickerDateTime(
       onSelect: (Picker picker, int index, List<int> selecteds) {
         var stateText = picker.adapter.toString();
       }).showDialog(context);
+  if (result !=null){
+    return true;
+  }
+  return false;
 }
 
 

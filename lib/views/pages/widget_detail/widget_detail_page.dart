@@ -46,6 +46,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   bool showEduControl=false;
   bool showMarriageControl=false;
   bool showSimilarControl=false;
+  bool showSelectControl=false;
   bool showPhotoControl=false;
   bool showAppointControl=false;
   bool showConnectControl=false;
@@ -470,6 +471,46 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       Map<String, dynamic> appointLists,
       Map<String, dynamic> actionLists,
       Map<String, dynamic> callLists) {
+    void callSetState(String tag) {
+      setState(() {
+        if(tag =="base"){
+          showBaseControl =true;
+          showEduControl =false;
+          showMarriageControl =false;
+          showSimilarControl =false;
+          showSelectControl =false;
+        }
+        if(tag =="education"){
+          showBaseControl =false;
+          showEduControl =true;
+          showMarriageControl =false;
+          showSimilarControl =false;
+          showSelectControl =false;
+        }
+        if(tag =="marriage"){
+          showBaseControl =false;
+          showEduControl =false;
+          showMarriageControl =true;
+          showSimilarControl =false;
+          showSelectControl =false;
+        }
+        if(tag =="similar"){
+          showBaseControl =false;
+          showEduControl =false;
+          showMarriageControl =false;
+          showSimilarControl =true;
+          showSelectControl =false;
+        }
+        if(tag =="select"){
+          showBaseControl =false;
+          showEduControl =false;
+          showMarriageControl =false;
+          showSimilarControl =false;
+          showSelectControl =true;
+        }
+
+      });
+    }
     var info = userDetails['info'];
     var demand = userDetails['demand'];
     canEdit = userDetails['can_edit'];
@@ -495,11 +536,11 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        buildBase(context, info, canEdit,showBaseControl),
-        buildEdu(context, info, canEdit,showEduControl),
-        buildMarriage(context, info, canEdit,showMarriageControl),
-        buildSimilar(context, info, canEdit,showSimilarControl),
-        buildUserSelect(context, demand, canEdit,showSimilarControl,info['uuid']),
+        buildBase(context, info, canEdit,showBaseControl,callSetState),
+        buildEdu(context, info, canEdit,showEduControl,callSetState),
+        buildMarriage(context, info, canEdit,showMarriageControl,callSetState),
+        buildSimilar(context, info, canEdit,showSimilarControl,callSetState),
+        buildUserSelect(context, demand, canEdit,showSelectControl,info['uuid'],callSetState),
         buildPhoto(context, userDetails, canEdit,showPhotoControl),
         buildConnect(connectListView,showConnectControl),
         buildAppoint(appointListView,showAppointControl),
