@@ -451,13 +451,16 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       img["id"] = 0;
       img["customer_id"] = 0;
       userdetails['pics'].add(img);
-
+      Map<String, dynamic> reason = Map<String, dynamic>();
+      reason['result']= "upload_success";
+      reason['reason']= "上传成功";
       yield DetailWithData(
           userdetails: result,
           connectList: connectList,
           appointList: appointList,
           actionList: actionList,
-          callList: callList);
+          callList: callList,
+          reason: reason,);
     }
 
     if (event is EditDetailEventString) {
@@ -491,26 +494,34 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         );
         if (res == null) {res=[];}
         userDetails['pics'] = res;
+        Map<String, dynamic> reason = Map<String, dynamic>();
+        reason['result']= "delete_success";
+        reason['reason']= "删除成功";
         yield DetailWithData(
             userdetails: userDetails,
             connectList: connectList,
             appointList: appointList,
             actionList: actionList,
-            callList: callList);
+            callList: callList,
+            reason: reason,
+        );
       } else {
         Map<String, dynamic> userdetails = state.props.elementAt(0);
         Map<String, dynamic> connectList = state.props.elementAt(1);
         Map<String, dynamic> appointList = state.props.elementAt(2);
         Map<String, dynamic> actionList = state.props.elementAt(3);
         Map<String, dynamic> callList = state.props.elementAt(4);
-
-        yield DelSuccessData(
-            userdetails: userdetails,
-            connectList: connectList,
-            appointList: appointList,
-            actionList: actionList,
-            callList: callList,
-            reason: result1['message']);
+        Map<String, dynamic> reason = Map<String, dynamic>();
+        reason['result']= "delete_fail";
+        reason['reason']= result1['message'];
+        yield DetailWithData(
+          userdetails: userdetails,
+          connectList: connectList,
+          appointList: appointList,
+          actionList: actionList,
+          callList: callList,
+          reason: reason,
+        );
       }
     }
   }

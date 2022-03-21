@@ -21,10 +21,11 @@ class DetailWithData extends DetailState {
   final Map<String,dynamic>  appointList ;
   final Map<String,dynamic>  actionList ;
   final Map<String,dynamic>  callList ;
-  const DetailWithData({this.userdetails,this.connectList,this.appointList,this.actionList,this.callList});
+  final Map<String,dynamic>  reason ;
+  const DetailWithData({this.userdetails,this.connectList,this.appointList,this.actionList,this.callList,this.reason});
 
   @override
-  List<Object> get props => [userdetails,connectList,appointList,actionList,callList];
+  List<Object> get props => [userdetails,connectList,appointList,actionList,callList,reason];
 
   @override
   String toString() {

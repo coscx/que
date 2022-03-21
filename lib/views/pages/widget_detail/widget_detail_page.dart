@@ -119,13 +119,24 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           ),
           body: BlocListener<DetailBloc, DetailState>(
               listener: (ctx, state) {
-                if (state is DetailWithActionFail) {
-                  showToastRed(context, state.reason, true);
+                if (state is DetailWithData) {
+                  if (state.reason !=null){
+                    var result =state.reason['result'];
+                    if (result=="delete_success"){
+                      showToast(context, state.reason['reason'], true);
+                    }
+                    if (result=="delete_fail"){
+                      showToastRed(context, state.reason['reason'], true);
+                    }
+                    if (result=="upload_success"){
+                      showPhotoControl = true;
+
+                    }
+
+                  }
+
                 }
 
-                if (state is DelSuccessData) {
-                  showToast(ctx, state.reason, true);
-                }
               },
               child: Builder(builder: _buildContent)),
         ));
@@ -462,10 +473,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       return _buildStateDetail(context, state.userdetails, state.connectList,
           state.appointList, state.actionList, state.callList);
     }
-    if (state is DelSuccessData) {
-      return _buildStateDetail(context, state.userdetails, state.connectList,
-          state.appointList, state.actionList, state.callList);
-    }
+    // if (state is DelSuccessData) {
+    //   return _buildStateDetail(context, state.userdetails, state.connectList,
+    //       state.appointList, state.actionList, state.callList);
+    // }
 
     if (state is DetailLoading) {}
     return Container(
