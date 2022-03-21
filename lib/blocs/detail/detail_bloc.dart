@@ -486,14 +486,11 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         Map<String, dynamic> actionList = state.props.elementAt(3);
         Map<String, dynamic> callList = state.props.elementAt(4);
         List<dynamic> res = userDetails['pics'];
-        var imgR = res.map((e) {
-          if (e['id'] == event.img['id']) {
-          } else {
-            return e;
-          }
-        }).toList();
-        if (imgR == null) {}
-        userDetails['pics'] = imgR;
+        res.removeWhere((e) =>
+         e['id'] == event.img['id']
+        );
+        if (res == null) {res=[];}
+        userDetails['pics'] = res;
         yield DetailWithData(
             userdetails: userDetails,
             connectList: connectList,

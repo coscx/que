@@ -2525,12 +2525,17 @@ Widget _buildLinkTo(
   void Function(String tag) callSetState,
 ) {
   List<dynamic> imgList = userdetail['pics'];
-  var imageListView = imgList
-      .map((e) => ImageOptions(
-            url: e['file_url'],
-            tag: e['file_url'],
-          ))
-      .toList();
+  var imageListView = <ImageOptions>[];
+  for(int i=0;i<imgList.length;i++)
+  {
+    var e=imgList[i];
+    if (e == null) continue;
+    imageListView.add(ImageOptions(
+      url: e['file_url'],
+      tag: e['file_url'],
+    ));
+  }
+
 
   List<Widget> list = [];
   if (imgList != null && imgList.length > 0) {
