@@ -42,16 +42,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   String call = "";
   String uuid = "";
   int status = 10;
-  bool showBaseControl=false;
-  bool showEduControl=false;
-  bool showMarriageControl=false;
-  bool showSimilarControl=false;
-  bool showSelectControl=false;
-  bool showPhotoControl=false;
-  bool showAppointControl=false;
-  bool showConnectControl=false;
-  bool showActionControl=false;
-  bool showCallControl=false;
+  bool showBaseControl = false;
+  bool showEduControl = false;
+  bool showMarriageControl = false;
+  bool showSimilarControl = false;
+  bool showSelectControl = false;
+  bool showPhotoControl = false;
+  bool showAppointControl = false;
+  bool showConnectControl = false;
+  bool showActionControl = false;
+  bool showCallControl = false;
 
   Map<String, dynamic> userDetail;
   final List<ShareOpt> list = [
@@ -176,7 +176,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       offset: Offset(button.size.width - 7.w, -15.h),
       anchor: button,
       child: GoodsAddMenu(
-
         args: args,
       ),
     );
@@ -250,11 +249,20 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           ),
           onTap: () async {
             if (canEdit == 1) {
-             var d = await appointDialog(context, userDetail);
-              if (d!=null){
-                if (d== true){
+              var d = await appointDialog(context, userDetail);
+              if (d != null) {
+                if (d == true) {
                   setState(() {
-                    showAppointControl =true;
+                    showBaseControl = false;
+                    showEduControl = false;
+                    showMarriageControl = false;
+                    showSimilarControl = false;
+                    showSelectControl = false;
+                    showPhotoControl = false;
+                    showConnectControl = false;
+                    showAppointControl = true;
+                    showActionControl = false;
+                    showCallControl= false;
                   });
                 }
               }
@@ -314,11 +322,20 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return FeedbackWidget(
       onPressed: () async {
         if (canEdit == 1) {
-         var d = await commentDialog(context, connectStatus, userDetail);
-          if (d!=null){
-            if (d== true){
+          var d = await commentDialog(context, connectStatus, userDetail);
+          if (d != null) {
+            if (d == true) {
               setState(() {
-                showConnectControl =true;
+                showBaseControl = false;
+                showEduControl = false;
+                showMarriageControl = false;
+                showSimilarControl = false;
+                showSelectControl = false;
+                showPhotoControl = false;
+                showConnectControl = true;
+                showAppointControl = false;
+                showActionControl = false;
+                showCallControl= false;
               });
             }
           }
@@ -473,44 +490,81 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       Map<String, dynamic> callLists) {
     void callSetState(String tag) {
       setState(() {
-        if(tag =="base"){
-          showBaseControl =true;
-          showEduControl =false;
-          showMarriageControl =false;
-          showSimilarControl =false;
-          showSelectControl =false;
+        if (tag == "base") {
+          showBaseControl = true;
+          showEduControl = false;
+          showMarriageControl = false;
+          showSimilarControl = false;
+          showSelectControl = false;
+          showPhotoControl = false;
+          showConnectControl = false;
+          showAppointControl = false;
+          showActionControl = false;
+          showCallControl= false;
         }
-        if(tag =="education"){
-          showBaseControl =false;
-          showEduControl =true;
-          showMarriageControl =false;
-          showSimilarControl =false;
-          showSelectControl =false;
+        if (tag == "education") {
+          showBaseControl = false;
+          showEduControl = true;
+          showMarriageControl = false;
+          showSimilarControl = false;
+          showSelectControl = false;
+          showPhotoControl = false;
+          showConnectControl = false;
+          showAppointControl = false;
+          showActionControl = false;
+          showCallControl= false;
         }
-        if(tag =="marriage"){
-          showBaseControl =false;
-          showEduControl =false;
-          showMarriageControl =true;
-          showSimilarControl =false;
-          showSelectControl =false;
+        if (tag == "marriage") {
+          showBaseControl = false;
+          showEduControl = false;
+          showMarriageControl = true;
+          showSimilarControl = false;
+          showSelectControl = false;
+          showPhotoControl = false;
+          showConnectControl = false;
+          showAppointControl = false;
+          showActionControl = false;
+          showCallControl= false;
         }
-        if(tag =="similar"){
-          showBaseControl =false;
-          showEduControl =false;
-          showMarriageControl =false;
-          showSimilarControl =true;
-          showSelectControl =false;
+        if (tag == "similar") {
+          showBaseControl = false;
+          showEduControl = false;
+          showMarriageControl = false;
+          showSimilarControl = true;
+          showSelectControl = false;
+          showPhotoControl = false;
+          showConnectControl = false;
+          showAppointControl = false;
+          showActionControl = false;
+          showCallControl= false;
         }
-        if(tag =="select"){
-          showBaseControl =false;
-          showEduControl =false;
-          showMarriageControl =false;
-          showSimilarControl =false;
-          showSelectControl =true;
+        if (tag == "select") {
+          showBaseControl = false;
+          showEduControl = false;
+          showMarriageControl = false;
+          showSimilarControl = false;
+          showSelectControl = true;
+          showPhotoControl = false;
+          showConnectControl = false;
+          showAppointControl = false;
+          showActionControl = false;
+          showCallControl= false;
         }
-
+        if (tag == "photo") {
+          showBaseControl = false;
+          showEduControl = false;
+          showMarriageControl = false;
+          showSimilarControl = false;
+          showSelectControl = false;
+          showPhotoControl = true;
+          showConnectControl = false;
+          showAppointControl = false;
+          showActionControl = false;
+          showCallControl= false;
+        }
       });
     }
+
     var info = userDetails['info'];
     var demand = userDetails['demand'];
     canEdit = userDetails['can_edit'];
@@ -536,16 +590,19 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        buildBase(context, info, canEdit,showBaseControl,callSetState),
-        buildEdu(context, info, canEdit,showEduControl,callSetState),
-        buildMarriage(context, info, canEdit,showMarriageControl,callSetState),
-        buildSimilar(context, info, canEdit,showSimilarControl,callSetState),
-        buildUserSelect(context, demand, canEdit,showSelectControl,info['uuid'],callSetState),
-        buildPhoto(context, userDetails, canEdit,showPhotoControl),
-        buildConnect(connectListView,showConnectControl),
-        buildAppoint(appointListView,showAppointControl),
-        buildAction(actionListView,showActionControl),
-        buildCall(callListView,showCallControl),
+        buildBase(context, info, canEdit, showBaseControl, callSetState),
+        buildEdu(context, info, canEdit, showEduControl, callSetState),
+        buildMarriage(
+            context, info, canEdit, showMarriageControl, callSetState),
+        buildSimilar(context, info, canEdit, showSimilarControl, callSetState),
+        buildUserSelect(context, demand, canEdit, showSelectControl,
+            info['uuid'], callSetState),
+        buildPhoto(
+            context, userDetails, canEdit, showPhotoControl, callSetState),
+        buildConnect(connectListView, showConnectControl),
+        buildAppoint(appointListView, showAppointControl),
+        buildAction(actionListView, showActionControl),
+        buildCall(callListView, showCallControl),
       ],
     );
   }
