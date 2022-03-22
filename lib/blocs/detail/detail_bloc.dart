@@ -448,7 +448,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       //List<Map<String ,dynamic>>   ss = userdetails['pics'];
       Map<String, dynamic> img = {};
       img["file_url"] = imgUrl;
-      img["id"] = 0;
+      img["id"] = event.id;
       img["customer_id"] = 0;
       userdetails['pics'].add(img);
       Map<String, dynamic> reason = Map<String, dynamic>();

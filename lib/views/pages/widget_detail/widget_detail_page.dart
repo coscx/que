@@ -123,9 +123,11 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   if (state.reason !=null){
                     var result =state.reason['result'];
                     if (result=="delete_success"){
+                      showPhotoControl = true;
                       showToast(context, state.reason['reason'], true);
                     }
                     if (result=="delete_fail"){
+                      showPhotoControl = true;
                       showToastRed(context, state.reason['reason'], true);
                     }
                     if (result=="upload_success"){
@@ -499,10 +501,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       Map<String, dynamic> appointLists,
       Map<String, dynamic> actionLists,
       Map<String, dynamic> callLists) {
-    void callSetState(String tag) {
+    void callSetState(String tag,bool value) {
       setState(() {
         if (tag == "base") {
-          showBaseControl = true;
+          showBaseControl = value;
           showEduControl = false;
           showMarriageControl = false;
           showSimilarControl = false;
@@ -515,7 +517,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         }
         if (tag == "education") {
           showBaseControl = false;
-          showEduControl = true;
+          showEduControl = value;
           showMarriageControl = false;
           showSimilarControl = false;
           showSelectControl = false;
@@ -528,7 +530,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         if (tag == "marriage") {
           showBaseControl = false;
           showEduControl = false;
-          showMarriageControl = true;
+          showMarriageControl = value;
           showSimilarControl = false;
           showSelectControl = false;
           showPhotoControl = false;
@@ -541,7 +543,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showBaseControl = false;
           showEduControl = false;
           showMarriageControl = false;
-          showSimilarControl = true;
+          showSimilarControl = value;
           showSelectControl = false;
           showPhotoControl = false;
           showConnectControl = false;
@@ -554,7 +556,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showEduControl = false;
           showMarriageControl = false;
           showSimilarControl = false;
-          showSelectControl = true;
+          showSelectControl = value;
           showPhotoControl = false;
           showConnectControl = false;
           showAppointControl = false;
@@ -567,12 +569,64 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showMarriageControl = false;
           showSimilarControl = false;
           showSelectControl = false;
-          showPhotoControl = true;
+          showPhotoControl = value;
           showConnectControl = false;
           showAppointControl = false;
           showActionControl = false;
           showCallControl= false;
         }
+        if (tag == "connect") {
+          showBaseControl = false;
+          showEduControl = false;
+          showMarriageControl = false;
+          showSimilarControl = false;
+          showSelectControl = false;
+          showPhotoControl = false;
+          showConnectControl = value;
+          showAppointControl = false;
+          showActionControl = false;
+          showCallControl= false;
+        }
+        if (tag == "appoint") {
+          showBaseControl = false;
+          showEduControl = false;
+          showMarriageControl = false;
+          showSimilarControl = false;
+          showSelectControl = false;
+          showPhotoControl = false;
+          showConnectControl = false;
+          showAppointControl = value;
+          showActionControl = false;
+          showCallControl= false;
+        }
+        if (tag == "action") {
+          showBaseControl = false;
+          showEduControl = false;
+          showMarriageControl = false;
+          showSimilarControl = false;
+          showSelectControl = false;
+          showPhotoControl = false;
+          showConnectControl = false;
+          showAppointControl = false;
+          showActionControl = value;
+          showCallControl= false;
+        }
+        if (tag == "call") {
+          showBaseControl = false;
+          showEduControl = false;
+          showMarriageControl = false;
+          showSimilarControl = false;
+          showSelectControl = false;
+          showPhotoControl = false;
+          showConnectControl = false;
+          showAppointControl = false;
+          showActionControl = false;
+          showCallControl= value;
+        }
+
+
+
+
       });
     }
 
@@ -601,19 +655,19 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        buildBase(context, info, canEdit, showBaseControl, callSetState),
-        buildEdu(context, info, canEdit, showEduControl, callSetState),
+        buildBase(context, info, canEdit, showBaseControl, callSetState,"base"),
+        buildEdu(context, info, canEdit, showEduControl, callSetState,"education"),
         buildMarriage(
-            context, info, canEdit, showMarriageControl, callSetState),
-        buildSimilar(context, info, canEdit, showSimilarControl, callSetState),
+            context, info, canEdit, showMarriageControl, callSetState,"marriage"),
+        buildSimilar(context, info, canEdit, showSimilarControl, callSetState,"similar"),
         buildUserSelect(context, demand, canEdit, showSelectControl,
-            info['uuid'], callSetState),
+            info['uuid'], callSetState,"select"),
         buildPhoto(
-            context, userDetails, canEdit, showPhotoControl, callSetState),
-        buildConnect(connectListView, showConnectControl),
-        buildAppoint(appointListView, showAppointControl),
-        buildAction(actionListView, showActionControl),
-        buildCall(callListView, showCallControl),
+            context, userDetails, canEdit, showPhotoControl, callSetState,"photo"),
+        buildConnect(connectListView, showConnectControl, callSetState,"connect"),
+        buildAppoint(appointListView, showAppointControl, callSetState,"appoint"),
+        buildAction(actionListView, showActionControl, callSetState,"action"),
+        buildCall(callListView, showCallControl, callSetState,"call"),
       ],
     );
   }

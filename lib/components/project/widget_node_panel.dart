@@ -22,7 +22,9 @@ class WidgetNodePanel extends StatefulWidget {
   final HighlighterStyle codeStyle;
   final String codeFamily;
   final bool showMore;
-   bool showControl;
+  bool showControl;
+  final void Function(String tag,bool value) callSetState;
+  String name;
   WidgetNodePanel(
       {this.text,
       this.subText,
@@ -30,7 +32,7 @@ class WidgetNodePanel extends StatefulWidget {
       this.show,
       this.codeStyle,
       this.codeFamily,
-      this.showMore, this.showControl
+      this.showMore, this.showControl,this.callSetState,this.name
       });
 
   @override
@@ -171,6 +173,7 @@ class _WidgetNodePanelState extends State<WidgetNodePanel> {
       _crossFadeState =
           !isFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond;
       widget.showControl =!widget.showControl;
+      widget.callSetState(widget.name,widget.showControl);
     });
   }
 }

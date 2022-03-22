@@ -28,7 +28,8 @@ Widget buildBase(
   Map<String, dynamic> info,
   int canEdit,
   bool showControl,
-  void Function(String tag) callSetState,
+  void Function(String tag,bool value) callSetState,
+  String name
 ) {
   String level = getLevel(info['status']);
 
@@ -40,6 +41,8 @@ Widget buildBase(
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
@@ -80,7 +83,7 @@ Widget buildBase(
                           var result = await showEditDialog(context, "请输入姓名",
                               "", info['name'].toString(), "name", 1, info);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -107,7 +110,7 @@ Widget buildBase(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -142,7 +145,7 @@ Widget buildBase(
                               "birthday",
                               info);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -297,7 +300,7 @@ Widget buildBase(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -329,7 +332,7 @@ Widget buildBase(
                               "身高(cm)",
                               false);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -361,7 +364,7 @@ Widget buildBase(
                               "体重(kg)",
                               false);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -403,7 +406,7 @@ Widget buildBase(
                               5,
                               info);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -432,7 +435,7 @@ Widget buildBase(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -463,7 +466,7 @@ Widget buildBase(
                               5,
                               info);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -496,7 +499,7 @@ Widget buildBase(
                               5,
                               info);
                           if (result != null) {
-                            callSetState("base");
+                            callSetState("base",true);
                           }
                         },
                         child: _item_detail(
@@ -522,7 +525,8 @@ Widget buildEdu(
   Map<String, dynamic> info,
   int canEdit,
   bool showControl,
-  void Function(String tag) callSetState,
+  void Function(String tag,bool value) callSetState,
+    String name
 ) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -532,6 +536,8 @@ Widget buildEdu(
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
@@ -563,7 +569,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -594,7 +600,7 @@ Widget buildEdu(
                               1,
                               info);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -625,7 +631,7 @@ Widget buildEdu(
                               1,
                               info);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -652,7 +658,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -679,7 +685,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -710,7 +716,7 @@ Widget buildEdu(
                               5,
                               info);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -739,7 +745,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -761,7 +767,7 @@ Widget buildEdu(
                           var result = await showEditDialog(context, "请输入收入",
                               "", info['income'].toString(), "income", 1, info);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -790,7 +796,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -819,7 +825,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -846,7 +852,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -873,7 +879,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education");
+                            callSetState("education",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -897,7 +903,8 @@ Widget buildMarriage(
   Map<String, dynamic> info,
   int canEdit,
   bool showControl,
-  void Function(String tag) callSetState,
+  void Function(String tag,bool value) callSetState,
+    String name
 ) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -907,6 +914,8 @@ Widget buildMarriage(
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
@@ -936,7 +945,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage");
+                            callSetState("marriage",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -965,7 +974,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage");
+                            callSetState("marriage",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -996,7 +1005,7 @@ Widget buildMarriage(
                               5,
                               info);
                           if (result != null) {
-                            callSetState("marriage");
+                            callSetState("marriage",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1025,7 +1034,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage");
+                            callSetState("marriage",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1052,7 +1061,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage");
+                            callSetState("marriage",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1083,7 +1092,7 @@ Widget buildMarriage(
                               1,
                               info);
                           if (result != null) {
-                            callSetState("marriage");
+                            callSetState("marriage",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1114,7 +1123,7 @@ Widget buildMarriage(
                               1,
                               info);
                           if (result != null) {
-                            callSetState("marriage");
+                            callSetState("marriage",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1145,7 +1154,7 @@ Widget buildMarriage(
                               1,
                               info);
                           if (result != null) {
-                            callSetState("marriage");
+                            callSetState("marriage",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1174,7 +1183,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage");
+                            callSetState("marriage",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1199,7 +1208,7 @@ Widget buildSimilar(
   Map<String, dynamic> info,
   int canEdit,
   bool showControl,
-  void Function(String tag) callSetState,
+  void Function(String tag,bool value) callSetState, String name
 ) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1209,6 +1218,8 @@ Widget buildSimilar(
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
@@ -1238,7 +1249,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar");
+                            callSetState("similar",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1265,7 +1276,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar");
+                            callSetState("similar",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1294,7 +1305,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar");
+                            callSetState("similar",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1323,7 +1334,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar");
+                            callSetState("similar",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1352,7 +1363,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar");
+                            callSetState("similar",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1381,7 +1392,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar");
+                            callSetState("similar",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1406,7 +1417,7 @@ Widget buildUserSelect(
   int canEdit,
   bool showControl,
   String uuid,
-  void Function(String tag) callSetState,
+  void Function(String tag,bool value) callSetState, String name
 ) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1416,6 +1427,8 @@ Widget buildUserSelect(
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
@@ -1447,7 +1460,7 @@ Widget buildUserSelect(
                           var result = await showPickerDemandAge(
                               context, info['wish_ages'], uuid, canEdit);
                           if (result != null) {
-                            callSetState("select");
+                            callSetState("select",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1476,7 +1489,7 @@ Widget buildUserSelect(
                           var result = await showPickerDemandWeight(
                               context, info['wish_weights'], uuid, canEdit);
                           if (result != null) {
-                            callSetState("select");
+                            callSetState("select",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1506,7 +1519,7 @@ Widget buildUserSelect(
                               true,
                               uuid);
                           if (result != null) {
-                            callSetState("select");
+                            callSetState("select",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1538,7 +1551,7 @@ Widget buildUserSelect(
                           var result = await showPickerDemandHeight(
                               context, info['wish_heights'], uuid, canEdit);
                           if (result != null) {
-                            callSetState("select");
+                            callSetState("select",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1614,7 +1627,7 @@ Widget buildUserSelect(
                               true,
                               uuid);
                           if (result != null) {
-                            callSetState("select");
+                            callSetState("select",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1645,7 +1658,7 @@ Widget buildUserSelect(
                               true,
                               uuid);
                           if (result != null) {
-                            callSetState("select");
+                            callSetState("select",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1677,7 +1690,7 @@ Widget buildUserSelect(
                               info,
                               uuid);
                           if (result != null) {
-                            callSetState("select");
+                            callSetState("select",true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1701,7 +1714,7 @@ Widget buildPhoto(
   Map<String, dynamic> userdetails,
   int canEdit,
   bool showControl,
-  void Function(String tag) callSetState,
+  void Function(String tag,bool value) callSetState, String name
 ) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1711,13 +1724,15 @@ Widget buildPhoto(
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: false,
             codeFamily: 'Inconsolata',
             text: "用户图片",
             code: "",
             show: Container(
-              padding: EdgeInsets.only(top: 20.h),
+              padding: EdgeInsets.only(top: 20.h,left: 15.w,right: 5.w),
               width: ScreenUtil().screenWidth * 0.98,
               // height: 300,
               child: Wrap(
@@ -1734,7 +1749,7 @@ Widget buildPhoto(
   );
 }
 
-Widget buildConnect(List<Widget> connectList, bool showControl) {
+Widget buildConnect(List<Widget> connectList, bool showControl,void Function(String tag,bool value) callSetState, String name) {
   //_buildNodes(state.nodes, state.widgetModel.name)
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1744,6 +1759,8 @@ Widget buildConnect(List<Widget> connectList, bool showControl) {
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: connectList.length == 20 ? true : false,
             codeFamily: 'Inconsolata',
@@ -1768,7 +1785,7 @@ Widget buildConnect(List<Widget> connectList, bool showControl) {
   );
 }
 
-Widget buildAppoint(List<Widget> appointListView, bool showControl) {
+Widget buildAppoint(List<Widget> appointListView, bool showControl,void Function(String tag,bool value) callSetState, String name) {
   //_buildNodes(state.nodes, state.widgetModel.name)
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1778,6 +1795,8 @@ Widget buildAppoint(List<Widget> appointListView, bool showControl) {
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: appointListView.length == 20 ? true : false,
             codeFamily: 'Inconsolata',
@@ -1802,7 +1821,7 @@ Widget buildAppoint(List<Widget> appointListView, bool showControl) {
   );
 }
 
-Widget buildAction(List<Widget> actionListView, bool showControl) {
+Widget buildAction(List<Widget> actionListView, bool showControl,void Function(String tag,bool value) callSetState, String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1811,6 +1830,8 @@ Widget buildAction(List<Widget> actionListView, bool showControl) {
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: actionListView.length == 20 ? true : false,
             codeFamily: 'Inconsolata',
@@ -1835,7 +1856,7 @@ Widget buildAction(List<Widget> actionListView, bool showControl) {
   );
 }
 
-Widget buildCall(List<Widget> callListView, bool showControl) {
+Widget buildCall(List<Widget> callListView, bool showControl,void Function(String tag,bool value) callSetState, String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1844,6 +1865,8 @@ Widget buildCall(List<Widget> callListView, bool showControl) {
         //CustomsExpansionPanelList()
         //_item(context),
         WidgetNodePanel(
+            name: name,
+            callSetState: callSetState,
             showControl: showControl,
             showMore: callListView.length == 20 ? true : false,
             codeFamily: 'Inconsolata',
@@ -2522,7 +2545,7 @@ Future<bool> showPickerDateTime(BuildContext context, String date, String type,
 Widget _buildLinkTo(
   BuildContext context,
   Map<String, dynamic> userdetail,
-  void Function(String tag) callSetState,
+  void Function(String tag,bool value) callSetState,
 ) {
   List<dynamic> imgList = userdetail['pics'];
   var imageListView = <ImageOptions>[];
@@ -2684,9 +2707,9 @@ Widget _buildLinkTo(
                 userdetail['info']['uuid'], "1", resultConnectList['data']);
             if (result['code'] == 200) {
               BlocProvider.of<DetailBloc>(context).add(
-                  UploadImgSuccessEvent(userdetail, resultConnectList['data']));
+                  UploadImgSuccessEvent(userdetail, resultConnectList['data'],result['data']));
               showToast(context, "上传成功", false);
-              callSetState("photo");
+              callSetState("photo",true);
             } else {
               showToast(context, result['message'], false);
             }

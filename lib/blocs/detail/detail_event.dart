@@ -127,10 +127,11 @@ class ResetDetailState extends DetailEvent {
 class UploadImgSuccessEvent extends DetailEvent {
   final Map<String,dynamic> photo;
   final String value;
-  const UploadImgSuccessEvent(this.photo,this.value);
+  final int id;
+  const UploadImgSuccessEvent(this.photo,this.value,this.id);
 
   @override
-  List<Object> get props => [photo,value];
+  List<Object> get props => [photo,value,id];
 
   @override
   String toString() {
