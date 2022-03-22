@@ -11,8 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../blocs/home/home_bloc.dart';
 import '../../blocs/home/home_event.dart';
 
-List<CitySelect> firstLevels = <CitySelect>[];
-List<StoreSelect> all = <StoreSelect>[];
+
 
 class AppBarComponent extends StatefulWidget {
   final List<SelectItem> selectItems;
@@ -25,6 +24,8 @@ class AppBarComponent extends StatefulWidget {
 }
 
 class _AppBarComponentState extends State<AppBarComponent> {
+  List<CitySelect> firstLevels = <CitySelect>[];
+  List<StoreSelect> all = <StoreSelect>[];
   final String title = "";
   final Color bgColor = Colors.black;
   final Color textColor = Colors.redAccent;
@@ -94,6 +95,8 @@ class _AppBarComponentState extends State<AppBarComponent> {
     Future.delayed(Duration(milliseconds: 1)).then((e) async {
       var result = await IssuesApi.getStoreList("1");
       if (result['code'] == 200) {
+        all.clear();
+        firstLevels.clear();
         List<dynamic> da = result['data'];
         da.forEach((value) {
           CitySelect cc1 = CitySelect();
