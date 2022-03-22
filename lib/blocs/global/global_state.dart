@@ -39,7 +39,7 @@ class GlobalState extends Equatable {
   const GlobalState({
     this.fontFamily = 'ComicNeue',
     this.themeColor = Colors.blue,
-    this.showBackGround = false,
+    this.showBackGround = true,
     this.codeStyleIndex = 0,
     this.itemStyleIndex = 0,
     this.showPerformanceOverlay = false,

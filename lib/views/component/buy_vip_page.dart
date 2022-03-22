@@ -172,21 +172,24 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                     // 触摸收起键盘
                     FocusScope.of(context).requestFocus(FocusNode());
                   },
-                  child: ScrollConfiguration(
-                      behavior: DyBehaviorNull(),
-                      child: ListView(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        children: <Widget>[
-                          buildStore("套餐选择:"),
-                          buildVipPrice(),
-                          buildVipMonth(),
-                          buildVipCount(),
-                          buildBirthday("支付时间"),
-                          buildTag(),
-                          buildSubmit()
-                        ],
-                      )),
+                  child: Container(
+                    color: Colors.white,
+                    child: ScrollConfiguration(
+                        behavior: DyBehaviorNull(),
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          children: <Widget>[
+                            buildStore("套餐选择:"),
+                            buildVipPrice(),
+                            buildVipMonth(),
+                            buildVipCount(),
+                            buildBirthday("支付时间"),
+                            buildTag(),
+                            buildSubmit()
+                          ],
+                        )),
+                  ),
                 ))));
   }
 

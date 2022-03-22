@@ -191,8 +191,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                         child:  Container(
                           child: Stack(
                             children: [
-
-                              _userHead==""? Container(): Container(
+                              _userHead==null? Container():(_userHead=="" || _userHead=="null"? Container(): Container(
                                 margin: EdgeInsets.fromLTRB(16.w, 107.h, 0.w, 0.h),
                                 child: CircleAvatar(
                                   radius:(58.w) ,
@@ -206,7 +205,8 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   ),
                                   backgroundColor: Colors.white,
                                 ),
-                              ),
+                              ))
+                              ,
                               Container(
                                 width: 302.h,
                                 height: 302.h,

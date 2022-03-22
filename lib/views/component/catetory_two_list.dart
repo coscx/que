@@ -4,6 +4,7 @@ import 'package:flutter_geen/blocs/detail/detail_bloc.dart';
 import 'package:flutter_geen/blocs/detail/detail_event.dart';
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
@@ -120,99 +121,109 @@ class _NaviPageState extends State<ErpUserPage> {
 
               //bottom: bar(),
             ),
-            body: Column(
-              children: [
-                Container(
-                  height: ScreenUtil().screenHeight - 400.h,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          color: Colors.white,
-                          child: ListView.builder(
-                            itemCount: _datas.length,
-                            itemBuilder: (BuildContext context, int position) {
-                              return getRow(position);
-                            },
+            body: ScrollConfiguration(
+              behavior: DyBehaviorNull(),
+              child: Column(
+                children: [
+                  Container(
+                    color: Colors.white,
+                    height: ScreenUtil().screenHeight - 400.h,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            color: Colors.white,
+                            child: ListView.builder(
+
+                              itemCount: _datas.length,
+                              itemBuilder: (BuildContext context, int position) {
+                                return getRow(position);
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                          flex: 5,
-                          child: ListView(
-                            children: <Widget>[
-                              Container(
-                                //height: double.infinity,
-                                alignment: Alignment.topLeft,
-                                padding: EdgeInsets.only(left: 20.w),
-                                color: Colors.white,
-                                child: user.length ==0? Container(
-                                  height: 300,
-                                  alignment: Alignment.center,
-                                  child:  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(Icons.loop, color: Colors.grey, size: 80.0),
-                                      Container(
-                                        padding:  EdgeInsets.only(top: 16.0),
-                                        child:  Text(
-                                          "加载中",
-                                          style:  TextStyle(
-                                            color: Colors.grey,
+                        Expanded(
+                            flex: 5,
+                            child: ListView(
+
+                              children: <Widget>[
+                                Container(
+                                  //height: double.infinity,
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 20.w),
+                                  color: Colors.white,
+                                  child: user.length ==0? Container(
+                                    height: 300,
+                                    alignment: Alignment.center,
+                                    child:  Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(Icons.loop, color: Colors.grey, size: 80.0),
+                                        Container(
+                                          padding:  EdgeInsets.only(top: 16.0),
+                                          child:  Text(
+                                            "加载中",
+                                            style:  TextStyle(
+                                              color: Colors.grey,
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ):getChip(index), //传入一级分类下标
-                              ),
-                            ],
-                          )),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: 50.h, bottom: 0.h, left: 10.h, right: 10.h),
-                  child: Container(
-                    width: ScreenUtil().screenWidth * 0.89,
-                    height: 70.h,
-                    child: RaisedButton(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(40.w))),
-                      color: Colors.lightBlue,
-                      onPressed: () async {
-                        if (selectId == 0) {
-                          showToastRed(context, '请选择用户', true);
-                          return;
-                        }
-
-                        var actionList =
-                        await IssuesApi.distribute(widget.uuid,index,selectUuid);
-                        if (actionList['code'] == 200) {
-                          BlocProvider.of<DetailBloc>(context)
-                              .add(HuaFenDetailEvent(selectName, selectId));
-                          showToast(context, '划分成功', true);
-                          Navigator.pop(context, selectId);
-                        } else {
-                          showToastRed(
-                              context, actionList['message'], true);
-                          Navigator.pop(context, selectId);
-                        }
-
-                      },
-                      child: Text("提交",
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 40.sp)),
+                                        )
+                                      ],
+                                    ),
+                                  ):getChip(index), //传入一级分类下标
+                                ),
+                              ],
+                            )),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: 50.h, bottom: 0.h, left: 10.h, right: 10.h),
+                      child: Container(
+                        color: Colors.white,
+                        width: ScreenUtil().screenWidth * 0.89,
+                        height: 70.h,
+                        child: RaisedButton(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40.w))),
+                          color: Colors.lightBlue,
+                          onPressed: () async {
+                            if (selectId == 0) {
+                              showToastRed(context, '请选择用户', true);
+                              return;
+                            }
+
+                            var actionList =
+                            await IssuesApi.distribute(widget.uuid,index,selectUuid);
+                            if (actionList['code'] == 200) {
+                              BlocProvider.of<DetailBloc>(context)
+                                  .add(HuaFenDetailEvent(selectName, selectId));
+                              showToast(context, '划分成功', true);
+                              Navigator.pop(context, selectId);
+                            } else {
+                              showToastRed(
+                                  context, actionList['message'], true);
+                              Navigator.pop(context, selectId);
+                            }
+
+                          },
+                          child: Text("提交",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 40.sp)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             )));
   }
 

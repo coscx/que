@@ -42,6 +42,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   String call = "";
   String uuid = "";
   int status = 10;
+  int roleId = 0;
   bool showBaseControl = false;
   bool showEduControl = false;
   bool showMarriageControl = false;
@@ -120,25 +121,21 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           body: BlocListener<DetailBloc, DetailState>(
               listener: (ctx, state) {
                 if (state is DetailWithData) {
-                  if (state.reason !=null){
-                    var result =state.reason['result'];
-                    if (result=="delete_success"){
+                  if (state.reason != null) {
+                    var result = state.reason['result'];
+                    if (result == "delete_success") {
                       showPhotoControl = true;
                       showToast(context, state.reason['reason'], true);
                     }
-                    if (result=="delete_fail"){
+                    if (result == "delete_fail") {
                       showPhotoControl = true;
                       showToastRed(context, state.reason['reason'], true);
                     }
-                    if (result=="upload_success"){
+                    if (result == "upload_success") {
                       showPhotoControl = true;
-
                     }
-
                   }
-
                 }
-
               },
               child: Builder(builder: _buildContent)),
         ));
@@ -148,13 +145,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return Container(
       margin: EdgeInsets.fromLTRB(0.w, 15.h, 20.w, 0.h),
       child: IconButton(
-        tooltip: '添加商品',
+        tooltip: '用户操作',
         key: _addKey,
         onPressed: () {
-          if (status == 5) {
-            showToastRed(context, "暂无权限", true);
-            return;
-          }
+          userDetail['role_id']= roleId;
           showAddMenu(userDetail);
         },
         icon: Icon(
@@ -275,7 +269,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                     showConnectControl = false;
                     showAppointControl = true;
                     showActionControl = false;
-                    showCallControl= false;
+                    showCallControl = false;
                   });
                 }
               }
@@ -348,7 +342,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                 showConnectControl = true;
                 showAppointControl = false;
                 showActionControl = false;
-                showCallControl= false;
+                showCallControl = false;
               });
             }
           }
@@ -470,26 +464,20 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   }
 
   Widget _buildDetail(BuildContext context, DetailState state) {
-    //print('build---${state.runtimeType}---');
     if (state is DetailWithData) {
       return _buildStateDetail(context, state.userdetails, state.connectList,
           state.appointList, state.actionList, state.callList);
     }
-    // if (state is DelSuccessData) {
-    //   return _buildStateDetail(context, state.userdetails, state.connectList,
-    //       state.appointList, state.actionList, state.callList);
-    // }
-
     if (state is DetailLoading) {}
     return Container(
       child: Container(
           child: Column(
-        children: [
-          SizedBox(
-            height: 0.h,
-          ),
-          Lottie.asset('assets/packages/lottie_flutter/loading.json'),
-        ],
+              children: [
+                  SizedBox(
+                    height: 0.h,
+                  ),
+                  Lottie.asset('assets/packages/lottie_flutter/loading.json'),
+              ],
       )),
     );
   }
@@ -501,7 +489,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       Map<String, dynamic> appointLists,
       Map<String, dynamic> actionLists,
       Map<String, dynamic> callLists) {
-    void callSetState(String tag,bool value) {
+    void callSetState(String tag, bool value) {
       setState(() {
         if (tag == "base") {
           showBaseControl = value;
@@ -513,7 +501,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = false;
           showAppointControl = false;
           showActionControl = false;
-          showCallControl= false;
+          showCallControl = false;
         }
         if (tag == "education") {
           showBaseControl = false;
@@ -525,7 +513,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = false;
           showAppointControl = false;
           showActionControl = false;
-          showCallControl= false;
+          showCallControl = false;
         }
         if (tag == "marriage") {
           showBaseControl = false;
@@ -537,7 +525,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = false;
           showAppointControl = false;
           showActionControl = false;
-          showCallControl= false;
+          showCallControl = false;
         }
         if (tag == "similar") {
           showBaseControl = false;
@@ -549,7 +537,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = false;
           showAppointControl = false;
           showActionControl = false;
-          showCallControl= false;
+          showCallControl = false;
         }
         if (tag == "select") {
           showBaseControl = false;
@@ -561,7 +549,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = false;
           showAppointControl = false;
           showActionControl = false;
-          showCallControl= false;
+          showCallControl = false;
         }
         if (tag == "photo") {
           showBaseControl = false;
@@ -573,7 +561,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = false;
           showAppointControl = false;
           showActionControl = false;
-          showCallControl= false;
+          showCallControl = false;
         }
         if (tag == "connect") {
           showBaseControl = false;
@@ -585,7 +573,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = value;
           showAppointControl = false;
           showActionControl = false;
-          showCallControl= false;
+          showCallControl = false;
         }
         if (tag == "appoint") {
           showBaseControl = false;
@@ -597,7 +585,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = false;
           showAppointControl = value;
           showActionControl = false;
-          showCallControl= false;
+          showCallControl = false;
         }
         if (tag == "action") {
           showBaseControl = false;
@@ -609,7 +597,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = false;
           showAppointControl = false;
           showActionControl = value;
-          showCallControl= false;
+          showCallControl = false;
         }
         if (tag == "call") {
           showBaseControl = false;
@@ -621,21 +609,19 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
           showConnectControl = false;
           showAppointControl = false;
           showActionControl = false;
-          showCallControl= value;
+          showCallControl = value;
         }
-
-
-
-
       });
     }
 
     var info = userDetails['info'];
     var demand = userDetails['demand'];
     canEdit = userDetails['can_edit'];
+    roleId = userDetails['role_id'];
     call = info['mobile'];
     uuid = info['uuid'];
     status = info['status'];
+
     userDetail = info;
     List<dynamic> connectList = connectLists['data'];
     List<dynamic> appointList = appointLists['data'];
@@ -655,19 +641,24 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        buildBase(context, info, canEdit, showBaseControl, callSetState,"base"),
-        buildEdu(context, info, canEdit, showEduControl, callSetState,"education"),
-        buildMarriage(
-            context, info, canEdit, showMarriageControl, callSetState,"marriage"),
-        buildSimilar(context, info, canEdit, showSimilarControl, callSetState,"similar"),
+        buildBase(
+            context, info, canEdit, showBaseControl, callSetState, "base"),
+        buildEdu(
+            context, info, canEdit, showEduControl, callSetState, "education"),
+        buildMarriage(context, info, canEdit, showMarriageControl, callSetState,
+            "marriage"),
+        buildSimilar(context, info, canEdit, showSimilarControl, callSetState,
+            "similar"),
         buildUserSelect(context, demand, canEdit, showSelectControl,
-            info['uuid'], callSetState,"select"),
-        buildPhoto(
-            context, userDetails, canEdit, showPhotoControl, callSetState,"photo"),
-        buildConnect(connectListView, showConnectControl, callSetState,"connect"),
-        buildAppoint(appointListView, showAppointControl, callSetState,"appoint"),
-        buildAction(actionListView, showActionControl, callSetState,"action"),
-        buildCall(callListView, showCallControl, callSetState,"call"),
+            info['uuid'], callSetState, "select"),
+        buildPhoto(context, userDetails, canEdit, showPhotoControl,
+            callSetState, "photo"),
+        buildConnect(
+            connectListView, showConnectControl, callSetState, "connect"),
+        buildAppoint(
+            appointListView, showAppointControl, callSetState, "appoint"),
+        buildAction(actionListView, showActionControl, callSetState, "action"),
+        buildCall(callListView, showCallControl, callSetState, "call"),
       ],
     );
   }
@@ -766,7 +757,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                        margin: EdgeInsets.fromLTRB(5.w, 5.h, 5.w, 0.h),
+                        constraints: BoxConstraints(
+                          maxWidth: 120.w,
+                        ),
+                        margin: EdgeInsets.fromLTRB(10.w, 10.h, 0.w, 0.h),
                         child: Text(
                           user['info']['name'],
                           style: TextStyle(
@@ -774,11 +768,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             fontWeight: FontWeight.bold,
                             fontSize: 32.sp,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         )),
                     Container(
                         //color: Colors.black12,
                         padding: EdgeInsets.fromLTRB(5.w, 0.h, 5.w, 0.h),
-                        margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
+                        margin: EdgeInsets.fromLTRB(10.w, 10.h, 5.w, 0.h),
                         alignment: Alignment.centerLeft,
                         height: 28.h,
                         decoration: new BoxDecoration(
@@ -804,6 +800,9 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           )
                         : Container(),
                     Container(
+                        constraints: BoxConstraints(
+                          maxWidth: 220.w,
+                        ),
                         margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
                         child: Text(
                           user['info']['vip_name'] +
@@ -818,6 +817,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                             fontWeight: FontWeight.w300,
                             fontSize: 25.sp,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         )),
                   ],
                 ),
@@ -829,17 +830,22 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
                           height: 40.h,
                         )
-                      : Tag(
-                          color: Color.fromRGBO(241, 241, 241, 100),
-                          borderColor: Color.fromRGBO(241, 241, 241, 100),
-                          borderWidth: 1,
-                          margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
-                          height: 40.h,
-                          radius: 10.w,
-                          text: Text(
-                            user['info']['location_place'].toString(),
-                            style: TextStyle(
-                              fontSize: 24.sp,
+                      : Container(
+                          width: 280.w,
+                          child: Tag(
+                            color: Color.fromRGBO(241, 241, 241, 100),
+                            borderColor: Color.fromRGBO(241, 241, 241, 100),
+                            borderWidth: 1,
+                            margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
+                            height: 40.h,
+                            radius: 10.w,
+                            text: Text(
+                              user['info']['location_place'].toString(),
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),

@@ -100,6 +100,11 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
           height: 50.0,
           child: TextButton.icon(
             onPressed: () {
+              if (widget.args['role_id'] > 3) {
+                showToastRed(context, "暂无权限", true);
+                Navigator.of(context).pop();
+                return;
+              }
               Navigator.of(context).pop();
               Navigator.pushNamed(context, UnitRouter.erp_user,arguments: widget.args['uuid']).then((value) {
                 print(value);

@@ -129,9 +129,9 @@ class UnitRouter {
       case to_chat:
         return Right2LeftRouter(child: AboutMePage());
       case erp_user:
-        return Right2LeftRouter(child: ErpUserPage(uuid:settings.arguments),durationMs: 200);
+        return Right2LeftRouter(child: ErpUserPage(uuid:settings.arguments));
       case buy_vip:
-        return Right2LeftRouter(child: BuyVipPage(args:settings.arguments),durationMs: 200);
+        return Right2LeftRouter(child: BuyVipPage(args:settings.arguments));
 
       case to_chats:
         return Right2LeftRouter(

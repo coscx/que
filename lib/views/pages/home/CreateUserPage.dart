@@ -218,7 +218,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                                       "男",
                                                       style:
                                                       TextStyle(
-                                                        fontFamily: "Poppins",
+                                                        //fontFamily: "Poppins",
                                                         fontWeight: FontWeight.w100,
                                                         decoration: TextDecoration.none,
                                                         fontSize: 40.sp,
@@ -268,7 +268,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                                       "女",
                                                       style:
                                                       TextStyle(
-                                                        fontFamily: "Poppins",
+                                                        //fontFamily: "Poppins",
                                                         fontWeight: FontWeight.w100,
                                                         decoration: TextDecoration.none,
                                                         fontSize: 40.sp,

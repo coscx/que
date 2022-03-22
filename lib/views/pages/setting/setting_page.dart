@@ -152,7 +152,7 @@ class SettingPage extends StatelessWidget {
                   TolyIcon.icon_background,
                   color: Theme.of(context).primaryColor,
                 ),
-                title: Text('显示背景'),
+                title: Text('主页选择记忆'),
                 onChanged: (show) {
                   BlocProvider.of<GlobalBloc>(context)
                       .add(EventSwitchShowBg(show));

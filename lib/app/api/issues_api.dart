@@ -207,7 +207,7 @@ class IssuesApi {
       url="/api/v1/customer/passive/index";
     }
     if(mode=="2"){//我的
-      url="/api/v1/customer/personal/index";
+      url="/api/v1/customer/personal/indexApp";
       searchParm['type'] = serveType;
     }
     if(mode=="3"){//我的

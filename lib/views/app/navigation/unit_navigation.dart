@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_geen/app/api/issues_api.dart';
+import 'package:flutter_geen/storage/app_storage.dart';
 import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
 import 'package:flutter_geen/views/pages/about/person_center_page.dart';
 import 'package:flutter_geen/views/pages/home/flow_page.dart';
@@ -106,6 +107,18 @@ class _UnitNavigationState extends State<UnitNavigation>
     Future.delayed(Duration(seconds: 1)).then((e) async {
       _checkUpdateVersion();
     });
+
+    Future.delayed(Duration(milliseconds: 1)).then((e) async {
+      var saveMode = BlocProvider.of<GlobalBloc>(context).state.showBackGround;
+      if (saveMode) {
+        final sp = AppStorage().sp;
+       var mode = await sp;
+       int modes =mode.getInt("currentPhotoMode");
+        BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(modes));
+      }
+    });
+
+
   }
 
   @override

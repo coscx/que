@@ -1741,7 +1741,7 @@ Widget buildPhoto(
                   spacing: 0,
                   runSpacing: 0,
                   children: <Widget>[
-                    _buildLinkTo(context, userdetails, callSetState),
+                    _buildLinkTo(context, userdetails, callSetState, canEdit),
                   ]),
             )),
       ],
@@ -2545,7 +2545,7 @@ Future<bool> showPickerDateTime(BuildContext context, String date, String type,
 Widget _buildLinkTo(
   BuildContext context,
   Map<String, dynamic> userdetail,
-  void Function(String tag,bool value) callSetState,
+  void Function(String tag,bool value) callSetState,int canEdit
 ) {
   List<dynamic> imgList = userdetail['pics'];
   var imageListView = <ImageOptions>[];
@@ -2626,6 +2626,10 @@ Widget _buildLinkTo(
                                     ),
                                     child: FeedbackWidget(
                                       onPressed: () {
+                                        if (canEdit ==0) {
+                                          showToastRed(context, "暂无权限", true);
+                                          return;
+                                        }
                                         _deletePhoto(context, e, userdetail);
                                       },
                                       child: const Icon(
@@ -2669,6 +2673,11 @@ Widget _buildLinkTo(
         )),
       ),
       onTap: () async {
+
+        if (canEdit ==0) {
+          showToastRed(context, "暂无权限", true);
+          return;
+        }
         //_getPermission(context);
         List<Asset> images = List<Asset>();
         List<Asset> resultList = List<Asset>();

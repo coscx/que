@@ -10,6 +10,7 @@ import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/components/permanent/overlay_tool_wrapper.dart';
+import 'package:flutter_geen/storage/app_storage.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
@@ -483,11 +484,13 @@ class _HomePageState extends State<HomePage>
             topRight: Radius.circular(5),
             bottomLeft: Radius.circular(5),
           )),
-          onSelected: (e) {
+          onSelected: (e) async {
             //print(e);
+            var ccMode =0;
             if (e == '全部') {
               BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
               var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+
               BlocProvider.of<HomeBloc>(context).add(EventFresh(
                   sex,
                   0,
@@ -497,6 +500,7 @@ class _HomePageState extends State<HomePage>
                   _showAgeMin,
                   serveType,
                   selectItems));
+              ccMode=0;
             }
             if (e == '我的') {
               BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
@@ -509,7 +513,7 @@ class _HomePageState extends State<HomePage>
                   _showAgeMax,
                   _showAgeMin,
                   serveType,
-                  selectItems));
+                  selectItems)); ccMode=2;
             }
             if (e == '良缘') {
               BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
@@ -522,7 +526,7 @@ class _HomePageState extends State<HomePage>
                   _showAgeMax,
                   _showAgeMin,
                   serveType,
-                  selectItems));
+                  selectItems)); ccMode=1;
             }
             if (e == '公海') {
               BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(3));
@@ -535,7 +539,12 @@ class _HomePageState extends State<HomePage>
                   _showAgeMax,
                   _showAgeMin,
                   serveType,
-                  selectItems));
+                  selectItems));ccMode=3;
+            }
+            var saveMode = BlocProvider.of<GlobalBloc>(context).state.showBackGround;
+            if (saveMode) {
+              final sp = AppStorage().sp;
+              await sp..setInt("currentPhotoMode", ccMode);
             }
           },
           onCanceled: () => print('onCanceled'),
@@ -759,9 +768,9 @@ class _HomePageState extends State<HomePage>
     return HomeItemSupport.get(null, 6, photo, isVip);
   }
 
-  _switchTab(int index, Color color) {
-    BlocProvider.of<HomeBloc>(context).add(EventTabTap());
-  }
+  // _switchTab(int index, Color color) {
+  //   BlocProvider.of<HomeBloc>(context).add(EventTabTap());
+  // }
 
 
   @override

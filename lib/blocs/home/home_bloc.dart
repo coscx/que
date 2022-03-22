@@ -5,7 +5,11 @@ import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/app/enums.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/utils/convert.dart';
+import 'package:flutter_geen/blocs/global/global_bloc.dart';
+import 'package:flutter_geen/blocs/global/global_event.dart';
 import 'package:flutter_geen/repositories/itf/widget_repository.dart';
+import 'package:flutter_geen/storage/app_storage.dart';
+import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 import 'dart:convert';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -212,8 +216,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Stream<HomeState> _mapLoadWidgetToState() async* {
     yield WidgetsLoading();
     try {
-
-      var result= await IssuesApi.getPhoto('', '1','1','0');
+      final app = AppStorage();
+      var mode = await app.sp;
+      var saveMode  =mode.getBool("show_background");
+      if (saveMode ==null ){
+        saveMode =true;
+      }
+      int modes =0;
+      if (saveMode) {
+        modes =mode.getInt("currentPhotoMode");
+      }
+      var result= await IssuesApi.searchErpUser('', '1',"1",modes.toString(),null,false,0,0,"1",<SelectItem>[]);
+      //var result= await IssuesApi.getPhoto('', '1','1','0');
       if  (result['message']=="Unauthenticated.") {
         yield Unauthenticated();
       }else{

@@ -119,57 +119,64 @@ Widget item_connect(
             margin: EdgeInsets.only(left: 15.w, right: 20.w),
             child: Column(
               children: [
-                Wrap(
+                Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Row(children: <Widget>[
-                          Circle(
-                            //connectType 沟通类型 1-线上沟通 2-到店沟通
-                            color: connectType == "1"
-                                ? Colors.green
-                                : Colors.redAccent,
-                            radius: 5,
-                          ),
-                          Container(
-                            // width: ScreenUtil().screenWidth * 0.15,
-                            margin: EdgeInsets.only(left: 15.w),
-                            child: Text(
-                              name == null ? "" : name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 30.sp, color: Colors.black54),
+                        Container(
+                          height: 30.h,
+                          child: Row(children: <Widget>[
+                            Circle(
+                              //connectType 沟通类型 1-线上沟通 2-到店沟通
+                              color: connectType == "1"
+                                  ? Colors.green
+                                  : Colors.redAccent,
+                              radius: 5,
                             ),
-                          ),
-                          SizedBox(
-                            width: ScreenUtil().setWidth(10.w),
-                          ),
-                          Visibility(
-                              visible: true,
-                              child: Container(
-                                //width: ScreenUtil().screenWidth*0.71,
-                                  height: 30.h,
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          width: ScreenUtil().screenWidth * 0.68,
-                                          child: Text(
-                                            content,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                fontSize: 25.sp,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w900),
+                            Container(
+                              // width: ScreenUtil().screenWidth * 0.15,
+                              constraints: BoxConstraints(
+                                maxWidth: 120.w,
+                              ),
+                              margin: EdgeInsets.only(left: 15.w),
+                              child: Text(
+                                name == null ? "" : name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 30.sp, color: Colors.black54),
+                              ),
+                            ),
+                            SizedBox(
+                              width: ScreenUtil().setWidth(10.w),
+                            ),
+                            Visibility(
+                                visible: true,
+                                child: Container(
+                                    margin: EdgeInsets.only(top: 5.w),
+                                  //width: ScreenUtil().screenWidth*0.71,
+                                   // height: 30.h,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            width: ScreenUtil().screenWidth * 0.68,
+                                            child: Text(
+                                              content,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 25.sp,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w900),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ))),
-                        ]),
+                                      ],
+                                    ))),
+                          ]),
+                        ),
                         //Visibility是控制子组件隐藏/可见的组件
                         Visibility(
                           visible: true,
@@ -258,6 +265,9 @@ Widget item_appoint(
                           ),
                           Container(
                             // width: ScreenUtil().screenWidth * 0.15,
+                            constraints: BoxConstraints(
+                              maxWidth: 120.w,
+                            ),
                             margin: EdgeInsets.only(left: 15.w),
                             child: Text(
                               name == null ? "" : name,
@@ -278,7 +288,9 @@ Widget item_appoint(
                             ),
                           ),
                           Container(
-                            width: ScreenUtil().screenWidth * 0.14,
+                            constraints: BoxConstraints(
+                              maxWidth: 120.w,
+                            ),
                             margin: EdgeInsets.only(left: 15.w),
                             child: Text(
                               other_name == null ? "" : other_name,
