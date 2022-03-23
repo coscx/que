@@ -186,9 +186,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
           yield WidgetsLoaded(photos: result['data'],count: total);
         }else{
-
-          yield WidgetsLoaded(photos: result['data']['data'],count: total);
           total = result['data']['total'].toString();
+          yield WidgetsLoaded(photos: result['data']['data'],count: total);
+
         }
 
 
