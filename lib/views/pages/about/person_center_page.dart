@@ -170,7 +170,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
         slivers: <Widget>[
            SliverAppBar(
             backgroundColor: Colors.white,
-            expandedHeight: _appBarHeight,
+            expandedHeight: 220.h,
             flexibleSpace:  FlexibleSpaceBar(
               collapseMode: CollapseMode.parallax,
               background:  Stack(
@@ -198,14 +198,13 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                    Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-
                       Container(
-                        margin: EdgeInsets.only(top: 0.h, bottom: 0.h, left: 20.w),
-                        child:  Container(
+                          margin: EdgeInsets.only(left: 20.w),
                           width: 150.w,
                           child: Stack(
                             children: [
-                              _userHead==null? Container():(_userHead=="" || _userHead=="null"? Container(): Positioned(
+                              _userHead==null? Container():(_userHead=="" || _userHead=="null"? Container():
+                              Positioned(
                                 left: 25.w,
                                 top: 120.h,
                                 child: Container(
@@ -234,7 +233,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                             ],
                           ),
                         ),
-                      ),
+
                       Container(
                         padding:  EdgeInsets.only(
                           top: 60.h,
@@ -295,7 +294,6 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           ],
                         ),
                       ),
-
 
                     ],
                   ),
