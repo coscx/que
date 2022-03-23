@@ -825,6 +825,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
+  radial_menu:
+    dependency: "direct main"
+    description:
+      name: radial_menu
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.1"
   recase:
     dependency: transitive
     description:

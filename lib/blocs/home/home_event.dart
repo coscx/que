@@ -67,6 +67,19 @@ class EventFresh extends HomeEvent {
   final List<SelectItem> selectItems ;
   EventFresh(this.sex,this.mode,this.search,this.showAge,this.maxAge,this.minAge,this.serveType,this.selectItems);
 }
+
+class EventTab extends HomeEvent {
+
+  final int sex;
+  final int mode;
+  final bool showAge;
+  final int minAge;
+  final int maxAge;
+  final String serveType ;
+  final SearchParamList search;
+  final List<SelectItem> selectItems ;
+  EventTab(this.sex,this.mode,this.search,this.showAge,this.maxAge,this.minAge,this.serveType,this.selectItems);
+}
 class EventGetCreditId extends HomeEvent {
 
   final String CreditIds;

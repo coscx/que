@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -471,12 +472,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     if (state is DetailLoading) {}
     return Container(
       child: Container(
+          padding: EdgeInsets.only(top: ScreenUtil().screenHeight *0.2),
           child: Column(
               children: [
                   SizedBox(
                     height: 0.h,
                   ),
-                  Lottie.asset('assets/packages/lottie_flutter/loading.json'),
+                  Lottie.asset('assets/packages/lottie_flutter/890-loading-animation.json'),
               ],
       )),
     );
@@ -696,11 +698,15 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             child: CircleAvatar(
               radius: (70.w),
               child: ClipOval(
-                child: Image.network(
-                  url,
+                child: CachedNetworkImage(
+                  imageUrl: url,
                   fit: BoxFit.cover,
                   width: 140.w,
                   height: 140.h,
+                    placeholder: (context, url) => Image.asset(
+                      'assets/images/radio_header_1.png',
+                      fit: BoxFit.fill,
+                    )
                 ),
               ),
               backgroundColor: Colors.white,
@@ -745,8 +751,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                 padding: EdgeInsets.only(left: 10.w, right: 0.w),
                 child: user['pic'].length > 0
                     ? avatar(user['pic'][0], isVip)
-                    : Image.asset(
-                        "assets/packages/images/ic_user_none_round.png"),
+                    : Container(
+                        margin: EdgeInsets.only(left: 20.w, top: 0.h),
+                        width: 180.w,
+                        height: 180.h,
+                        child: Image.asset(
+                          "assets/packages/images/ic_user_none_round.png"),
+                    ),
               )),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

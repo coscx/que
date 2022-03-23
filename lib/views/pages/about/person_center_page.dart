@@ -6,22 +6,26 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
-import 'package:flutter_geen/app/utils/Toast.dart';
+import 'package:flutter_geen/views/component/flow_bottom_sheet.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class MinePage extends StatefulWidget {
   @override
   _MinePageState createState() => _MinePageState();
 }
 
 class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<MinePage> {
-  final double _appBarHeight = 180.0;
+  final double _appBarHeight = 220.h;
   String name ="MSTAR";
   String bind="微信绑定";
   String memberId="0";
    String _userHead =
       'https://img.bosszhipin.com/beijin/mcs/useravatar/20171211/4d147d8bb3e2a3478e20b50ad614f4d02062e3aec7ce2519b427d24a3f300d68_s.jpg';
+   String lost="0";
+  String join="0";
+  String connect="0";
 
   @override
   bool get wantKeepAlive => true;
@@ -75,7 +79,18 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
           bind="已绑定微信";
         });
       }
+      var result = await IssuesApi.getDashBord();
+      if (result['code'] == 200) {
+        var d = result['data']['top'];
 
+        setState(() {
+          lost = d['yesterday_lost'].toString();
+          join = d['yesterday_create'].toString();
+          connect = d['yesterday_connect'].toString();
+        });
+
+
+      } else {}
 
     });
 
@@ -124,7 +139,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
             onPressed: cancel,
           )),
       title: (text)=>Container(
-        child: Text(msg,style: new TextStyle(
+        child: Text(msg,style:  TextStyle(
             color: Colors.black, fontSize: 40.sp)),
       ),
       duration: const Duration(seconds: 5),
@@ -153,12 +168,12 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
         body:  CustomScrollView(
         physics:const BouncingScrollPhysics() ,
         slivers: <Widget>[
-          new SliverAppBar(
+           SliverAppBar(
             backgroundColor: Colors.white,
             expandedHeight: _appBarHeight,
-            flexibleSpace: new FlexibleSpaceBar(
+            flexibleSpace:  FlexibleSpaceBar(
               collapseMode: CollapseMode.parallax,
-              background: new Stack(
+              background:  Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
                   const DecoratedBox(
@@ -175,51 +190,58 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                   ),
 
                   Container(
-                    height: ScreenUtil().setHeight(120),
-                    width: ScreenUtil().setWidth(120),
+                    height:120.h,
+                    width: 120.w,
                     alignment: FractionalOffset.topLeft,
                     child: Image.asset("assets/packages/images/friend_card_bg.png"),
                   ),
                    Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: ScreenUtil().setWidth(80.w),
-                      ),
-                      Expanded(
-                        //flex: 1,
+
+                      Container(
+                        margin: EdgeInsets.only(top: 0.h, bottom: 0.h, left: 20.w),
                         child:  Container(
+                          width: 150.w,
                           child: Stack(
                             children: [
-                              _userHead==null? Container():(_userHead=="" || _userHead=="null"? Container(): Container(
-                                margin: EdgeInsets.fromLTRB(16.w, 107.h, 0.w, 0.h),
-                                child: CircleAvatar(
-                                  radius:(58.w) ,
+                              _userHead==null? Container():(_userHead=="" || _userHead=="null"? Container(): Positioned(
+                                left: 25.w,
+                                top: 120.h,
+                                child: Container(
+                                  width: 90.h,
+                                  height: 90.h,
                                   child: ClipOval(
                                     child: Image.network(
                                       _userHead,
                                       fit: BoxFit.cover,
-                                      width: 116.w,
-                                      height: 116.h,
                                     ),
                                   ),
-                                  backgroundColor: Colors.white,
+                                  //backgroundColor: Colors.white,
                                 ),
                               ))
                               ,
-                              Container(
-                                width: 302.h,
-                                height: 302.h,
-                                //margin: EdgeInsets.fromLTRB(1.w, 5.h, 5.w, 0.h),
-                                child:Lottie.asset('assets/packages/lottie_flutter/36535-avatar-pendant.json'),
+                              Positioned(
+                                left: 10.w,
+                                top: 100.h,
+                                child: Container(
+                                  width: 120.h,
+                                  height: 120.h,
+                                  //margin: EdgeInsets.fromLTRB(1.w, 5.h, 5.w, 0.h),
+                                  child:Lottie.asset('assets/packages/lottie_flutter/36535-avatar-pendant.json'),
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                       Expanded(
-                        flex: 3,
-                        child: new Column(
+                      Container(
+                        padding:  EdgeInsets.only(
+                          top: 60.h,
+                          left: 20.w,
+                          bottom: 0.h,
+                        ),
+                        child:  Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -229,9 +251,9 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                 left: 30.w,
                                 bottom: 5.h,
                               ),
-                              child: new Text(
+                              child:  Text(
                                 name,
-                                style: new TextStyle(
+                                style:  TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20.0),
@@ -259,9 +281,9 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                       left: 10.w,
                                       bottom: 0.h,
                                     ),
-                                    child: new Text(
+                                    child:  Text(
                                      "S001M00"+ memberId,
-                                      style: new TextStyle(
+                                      style:  TextStyle(
                                           color: Colors.black, fontSize: 28.sp,fontWeight: FontWeight.bold,),
                                     ),
                                   ),
@@ -273,70 +295,77 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           ],
                         ),
                       ),
-                      Padding(
-                          padding:  EdgeInsets.only(
-                            left: 0.0,
-                            right: 30.w,
-                            top: 0.h,
-                            bottom: 150.h
-                          ),
-                          child: GestureDetector(
-                            onTap: (){
-                              Navigator.pushNamed(context, UnitRouter.setting);
-                            },
-                            child: Container(
-                              width: 50.h,
-                              height: 50.h,
-                              //margin: EdgeInsets.fromLTRB(1.w, 5.h, 5.w, 0.h),
-                              child:Lottie.asset('assets/packages/lottie_flutter/6547-gear.json'),
-                            ),
-                          ),
 
-                      ),
 
                     ],
+                  ),
+                  Positioned(
+                    right: 40.w,
+                    top: 80.w,
+                    child: Container(
+                      padding:  EdgeInsets.only(
+                          left: 0.w,
+                          right: 0.w,
+                          top: 0.h,
+                          bottom: 70.h
+                      ),
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, UnitRouter.setting);
+                        },
+                        child: Container(
+                          width: 50.h,
+                          height: 50.h,
+                          //margin: EdgeInsets.fromLTRB(1.w, 5.h, 5.w, 0.h),
+                          child:Lottie.asset('assets/packages/lottie_flutter/6547-gear.json'),
+                        ),
+                      ),
+
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          new SliverList(
-            delegate: new SliverChildListDelegate(
+           SliverList(
+            delegate:  SliverChildListDelegate(
               <Widget>[
-                new Container(
+                 Container(
                   color: Colors.white,
                   child:  Padding(
                     padding:  EdgeInsets.only(
                       top: 0.h,
-                      bottom: 10.h,
+                      bottom: 20.h,
                       left: 20.w,
                       right: 20.w
                     ),
-                    child: new Row(
+                    child:  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        new ContactItem(
-                          count: '696',
-                          title: '客户录入',
+                        TopCard(
+                          url: 'assets/images/default/lost.png',
+                          title: '昨日流失',
+                          content: lost,
+                          colorStart:  Color(0xff0CDAC5),
+                          colorEnd: Color(0xff3BBFF9),
+                        ),TopCard(
+                          url: 'assets/images/default/join.png',
+                          title: '昨日入库',
+                          content: join,
+                          colorStart:  Color(0xffF6A681),
+                          colorEnd: Color(0xffF86CA0),
                         ),
-                        new ContactItem(
-                          count: '0',
-                          title: '已提交',
-                        ),
-                        new ContactItem(
-                          count: '71',
-                          title: '用户管理',
-                        ),
-                        new ContactItem(
-                          count: '53',
-                          title: '权限管理',
-                        ),
+                        TopCard(
+                          url: 'assets/images/default/connect.png',
+                          title: '昨日沟通',
+                          content: connect,
+                          colorStart:  Color(0xff9A7FF6),
+                          colorEnd: Color(0xffEA76EE),
+                        )
                       ],
                     ),
                   ),
                 ),
-
-
 
                 Container(
                     decoration: BoxDecoration(
@@ -344,7 +373,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                         color: Colors.white,
                         boxShadow: [BoxShadow(color: Color(0x19000000), offset: Offset(0.5, 0.5),  blurRadius: 1.5, spreadRadius: 1.5),  BoxShadow(color: Colors.white)],
                     ),
-                    margin: EdgeInsets.fromLTRB(30.w,20.h,30.w,0),
+                    margin: EdgeInsets.fromLTRB(30.w,40.h,30.w,0),
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.w),
                         child: Container(
@@ -382,7 +411,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   ),
                                   // Text(
                                   //   "客户录入",
-                                  //   style: new TextStyle(color: Colors.black54, fontSize: 28.sp),
+                                  //   style:  TextStyle(color: Colors.black54, fontSize: 28.sp),
                                   // ),
 
                                 ]),
@@ -407,19 +436,16 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   ),
                                   // Text(
                                   //   "已提交",
-                                  //   style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
+                                  //   style:  TextStyle(color: Colors.black54, fontSize: 24.sp),
                                   // ),
 
                                 ]),
                               )),
 
                     GestureDetector(
-                      onTap: (){
-                          //Navigator.pushNamed(context, UnitRouter.game);
-                         // _userDetail(context);
+                    onTap: (){
 
-
-                      },
+                    },
                       child:Container(
                                 padding:  EdgeInsets.only(
                                     top: 0.h,
@@ -435,31 +461,48 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                                   ),
                                   // Text(
                                   //   "用户管理",
-                                  //   style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
+                                  //   style:  TextStyle(color: Colors.black54, fontSize: 24.sp),
                                   // ),
 
                                 ]),
-                              )),
+                              )
 
-                              Container(
-                                padding:  EdgeInsets.only(
-                                    // top: 10.h,
-                                    // bottom: 10.h,
+                    ),
 
-                                ),
-                                child:  Column(children: <Widget>[
-                                  Container(
-                                    height: 150.h,
-                                    width: 150.w,
-                                    alignment: FractionalOffset.topLeft,
-                                    child: Lottie.asset('assets/packages/lottie_flutter/97577-instagram.json'),
+                              GestureDetector(
+                                onTap: (){
+                                  //Navigator.pushNamed(context, UnitRouter.game);
+                                  // _userDetail(context);
+                                  // showCupertinoModalBottomSheet(
+                                  //   expand: true,
+                                  //   bounce: false,
+                                  //   context: context,
+                                  //   duration: const Duration(milliseconds: 200),
+                                  //   backgroundColor: Colors.white,
+                                  //   builder: (context) => FlowBottomSheet(),
+                                  // );
+
+                                },
+                                child: Container(
+                                  padding:  EdgeInsets.only(
+                                      // top: 10.h,
+                                      // bottom: 10.h,
+
                                   ),
-                                  // Text(
-                                  //   "权限管理",
-                                  //   style: new TextStyle(color: Colors.black54, fontSize: 24.sp),
-                                  // ),
+                                  child:  Column(children: <Widget>[
+                                    Container(
+                                      height: 150.h,
+                                      width: 150.w,
+                                      alignment: FractionalOffset.topLeft,
+                                      child: Lottie.asset('assets/packages/lottie_flutter/97577-instagram.json'),
+                                    ),
+                                    // Text(
+                                    //   "权限管理",
+                                    //   style:  TextStyle(color: Colors.black54, fontSize: 24.sp),
+                                    // ),
 
-                                ]),
+                                  ]),
+                                ),
                               ),
 
                               // SizedBox(
@@ -497,48 +540,48 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           title: bind,
                           ),
                        ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_profile_mentor_ship.svg",
                       //   title: '师徒关系',
                       // ),
                       //
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_my_bag.svg",
                       //   title: '我的背包',
                       // ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_activity.svg",
                       //   title: '订单',
                       // ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_app_review.svg",
                       //   title: '去好评',
                       // ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_contribute.svg",
                       //   title: '贡献题目',
                       // ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_invite.svg",
                       //   title: '邀请有礼',
                       // ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_activity.svg",
                       //   title: '活动',
                       // ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_settings.svg",
                       //   title: '账号设置',
                       // ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_service.svg",
                       //   title: '在线客服',
                       // ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_help.svg",
                       //   title: '帮助',
                       // ),
-                      // new MenuItem(
+                      //  MenuItem(
                       //   icon: "assets/packages/images/ic_contact.svg",
                       //   title: '联系我们',
                       // ),
@@ -582,7 +625,7 @@ class ContactItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return  GestureDetector(
       onTap: onPressed,
       child:  Column(
         children: [
@@ -590,15 +633,94 @@ class ContactItem extends StatelessWidget {
             padding:  EdgeInsets.only(
               bottom: 4.h,
             ),
-            child: new Text(count, style: new TextStyle(fontSize: 36.sp)),
+            child:  Text(count, style:  TextStyle(fontSize: 36.sp)),
           ),
-          new Text(title,
-              style: new TextStyle(color: Colors.black54, fontSize: 22.sp)),
+           Text(title,
+              style:  TextStyle(color: Colors.black54, fontSize: 22.sp)),
         ],
       ),
     );
   }
 }
+class TopCard extends StatelessWidget {
+  TopCard({Key key, this.url, this.title, this.onPressed, this.content, this.colorStart, this.colorEnd})
+      : super(key: key);
+
+  final String url;
+  final String title;
+  final String content;
+  final Color colorStart;
+  final Color colorEnd;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return  GestureDetector(
+      onTap: onPressed,
+      child:  Container(
+        decoration:  BoxDecoration(
+          //设置四周圆角 角度
+          borderRadius: BorderRadius.all(Radius.circular(8.h)),
+          //设置四周边框
+          //border:  Border.all(width: 1, color: Colors.red),
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                colorStart,
+                colorEnd
+              ],
+            ),
+
+        ),
+        child: Container(
+          child: Stack(
+            children: [
+              Container(
+                width: 220.w,
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 20.w, top: 20.h,bottom: 10.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(left: 0.w, bottom: 5.h),
+
+                            child: Text(title,
+                                style:  TextStyle(color: Colors.white, fontSize: 25.sp)),
+                          ),
+                           Container(
+                             padding: EdgeInsets.only(left: 0.w, bottom: 5.h),
+                             child: Text(content,
+                                style:  TextStyle(color: Colors.white, fontSize: 25.sp)),
+                           ),
+                        ],
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+              Positioned(
+                bottom: -16.w,
+                right: 10.w,
+                //margin: EdgeInsets.only( bottom: 0.h,right: 10.w),
+                width: 80.w,
+                height: 80.h,
+                child: Image.asset(
+                    url),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 class MenuItem extends StatelessWidget {
   MenuItem({Key key, this.icon, this.title, this.onPressed}) : super(key: key);
 
@@ -608,44 +730,44 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return  GestureDetector(
       onTap: onPressed,
-      child: new Column(
+      child:  Column(
         children: <Widget>[
-          new Padding(
+           Padding(
             padding: const EdgeInsets.only(
               left: 20.0,
               top: 12.0,
               right: 20.0,
               bottom: 10.0,
             ),
-            child: new Row(
+            child:  Row(
               children: [
-                new Padding(
+                 Padding(
                   padding: const EdgeInsets.only(
                     right: 12.0,
                   ),
-                  child: new SvgPicture.asset(
+                  child:  SvgPicture.asset(
                     icon,
                    // color: Colors.black54,
                   ),
                 ),
-                new Expanded(
-                  child: new Text(
+                 Expanded(
+                  child:  Text(
                     title,
-                    style: new TextStyle(color: Colors.black87, fontSize: 16.0),
+                    style:  TextStyle(color: Colors.black87, fontSize: 16.0),
                   ),
                 ),
-                new Icon(
+                 Icon(
                   Icons.chevron_right,
                   color: Colors.black12,
                 )
               ],
             ),
           ),
-          new Padding(
+           Padding(
             padding: const EdgeInsets.only(left: 20.0, right: 20.0,top: 13),
-            child: new Container(),
+            child:  Container(),
           )
         ],
       ),

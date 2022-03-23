@@ -524,6 +524,24 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String,dynamic>> getDashBord() async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    Map<String,dynamic> searchParm={};
+    searchParm['pageSize'] = 1000;
+
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
+    try {
+      Response<dynamic> rep = await dioA.post(NewBaseUrl+'/api/DashBord',data: searchParm );
+      var dd=rep.data;
+      return dd;
+    } on DioError catch(e){
+      var dd=e.response.data;
+      return dd;
+    }
+  }
+
   static Future<Map<String,dynamic>> getStoreVips() async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();

@@ -166,6 +166,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     }
     if (event is EventFresh) {
+      //yield WidgetsLoading();
       try {
 
         var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType,event.selectItems);
@@ -179,8 +180,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
           }
         }
+        var total ="0";
 
-        yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString() );
+        if (result['data'] is List){
+
+          yield WidgetsLoaded(photos: result['data'],count: total);
+        }else{
+
+          yield WidgetsLoaded(photos: result['data']['data'],count: total);
+          total = result['data']['total'].toString();
+        }
+
 
       } catch (err) {
         print(err);
@@ -188,6 +198,40 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
 
     }
+    if (event is EventTab) {
+      yield WidgetsLoading();
+      try {
+
+        var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType,event.selectItems);
+        if  (result['message']=="Unauthenticated.") {
+          yield Unauthenticated();
+        }else{
+          if  (result['code']==200){
+
+
+          } else{
+
+          }
+        }
+        var total ="0";
+
+        if (result['data'] is List){
+
+          yield WidgetsLoaded(photos: result['data'],count: total);
+        }else{
+          total = result['data']['total'].toString();
+          yield WidgetsLoaded(photos: result['data']['data'],count: total);
+
+        }
+
+
+      } catch (err) {
+        print(err);
+        yield WidgetsLoadFailed();
+      }
+
+    }
+
     if (event is EventSearchErpUser) {
       try {
 
@@ -203,7 +247,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           }
         }
 
-        yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
+        var total ="0";
+
+        if (result['data'] is List){
+
+          yield WidgetsLoaded(photos: result['data'],count: total);
+        }else{
+          total = result['data']['total'].toString();
+          yield WidgetsLoaded(photos: result['data']['data'],count: total);
+
+        }
 
       } catch (err) {
         print(err);
@@ -240,7 +293,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
 
 
-      yield WidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
+      var total ="0";
+
+      if (result['data'] is List){
+
+        yield WidgetsLoaded(photos: result['data'],count: total);
+      }else{
+        total = result['data']['total'].toString();
+        yield WidgetsLoaded(photos: result['data']['data'],count: total);
+
+      }
 
     } catch (err) {
       print(err);

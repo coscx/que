@@ -194,98 +194,104 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                       Row(
                                         children: <Widget>[
                                           Expanded(
-                                            child: Container(
-                                              margin: EdgeInsets.symmetric(
-                                                  vertical: 18.h, horizontal: 10.w),
-                                              child: Material(
-                                                color: selectedGender ==
-                                                        Gender.male
-                                                    ? activeColor
-                                                    :  inActiveColor,
-                                                elevation: 4.0,
-                                                borderRadius:
-                                                    BorderRadius.circular(12.w),
-                                                shadowColor: Colors.grey,
-                                                child: InkWell(
-                                                  splashColor: Colors.redAccent,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  selectedGender =
+                                                      Gender.male;
+                                                  gender = 1;
+                                                });
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 18.h, horizontal: 10.w),
+                                                child: Material(
+                                                  color: selectedGender ==
+                                                          Gender.male
+                                                      ? activeColor
+                                                      :  inActiveColor,
+                                                  elevation: 4.0,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          16.w),
+                                                      BorderRadius.circular(10.w),
+                                                  shadowColor: Colors.grey,
                                                   child: Container(
-                                                    height: blockVertical * 5.5,
-                                                    child: Center(
-                                                        child: Text(
-                                                      "男",
-                                                      style:
-                                                      TextStyle(
-                                                        //fontFamily: "Poppins",
-                                                        fontWeight: FontWeight.w100,
-                                                        decoration: TextDecoration.none,
-                                                        fontSize: 40.sp,
-                                                        color: selectedGender ==
-                                                            Gender.male
-                                                            ? Colors.white
-                                                            :  Colors.black,
-                                                      ),
-                                                    )),
+                                                    // splashColor: Colors.redAccent,
+                                                    // borderRadius:
+                                                    //     BorderRadius.circular(
+                                                    //         16.w),
+                                                    child: Container(
+                                                      height: blockVertical * 5.5,
+                                                      child: Center(
+                                                          child: Text(
+                                                        "男",
+                                                        style:
+                                                        TextStyle(
+                                                          //fontFamily: "Poppins",
+                                                          fontWeight: FontWeight.w100,
+                                                          decoration: TextDecoration.none,
+                                                          fontSize: 40.sp,
+                                                          color: selectedGender ==
+                                                              Gender.male
+                                                              ? Colors.white
+                                                              :  Colors.black,
+                                                        ),
+                                                      )),
+                                                    ),
+
                                                   ),
-                                                  onTap: () {
-                                                    setState(() {
-                                                      selectedGender =
-                                                          Gender.male;
-                                                      gender = 1;
-                                                    });
-                                                  },
                                                 ),
                                               ),
                                             ),
                                           ),
                                           SizedBox(width: 4.w),
                                           Expanded(
-                                            child: Container(
-                                              margin: EdgeInsets.symmetric(
-                                                  vertical: 12.h, horizontal: 6.w),
-                                              child: Material(
-                                                color: selectedGender ==
-                                                        Gender.female
-                                                    ? activeColor
-                                                    : isThemeDark(context)
-                                                        ? inActiveColorDark
-                                                        : inActiveColor,
-                                                elevation: 4.0,
-                                                borderRadius:
-                                                    BorderRadius.circular(12.w),
-                                                shadowColor: Colors.grey,
-                                                child: InkWell(
-                                                  splashColor: Colors.redAccent,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  selectedGender =
+                                                      Gender.female;
+                                                  gender = 2;
+                                                });
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 12.h, horizontal: 6.w),
+                                                child: Material(
+                                                  color: selectedGender ==
+                                                          Gender.female
+                                                      ? activeColor
+                                                      : isThemeDark(context)
+                                                          ? inActiveColorDark
+                                                          : inActiveColor,
+                                                  elevation: 4.0,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          16.w),
+                                                      BorderRadius.circular(10.w),
+                                                  shadowColor: Colors.grey,
                                                   child: Container(
-                                                    height: blockVertical * 5.5,
-                                                    child: Center(
-                                                        child: Text(
-                                                      "女",
-                                                      style:
-                                                      TextStyle(
-                                                        //fontFamily: "Poppins",
-                                                        fontWeight: FontWeight.w100,
-                                                        decoration: TextDecoration.none,
-                                                        fontSize: 40.sp,
-                                                        color: selectedGender ==
-                                                            Gender.female
-                                                            ? Colors.white
-                                                            :  Colors.black,
-                                                      ),
-                                                    )),
+                                                    // splashColor: Colors.redAccent,
+                                                    // borderRadius:
+                                                    //     BorderRadius.circular(
+                                                    //         16.w),
+                                                    child: Container(
+                                                      height: blockVertical * 5.5,
+                                                      child: Center(
+                                                          child: Text(
+                                                        "女",
+                                                        style:
+                                                        TextStyle(
+                                                          //fontFamily: "Poppins",
+                                                          fontWeight: FontWeight.w100,
+                                                          decoration: TextDecoration.none,
+                                                          fontSize: 40.sp,
+                                                          color: selectedGender ==
+                                                              Gender.female
+                                                              ? Colors.white
+                                                              :  Colors.black,
+                                                        ),
+                                                      )),
+                                                    ),
+
                                                   ),
-                                                  onTap: () {
-                                                    setState(() {
-                                                      selectedGender =
-                                                          Gender.female;
-                                                     gender = 2;
-                                                    });
-                                                  },
                                                 ),
                                               ),
                                             ),

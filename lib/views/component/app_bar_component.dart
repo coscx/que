@@ -96,7 +96,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
       var result = await IssuesApi.getStoreList("1");
       if (result['code'] == 200) {
         all.clear();
-        firstLevels.clear();
+
         List<dynamic> da = result['data'];
         da.forEach((value) {
           CitySelect cc1 = CitySelect();
