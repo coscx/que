@@ -486,7 +486,7 @@ Future<bool>  commentDialog(BuildContext context, int connectStatus, Map<String,
             children: <Widget>[
               Container(
                 width: ScreenUtil().screenWidth*0.95,
-                height: ScreenUtil().screenHeight*0.45,
+                height: ScreenUtil().screenHeight*0.55,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(12.w)),

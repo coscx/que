@@ -243,18 +243,18 @@ List<String> getHeightList() {
   return height;
 }
 
-List<String> nationLevel = [
+const List<String> nationLevel = [
   "未知","汉族","蒙古族","回族","藏族","维吾尔族","苗族","彝族","壮族","布依族","朝鲜族","满族","侗族","瑶族","白族","土家族",
   "哈尼族","哈萨克族","傣族","黎族","傈僳族","佤族","畲族","高山族","拉祜族","水族","东乡族","纳西族","景颇族","柯尔克孜族",
   "土族","达斡尔族","仫佬族","羌族","布朗族","撒拉族","毛南族","仡佬族","锡伯族","阿昌族","普米族","塔吉克族","怒族", "乌孜别克族",
   "俄罗斯族","鄂温克族","德昂族","保安族","裕固族","京族","塔塔尔族","独龙族","鄂伦春族","赫哲族","门巴族","珞巴族","基诺族"
 ];
-List<String> sexLevel = [
+const List<String> sexLevel = [
   "未知",
   "男生",
   "女生",
 ];
-List<String> floodLevel = [
+const List<String> floodLevel = [
   "未知",
   "A型",
   "B型",
@@ -263,7 +263,7 @@ List<String> floodLevel = [
 
 
 ];
-List<String> EduLevel = [
+const List<String> EduLevel = [
   "未知",
   "高中及以下",
   "大专",
@@ -274,7 +274,7 @@ List<String> EduLevel = [
   "其他",
 
 ];
-List<String> WorkTypeLevel = [
+const List<String> WorkTypeLevel = [
   "未知",
   "企事业单位公务员",
   "教育医疗",
@@ -283,7 +283,7 @@ List<String> WorkTypeLevel = [
   "其他",
 
 ];
-List<String> companyTypeLevel = [
+const List<String> companyTypeLevel = [
   "未知",
   "国企",
   "外商独资",
@@ -301,14 +301,14 @@ List<String> companyTypeLevel = [
   "港澳台公司",
   "其他",
 ];
-List<String> WorkOverTimeLevel = [
+const List<String> WorkOverTimeLevel = [
   "未知",
   "不加班",
   "偶尔加班",
   "经常加班",
 
 ];
-List<String> IncomeLevel = [
+const List<String> IncomeLevel = [
   "未知",
   "5万及以下",
   "5-10万",
@@ -320,7 +320,7 @@ List<String> IncomeLevel = [
   "70-100万",
   "100万以上",
 ];
-List<String> hasHouseLevel = [
+const List<String> hasHouseLevel = [
   "未知",
   "无房",
   "1套房",
@@ -328,19 +328,19 @@ List<String> hasHouseLevel = [
   "3套房及以上",
   "其他",
 ];
-List<String> houseFutureLevel = [
+const List<String> houseFutureLevel = [
   "未知",
   "无房贷",
   "已还清",
   "在还贷",
 
 ];
-List<String> hasCarLevel = [
+const List<String> hasCarLevel = [
   "未知",
   "有车",
   "无车",
 ];
-List<String> carLevelLevel = [
+const List<String> carLevelLevel = [
   "未知",
   "无车产",
   "5-10万车",
@@ -349,7 +349,7 @@ List<String> carLevelLevel = [
   "30-50万车",
   "50万以上车",
 ];
-List<String> marriageLevel = [
+const List<String> marriageLevel = [
   "请选择",
   "未婚",
   "离异带孩",
@@ -357,30 +357,30 @@ List<String> marriageLevel = [
   "离异未育",
   "丧偶",
 ];
-List<String> childLevel = [
+const List<String> childLevel = [
   "未知",
   "有",
   "无",
 ];
-List<String> onlyChildLevel = [
+const List<String> onlyChildLevel = [
   "未知",
   "是",
   "否",
 ];
-List<String> parentLevel = [
+const List<String> parentLevel = [
   "未知",
   "父母同在",
   "父歿母在",
   "父在母歿",
   "父母同歿",
 ];
-List<String> parentProtectLevel = [
+const List<String> parentProtectLevel = [
   "未知",
   "父亲有医保",
   "母亲有医保",
   "父母均有医保",
 ];
-List<String> faithLevel = [
+const List<String> faithLevel = [
   "未知",
   "无信仰",
   "基督教",
@@ -391,14 +391,14 @@ List<String> faithLevel = [
   "其他宗教",
 
 ];
-List<String> smokeLevel = [
+const List<String> smokeLevel = [
   "未知",
   "不吸烟",
   "偶尔吸烟",
   "经常吸烟",
   "有戒烟计划",
 ];
-List<String> drinkLevel = [
+const List<String> drinkLevel = [
   "未知",
   "不喝酒",
   "偶尔喝",
@@ -406,18 +406,18 @@ List<String> drinkLevel = [
   "经常喝",
   "有戒酒计划",
 ];
-List<String> lifeLevel = [
+const List<String> lifeLevel = [
   "未知",
   "很规律",
   "经常熬夜",
 ];
-List<String> creatLevel = [
+const List<String> creatLevel = [
   "未知",
   "想要孩子",
   "可以考虑",
   "想要孩子",
 ];
-List<String> marriageDateLevel = [
+const List<String> marriageDateLevel = [
   "未知",
   "半年内",
   "一年内",
@@ -426,7 +426,7 @@ List<String> marriageDateLevel = [
 ];
 
 
-List<String>  fromLevel = [
+const List<String>  fromLevel = [
   "请选择",
   "个人自带",
   "线下活动",
@@ -434,7 +434,7 @@ List<String>  fromLevel = [
   "大家亲CRM系统",
   "大家亲同城相亲圈",
 ];
-List<String>  connectLevel = [
+const List<String>  connectLevel = [
   "请选择",
   "新分未联系",
   "号码无效",

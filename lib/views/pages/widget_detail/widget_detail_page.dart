@@ -704,7 +704,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                   width: 140.w,
                   height: 140.h,
                     placeholder: (context, url) => Image.asset(
-                      'assets/images/radio_header_1.png',
+                      'assets/images/default/img_default.png',
                       fit: BoxFit.fill,
                     )
                 ),
