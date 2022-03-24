@@ -38,6 +38,10 @@ export 'flow/flow_bloc.dart';
 export 'flow/flow_state.dart';
 export 'flow/flow_event.dart';
 
+export 'connect/connect_bloc.dart';
+export 'connect/connect_state.dart';
+export 'connect/connect_event.dart';
+
 export 'chat/chat_bloc.dart';
 export 'chat/chat_state.dart';
 export 'chat/chat_event.dart';

@@ -29,7 +29,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
   final String title = "";
   final Color bgColor = Colors.black;
   final Color textColor = Colors.redAccent;
-  List<String> _dropDownHeaderItemStrings = ['门店', '客户状态', '沟通状态', '筛选'];
+  List<String> _dropDownHeaderItemStrings = ['全部门店', '客户状态', '沟通状态', '筛选'];
   List<SortCondition> _brandSortConditions = [];
   List<SortCondition> _distanceSortConditions = [];
   SortCondition _selectBrandSortCondition;
@@ -88,7 +88,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
     _selectDistanceSortCondition = _distanceSortConditions[0];
 
     CitySelect ta = CitySelect();
-    ta.name = "全部";
+    ta.name = "全部门店";
     ta.id = 0;
     firstLevels.add(ta);
 
@@ -118,7 +118,16 @@ class _AppBarComponentState extends State<AppBarComponent> {
 
     super.initState();
   }
+bool getSelect(){
+    var f = <SelectItem>[];
+  for (int i = 0; i < widget.selectItems.length; i++) {
+    if (widget.selectItems[i].type <100 ) {
+      f.add(widget.selectItems[i]);
+    }
 
+  }
+  return f.length > 0;
+}
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -127,16 +136,15 @@ class _AppBarComponentState extends State<AppBarComponent> {
         children: <Widget>[
           Column(
             children: <Widget>[
-//              SizedBox(height: 20,),
               Container(
                 decoration: new BoxDecoration(),
                 child: GZXDropDownHeader(
                   items: [
                     GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0],
-                        style: TextStyle()),
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
+                        style: TextStyle(color: (_dropDownHeaderItemStrings[0] =="全部门店" || _dropDownHeaderItemStrings[0] =="全部")?Colors.black:Colors.redAccent)),
+                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1], style: TextStyle(color: (_dropDownHeaderItemStrings[1] =="客户状态" )?Colors.black:Colors.redAccent)),
+                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2], style: TextStyle(color: (_dropDownHeaderItemStrings[2] =="沟通状态" )?Colors.black:Colors.redAccent)),
+                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3], style: TextStyle(color: (getSelect() == false )?Colors.black:Colors.redAccent),
                         iconSize: 18),
                   ],
                   stackKey: _stackKey,
@@ -255,16 +263,6 @@ class _AppBarComponentState extends State<AppBarComponent> {
             ],
           ),
 
-//          Positioned(
-//              width: 200,
-//              height: 200,
-//              left: 0,
-//              top: 0,
-//              child: Container(
-//                color: Colors.red,
-//                width: 200,
-//                height: 300,
-//              ))
         ],
       ),
     );
@@ -293,7 +291,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
                     SelectItem s = SelectItem();
                     s.type = 101;
                     s.id = "1";
-                    s.name = "全部";
+                    s.name = "全部门店";
                     itemOnTap(s);
                     return;
                   } else {

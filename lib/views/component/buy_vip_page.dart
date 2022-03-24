@@ -316,6 +316,11 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                   Container(),
                   Expanded(
                     child: TextField(
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(11),
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      keyboardType: TextInputType.number,
                       enabled: _isButton1Disabled,
                       controller: _vipPriceController,
                       decoration: InputDecoration(
@@ -323,9 +328,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                         hintText: '请输入套餐价格...',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
-                      inputFormatters: <TextInputFormatter>[
-                        LengthLimitingTextInputFormatter(11) //限制长度
-                      ],
+
                       onChanged: (str) {
                         setState(() {});
                       },
@@ -385,9 +388,11 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                         hintText: '请输入服务时长...',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
-                      inputFormatters: <TextInputFormatter>[
-                        LengthLimitingTextInputFormatter(11) //限制长度
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(11),
+                        FilteringTextInputFormatter.digitsOnly
                       ],
+                      keyboardType: TextInputType.number,
                       onChanged: (str) {
                         setState(() {});
                       },
@@ -447,9 +452,11 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                         hintText: '请输入排约次数...',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
-                      inputFormatters: <TextInputFormatter>[
-                        LengthLimitingTextInputFormatter(11) //限制长度
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(11),
+                        FilteringTextInputFormatter.digitsOnly
                       ],
+                      keyboardType: TextInputType.number,
                       onChanged: (str) {
                         setState(() {});
                       },

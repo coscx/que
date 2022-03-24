@@ -84,11 +84,21 @@ class EventIndexFlowPage extends GlobalEvent {
   @override
   List<Object> get props => [page];
 }
+class EventIndexConnectPage extends GlobalEvent {
+  final int page;
 
+  const EventIndexConnectPage(this.page);
+
+  @override
+  List<Object> get props => [page];
+}
 class EventResetIndexPhotoPage extends GlobalEvent {
 
 }
 class EventResetIndexFlowPage extends GlobalEvent {
+
+}
+class EventResetIndexConnectPage extends GlobalEvent {
 
 }
 class EventSearchPhotoPage extends GlobalEvent {

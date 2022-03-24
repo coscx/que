@@ -14,9 +14,7 @@ import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
 
-bool select1 = false;
-bool select2 = false;
-bool select3 = false;
+
 
 class WxSearchPage extends StatefulWidget {
   final List<SelectItem> selectItems;
@@ -37,6 +35,10 @@ class StoreItem {
   StoreItem({this.name, this.id, this.isSelect, this.index, this.type});
 }
 class _WxSearchPageState extends State<WxSearchPage> {
+  bool select1 = false;
+  bool select2 = false;
+  bool select3 = false;
+  bool changed =false;
   String store = "";
   String storeName = "选择门店";
   int minValue;
@@ -118,11 +120,11 @@ class _WxSearchPageState extends State<WxSearchPage> {
             body: WillPopScope(
                 onWillPop: () async {
                   //返回时 情空搜索
-                  BlocProvider.of<SearchBloc>(context)
-                      .add(EventTextChanged(args: SearchArgs()));
-                  BlocProvider.of<SearchBloc>(context).add(EventClearPage());
-                  BlocProvider.of<GlobalBloc>(context)
-                      .add(EventSearchPhotoPage(0));
+                  // BlocProvider.of<SearchBloc>(context)
+                  //     .add(EventTextChanged(args: SearchArgs()));
+                  // BlocProvider.of<SearchBloc>(context).add(EventClearPage());
+                  // BlocProvider.of<GlobalBloc>(context)
+                  //     .add(EventSearchPhotoPage(0));
                   return true;
                 },
                 child: ScrollConfiguration(
@@ -132,39 +134,43 @@ class _WxSearchPageState extends State<WxSearchPage> {
                       shrinkWrap: true,
                       children: <Widget>[
 
-                        Row(
-                          children: [
-                            OriginAuthority(
-                              authorityChanged: (int value) {
-                                int j = 0, k = 0;
-                                for (int i = 0;
-                                i < widget.selectItems.length;
-                                i++) {
-                                  if (widget.selectItems[i].type == 1000) {
-                                    j = 1;
-                                    widget.selectItems[i].id =
-                                        value.toString();
-                                    widget.selectItems[i].name =
-                                        value.toString();
-                                    break;
-                                  }
-                                }
+                        Container(
 
-                                if (j == 0) {
-                                  SelectItem s = SelectItem();
-                                  s.type = 1000;
-                                  s.name =  value.toString();;
-                                  s.id =  value.toString();
-                                  widget.selectItems.add(s);
-                                }
-                              }, isSelected: sexSelect,
-                            )
-                          ],
+                          padding: EdgeInsets.only(top: 20.h, bottom: 0.h,left: 0.h,right: 0.h),
+                          child: Row(
+                            children: [
+                              OriginAuthority(
+                                authorityChanged: (int value) {
+                                  int j = 0, k = 0;
+                                  for (int i = 0;
+                                  i < widget.selectItems.length;
+                                  i++) {
+                                    if (widget.selectItems[i].type == 1000) {
+                                      j = 1;
+                                      widget.selectItems[i].id =
+                                          value.toString();
+                                      widget.selectItems[i].name =
+                                          value.toString();
+                                      break;
+                                    }
+                                  }
+
+                                  if (j == 0) {
+                                    SelectItem s = SelectItem();
+                                    s.type = 1000;
+                                    s.name =  value.toString();;
+                                    s.id =  value.toString();
+                                    widget.selectItems.add(s);
+                                  }
+                                }, isSelected: sexSelect,
+                              )
+                            ],
+                          ),
                         ),
-                        buildRangerSlider("性别"),
+                        buildRangerSlider("年龄"),
                         buildStore("门店选择"),
                         Padding(
-                          padding: EdgeInsets.only(top: 20.h, bottom: 0.h,left: 30.h,right: 30.h),
+                          padding: EdgeInsets.only(top: 40.h, bottom: 0.h,left: 30.h,right: 30.h),
                           child: Container(
                             width: ScreenUtil().screenWidth*0.7,
                             height: 70.h,
@@ -174,8 +180,11 @@ class _WxSearchPageState extends State<WxSearchPage> {
                                   borderRadius: BorderRadius.all(Radius.circular(40.w))),
                               color: Colors.lightBlue,
                               onPressed: (){
+                                setState(() {
+                                  changed =true;
+                                });
 
-                                Navigator.of(context).pop();
+                                Navigator.of(context).pop(changed);
                               },
                               child: Text("提交",
                                   style: TextStyle(color: Colors.white, fontSize: 40.sp)),
@@ -203,7 +212,7 @@ class _WxSearchPageState extends State<WxSearchPage> {
       children: [
         Container(
           padding:
-          EdgeInsets.only(left: 40.w, top: 0.h, right: 0.w, bottom: 0.h),
+          EdgeInsets.only(left: 40.w, top: 20.h, right: 0.w, bottom: 0.h),
           alignment: Alignment.centerLeft,
           child: Text(title,
               style: TextStyle(fontSize: 24.sp, color: Color(0xFF6a6a6a))),
@@ -218,7 +227,8 @@ class _WxSearchPageState extends State<WxSearchPage> {
                     left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
                 child: ElevatedButton(
                   onPressed: () {
-                    new Picker(
+                     Picker(
+                       height: 400.h,
                         selecteds: [storeId],
                         itemExtent: 40,
                         selectionOverlay:
@@ -226,9 +236,13 @@ class _WxSearchPageState extends State<WxSearchPage> {
                           background: Colors.transparent,
                         ),
                         cancelText: "取消",
+                        cancelTextStyle:  TextStyle(
+                            fontSize: 30.sp, color: Colors.black),
+                        confirmTextStyle: TextStyle(
+                            fontSize: 30.sp, color: Colors.blue),
                         confirmText: "确定",
                         selectedTextStyle: TextStyle(
-                            fontSize: 40.sp, color: Colors.redAccent),
+                            fontSize: 38.sp, color: Colors.redAccent),
                         textStyle:
                         TextStyle(fontSize: 25.sp, color: Colors.black),
                         adapter: PickerDataAdapter<String>(
@@ -307,7 +321,7 @@ class _WxSearchPageState extends State<WxSearchPage> {
     }
 
     return Container(
-      padding: EdgeInsets.only(left: 20.w, top: 0.h, right: 0.w, bottom: 0.h),
+      padding: EdgeInsets.only(left: 20.w, top: 20.h, right: 0.w, bottom: 0.h),
       child: Column(
         children: [
           Container(

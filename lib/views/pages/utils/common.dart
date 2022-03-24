@@ -1,5 +1,11 @@
 
-
+getConnectLevel(info) {
+  try {
+    return connectLevel[info];
+  } catch (e) {
+    return "未知";
+  }
+}
 getEduLevel(info) {
   try {
     return EduLevel[info];
@@ -428,3 +434,19 @@ List<String>  fromLevel = [
   "大家亲CRM系统",
   "大家亲同城相亲圈",
 ];
+List<String>  connectLevel = [
+  "新分未联系",
+  "号码无效",
+  "号码未接通",
+  "可继续沟通",
+  "有意向面谈",
+  "确定到店时间",
+  "已到店，意愿需跟进",
+  "已到店，考虑7天付款",
+  "高级会员，支付预付款",
+  "高级会员，费用已结清",
+  "毁单",
+  "放弃并放入公海",
+  "放弃并放入D级",
+];
+

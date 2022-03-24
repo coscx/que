@@ -14,7 +14,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
 
-
 typedef _CallBack = void Function(List<String> selectStr);
 
 class ExpansionPanelItem {
@@ -140,9 +139,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
           pickerStoreItem.add(ff);
           pickerStoreData.add(value['name']);
         });
-      } else {
-
-      }
+      } else {}
     });
   }
 
@@ -216,14 +213,11 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
           ],
         ),
         _typeGridWidget(_value, 0),
-        // Offstage(
-        //   offstage: _isHideValue1,
-        //   child: _typeGridWidget(_value1,0),
-        // ),
+
         Container(
             margin: EdgeInsets.only(top: 6),
             decoration: BoxDecoration(
-//      color: Colors.red,
+
                 border: Border(
                     bottom: BorderSide(
                         width: 1, color: GZXColors.mainBackgroundColor)))),
@@ -489,7 +483,6 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
     );
   }
 
-
   Widget _buildGroup1(String title, bool isShowExpansionIcon,
       List<SelectItem> items, List<SelectItem> sel) {
     for (int i = 0; i < items.length; i++) {
@@ -533,10 +526,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
         ],
       ),
       _typeGridWidget(items, 1),
-//      Offstage(
-//        offstage: _isHideValue1,
-//        child: _typeGridWid2(_value1),
-//      ),
+
       Container(
           margin: EdgeInsets.only(top: 6),
           decoration: BoxDecoration(
@@ -606,13 +596,11 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
             crossAxisSpacing: 6.0,
             childAspectRatio: 2,
             padding: EdgeInsets.only(left: 6, right: 6, top: 6),
-//    padding: EdgeInsets.all(6),
             children: List.generate(
               3,
               (index) {
                 return Container(
                     alignment: Alignment.center,
-//                height: 164.0,
                     decoration: BoxDecoration(
                         color: GZXColors.mainBackgroundColor,
                         borderRadius: BorderRadius.circular(3.0)),
@@ -631,221 +619,14 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
               },
             ),
           ),
-//      Offstage(
-//        offstage: _isHideValue1,
-//        child: _typeGridWid2(_value1),
-//      ),
-//    Offstage(offstage: _isHideOtherLocation,child: Container(
-//      child: Column(
-//        children: <Widget>[
-//          Expanded(
-//            child: Text('发货地', style: TextStyle(fontSize: 11, color: Color(0xFF6a6a6a))),
-//          ),
-//          _typeGridWid2(_value5),
-//        ],
-//      ),
-//    ),),
           Container(
               margin: EdgeInsets.only(top: 6),
               decoration: BoxDecoration(
-//      color: Colors.red,
                   border: Border(
                       bottom: BorderSide(
                           width: 1, color: GZXColors.mainBackgroundColor))))
         ]);
   }
-
-//   Widget _buildGroup3() {
-//     return Column(
-//       children: <Widget>[
-//         Row(
-//           children: <Widget>[
-//             SizedBox(
-//               width: 6,
-//             ),
-//             Expanded(
-//               child: Text('发货地', style: TextStyle(fontSize: 12, color: Color(0xFF6a6a6a))),
-//             ),
-//             GestureDetector(
-//               onTap: () {
-//                 setState(() {
-//                   _isHideOtherLocation = !_isHideOtherLocation;
-//                 });
-//               },
-//               child: Icon(
-//                 _isHideOtherLocation ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
-//                 color: Colors.grey,
-//               ),
-//             ),
-//             SizedBox(
-//               width: 6,
-//             ),
-//           ],
-//         ),
-// //        _typeGridWid2(_value),
-//         Row(
-//           children: <Widget>[
-//             SizedBox(
-//               width: 6,
-//             ),
-//             Container(
-// //                height: 64.0,
-//                 padding: EdgeInsets.only(left: 8, top: 6, right: 8, bottom: 6),
-//                 decoration:
-//                     BoxDecoration(color: GZXColors.mainBackgroundColor, borderRadius: BorderRadius.circular(3.0)),
-//                 child: Row(
-//                   children: <Widget>[
-//                     Icon(
-//                       Icons.location_on,
-//                       size: 14,
-//                       color: Colors.grey,
-//                     ),
-//                     SizedBox(
-//                       width: 2,
-//                     ),
-//                     Text('深圳', style: TextStyle(color: Color(0xFF333333), fontSize: 12.0)),
-//                   ],
-//                 )),
-//             SizedBox(
-//               width: 6,
-//             ),
-//             Row(
-//               children: <Widget>[
-//                 Icon(
-//                   Icons.refresh,
-//                   size: 14,
-//                   color: Colors.grey,
-//                 ),
-//                 SizedBox(
-//                   width: 2,
-//                 ),
-//                 Text('定位', style: TextStyle(color: Colors.grey, fontSize: 12.0)),
-//               ],
-//             )
-//           ],
-//         ),
-//         Offstage(
-//           offstage: _isHideOtherLocation,
-//           child: Container(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: <Widget>[
-//                 Padding(
-//                   padding: EdgeInsets.only(left: 6, top: 6),
-//                   child: Text('区域', style: TextStyle(fontSize: 11, color: Color(0xFF6a6a6a))),
-//                 ),
-//                 _typeGridWidget(_value5, 3,childAspectRatio: 3),
-//                 Padding(
-//                   padding: EdgeInsets.only(left: 6, top: 6),
-//                   child: Text('城市', style: TextStyle(fontSize: 11, color: Color(0xFF6a6a6a))),
-//                 ),
-//                 _typeGridWidget(_value6, 3,childAspectRatio: 3),
-//                 Padding(
-//                   padding: EdgeInsets.only(left: 6, top: 6),
-//                   child: Text('省份', style: TextStyle(fontSize: 11, color: Color(0xFF6a6a6a))),
-//                 ),
-//                 _typeGridWidget(_value7, 3,childAspectRatio: 3),
-//               ],
-//             ),
-//           ),
-//         ),
-//         Container(
-//             margin: EdgeInsets.only(top: 6),
-//             decoration: BoxDecoration(
-// //      color: Colors.red,
-//                 border: Border(bottom: BorderSide(width: 1, color: GZXColors.mainBackgroundColor)))),
-//       ],
-//     );
-//   }
-//
-//   Widget _buildGroup4() {
-//     return Column(children: <Widget>[
-//       SizedBox(
-//         height: 6,
-//       ),
-//       Row(
-//         children: <Widget>[
-//           SizedBox(
-//             width: 6,
-//           ),
-//           Expanded(
-//             child: Text('我喜欢', style: TextStyle(fontSize: 11, color: Color(0xFF6a6a6a))),
-//           ),
-//         ],
-//       ),
-//       SizedBox(
-//         height: 6,
-//       ),
-//       Row(
-//         children: <Widget>[
-//           SizedBox(
-//             width: 6,
-//           ),
-//           Container(
-// //                height: 64.0,
-//               padding: EdgeInsets.all(16),
-//               decoration: BoxDecoration(color: GZXColors.mainBackgroundColor, borderRadius: BorderRadius.circular(3.0)),
-//               child: Row(
-//                 children: <Widget>[
-//                   Text('购买过的店', style: TextStyle(color: Color(0xFF333333), fontSize: 12.0)),
-//                 ],
-//               )),
-//           SizedBox(
-//             width: 6,
-//           ),
-//         ],
-//       ),
-//       Container(
-//           margin: EdgeInsets.only(top: 6),
-//           decoration: BoxDecoration(
-// //      color: Colors.red,
-//               border: Border(bottom: BorderSide(width: 1, color: GZXColors.mainBackgroundColor)))),
-//     ]);
-//   }
-//
-//   Widget _buildGroup5(String title, List<SelectItem> items, bool isHideValue, VoidCallback onTapExpansion) {
-//     return Column(
-//       children: <Widget>[
-//         SizedBox(
-//           height: 6,
-//         ),
-//         Row(
-//           children: <Widget>[
-//             SizedBox(
-//               width: 6,
-//             ),
-//             Expanded(
-//               child: Text(title, style: TextStyle(fontSize: 12, color: Color(0xFF6a6a6a))),
-//             ),
-//             GestureDetector(
-// //              onTap: () {
-// //                setState(() {
-// //                  isHideValue = !isHideValue;
-// //                });
-// //              },
-//               onTap: onTapExpansion,
-//               child: Icon(
-//                 isHideValue ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
-//                 color: Colors.grey,
-//               ),
-//             ),
-//             SizedBox(
-//               width: 6,
-//             ),
-//           ],
-//         ),
-//         Offstage(
-//           offstage: isHideValue,
-//           child: _typeGridWidget(items,5),
-//         ),
-//         Container(
-//             margin: EdgeInsets.only(top: 6),
-//             decoration: BoxDecoration(
-// //      color: Colors.red,
-//                 border: Border(bottom: BorderSide(width: 1, color: GZXColors.mainBackgroundColor)))),
-//       ],
-//     );
-//   }
 
   doi(i) {
     i++;

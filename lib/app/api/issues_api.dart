@@ -47,13 +47,13 @@ class IssuesApi {
 
 
   }
-  static Future<Map<String,dynamic>> getPhoto( String keyWord, String page,String sex,String is_passive ) async {
+  static Future<Map<String,dynamic>> getYesterdayConnect( String keyWord, String page,String sex,String is_passive ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     var data={'name':keyWord,'currentPage':page,'status':"all",'is_passive':"all","pageSize":20,'gender':sex};
     try {
-    Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
+    Response<dynamic> rep = await dio.get('/api/v1/customer/personal/connectApp',queryParameters:data );
     return rep.data;
 
     } on DioError catch(e){
@@ -307,7 +307,7 @@ class IssuesApi {
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     try {
-      Response<dynamic> rep = await dio.post('/api/v1/customer/buyVip',queryParameters:data );
+      Response<dynamic> rep = await dio.post('/api/v1/customer/buyVipApp',queryParameters:data );
       var dd=rep.data;
       return dd;
     } on DioError catch(e){

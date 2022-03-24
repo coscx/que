@@ -353,12 +353,17 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           colorStart:  Color(0xffF6A681),
                           colorEnd: Color(0xffF86CA0),
                         ),
-                        TopCard(
-                          url: 'assets/images/default/connect.png',
-                          title: '昨日沟通',
-                          content: connect,
-                          colorStart:  Color(0xff9A7FF6),
-                          colorEnd: Color(0xffEA76EE),
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.pushNamed(context, UnitRouter.connect);
+                          },
+                          child: TopCard(
+                            url: 'assets/images/default/connect.png',
+                            title: '昨日沟通',
+                            content: connect,
+                            colorStart:  Color(0xff9A7FF6),
+                            colorEnd: Color(0xffEA76EE),
+                          ),
                         )
                       ],
                     ),

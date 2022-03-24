@@ -407,7 +407,9 @@ Widget itemAction(BuildContext context, String name, String title,
                             radius: 5,
                           ),
                           Container(
-                            width: ScreenUtil().screenWidth * 0.13 ,
+                            constraints: BoxConstraints(
+                              maxWidth: 120.w,
+                            ),
                             margin: EdgeInsets.only(left: 15.w),
                             child: Text(
                               name == null ? "" : name,
@@ -423,6 +425,7 @@ Widget itemAction(BuildContext context, String name, String title,
                           Visibility(
                               visible: true,
                               child: Container(
+                                  margin: EdgeInsets.only(top: 10.w),
                                 //width: ScreenUtil().screenWidth*0.71,
                                   height: 30.h,
                                   child: Column(
@@ -532,6 +535,7 @@ Widget itemCall(
                           Visibility(
                               visible: true,
                               child: Container(
+                                  margin: EdgeInsets.only(top: 10.w),
                                 // width: ScreenUtil().screenWidth*0.6,
                                   height: 30.h,
                                   child: Column(

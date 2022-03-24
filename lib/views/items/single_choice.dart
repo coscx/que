@@ -46,11 +46,11 @@ class __OriginAuthorityState extends State<OriginAuthority> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 40.w,top: 0.w,bottom: 0,right: 10.w),
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: Colors.grey, width: 0.1),
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border(
+      //     top: BorderSide(color: Colors.grey, width: 0.1),
+      //   ),
+      // ),
       child: Row(
         //mainAxisAlignment: MainAxisAlignment.start,
         //crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,8 +112,8 @@ class InputSelect extends StatelessWidget {
           backgroundColor: Colors.grey.withAlpha(33),
           //被禁用得时候背景
           //disabledColor: ,
-          labelStyle: TextStyle(fontWeight: FontWeight.w200, fontSize: 15.0,color: parent.selected == index? Colors.white:Colors.black),
-          labelPadding: EdgeInsets.only(left: 8.0, right: 8.0),
+          labelStyle: TextStyle( fontSize: 30.sp,color: parent.selected == index? Colors.white:Colors.black),
+          labelPadding: EdgeInsets.only(left: 16.w, right: 16.w),
           materialTapTargetSize: MaterialTapTargetSize.padded,
           onSelected: (bool value) {
             parent.onSelectedChanged(index);

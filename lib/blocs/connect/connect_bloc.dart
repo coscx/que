@@ -7,34 +7,34 @@ import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/app/utils/convert.dart';
 import 'package:flutter_geen/repositories/itf/widget_repository.dart';
 import 'dart:convert';
-import 'flow_event.dart';
-import 'flow_state.dart';
+import 'connect_event.dart';
+import 'connect_state.dart';
 
 
 
-class FlowBloc extends Bloc<FlowEvent, FlowState> {
+class ConnectBloc extends Bloc<ConnectEvent, ConnectState> {
   final WidgetRepository repository;
 
-  FlowBloc({@required this.repository});
+  ConnectBloc({@required this.repository});
 
   @override
-  FlowState get initialState => FlowWidgetsLoading();
+  ConnectState get initialState => ConnectWidgetsLoading();
 
   Color get activeHomeColor {
 
-    if (state is FlowWidgetsLoaded) {
+    if (state is ConnectWidgetsLoaded) {
       return Colors.grey;
     }
     return Color(Cons.tabColors[0]);
   }
 
   @override
-  Stream<FlowState> mapEventToState(FlowEvent event) async* {
-    if (event is FlowEventTabTap) {
+  Stream<ConnectState> mapEventToState(ConnectEvent event) async* {
+    if (event is ConnectEventTabTap) {
 
-      //yield* _mapLoadWidgetToState();
+      yield* _mapLoadWidgetToState();
     }
-    if (event is EventFlowCheckUser) {
+    if (event is EventConnectCheckUser) {
 
       var user=event.user;
       List<dynamic> users =state.props.elementAt(2);
@@ -71,15 +71,15 @@ class FlowBloc extends Bloc<FlowEvent, FlowState> {
 
         }
 
-        yield FlowCheckUserSuccess(photos: newUsers,Reason:reason);
+        yield ConnectCheckUserSuccess(photos: newUsers,Reason:reason);
       } catch (err) {
         print(err);
-        yield FlowWidgetsLoadFailed();
+        yield ConnectWidgetsLoadFailed();
       }
 
     }
 
-    if (event is EventFlowResetCheckUser) {
+    if (event is EventConnectResetCheckUser) {
 
       var user=event.user;
       List<dynamic> users =state.props.elementAt(2);
@@ -104,15 +104,15 @@ class FlowBloc extends Bloc<FlowEvent, FlowState> {
       }
 
 
-        yield FlowCheckUserSuccess(photos: newUsers,Reason:reason);
+        yield ConnectCheckUserSuccess(photos: newUsers,Reason:reason);
       } catch (err) {
         print(err);
-        yield FlowWidgetsLoadFailed();
+        yield ConnectWidgetsLoadFailed();
       }
 
     }
 
-    if (event is EventFlowDelImg) {
+    if (event is EventConnectDelImg) {
 
       var img=event.user;
       List<dynamic> oldUsers = state.props.elementAt(2);
@@ -139,37 +139,36 @@ class FlowBloc extends Bloc<FlowEvent, FlowState> {
         } else{
 
         }
-        yield FlowDelImgSuccess(photos: newUsers);
+        yield ConnectDelImgSuccess(photos: newUsers);
       } catch (err) {
         print(err);
-        yield FlowWidgetsLoadFailed();
+        yield ConnectWidgetsLoadFailed();
       }
 
     }
-    if (event is EventFlowGetCreditId) {
-
+    if (event is EventConnectGetCreditId) {
 
       try {
 
-        yield FlowDelImgSuccess(photos: state.props.elementAt(2));
+        yield ConnectDelImgSuccess(photos: state.props.elementAt(2));
       } catch (err) {
         print(err);
-        yield FlowWidgetsLoadFailed();
+        yield ConnectWidgetsLoadFailed();
       }
 
     }
-    if (event is EventFlowLoadMore) {
+    if (event is EventConnectLoadMore) {
        var data =event.user01;
        var count = state.props.elementAt(1);
-      yield FlowWidgetsLoaded(photos: data,count: count);
+      yield ConnectWidgetsLoaded(photos: data,count: count);
 
     }
-    if (event is EventFlowFresh) {
+    if (event is EventConnectFresh) {
       try {
 
-        var result= await IssuesApi.getFlowData(1,event.selectItems);
+        var result= await IssuesApi.getYesterdayConnect('', '1','1','0');
         if  (result['message']=="Unauthenticated.") {
-          yield FlowUnauthenticated();
+          yield ConnectUnauthenticated();
         }else{
           if  (result['code']==200){
 
@@ -179,20 +178,20 @@ class FlowBloc extends Bloc<FlowEvent, FlowState> {
           }
         }
 
-        yield FlowWidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString() );
+        yield ConnectWidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString() );
 
       } catch (err) {
         print(err);
-        yield FlowWidgetsLoadFailed();
+        yield ConnectWidgetsLoadFailed();
       }
 
     }
-    if (event is EventFlowSearchErpUser) {
+    if (event is EventConnectSearchErpUser) {
       try {
 
-        var result= await IssuesApi.getFlowData(1,[]);
+        var result= await IssuesApi.getYesterdayConnect('', '1','1','0');
         if  (result['message']=="Unauthenticated.") {
-          yield FlowUnauthenticated();
+          yield ConnectUnauthenticated();
         }else{
           if  (result['code']==200){
 
@@ -202,39 +201,39 @@ class FlowBloc extends Bloc<FlowEvent, FlowState> {
           }
         }
 
-        yield FlowWidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
+        yield ConnectWidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
 
       } catch (err) {
         print(err);
-        yield FlowWidgetsLoadFailed();
+        yield ConnectWidgetsLoadFailed();
       }
 
     }
   }
 
-  // Stream<FlowState> _mapLoadWidgetToState() async* {
-  //   yield FlowWidgetsLoading();
-  //   try {
-  //
-  //     var result= await IssuesApi.getPhoto('', '1','1','0');
-  //     if  (result['message']=="Unauthenticated.") {
-  //       yield FlowUnauthenticated();
-  //     }else{
-  //       if  (result['code']==200){
-  //
-  //
-  //       } else{
-  //
-  //       }
-  //     }
-  //
-  //
-  //     yield FlowWidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
-  //
-  //   } catch (err) {
-  //     print(err);
-  //     yield FlowWidgetsLoadFailed();
-  //   }
-  // }
+  Stream<ConnectState> _mapLoadWidgetToState() async* {
+    yield ConnectWidgetsLoading();
+    try {
+
+      var result= await IssuesApi.getYesterdayConnect('', '1','1','0');
+      if  (result['message']=="Unauthenticated.") {
+        yield ConnectUnauthenticated();
+      }else{
+        if  (result['code']==200){
+
+
+        } else{
+
+        }
+      }
+
+
+      yield ConnectWidgetsLoaded(photos: result['data']['data'],count:result['data']['total'].toString());
+
+    } catch (err) {
+      print(err);
+      yield ConnectWidgetsLoadFailed();
+    }
+  }
 
 }

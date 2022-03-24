@@ -25,19 +25,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_geen/views/items/slide_menu_item.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
-class PhotoWidgetListItem extends StatelessWidget {
-  final bool hasTopHole;
-  final bool hasBottomHole;
-  final bool isClip;
-  final bool showBadge;
+class ConnectWidgetListItem extends StatelessWidget {
+
   final Map<String,dynamic>  photo;
-  PhotoWidgetListItem(
+  ConnectWidgetListItem(
       {
-      this.hasTopHole = true,
-      this.hasBottomHole = false,
-      this.isClip = true,
+
       this.photo,
-      this.showBadge
+
       });
 
   final List<int> colors = Cons.tabColors;
@@ -672,17 +667,20 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
     );
   }
   Widget _buildSummary() {
+   var t="";
+   if (photo['connect_status']==null){
+      t= "";
+   }else{
+     t= getConnectLevel(photo['connect_status']);
+   }
     return Padding(
       padding:  EdgeInsets.only(left: 1.w, bottom: 0.h, top: 5.h),
       child: Container(
         child: Text(
-          //尾部摘要
-          (photo['has_house']==null?"":hasHouseLevel[photo['has_house']])+" "+(photo['has_car']==null?"":hasCarLevel[photo['has_car']])+" " +(marriageLevel[photo['marriage']]) +" 生日:" +
-
-              (photo['birthday']==null ? "-":(photo['birthday'].length > 10? photo['birthday'].toString().substring(0,10):"")) +" 收入:"+photo['income'].toString()+"w",
+         t,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: Colors.black, fontSize: 23.sp, shadows: [
+          style: TextStyle(color: Colors.redAccent, fontSize: 23.sp, shadows: [
             const Shadow(color: Colors.white, offset: const Offset(.5, .5))
           ]),
         ),
@@ -695,7 +693,7 @@ Widget buildCard (BuildContext context,Map<String,dynamic> img){
       child: Container(
         child: Text(
           //尾部摘要
-         (photo['sale_name']==null?"": "红娘: "+photo['sale_name'].toString())+" 沟通"+photo['connect_count'].toString()+"次 " +(photo['connect_status']==0?"":(photo['connect_status']==null?"":getConnectLevel(photo['connect_status']).toString())),
+         "沟通"+photo['connect_count'].toString()+"次 " +((photo['last_connect_time']==null?"":"最后沟通时间:"+photo['last_connect_time'].toString())),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontSize: 23.sp, shadows: [

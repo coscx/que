@@ -6,15 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
-import 'package:flutter_geen/blocs/flow/flow_bloc.dart';
+
 import 'package:flutter_geen/components/permanent/overlay_tool_wrapper.dart';
-import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+
 import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 import 'package:flutter_geen/views/component/refresh.dart';
 import 'package:flutter_geen/views/items/SearchParamModel.dart';
 
 import 'package:flutter_geen/views/items/drop_menu_leftWidget.dart';
-
+import 'package:flutter_geen/views/items/connect_widget_list_item.dart';
 import 'package:flutter_geen/views/common/empty_page.dart';
 
 
@@ -24,7 +24,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'flow.dart';
 
 class SortCondition {
   String name;
@@ -54,12 +53,12 @@ class CitySelect {
 
 var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-class FlowPage extends StatefulWidget {
+class ConnectPage extends StatefulWidget {
   @override
-  _FlowPageState createState() => _FlowPageState();
+  _ConnectPageState createState() => _ConnectPageState();
 }
 
-class _FlowPageState extends State<FlowPage>
+class _ConnectPageState extends State<ConnectPage>
     with AutomaticKeepAliveClientMixin {
 
   RefreshController _refreshController =
@@ -75,7 +74,7 @@ class _FlowPageState extends State<FlowPage>
   int _selectedIndex = 999;
   String serveType = "1";
   String totalCount = "";
-  String title = "微信推文";
+  String title = "昨日今日沟通";
   static List<SortModel> _leftWidgets = [
     SortModel(name: "服务中", isSelected: true, code: "2"),
     SortModel(name: "跟进中", isSelected: false, code: "1"),
@@ -91,10 +90,10 @@ class _FlowPageState extends State<FlowPage>
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<FlowBloc>(context).add(EventFlowFresh(0, 0, null, null, 0, 0, "0", []));
-    WidgetsBinding.instance.addPostFrameCallback((callback) {
-      OverlayToolWrapper.of(context).showFloating();
-    });
+    BlocProvider.of<ConnectBloc>(context).add(EventConnectFresh(0, 0, null, null, 0, 0, "0", []));
+    // WidgetsBinding.instance.addPostFrameCallback((callback) {
+    //   OverlayToolWrapper.of(context).showFloating();
+    // });
     Future.delayed(Duration(milliseconds: 2500)).then((e) async {
       //_onRefresh();
     });
@@ -108,11 +107,11 @@ class _FlowPageState extends State<FlowPage>
 
   // 下拉刷新
   void _onRefresh() async {
-    BlocProvider.of<GlobalBloc>(context).add(EventResetIndexFlowPage());
+    BlocProvider.of<GlobalBloc>(context).add(EventResetIndexConnectPage());
 
     var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
     var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-    BlocProvider.of<FlowBloc>(context).add(EventFlowFresh(
+    BlocProvider.of<ConnectBloc>(context).add(EventConnectFresh(
         sex,
         mode,
         searchParamList,
@@ -127,11 +126,11 @@ class _FlowPageState extends State<FlowPage>
   // 上拉加载
   void _onLoading() async {
     List<dynamic> oldUsers =
-        BlocProvider.of<FlowBloc>(context).state.props.elementAt(0);
-    var currentPage = BlocProvider.of<GlobalBloc>(context).state.indexFlowPage;
-    BlocProvider.of<GlobalBloc>(context).add(EventIndexFlowPage(currentPage));
+        BlocProvider.of<ConnectBloc>(context).state.props.elementAt(0);
+    var currentPage = BlocProvider.of<GlobalBloc>(context).state.indexConnectPage;
+    BlocProvider.of<GlobalBloc>(context).add(EventIndexConnectPage(currentPage));
     currentPage++;
-    var result = await IssuesApi.getFlowData(currentPage,selectItems);
+    var result = await IssuesApi.getYesterdayConnect("",currentPage.toString(),"","");
     if (result['code'] == 200) {
     } else {
 
@@ -141,7 +140,7 @@ class _FlowPageState extends State<FlowPage>
       newUsers.add(element);
     });
     newUsers.addAll(result['data']['data']);
-    BlocProvider.of<FlowBloc>(context).add(EventFlowLoadMore(newUsers));
+    BlocProvider.of<ConnectBloc>(context).add(EventConnectLoadMore(newUsers));
     _refreshController.loadComplete();
   }
 
@@ -161,39 +160,25 @@ class _FlowPageState extends State<FlowPage>
             key: _scaffoldKey,
 
             appBar: AppBar(
-              titleSpacing: 40.w,
-              leadingWidth: 0,
-              title: Row(
-                children: [
-                  Text(title,
-                      style: TextStyle(
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
-                          fontSize: 48.sp,
-                          fontWeight: FontWeight.bold)),
-
-                ],
-              ),
-              //leading:const Text('Demo',style: TextStyle(color: Colors.black, fontSize: 15)),
               backgroundColor: Colors.white,
               elevation: 0,
               //去掉Appbar底部阴影
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              title: Text("昨日今日沟通",
+                  style: TextStyle(
+                    fontFamily: "Quicksand",
+                    fontWeight: FontWeight.w900,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 38.sp,
+                    decoration: TextDecoration.none,
+                    color: Colors.black,
+                  )),
+              //去掉Appbar底部阴影
               actions: <Widget>[
-                Container(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.search,
-                      color: Colors.black87,
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, UnitRouter.wx_search,arguments: selectItems).then((value) {
-                        if (value ==true)
-                        BlocProvider.of<FlowBloc>(context).add(EventFlowFresh(0, 0, null, null, 0, 0, "0", selectItems));
-                      });
-                    },
-                  ),
-                ),
+
                 SizedBox(width: 20),
 
 
@@ -201,9 +186,9 @@ class _FlowPageState extends State<FlowPage>
 
               //bottom: bar(),
             ),
-            body: BlocListener<FlowBloc, FlowState>(
+            body: BlocListener<ConnectBloc, ConnectState>(
                 listener: (ctx, state) {
-                  if (state is FlowCheckUserSuccess) {
+                  if (state is ConnectCheckUserSuccess) {
                     BlocProvider.of<GlobalBloc>(context)
                         .add((EventSetIndexNum()));
                     Scaffold.of(context).showSnackBar(SnackBar(
@@ -211,44 +196,27 @@ class _FlowPageState extends State<FlowPage>
                       backgroundColor: Colors.green,
                     ));
                   }
-                  if (state is FlowDelImgSuccess) {
+                  if (state is ConnectDelImgSuccess) {
                     Scaffold.of(context).showSnackBar(SnackBar(
                       content: Text('删除成功'),
                       backgroundColor: Colors.blue,
                     ));
                   }
-                  if (state is FlowUnauthenticated) {
+                  if (state is ConnectUnauthenticated) {
                     Navigator.of(context)
                         .pushReplacementNamed(UnitRouter.login);
                   }
 
-                  if (state is FlowWidgetsLoaded) {
-                    var data = state.photos;
-                    // print(data.toString());
-                    var mode = BlocProvider.of<GlobalBloc>(context)
-                        .state
-                        .currentPhotoMode;
-                    if (mode == 0) {
-                      title = "微信推文";
-                    }
-                    if (mode == 1) {
-                      title = "缔结良缘库";
-                    }
-                    if (mode == 2) {
-                      title = "我的客户";
-                    }
-                    if (mode == 3) {
-                      title = "销售公海";
-                    }
-                    //setState(() {
+                  if (state is ConnectWidgetsLoaded) {
+
                     totalCount = state.count;
-                    //});
+
                   }
                 },
                 child: Container(
 
                   child:
-                      BlocBuilder<FlowBloc, FlowState>(builder: (ctx, state) {
+                      BlocBuilder<ConnectBloc, ConnectState>(builder: (ctx, state) {
                     return Stack(
                       children: <Widget>[
                         //BlocBuilder<GlobalBloc, GlobalState>(builder: _buildBackground),
@@ -279,18 +247,23 @@ class _FlowPageState extends State<FlowPage>
                 ))));
   }
 
-  Widget _buildContent(BuildContext context, FlowState state) {
-    if (state is FlowWidgetsLoading) {
+  Widget _buildContent(BuildContext context, ConnectState state) {
+    if (state is ConnectWidgetsLoading) {
       return SliverToBoxAdapter(
         child: Container(),
       );
     }
 
-    if (state is FlowWidgetsLoaded) {
+    if (state is ConnectWidgetsLoaded) {
       List<dynamic> photos = state.photos;
       if (photos.isEmpty) return SliverToBoxAdapter(child: EmptyPage());
       return photos.isNotEmpty
-          ? SliverToBoxAdapter(
+          ? SliverList(
+        delegate: SliverChildBuilderDelegate(
+                (_, int index) => ConnectWidgetListItem(photo:photos[index]),
+            childCount: photos.length),
+      )
+          : SliverToBoxAdapter(
           child: Center(
             child: Container(
               alignment: FractionalOffset.center,
@@ -298,51 +271,39 @@ class _FlowPageState extends State<FlowPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  MyFlow(liveData: photos,)
+                  Icon(Icons.airplay,
+                      color: Colors.orangeAccent, size: 120.0),
+                  Container(
+                    padding: EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      "暂时没有用户了，(" "^ _ ^)/~┴┴",
+                      style: TextStyle(
+                        fontSize: 40.sp,
+                        color: Colors.orangeAccent,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
-          ))
-          : SliverToBoxAdapter(
-              child: Center(
-              child: Container(
-                alignment: FractionalOffset.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.airplay,
-                        color: Colors.orangeAccent, size: 120.0),
-                    Container(
-                      padding: EdgeInsets.only(top: 16.0),
-                      child: Text(
-                        "暂时没有用户了，(" "^ _ ^)/~┴┴",
-                        style: TextStyle(
-                          fontSize: 40.sp,
-                          color: Colors.orangeAccent,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ));
+          ));
     }
 
-    if (state is FlowWidgetsLoadFailed) {
+    if (state is ConnectWidgetsLoadFailed) {
       return SliverToBoxAdapter(
         child: Container(
           child: Center(
             child: Container(
+              padding: EdgeInsets.only(top: 200.h),
               alignment: FractionalOffset.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Icon(Icons.event_busy,
-                      color: Colors.orangeAccent, size: 120.0),
+                      color: Colors.orangeAccent, size: 200.sp),
                   Container(
-                    padding: EdgeInsets.only(top: 16.0),
+                    padding: EdgeInsets.only(top: 20.h),
                     child: Text(
                       "数据异常，(≡ _ ≡)/~┴┴",
                       style: TextStyle(
