@@ -425,7 +425,7 @@ Widget itemAction(BuildContext context, String name, String title,
                           Visibility(
                               visible: true,
                               child: Container(
-                                  margin: EdgeInsets.only(top: 10.w),
+                                  margin: EdgeInsets.only(top: 0.w),
                                 //width: ScreenUtil().screenWidth*0.71,
                                   height: 30.h,
                                   child: Column(

@@ -435,6 +435,7 @@ List<String>  fromLevel = [
   "大家亲同城相亲圈",
 ];
 List<String>  connectLevel = [
+  "请选择",
   "新分未联系",
   "号码无效",
   "号码未接通",
