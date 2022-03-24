@@ -642,7 +642,7 @@ class IssuesApi {
     var data={'memberId':memberId,'token':token,"pageSize":20};
     Dio dioA= Dio();
     try {
-      Response<dynamic> rep = await dioA.get('http://mm.3dsqq.com:8000/addtoken',queryParameters:data );
+      Response<dynamic> rep = await dioA.get('http://mm.3dsqq.com:8000/addtoken',queryParameters:data);
       return rep.data;
 
     } on DioError catch(e){
@@ -651,15 +651,13 @@ class IssuesApi {
     }
   }
 
-
-
   static Future<Map<String,dynamic>> viewCall( String uuid ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
     dio.options.headers['authorization']="Bearer "+token;
     var data={'customer_uuid':uuid};
     try {
-      Response<dynamic> rep = await dio.get('/api/v1/auth/getCustomerMobile/'+uuid,queryParameters:data );
+      Response<dynamic> rep = await dio.get('/api/v1/auth/getCustomerMobile/'+uuid,queryParameters:data);
       return rep.data;
 
     } on DioError catch(e){
@@ -673,7 +671,7 @@ class IssuesApi {
     dio.options.headers['authorization']="Bearer "+token;
     var data={'customer_uuids[0]':uuid};
     try {
-      Response<dynamic> rep = await dio.post('/api/v1/customer/public/claimCustomer',queryParameters:data );
+      Response<dynamic> rep = await dio.post('/api/v1/customer/public/claimCustomerApp',queryParameters:data);
       return rep.data;
 
     } on DioError catch(e){

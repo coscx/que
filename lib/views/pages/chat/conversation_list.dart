@@ -64,20 +64,22 @@ class ImConversationListPage extends StatelessWidget{
     ),
     child:Scaffold(
       appBar: AppBar(
-        titleSpacing:60.w,
-        leadingWidth: 0,
+        titleSpacing:40.w,
+        //leadingWidth: 830.w,
         title:  Text('消息',style: TextStyle(color: Theme
             .of(context)
             .primaryColor, fontSize: 50.sp,fontWeight: FontWeight.bold)),
         //leading:const Text('Demo',style: TextStyle(color: Colors.black, fontSize: 15)),
         backgroundColor: Colors.white,
         elevation: 0, //去掉Appbar底部阴影
+        //去掉Appbar底部阴影
+
         actions:<Widget> [
 
           Container(
-           margin: EdgeInsets.fromLTRB(0.w,10.h,0.w,0.h),
-           height: 20.h,
-            width: 20.w,
+           margin: EdgeInsets.fromLTRB(0.w,10.h,20.w,0.h),
+           //height: 20.h,
+            //width: 20.w,
             child: IconButton(
               padding: EdgeInsets.zero,
               icon: Icon(
@@ -90,9 +92,7 @@ class ImConversationListPage extends StatelessWidget{
               },
             ),
           ),
-        SizedBox(
-          width: 80.w,
-        )
+
         ],
       ),
       body:Column(

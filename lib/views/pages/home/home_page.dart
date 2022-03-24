@@ -278,9 +278,7 @@ class _HomePageState extends State<HomePage>
                 //     },
                 //   ),
                 // ),
-                SizedBox(
-                  width: 0.w,
-                )
+             
               ],
 
               //bottom: bar(),

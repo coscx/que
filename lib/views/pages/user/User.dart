@@ -93,9 +93,15 @@ class _UserPage extends State<UserPage> with TickerProviderStateMixin {
         child:Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text("用户",style: TextStyle(color: Colors.black, fontSize: 25,fontWeight: FontWeight.bold)),
+            title: Text("用户选择",style: TextStyle(color: Colors.black, fontSize: 25,fontWeight: FontWeight.bold)),
             backgroundColor: Colors.white,
             elevation: 0,
+
+            //去掉Appbar底部阴影
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
           ),
           body: BlocBuilder<UserBloc, UserState>(builder: _buildContent),
 
