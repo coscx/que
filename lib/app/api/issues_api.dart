@@ -123,8 +123,7 @@ class IssuesApi {
       }
       if (e.type == 130) {
 
-          searchParm['connect'] = e.
-          id;
+          searchParm['connect'] = e.id;
 
       }
       if (e.type == 0) {

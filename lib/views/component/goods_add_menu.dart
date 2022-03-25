@@ -54,8 +54,8 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
           ),
         ),
         SizedBox(
-          width: 140.0,
-          height: 50.0,
+          width: 240.w,
+          height: 70.h,
           child: TextButton.icon(
             onPressed: () async {
                                 var actionList =
@@ -96,8 +96,8 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
         ),
         //Container(width: 120.0, height: 0.6, color: Colors.black),
         SizedBox(
-          width: 140.0,
-          height: 50.0,
+          width: 240.w,
+          height: 70.h,
           child: TextButton.icon(
             onPressed: () {
               if (widget.args['role_id'] > 3) {
@@ -133,8 +133,8 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
         ),
         //Container(width: 120.0, height: 0.6, color: Colors.black),
         SizedBox(
-          width: 140.0,
-          height: 50.0,
+          width: 240.w,
+          height: 70.h,
           child: TextButton.icon(
             onPressed: () {
 
@@ -168,6 +168,8 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
             ),
           ),
         ),
+
+
       ],
     );
 

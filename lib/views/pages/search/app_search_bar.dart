@@ -26,7 +26,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
           controller: _controller,
           maxLines: 1,
           decoration:  InputDecoration(
-            hintText: '手机号、用户名...',
+            hintText: '手机号、用户名、id...',
             hintStyle: TextStyle(
               fontSize: 14,
             ),

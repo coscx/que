@@ -3,14 +3,14 @@ getConnectLevel(info) {
   try {
     return connectLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 getEduLevel(info) {
   try {
     return EduLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -18,7 +18,7 @@ getWorkType(info) {
   try {
     return WorkTypeLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -26,15 +26,17 @@ getWorkOverTime(info) {
   try {
     return WorkOverTimeLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
 getIncome(info) {
+
   try {
-    return IncomeLevel[info];
+    var infoS = int.parse(info);
+    return IncomeLevel[infoS];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -42,7 +44,7 @@ getHasHouse(info) {
   try {
     return hasHouseLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -50,7 +52,7 @@ getHouseFuture(info) {
   try {
     return houseFutureLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -58,7 +60,7 @@ getHasCar(info) {
   try {
     return hasCarLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -66,7 +68,7 @@ getCarLevel(info) {
   try {
     return carLevelLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -74,7 +76,7 @@ getMarriageLevel(info) {
   try {
     return marriageLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -82,7 +84,7 @@ getChildLevel(info) {
   try {
     return childLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -90,7 +92,7 @@ getOnlyChildLevel(info) {
   try {
     return onlyChildLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -98,7 +100,7 @@ getParentLevel(info) {
   try {
     return parentLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -106,7 +108,7 @@ getParentProtectLevel(info) {
   try {
     return parentProtectLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -114,7 +116,7 @@ getFaithLevel(info) {
   try {
     return faithLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -122,7 +124,7 @@ getSmokeLevel(info) {
   try {
     return smokeLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -130,7 +132,7 @@ getDrinkLevel(info) {
   try {
     return drinkLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -138,7 +140,7 @@ getLifeLevel(info) {
   try {
     return lifeLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -146,7 +148,7 @@ getCreatLevel(info) {
   try {
     return creatLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -154,7 +156,7 @@ getMarriageDateLevel(info) {
   try {
     return marriageDateLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -162,7 +164,7 @@ getFloodLevel(info) {
   try {
     return floodLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -170,7 +172,7 @@ getSexLevel(info) {
   try {
     return sexLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -178,7 +180,7 @@ getNationLevel(info) {
   try {
     return nationLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -186,7 +188,7 @@ getCompanyLevel(info) {
   try {
     return companyTypeLevel[info];
   } catch (e) {
-    return "未知";
+    return "-";
   }
 }
 
@@ -451,3 +453,33 @@ const List<String>  connectLevel = [
   "放弃并放入D级",
 ];
 
+List<String> goals = [
+  "请选择",
+  "1.新分未联系",
+  "2.号码无效",
+  "3.号码未接通",
+  "4.可继续沟通",
+  "5.有意向面谈",
+  "6.确定到店时间",
+  "7.已到店，意愿需跟进",
+  "8.已到店，考虑7天付款",
+  "9.高级会员,支付预付款",
+  "10.高级会员，费用已结清",
+  "11.毁单",
+  "12.放弃并放入公海",
+  "13.放弃并放入D级"
+];
+List<String> goalsAppoint = [
+  "请选择",
+  "20.已入库资料不全",
+  "21.新分VIP",
+  "22.无对象,待推荐",
+  "23.推动见面指导",
+  "24.撮合再见面",
+  "25.深入交往,推动恋爱",
+  "26.确认恋爱",
+  "27.结婚",
+  "28.暂停",
+  "29.放弃",
+  "30.已共识退费",
+];

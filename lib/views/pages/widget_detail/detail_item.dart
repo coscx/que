@@ -1646,12 +1646,19 @@ Widget buildUserSelect(
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
+                          var income =0;
+                          try{
+                            income = int.parse(info['wish_income']);
+                          }catch(e){
+
+                          }
+
                           var result = await showPickerArrayDemand(
                               context,
                               [IncomeLevel],
                               info['wish_income'] == ""
                                   ? [0]
-                                  : [int.parse(info['wish_income'])],
+                                  : [income],
                               "wish_income",
                               info,
                               "",
@@ -1668,7 +1675,7 @@ Widget buildUserSelect(
                             "年收入",
                             info['wish_income'] == ""
                                 ? "-"
-                                : getIncome(int.parse(info['wish_income'])),
+                                : getIncome((info['wish_income'] )),
                             true)),
                     GestureDetector(
                         onTap: () async {

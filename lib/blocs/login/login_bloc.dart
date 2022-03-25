@@ -42,6 +42,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
        LocalStorage.save("memberId", m.data.user.id.toString());
        LocalStorage.save("im_token", m.data.imToken);
        LocalStorage.save("avatar", m.data.user.avatar);
+       LocalStorage.save("roleId", m.data.user.idcardVerified.toString());
        IssuesApi.httpHeaders['authorization']="Bearer "+m.data.token.accessToken;
        yield LoginSuccess();
      } else{
@@ -64,6 +65,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           LocalStorage.save("memberId", m.data.user.id.toString());
           LocalStorage.save("im_token", m.data.imToken);
           LocalStorage.save("avatar", m.data.user.avatar);
+          LocalStorage.save("roleId", m.data.user.idcardVerified.toString());
           IssuesApi.httpHeaders['authorization']="Bearer "+m.data.token.accessToken;
           yield LoginSuccess();
         } else{

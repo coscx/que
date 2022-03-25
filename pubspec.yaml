@@ -100,6 +100,7 @@ dependencies:
   overlay_support: ^0.0.4
   soundpool: ^1.0.1
   radial_menu: ^0.0.1
+  add_2_calendar: ^2.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

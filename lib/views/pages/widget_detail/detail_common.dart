@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/components/permanent/circle.dart';
 import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
+import 'package:flutter_geen/views/pages/utils/common.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'detail_dialog.dart';
@@ -92,7 +93,14 @@ getStatusIndex(info) {
     return "4.可继续沟通";
   }
 }
-
+getServeStatusIndex(info) {
+  info =info -19;
+  try {
+    return goalsAppoint[info];
+  } catch (e) {
+    return "21.新分VIP";
+  }
+}
 Widget item_connect(
     BuildContext context,
     String name,
@@ -100,7 +108,7 @@ Widget item_connect(
     String content,
     String subscribeTime,
     String connectStatus,
-    String connectType) {
+    String connectType,int roleId) {
   bool isDark = false;
 
   return Container(
@@ -109,10 +117,16 @@ Widget item_connect(
     //height: 180.h,
     child: Material(
         color: Colors.transparent,
-        child: InkWell(
+        child: GestureDetector(
           onTap: () {
-            _showBottom(context, content,
-                getStatusIndex(int.parse(connectStatus)), connectType);
+            if (roleId==7 || roleId==9){
+              _showBottom(context, content,
+                  getServeStatusIndex(int.parse(connectStatus)), connectType);
+            }else{
+              _showBottom(context, content,
+                  getStatusIndex(int.parse(connectStatus)), connectType);
+            }
+
           },
           child: Container(
 
@@ -148,18 +162,16 @@ Widget item_connect(
                                     fontSize: 30.sp, color: Colors.black54),
                               ),
                             ),
-                            SizedBox(
-                              width: ScreenUtil().setWidth(10.w),
-                            ),
+
                             Visibility(
                                 visible: true,
                                 child: Container(
-                                    margin: EdgeInsets.only(top: 5.w),
+                                    margin: EdgeInsets.only(top: 0.w,left: 5.w),
                                   //width: ScreenUtil().screenWidth*0.71,
                                    // height: 30.h,
-                                    child: Column(
+                                    child: Row(
                                       children: [
-                                        Expanded(
+                                        Container(
                                           child: Container(
                                             width: ScreenUtil().screenWidth * 0.68,
                                             child: Text(
@@ -233,7 +245,7 @@ Widget item_appoint(
     String appointment_time,
     String can_write,
     String remark,
-    String feedback1) {
+    String feedback1,String customerId) {
   bool isDark = false;
 
   return Container(
@@ -242,10 +254,10 @@ Widget item_appoint(
     //height: 180.h,
     child: Material(
         color: Colors.transparent,
-        child: InkWell(
+        child: GestureDetector(
           onTap: () {
             _showAppointBottom(context, name, other_name, appointment_time,
-                appointment_address, remark, feedback1);
+                appointment_address, remark, feedback1,customerId);
           },
           child: Container(
 
@@ -268,7 +280,7 @@ Widget item_appoint(
                             constraints: BoxConstraints(
                               maxWidth: 120.w,
                             ),
-                            margin: EdgeInsets.only(left: 15.w),
+                            margin: EdgeInsets.only(left: 10.w),
                             child: Text(
                               name == null ? "" : name,
                               maxLines: 1,
@@ -278,7 +290,7 @@ Widget item_appoint(
                             ),
                           ),
                           SizedBox(
-                            width: 5.w,
+                            width: 2.w,
                           ),
                           Container(
                             child: Icon(
@@ -291,7 +303,7 @@ Widget item_appoint(
                             constraints: BoxConstraints(
                               maxWidth: 120.w,
                             ),
-                            margin: EdgeInsets.only(left: 15.w),
+                            margin: EdgeInsets.only(left: 5.w),
                             child: Text(
                               other_name == null ? "" : other_name,
                               maxLines: 1,
@@ -306,7 +318,7 @@ Widget item_appoint(
                           Visibility(
                               visible: true,
                               child: Container(
-                                width: ScreenUtil().screenWidth * 0.46,
+                                width: ScreenUtil().screenWidth * 0.55,
                                 child: Text(
                                   remark,
                                   maxLines: 1,
@@ -385,7 +397,7 @@ Widget itemAction(BuildContext context, String name, String title,
     //height: 180.h,
     child: Material(
         color: Colors.transparent,
-        child: InkWell(
+        child: GestureDetector(
           onTap: () {
             _showActionBottom(context, name, "", time,
                 title, content, "");
@@ -419,19 +431,19 @@ Widget itemAction(BuildContext context, String name, String title,
                               TextStyle(fontSize: 30.sp, color: Colors.black),
                             ),
                           ),
-                          SizedBox(
-                            width: ScreenUtil().setWidth(10.w),
-                          ),
+
                           Visibility(
                               visible: true,
                               child: Container(
-                                  margin: EdgeInsets.only(top: 0.w),
+                                  margin: EdgeInsets.only(top: 0.w,left: 5.w),
                                 //width: ScreenUtil().screenWidth*0.71,
                                   height: 30.h,
-                                  child: Column(
+                                  child: Row(
                                     children: [
-                                      Expanded(
+                                      Container(
+
                                         child: Container(
+
                                           width: ScreenUtil().screenWidth * 0.63,
                                           child: Text(
                                             content,
@@ -504,7 +516,7 @@ Widget itemCall(
     //height: 180.h,
     child: Material(
         color: Colors.transparent,
-        child: InkWell(
+        child: GestureDetector(
           onTap: () {},
           child: Container(
             margin: EdgeInsets.only(left: 15.w, right: 20.w),
@@ -529,18 +541,16 @@ Widget itemCall(
                               TextStyle(fontSize: 30.sp, color: Colors.black),
                             ),
                           ),
-                          SizedBox(
-                            width: ScreenUtil().setWidth(10.w),
-                          ),
+
                           Visibility(
                               visible: true,
                               child: Container(
-                                  margin: EdgeInsets.only(top: 10.w),
+                                  margin: EdgeInsets.only(top: 0.w,left: 5.w),
                                 // width: ScreenUtil().screenWidth*0.6,
                                   height: 30.h,
-                                  child: Column(
+                                  child: Row(
                                     children: [
-                                      Expanded(
+                                      Container(
                                         child: Container(
                                           //width: ScreenUtil().screenWidth * 0.63,
                                           child: Text(
@@ -592,7 +602,7 @@ Widget itemCall(
 }
 
 _showAppointBottom(BuildContext context, String userName, String otherName,
-    String time, String address, String remark, String feedback) {
+    String time, String address, String remark, String feedback,String customerId) {
   showFLBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -625,7 +635,7 @@ _showAppointBottom(BuildContext context, String userName, String otherName,
                     ),
                     Container(
                       child: Text(
-                        "约会对象:" + otherName,
+                        "约会对象:" + otherName+"(id:"+customerId+")",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 28.sp,

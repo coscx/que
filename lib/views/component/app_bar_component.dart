@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/blocs/global/global_bloc.dart';
+import 'package:flutter_geen/storage/dao/local_storage.dart';
+import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
 import 'package:flutter_geen/views/pages/home/flow_page.dart';
 import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 
@@ -16,8 +18,9 @@ import '../../blocs/home/home_event.dart';
 class AppBarComponent extends StatefulWidget {
   final List<SelectItem> selectItems;
   final GlobalKey<ScaffoldState> state;
+  final int mode;
   AppBarComponent({
-    @required this.selectItems,@required this.state,
+    @required this.selectItems,@required this.state, this.mode,
   });
   @override
   _AppBarComponentState createState() => _AppBarComponentState();
@@ -38,11 +41,19 @@ class _AppBarComponentState extends State<AppBarComponent> {
   GZXDropdownMenuController();
   List<StoreSelect> secondtLevels = <StoreSelect>[];
   GlobalKey _stackKey = GlobalKey();
-
+  int roleId =0;
   @override
   void initState() {
     // TODO: implement initState
+    Future.delayed(Duration(microseconds: 1)).then((e) async {
+      var roleIds = await LocalStorage.get("roleId");
+      if (roleIds != "" && roleIds != null) {
 
+        setState(() {
+          roleId = int.parse(roleIds);
+        });
+      }
+    });
     _brandSortConditions
         .add(SortCondition(name: '客户状态', id: 0, isSelected: true, all: true));
     _brandSortConditions
@@ -130,6 +141,69 @@ bool getSelect(){
 }
   @override
   Widget build(BuildContext context) {
+    if (widget.mode==2 && (roleId == 7 || roleId == 9)){
+
+        _distanceSortConditions.clear();
+        _distanceSortConditions
+            .add(SortCondition(name: '沟通状态', id: 0, isSelected: true, all: true));
+        _distanceSortConditions
+            .add(SortCondition(name: '20.已入库资料不全', id: 20, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '21.新分VIP', id: 21, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '22.无对象,待推荐', id: 22, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '23.推动见面指导', id: 23, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '24.撮合再见面', id: 24, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '25.深入交往,推动恋爱', id: 25, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '26.确认恋爱', id: 26, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '27.结婚', id: 27, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '28.暂停', id: 28, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '29.放弃', id: 29, isSelected: false, all: true));
+        _distanceSortConditions.add(
+            SortCondition(name: '30.已共识退费', id: 30, isSelected: false, all: true));
+
+
+
+    }else{
+      _distanceSortConditions.clear();
+      _distanceSortConditions
+          .add(SortCondition(name: '沟通状态', id: 0, isSelected: true, all: true));
+      _distanceSortConditions.add(
+          SortCondition(name: '1.新分未联系', id: 1, isSelected: false, all: true));
+      _distanceSortConditions.add(
+          SortCondition(name: '2.号码无效', id: 2, isSelected: false, all: true));
+      _distanceSortConditions.add(
+          SortCondition(name: '3.号码未接通', id: 3, isSelected: false, all: true));
+      _distanceSortConditions.add(
+          SortCondition(name: '4.可继续沟通', id: 4, isSelected: false, all: true));
+      _distanceSortConditions.add(
+          SortCondition(name: '5.有意向面谈', id: 5, isSelected: false, all: true));
+      _distanceSortConditions.add(
+          SortCondition(name: '6.确定到店时间', id: 6, isSelected: false, all: true));
+      _distanceSortConditions.add(SortCondition(
+          name: '7.已到店，意愿需跟进', id: 7, isSelected: false, all: true));
+      _distanceSortConditions.add(SortCondition(
+          name: '8.已到店，考虑7天付款', id: 8, isSelected: false, all: true));
+      _distanceSortConditions.add(SortCondition(
+          name: '9.高级会员，支付预付款', id: 9, isSelected: false, all: true));
+      _distanceSortConditions.add(SortCondition(
+          name: '10.高级会员，费用已结清', id: 10, isSelected: false, all: true));
+      _distanceSortConditions.add(
+          SortCondition(name: '11.毁单', id: 11, isSelected: false, all: true));
+      _distanceSortConditions.add(SortCondition(
+          name: '12.放弃并放入公海', id: 12, isSelected: false, all: true));
+      _distanceSortConditions.add(SortCondition(
+          name: '13.放弃并放入D级', id: 13, isSelected: false, all: true));
+    }
+
+
     return Container(
       child: Stack(
         key: _stackKey,
@@ -381,59 +455,63 @@ bool getSelect(){
   }
 
   _buildConditionListWidget(items, void itemOnTap(SortCondition)) {
-    return ListView.separated(
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      itemCount: items.length,
-      // item 的个数
-      separatorBuilder: (BuildContext context, int index) =>
-          Divider(height: 1.0),
-      // 添加分割线
-      itemBuilder: (BuildContext context, int index) {
-        SortCondition goodsSortCondition = items[index];
-        return GestureDetector(
-          onTap: () {
-            for (var value in items) {
-              value.isSelected = false;
-            }
+    return Container(
+      child: ScrollConfiguration(
+          behavior: DyBehaviorNull(),
+      child: ListView.separated(
+        shrinkWrap: false,
+        scrollDirection: Axis.vertical,
+        itemCount: items.length,
+        // item 的个数
+        separatorBuilder: (BuildContext context, int index) =>
+            Divider(height: 1.0),
+        // 添加分割线
+        itemBuilder: (BuildContext context, int index) {
+          SortCondition goodsSortCondition = items[index];
+          return GestureDetector(
+            onTap: () {
+              for (var value in items) {
+                value.isSelected = false;
+              }
 
-            goodsSortCondition.isSelected = true;
+              goodsSortCondition.isSelected = true;
 
-            itemOnTap(goodsSortCondition);
-          },
-          child: Container(
+              itemOnTap(goodsSortCondition);
+            },
+            child: Container(
 //            color: Colors.blue,
-            height: 40,
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  child: Text(
-                    goodsSortCondition.name,
-                    style: TextStyle(
-                      color: goodsSortCondition.isSelected
-                          ? Colors.red
-                          : Colors.black,
+              height: 40,
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: Text(
+                      goodsSortCondition.name,
+                      style: TextStyle(
+                        color: goodsSortCondition.isSelected
+                            ? Colors.red
+                            : Colors.black,
+                      ),
                     ),
                   ),
-                ),
-                goodsSortCondition.isSelected
-                    ? Icon(
-                  Icons.check,
-                  color: Theme.of(context).primaryColor,
-                  size: 16,
-                )
-                    : SizedBox(),
-                SizedBox(
-                  width: 16,
-                ),
-              ],
+                  goodsSortCondition.isSelected
+                      ? Icon(
+                    Icons.check,
+                    color: Theme.of(context).primaryColor,
+                    size: 16,
+                  )
+                      : SizedBox(),
+                  SizedBox(
+                    width: 16,
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      )),
     );
   }
 }

@@ -149,7 +149,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         tooltip: '用户操作',
         key: _addKey,
         onPressed: () {
-          userDetail['role_id']= roleId;
+          userDetail['role_id'] = roleId;
           showAddMenu(userDetail);
         },
         icon: Icon(
@@ -330,7 +330,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return FeedbackWidget(
       onPressed: () async {
         if (canEdit == 1) {
-          var d = await commentDialog(context, connectStatus, userDetail);
+          var d = await commentDialog(context, connectStatus, userDetail,roleId);
           if (d != null) {
             if (d == true) {
               setState(() {
@@ -428,7 +428,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             e['connect_message'],
             e['subscribe_time'] == null ? "" : e['subscribe_time'],
             e['connect_status'].toString(),
-            e['connect_type'].toString()))
+            e['connect_type'].toString(),roleId))
         .toList();
   }
 
@@ -442,7 +442,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             e['appointment_time'] == null ? "" : e['appointment_time'],
             e['can_write'].toString(),
             e['remark'].toString(),
-            e['feedback1'].toString()))
+            e['feedback1'].toString(),e["other_id"].toString()))
         .toList();
   }
 
@@ -472,15 +472,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     if (state is DetailLoading) {}
     return Container(
       child: Container(
-          padding: EdgeInsets.only(top: ScreenUtil().screenHeight *0.2),
+          padding: EdgeInsets.only(top: ScreenUtil().screenHeight * 0.2),
           child: Column(
-              children: [
-                  SizedBox(
-                    height: 0.h,
-                  ),
-                  Lottie.asset('assets/packages/lottie_flutter/890-loading-animation.json'),
-              ],
-      )),
+            children: [
+              SizedBox(
+                height: 0.h,
+              ),
+              Lottie.asset(
+                  'assets/packages/lottie_flutter/890-loading-animation.json'),
+            ],
+          )),
     );
   }
 
@@ -699,15 +700,14 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
               radius: (70.w),
               child: ClipOval(
                 child: CachedNetworkImage(
-                  imageUrl: url,
-                  fit: BoxFit.cover,
-                  width: 140.w,
-                  height: 140.h,
+                    imageUrl: url,
+                    fit: BoxFit.cover,
+                    width: 140.w,
+                    height: 140.h,
                     placeholder: (context, url) => Image.asset(
-                      'assets/images/default/img_default.png',
-                      fit: BoxFit.fill,
-                    )
-                ),
+                          'assets/images/default/img_default.png',
+                          fit: BoxFit.fill,
+                        )),
               ),
               backgroundColor: Colors.white,
             ),
@@ -718,12 +718,29 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   }
 
   header(Map<String, dynamic> user) {
-    bool isVip;
+    bool isVip = false;
+    bool expire = false;
+    String vipName = "";
+    String vipName1 = "";
     var vipExpireTime = user['info']['vip_expire_time'];
     if (vipExpireTime == null) {
       isVip = false;
     } else {
-      isVip = true;
+      if (user['info']['status'] == 2) {
+        if (user['info']['vip_id'] > 0 &&
+            DateTime.parse(user['info']['vip_expire_time'])
+                    .millisecondsSinceEpoch >
+                DateTime.now().millisecondsSinceEpoch) {
+          isVip = true;
+          vipName = user['info']['vip_name'] ;
+              vipName1 ="("+
+              user['info']['vip_expire_time'] +")";
+
+        } else {
+          expire = true;
+          vipName1 = "(会员已过期)";
+        }
+      } else {}
     }
     return Container(
       height: 166.h,
@@ -756,8 +773,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                         width: 180.w,
                         height: 180.h,
                         child: Image.asset(
-                          "assets/packages/images/ic_user_none_round.png"),
-                    ),
+                            "assets/packages/images/ic_user_none_round.png"),
+                      ),
               )),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -785,11 +802,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                     Container(
                         //color: Colors.black12,
                         padding: EdgeInsets.fromLTRB(5.w, 0.h, 5.w, 0.h),
-                        margin: EdgeInsets.fromLTRB(10.w, 10.h, 5.w, 0.h),
+                        margin: EdgeInsets.fromLTRB(5.w, 10.h, 0.w, 0.h),
                         alignment: Alignment.centerLeft,
                         height: 28.h,
                         decoration: new BoxDecoration(
-//背景
                           color: Color.fromRGBO(255, 255, 255, 100),
                           //设置四周圆角 角度
                           borderRadius: BorderRadius.all(Radius.circular(5.h)),
@@ -801,36 +817,46 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
                           style:
                               TextStyle(color: Colors.black, fontSize: 18.sp),
                         )),
-                    user['info']['vip_expire_time'] != null
+                    isVip == true
                         ? Container(
                             width: 60.h,
                             height: 60.h,
-                            margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                            margin: EdgeInsets.fromLTRB(0.w, 5.h, 0.w, 0.h),
                             child: Lottie.asset(
                                 'assets/packages/lottie_flutter/vip-icon.json'),
                           )
                         : Container(),
                     Container(
                         constraints: BoxConstraints(
-                          maxWidth: 220.w,
+                          maxWidth: 120.w,
                         ),
-                        margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
+                        margin: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.h),
                         child: Text(
-                          user['info']['vip_name'] +
-                              "" +
-                              (user['info']['vip_expire_time'] == null
-                                  ? ""
-                                  : "(" +
-                                      user['info']['vip_expire_time'] +
-                                      ")"),
+                          vipName,
                           style: TextStyle(
                             color: Colors.redAccent,
-                            fontWeight: FontWeight.w300,
+                            fontWeight: FontWeight.w700,
                             fontSize: 25.sp,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         )),
+                    Container(
+                        constraints: BoxConstraints(
+                          maxWidth: 170.w,
+                        ),
+                        margin: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.h),
+                        child: Text(
+                          vipName1,
+                          style: TextStyle(
+                            color: Colors.redAccent,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 25.sp,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )),
+
                   ],
                 ),
               ),

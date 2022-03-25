@@ -221,7 +221,6 @@ class ConnectBloc extends Bloc<ConnectEvent, ConnectState> {
       }else{
         if  (result['code']==200){
 
-
         } else{
 
         }

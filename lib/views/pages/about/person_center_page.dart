@@ -1,3 +1,4 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/router.dart';
@@ -154,6 +155,8 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
         BotToast.showText(text: 'Tap toast');
       },); //弹出简单通知Toast
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -424,11 +427,10 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           GestureDetector(
                             onTap: (){
                               //Navigator.pushNamed(context, UnitRouter.select_page);
+
                             },
                             child:Container(
                                 padding:  EdgeInsets.only(
-
-
                                 ),
                                 child:  Column(children: <Widget>[
                                   Container(

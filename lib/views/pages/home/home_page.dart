@@ -11,6 +11,7 @@ import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/blocs/home/home_bloc.dart';
 import 'package:flutter_geen/components/permanent/overlay_tool_wrapper.dart';
 import 'package:flutter_geen/storage/app_storage.dart';
+import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage>
   ];
   SearchParamList searchParamList = SearchParamList(list: []);
   List<SelectItem> selectItems = <SelectItem>[];
-
+  int roleId =0;
   @override
   void initState() {
     super.initState();
@@ -91,9 +92,7 @@ class _HomePageState extends State<HomePage>
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       OverlayToolWrapper.of(context).showFloating();
     });
-    Future.delayed(Duration(milliseconds: 2500)).then((e) async {
-      //_onRefresh();
-    });
+
   }
 
   @override
@@ -310,7 +309,9 @@ class _HomePageState extends State<HomePage>
                     var mode = BlocProvider.of<GlobalBloc>(context)
                         .state
                         .currentPhotoMode;
+                    roleId = mode;
                     if (mode == 0) {
+
                       title = "客户管理";
                     }
                     if (mode == 1) {
@@ -368,6 +369,7 @@ class _HomePageState extends State<HomePage>
                         ),
                         bar(
                           selectItems: selectItems,
+                          roleId: roleId,
                         ),
                       ],
                     );
@@ -545,6 +547,9 @@ class _HomePageState extends State<HomePage>
                         await sp
                           ..setInt("currentPhotoMode", ccMode);
                       }
+                      setState(() {
+                        roleId = ccMode;
+                      });
                     },
                     onCanceled: () => print('onCanceled'),
                   )
@@ -811,9 +816,9 @@ class FlexHeaderDelegate extends SliverPersistentHeaderDelegate {
 
 class bar extends StatelessWidget implements PreferredSizeWidget {
   final List<SelectItem> selectItems;
-
+  final int roleId;
   bar({
-    @required this.selectItems,
+    @required this.selectItems, this.roleId,
   });
 
   @override
@@ -822,13 +827,14 @@ class bar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       padding: EdgeInsets.only(left: 20.w, right: 20.w),
       child: Column(
         children: [
           Expanded(
               child: AppBarComponent(
-                  selectItems: selectItems, state: _scaffoldKey)),
+                  selectItems: selectItems, state: _scaffoldKey,mode: roleId,)),
         ],
       ),
     );
