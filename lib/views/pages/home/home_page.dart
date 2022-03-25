@@ -84,7 +84,8 @@ class _HomePageState extends State<HomePage>
   ];
   SearchParamList searchParamList = SearchParamList(list: []);
   List<SelectItem> selectItems = <SelectItem>[];
-  int roleId =0;
+  int roleId = 0;
+
   @override
   void initState() {
     super.initState();
@@ -92,7 +93,6 @@ class _HomePageState extends State<HomePage>
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       OverlayToolWrapper.of(context).showFloating();
     });
-
   }
 
   @override
@@ -277,7 +277,6 @@ class _HomePageState extends State<HomePage>
                 //     },
                 //   ),
                 // ),
-             
               ],
 
               //bottom: bar(),
@@ -311,7 +310,6 @@ class _HomePageState extends State<HomePage>
                         .currentPhotoMode;
                     roleId = mode;
                     if (mode == 0) {
-
                       title = "客户管理";
                     }
                     if (mode == 1) {
@@ -408,152 +406,152 @@ class _HomePageState extends State<HomePage>
     return Container(
         child: Container(
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-          //                交叉轴的布局方式，对于column来说就是水平方向的布局方式
-                crossAxisAlignment: CrossAxisAlignment.center,
-                //就是字child的垂直布局方向，向上还是向下
-                verticalDirection: VerticalDirection.down,
-                children: <Widget>[
-                  SizedBox(
-                    width: 1.w,
-                  ),
-                  Container(
-                    width: 100.w,
-                    child: Text(
-                      "筛选:",
-                      style: TextStyle(
-                        fontSize: 32.sp,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  CupertinoSegmentedControl<int>(
-                    //unselectedColor: Colors.yellow,
-                    //selectedColor: Colors.green,
-                    //pressedColor: Colors.blue,
-                    //borderColor: Colors.red,
-                    groupValue: state.sex == 0 ? 1 : state.sex,
-                    onValueChanged: _onValueChanged,
-                    padding: EdgeInsets.only(right: 0.w),
-                    children: {
-                      1: state.sex == 1
-                          ? Padding(
-                              padding: EdgeInsets.only(left: 50.w, right: 40.w),
-                              child: Text("男",
-                                  style: TextStyle(
-                                    fontSize: 30.sp,
-                                    color: Colors.white,
-                                  )),
-                            )
-                          : Text("男",
-                              style: TextStyle(
-                                fontSize: 30.sp,
-                                color: Colors.blue,
-                              )),
-                      2: state.sex == 2
-                          ? Padding(
-                              padding: EdgeInsets.only(left: 50.w, right: 40.w),
-                              child: Text("女",
-                                  style: TextStyle(
-                                    fontSize: 30.sp,
-                                    color: Colors.white,
-                                  )),
-                            )
-                          : Text("女",
-                              style: TextStyle(
-                                fontSize: 30.sp,
-                                color: Colors.blue,
-                              )),
-                    },
-                  ),
-                  buildHeadTxt(context, state),
-                  PopupMenuButton<String>(
-                    itemBuilder: (context) => buildItems(),
-                    offset: Offset(0, 0.w),
-                    color: Color(0xffF4FFFA),
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                      topRight: Radius.circular(5),
-                      bottomLeft: Radius.circular(5),
-                    )),
-                    onSelected: (e) async {
-                      //print(e);
-                      var ccMode = 0;
-                      if (e == '全部') {
-                        BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
-                        var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-
-                        BlocProvider.of<HomeBloc>(context).add(EventTab(
-                            sex,
-                            0,
-                            searchParamList,
-                            _showAge,
-                            _showAgeMax,
-                            _showAgeMin,
-                            serveType,
-                            selectItems));
-                        ccMode = 0;
-                      }
-                      if (e == '我的') {
-                        BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
-                        var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-                        BlocProvider.of<HomeBloc>(context).add(EventTab(
-                            sex,
-                            2,
-                            searchParamList,
-                            _showAge,
-                            _showAgeMax,
-                            _showAgeMin,
-                            serveType,
-                            selectItems));
-                        ccMode = 2;
-                      }
-                      if (e == '良缘') {
-                        BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
-                        var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-                        BlocProvider.of<HomeBloc>(context).add(EventTab(
-                            sex,
-                            1,
-                            searchParamList,
-                            _showAge,
-                            _showAgeMax,
-                            _showAgeMin,
-                            serveType,
-                            selectItems));
-                        ccMode = 1;
-                      }
-                      if (e == '公海') {
-                        BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(3));
-                        var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-                        BlocProvider.of<HomeBloc>(context).add(EventTab(
-                            sex,
-                            3,
-                            searchParamList,
-                            _showAge,
-                            _showAgeMax,
-                            _showAgeMin,
-                            serveType,
-                            selectItems));
-                        ccMode = 3;
-                      }
-                      var saveMode =
-                          BlocProvider.of<GlobalBloc>(context).state.showBackGround;
-                      if (saveMode) {
-                        final sp = AppStorage().sp;
-                        await sp
-                          ..setInt("currentPhotoMode", ccMode);
-                      }
-                      setState(() {
-                        roleId = ccMode;
-                      });
-                    },
-                    onCanceled: () => print('onCanceled'),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.max,
+      //                交叉轴的布局方式，对于column来说就是水平方向的布局方式
+      crossAxisAlignment: CrossAxisAlignment.center,
+      //就是字child的垂直布局方向，向上还是向下
+      verticalDirection: VerticalDirection.down,
+      children: <Widget>[
+        SizedBox(
+          width: 1.w,
+        ),
+        Container(
+          width: 100.w,
+          child: Text(
+            "筛选:",
+            style: TextStyle(
+              fontSize: 32.sp,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        CupertinoSegmentedControl<int>(
+          //unselectedColor: Colors.yellow,
+          //selectedColor: Colors.green,
+          //pressedColor: Colors.blue,
+          //borderColor: Colors.red,
+          groupValue: state.sex == 0 ? 1 : state.sex,
+          onValueChanged: _onValueChanged,
+          padding: EdgeInsets.only(right: 0.w),
+          children: {
+            1: state.sex == 1
+                ? Padding(
+                    padding: EdgeInsets.only(left: 50.w, right: 40.w),
+                    child: Text("男",
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Colors.white,
+                        )),
                   )
-                ],
+                : Text("男",
+                    style: TextStyle(
+                      fontSize: 30.sp,
+                      color: Colors.blue,
+                    )),
+            2: state.sex == 2
+                ? Padding(
+                    padding: EdgeInsets.only(left: 50.w, right: 40.w),
+                    child: Text("女",
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Colors.white,
+                        )),
+                  )
+                : Text("女",
+                    style: TextStyle(
+                      fontSize: 30.sp,
+                      color: Colors.blue,
+                    )),
+          },
+        ),
+        buildHeadTxt(context, state),
+        PopupMenuButton<String>(
+          itemBuilder: (context) => buildItems(),
+          offset: Offset(0, 0.w),
+          color: Color(0xffF4FFFA),
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            topRight: Radius.circular(5),
+            bottomLeft: Radius.circular(5),
+          )),
+          onSelected: (e) async {
+            //print(e);
+            var ccMode = 0;
+            if (e == '全部') {
+              BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(0));
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+
+              BlocProvider.of<HomeBloc>(context).add(EventTab(
+                  sex,
+                  0,
+                  searchParamList,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType,
+                  selectItems));
+              ccMode = 0;
+            }
+            if (e == '我的') {
+              BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+              BlocProvider.of<HomeBloc>(context).add(EventTab(
+                  sex,
+                  2,
+                  searchParamList,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType,
+                  selectItems));
+              ccMode = 2;
+            }
+            if (e == '良缘') {
+              BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(1));
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+              BlocProvider.of<HomeBloc>(context).add(EventTab(
+                  sex,
+                  1,
+                  searchParamList,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType,
+                  selectItems));
+              ccMode = 1;
+            }
+            if (e == '公海') {
+              BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(3));
+              var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+              BlocProvider.of<HomeBloc>(context).add(EventTab(
+                  sex,
+                  3,
+                  searchParamList,
+                  _showAge,
+                  _showAgeMax,
+                  _showAgeMin,
+                  serveType,
+                  selectItems));
+              ccMode = 3;
+            }
+            var saveMode =
+                BlocProvider.of<GlobalBloc>(context).state.showBackGround;
+            if (saveMode) {
+              final sp = AppStorage().sp;
+              await sp
+                ..setInt("currentPhotoMode", ccMode);
+            }
+            setState(() {
+              roleId = ccMode;
+            });
+          },
+          onCanceled: () => print('onCanceled'),
+        )
+      ],
     )));
   }
 
@@ -817,8 +815,10 @@ class FlexHeaderDelegate extends SliverPersistentHeaderDelegate {
 class bar extends StatelessWidget implements PreferredSizeWidget {
   final List<SelectItem> selectItems;
   final int roleId;
+
   bar({
-    @required this.selectItems, this.roleId,
+    @required this.selectItems,
+    this.roleId,
   });
 
   @override
@@ -827,14 +827,16 @@ class bar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       padding: EdgeInsets.only(left: 20.w, right: 20.w),
       child: Column(
         children: [
           Expanded(
               child: AppBarComponent(
-                  selectItems: selectItems, state: _scaffoldKey,mode: roleId,)),
+            selectItems: selectItems,
+            state: _scaffoldKey,
+            mode: roleId,
+          )),
         ],
       ),
     );

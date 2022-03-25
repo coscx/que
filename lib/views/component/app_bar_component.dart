@@ -459,7 +459,7 @@ bool getSelect(){
       child: ScrollConfiguration(
           behavior: DyBehaviorNull(),
       child: ListView.separated(
-        shrinkWrap: false,
+        shrinkWrap: true,
         scrollDirection: Axis.vertical,
         itemCount: items.length,
         // item 的个数
