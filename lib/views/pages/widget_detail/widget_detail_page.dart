@@ -82,6 +82,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
   @override
   void initState() {
+    Future.delayed(Duration(seconds: 1)).then((e) async {
+      Map<String, dynamic> photo = Map();
+      photo['uuid'] = userDetail['uuid'];
+      BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetailNoFresh(photo));
+    });
+
+
     super.initState();
   }
 
@@ -626,10 +633,10 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     status = info['status'];
 
     userDetail = info;
-    List<dynamic> connectList = connectLists['data'];
-    List<dynamic> appointList = appointLists['data'];
-    List<dynamic> actionList = actionLists['data'];
-    List<dynamic> callList = callLists['data'];
+    List<dynamic> connectList =connectLists==null?[]: connectLists['data'];
+    List<dynamic> appointList = appointLists==null?[]:appointLists['data'];
+    List<dynamic> actionList = actionLists==null?[]:actionLists['data'];
+    List<dynamic> callList = callLists==null?[]:callLists['data'];
     if (connectList.length > 0) {
       Map<String, dynamic> e = connectList.first;
       if (e != null) connectStatus = e['connect_status'];
@@ -668,280 +675,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
   Widget _buildTitle(BuildContext context, DetailState state) {
     if (state is DetailWithData) {
-      return header(state.userdetails);
+      return header(context,state.userdetails);
     }
-    if (state is DelSuccessData) {
-      return header(state.userdetails);
-    }
-
     return Container();
   }
 
-  avatar(String url, bool isVip) {
-    return Container(
-      child: Stack(
-        children: [
-          isVip
-              ? Container(
-                  width: 200.w,
-                  height: 200.h,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/radio_header_1.png"),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  margin: EdgeInsets.only(left: 0.w, top: 10.h),
-                )
-              : Container(),
-          Container(
-            margin: EdgeInsets.only(left: 30.w, top: 30.h),
-            child: CircleAvatar(
-              radius: (70.w),
-              child: ClipOval(
-                child: CachedNetworkImage(
-                    imageUrl: url,
-                    fit: BoxFit.cover,
-                    width: 140.w,
-                    height: 140.h,
-                    placeholder: (context, url) => Image.asset(
-                          'assets/images/default/img_default.png',
-                          fit: BoxFit.fill,
-                        )),
-              ),
-              backgroundColor: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  header(Map<String, dynamic> user) {
-    bool isVip = false;
-    bool expire = false;
-    String vipName = "";
-    String vipName1 = "";
-    var vipExpireTime = user['info']['vip_expire_time'];
-    if (vipExpireTime == null) {
-      isVip = false;
-    } else {
-      if (user['info']['status'] == 2) {
-        if (user['info']['vip_id'] > 0 &&
-            DateTime.parse(user['info']['vip_expire_time'])
-                    .millisecondsSinceEpoch >
-                DateTime.now().millisecondsSinceEpoch) {
-          isVip = true;
-          vipName = user['info']['vip_name'] ;
-              vipName1 ="("+
-              user['info']['vip_expire_time'] +")";
 
-        } else {
-          expire = true;
-          vipName1 = "(会员已过期)";
-        }
-      } else {}
-    }
-    return Container(
-      height: 166.h,
-      margin: EdgeInsets.only(top: 0.h, bottom: 0.h, left: 0.w),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: <Widget>[
-          GestureDetector(
-              onTap: () {
-                ImagePreview.preview(
-                  context,
-                  images: List.generate(1, (index) {
-                    return ImageOptions(
-                      url: user['pic'].length > 0
-                          ? (user['pic'][0])
-                          : ("assets/packages/images/ic_user_none_round.png"),
-                      tag: user['pic'].length > 0
-                          ? (user['pic'][0])
-                          : ("assets/packages/images/ic_user_none_round.png"),
-                    );
-                  }),
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.only(left: 10.w, right: 0.w),
-                child: user['pic'].length > 0
-                    ? avatar(user['pic'][0], isVip)
-                    : Container(
-                        margin: EdgeInsets.only(left: 20.w, top: 0.h),
-                        width: 180.w,
-                        height: 180.h,
-                        child: Image.asset(
-                            "assets/packages/images/ic_user_none_round.png"),
-                      ),
-              )),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                        constraints: BoxConstraints(
-                          maxWidth: 120.w,
-                        ),
-                        margin: EdgeInsets.fromLTRB(10.w, 10.h, 0.w, 0.h),
-                        child: Text(
-                          user['info']['name'],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 32.sp,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        )),
-                    Container(
-                        //color: Colors.black12,
-                        padding: EdgeInsets.fromLTRB(5.w, 0.h, 5.w, 0.h),
-                        margin: EdgeInsets.fromLTRB(5.w, 10.h, 0.w, 0.h),
-                        alignment: Alignment.centerLeft,
-                        height: 28.h,
-                        decoration: new BoxDecoration(
-                          color: Color.fromRGBO(255, 255, 255, 100),
-                          //设置四周圆角 角度
-                          borderRadius: BorderRadius.all(Radius.circular(5.h)),
-                          //设置四周边框
-                          border: new Border.all(width: 1, color: Colors.red),
-                        ),
-                        child: Text(
-                          user['info']['age'].toString() + "岁",
-                          style:
-                              TextStyle(color: Colors.black, fontSize: 18.sp),
-                        )),
-                    isVip == true
-                        ? Container(
-                            width: 60.h,
-                            height: 60.h,
-                            margin: EdgeInsets.fromLTRB(0.w, 5.h, 0.w, 0.h),
-                            child: Lottie.asset(
-                                'assets/packages/lottie_flutter/vip-icon.json'),
-                          )
-                        : Container(),
-                    Container(
-                        constraints: BoxConstraints(
-                          maxWidth: 120.w,
-                        ),
-                        margin: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.h),
-                        child: Text(
-                          vipName,
-                          style: TextStyle(
-                            color: Colors.redAccent,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 25.sp,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        )),
-                    Container(
-                        constraints: BoxConstraints(
-                          maxWidth: 170.w,
-                        ),
-                        margin: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.h),
-                        child: Text(
-                          vipName1,
-                          style: TextStyle(
-                            color: Colors.redAccent,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 25.sp,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        )),
 
-                  ],
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  user['info']['location_place'] == ""
-                      ? Container(
-                          margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
-                          height: 40.h,
-                        )
-                      : Container(
-                          width: 280.w,
-                          child: Tag(
-                            color: Color.fromRGBO(241, 241, 241, 100),
-                            borderColor: Color.fromRGBO(241, 241, 241, 100),
-                            borderWidth: 1,
-                            margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
-                            height: 40.h,
-                            radius: 10.w,
-                            text: Text(
-                              user['info']['location_place'].toString(),
-                              style: TextStyle(
-                                fontSize: 24.sp,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                  user['info']['serve_user'] != ""
-                      ? Container(
-                          margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
-                          child: Text(
-                            user['info']['serve_user'] != "" ? "服务:" : "",
-                            style: TextStyle(
-                              color: Colors.deepOrangeAccent,
-                              fontWeight: FontWeight.w300,
-                              fontSize: 25.sp,
-                            ),
-                          ))
-                      : (user['info']['sale_user'] != ""
-                          ? Container(
-                              margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
-                              child: Text(
-                                user['info']['sale_user'] != "" ? "销售:" : "",
-                                style: TextStyle(
-                                  color: Colors.deepOrangeAccent,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 25.sp,
-                                ),
-                              ))
-                          : Container(
-                              margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
-                            )),
-                  user['info']['serve_user'] != ""
-                      ? Container(
-                          margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
-                          child: Text(
-                            user['info']['serve_user'],
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 25.sp,
-                            ),
-                          ))
-                      : (user['info']['sale_user'] == ""
-                          ? Container(
-                              margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
-                            )
-                          : Container(
-                              margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
-                              child: Text(
-                                user['info']['sale_user'],
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 25.sp,
-                                ),
-                              ))),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }

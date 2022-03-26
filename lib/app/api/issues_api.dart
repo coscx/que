@@ -92,7 +92,8 @@ class IssuesApi {
   static Future<Map<String,dynamic>> searchErpUser( String keyWord, String page,String sex,String mode,SearchParamList search ,bool _showAge, int _showAgeMax, int _showAgeMin,String serveType,final List<SelectItem> selectItems ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    dio.options.headers['authorization']="Bearer "+token;
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
     Map<String,dynamic> searchParm={};
     var channel = <String>[];
     var education = <String>[];
@@ -206,14 +207,15 @@ class IssuesApi {
       url="/api/v1/customer/passive/index";
     }
     if(mode=="2"){//我的
-      url="/api/v1/customer/personal/indexApp";
+      url="/api/v1/customer/personal/index";
       searchParm['type'] = serveType;
     }
     if(mode=="3"){//我的
       url="/api/v1/customer/public/index";
     }
+
     try {
-      Response<dynamic> rep = await dio.get(url,queryParameters:searchParm );
+      Response<dynamic> rep = await dioA.get(NewBaseUrl+url,queryParameters:searchParm );
       return rep.data;
 
     } on DioError catch(e){
@@ -562,11 +564,12 @@ class IssuesApi {
   static Future<Map<String,dynamic>> getConnectList( String uuid, String page ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    dio.options.headers['authorization']="Bearer "+token;
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
     var data={'customer_uuid':uuid,'currentPage':page,"pageSize":20};
 
     try {
-      Response<dynamic> rep = await dio.get('/api/v1/customer/connectList',queryParameters:data );
+      Response<dynamic> rep = await dioA.get(NewBaseUrl+'/api/v1/customer/connectList',queryParameters:data );
       return rep.data;
 
     } on DioError catch(e){
@@ -592,11 +595,12 @@ class IssuesApi {
   static Future<Map<String,dynamic>> getActionList( String uuid, String page ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    dio.options.headers['authorization']="Bearer "+token;
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
     var data={'customer_uuid':uuid,'currentPage':page,"pageSize":20};
 
     try {
-      Response<dynamic> rep = await dio.get('/api/v1/customer/actionList',queryParameters:data );
+      Response<dynamic> rep = await dioA.get(NewBaseUrl+'/api/v1/customer/actionList',queryParameters:data );
       return rep.data;
 
     } on DioError catch(e){
@@ -607,11 +611,12 @@ class IssuesApi {
   static Future<Map<String,dynamic>> getCallList( String uuid, String page ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    dio.options.headers['authorization']="Bearer "+token;
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
     var data={'customer_uuid':uuid,'currentPage':page,"pageSize":20};
 
     try {
-      Response<dynamic> rep = await dio.get('/api/v1/customer/callLogs',queryParameters:data );
+      Response<dynamic> rep = await dioA.get(NewBaseUrl+'/api/v1/customer/callLogs',queryParameters:data );
       return rep.data;
 
     } on DioError catch(e){
@@ -623,11 +628,12 @@ class IssuesApi {
   static Future<Map<String,dynamic>> getAppointmentList( String uuid, String page ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    dio.options.headers['authorization']="Bearer "+token;
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
     var data={'customer_uuid':uuid,'currentPage':page,"pageSize":20};
 
     try {
-      Response<dynamic> rep = await dio.get('/api/v1/customer/appointmentList',queryParameters:data );
+      Response<dynamic> rep = await dioA.get(NewBaseUrl+'/api/v1/customer/appointmentList',queryParameters:data );
       return rep.data;
 
     } on DioError catch(e){
@@ -791,10 +797,12 @@ class IssuesApi {
   static Future<Map<String,dynamic>> getUserDetail( String memberId) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    dio.options.headers['authorization']="Bearer "+token;
+
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
     var data={};
     try{
-      Response<dynamic> rep = await dio.get('/api/v1/customer/detail/'+memberId );
+      Response<dynamic> rep = await dioA.post(NewBaseUrl+  '/api/v1/customer/detail/'+memberId );
       //var datas = json.decode(rep.data);
       return rep.data;
     } on DioError catch(e){

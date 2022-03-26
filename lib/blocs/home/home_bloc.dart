@@ -233,6 +233,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
 
     if (event is EventSearchErpUser) {
+      //yield WidgetsLoading();
       try {
 
         var result= await IssuesApi.searchErpUser('', '1',event.sex.toString(),event.mode.toString(),event.search,event.showAge,event.maxAge,event.minAge,event.serveType,event.selectItems);

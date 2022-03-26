@@ -533,32 +533,32 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       if (result['code'] == 200) {
       } else {}
 
-      var resultConnectList =
-          await IssuesApi.getConnectList(photo['uuid'].toString(), "1");
-      if (resultConnectList['code'] == 200) {
-      } else {}
-
-      var appointList =
-          await IssuesApi.getAppointmentList(photo['uuid'].toString(), "1");
-      if (appointList['code'] == 200) {
-      } else {}
-      var actionList =
-          await IssuesApi.getActionList(photo['uuid'].toString(), "1");
-      if (actionList['code'] == 200) {
-      } else {}
-      var callList = await IssuesApi.getCallList(photo['uuid'].toString(), "1");
-      if (actionList['code'] == 200) {
-      } else {}
+      // var resultConnectList =
+      //     await IssuesApi.getConnectList(photo['uuid'].toString(), "1");
+      // if (resultConnectList['code'] == 200) {
+      // } else {}
+      //
+      // var appointList =
+      //     await IssuesApi.getAppointmentList(photo['uuid'].toString(), "1");
+      // if (appointList['code'] == 200) {
+      // } else {}
+      // var actionList =
+      //     await IssuesApi.getActionList(photo['uuid'].toString(), "1");
+      // if (actionList['code'] == 200) {
+      // } else {}
+      // var callList = await IssuesApi.getCallList(photo['uuid'].toString(), "1");
+      // if (actionList['code'] == 200) {
+      // } else {}
 
       if (result['data'].isEmpty) {
         yield DetailEmpty();
       } else {
         yield DetailWithData(
             userdetails: result['data'],
-            connectList: resultConnectList['data'],
-            appointList: appointList['data'],
-            actionList: actionList['data'],
-            callList: callList['data']);
+            connectList: null,
+            appointList: null,
+            actionList: null,
+            callList: null);
       }
     } catch (e) {
       yield DetailFailed();

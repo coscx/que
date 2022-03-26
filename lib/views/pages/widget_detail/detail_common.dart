@@ -166,7 +166,7 @@ Widget item_connect(
                             Visibility(
                                 visible: true,
                                 child: Container(
-                                    margin: EdgeInsets.only(top: 0.w,left: 5.w),
+                                    margin: EdgeInsets.only(top: 3.w,left: 5.w),
                                   //width: ScreenUtil().screenWidth*0.71,
                                    // height: 30.h,
                                     child: Row(

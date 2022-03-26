@@ -144,7 +144,13 @@ class _HomePageState extends State<HomePage>
     oldUsers.forEach((element) {
       newUsers.add(element);
     });
-    newUsers.addAll(result['data']['data']);
+    if (result['data'] is List){
+
+    }else{
+      if (result['data']['data']!=null)
+      newUsers.addAll(result['data']['data']);
+    }
+
     BlocProvider.of<HomeBloc>(context).add(EventLoadMore(newUsers));
     _refreshController.loadComplete();
   }
@@ -308,7 +314,7 @@ class _HomePageState extends State<HomePage>
                     var mode = BlocProvider.of<GlobalBloc>(context)
                         .state
                         .currentPhotoMode;
-                    roleId = mode;
+
                     if (mode == 0) {
                       title = "客户管理";
                     }
@@ -379,17 +385,6 @@ class _HomePageState extends State<HomePage>
     BlocProvider.of<GlobalBloc>(context).add(EventSetIndexSex(value));
     var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
 
-    if (searchParamList == null) {
-      BlocProvider.of<HomeBloc>(context).add(EventFresh(
-          value,
-          mode,
-          searchParamList,
-          _showAge,
-          _showAgeMax,
-          _showAgeMin,
-          serveType,
-          selectItems));
-    } else {
       BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
           searchParamList,
           selectItems,
@@ -399,7 +394,7 @@ class _HomePageState extends State<HomePage>
           _showAgeMax,
           _showAgeMin,
           serveType));
-    }
+
   }
 
   Widget _buildHead(BuildContext context, GlobalState state) {
@@ -468,15 +463,16 @@ class _HomePageState extends State<HomePage>
         buildHeadTxt(context, state),
         PopupMenuButton<String>(
           itemBuilder: (context) => buildItems(),
-          offset: Offset(0, 0.w),
-          color: Color(0xffF4FFFA),
+          padding: EdgeInsets.only(right: 0.w),
+          offset: Offset(-45.w, 10.h),
+          color: Colors.white,
           elevation: 1,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-            topRight: Radius.circular(5),
-            bottomLeft: Radius.circular(5),
+            topLeft: Radius.circular(20.w),
+            bottomRight: Radius.circular(20.w),
+            topRight: Radius.circular(5.w),
+            bottomLeft: Radius.circular(20.w),
           )),
           onSelected: (e) async {
             //print(e);
@@ -494,7 +490,7 @@ class _HomePageState extends State<HomePage>
                   _showAgeMin,
                   serveType,
                   selectItems));
-              ccMode = 0;
+              ccMode = 10;
             }
             if (e == '我的') {
               BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(2));
@@ -566,8 +562,8 @@ class _HomePageState extends State<HomePage>
         .toList()
         .map((e) => PopupMenuItem<String>(
             value: e,
-            child: Wrap(
-              spacing: 10.w,
+            child: Row(
+              //spacing: 10.w,
               children: <Widget>[
                 Icon(
                   map[e],
@@ -624,6 +620,7 @@ class _HomePageState extends State<HomePage>
 
     if (state is WidgetsLoaded) {
       List<dynamic> photos = state.photos;
+      if (photos==null) return SliverToBoxAdapter(child: EmptyPage());
       if (photos.isEmpty) return SliverToBoxAdapter(child: EmptyPage());
       return photos.isNotEmpty
           ? SliverList(

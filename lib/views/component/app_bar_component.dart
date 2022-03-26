@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/blocs/global/global_bloc.dart';
+import 'package:flutter_geen/storage/app_storage.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
 import 'package:flutter_geen/views/pages/home/flow_page.dart';
@@ -45,12 +46,84 @@ class _AppBarComponentState extends State<AppBarComponent> {
   @override
   void initState() {
     // TODO: implement initState
-    Future.delayed(Duration(microseconds: 1)).then((e) async {
+    Future.delayed(Duration(milliseconds: 1)).then((e) async {
+      int ccMode =0;
+
+        final sp = AppStorage().sp;
+        var mode = await sp;
+        ccMode =mode.getInt("currentPhotoMode");
+
+      if (widget.mode >0){
+        ccMode = widget.mode;
+      }
       var roleIds = await LocalStorage.get("roleId");
+
       if (roleIds != "" && roleIds != null) {
 
         setState(() {
           roleId = int.parse(roleIds);
+          //print(roleId);
+          //print(widget.mode);
+          //print((widget.mode==2 && (roleId == 7 || roleId == 9)));
+          if (ccMode==2 && (roleId == 7 || roleId == 9)){
+              //print("88888888");
+            _distanceSortConditions.clear();
+            _distanceSortConditions
+                .add(SortCondition(name: '沟通状态', id: 0, isSelected: true, all: true));
+            _distanceSortConditions
+                .add(SortCondition(name: '20.已入库资料不全', id: 20, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '21.新分VIP', id: 21, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '22.无对象,待推荐', id: 22, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '23.推动见面指导', id: 23, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '24.撮合再见面', id: 24, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '25.深入交往,推动恋爱', id: 25, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '26.确认恋爱', id: 26, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '27.结婚', id: 27, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '28.暂停', id: 28, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '29.放弃', id: 29, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '30.已共识退费', id: 30, isSelected: false, all: true));
+
+          }else{
+            _distanceSortConditions.clear();
+            _distanceSortConditions
+                .add(SortCondition(name: '沟通状态', id: 0, isSelected: true, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '1.新分未联系', id: 1, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '2.号码无效', id: 2, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '3.号码未接通', id: 3, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '4.可继续沟通', id: 4, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '5.有意向面谈', id: 5, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '6.确定到店时间', id: 6, isSelected: false, all: true));
+            _distanceSortConditions.add(SortCondition(
+                name: '7.已到店，意愿需跟进', id: 7, isSelected: false, all: true));
+            _distanceSortConditions.add(SortCondition(
+                name: '8.已到店，考虑7天付款', id: 8, isSelected: false, all: true));
+            _distanceSortConditions.add(SortCondition(
+                name: '9.高级会员，支付预付款', id: 9, isSelected: false, all: true));
+            _distanceSortConditions.add(SortCondition(
+                name: '10.高级会员，费用已结清', id: 10, isSelected: false, all: true));
+            _distanceSortConditions.add(
+                SortCondition(name: '11.毁单', id: 11, isSelected: false, all: true));
+            _distanceSortConditions.add(SortCondition(
+                name: '12.放弃并放入公海', id: 12, isSelected: false, all: true));
+            _distanceSortConditions.add(SortCondition(
+                name: '13.放弃并放入D级', id: 13, isSelected: false, all: true));
+          }
         });
       }
     });
@@ -103,7 +176,7 @@ class _AppBarComponentState extends State<AppBarComponent> {
     ta.id = 0;
     firstLevels.add(ta);
 
-    Future.delayed(Duration(milliseconds: 1)).then((e) async {
+    Future.delayed(Duration(microseconds: 1)).then((e) async {
       var result = await IssuesApi.getStoreList("1");
       if (result['code'] == 200) {
         all.clear();
@@ -124,7 +197,12 @@ class _AppBarComponentState extends State<AppBarComponent> {
             all.add(ddd1);
           });
         });
-      } else {}
+        setState(() {
+
+        });
+      } else {
+
+      }
     });
 
     super.initState();
@@ -141,68 +219,6 @@ bool getSelect(){
 }
   @override
   Widget build(BuildContext context) {
-    if (widget.mode==2 && (roleId == 7 || roleId == 9)){
-
-        _distanceSortConditions.clear();
-        _distanceSortConditions
-            .add(SortCondition(name: '沟通状态', id: 0, isSelected: true, all: true));
-        _distanceSortConditions
-            .add(SortCondition(name: '20.已入库资料不全', id: 20, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '21.新分VIP', id: 21, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '22.无对象,待推荐', id: 22, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '23.推动见面指导', id: 23, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '24.撮合再见面', id: 24, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '25.深入交往,推动恋爱', id: 25, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '26.确认恋爱', id: 26, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '27.结婚', id: 27, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '28.暂停', id: 28, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '29.放弃', id: 29, isSelected: false, all: true));
-        _distanceSortConditions.add(
-            SortCondition(name: '30.已共识退费', id: 30, isSelected: false, all: true));
-
-
-
-    }else{
-      _distanceSortConditions.clear();
-      _distanceSortConditions
-          .add(SortCondition(name: '沟通状态', id: 0, isSelected: true, all: true));
-      _distanceSortConditions.add(
-          SortCondition(name: '1.新分未联系', id: 1, isSelected: false, all: true));
-      _distanceSortConditions.add(
-          SortCondition(name: '2.号码无效', id: 2, isSelected: false, all: true));
-      _distanceSortConditions.add(
-          SortCondition(name: '3.号码未接通', id: 3, isSelected: false, all: true));
-      _distanceSortConditions.add(
-          SortCondition(name: '4.可继续沟通', id: 4, isSelected: false, all: true));
-      _distanceSortConditions.add(
-          SortCondition(name: '5.有意向面谈', id: 5, isSelected: false, all: true));
-      _distanceSortConditions.add(
-          SortCondition(name: '6.确定到店时间', id: 6, isSelected: false, all: true));
-      _distanceSortConditions.add(SortCondition(
-          name: '7.已到店，意愿需跟进', id: 7, isSelected: false, all: true));
-      _distanceSortConditions.add(SortCondition(
-          name: '8.已到店，考虑7天付款', id: 8, isSelected: false, all: true));
-      _distanceSortConditions.add(SortCondition(
-          name: '9.高级会员，支付预付款', id: 9, isSelected: false, all: true));
-      _distanceSortConditions.add(SortCondition(
-          name: '10.高级会员，费用已结清', id: 10, isSelected: false, all: true));
-      _distanceSortConditions.add(
-          SortCondition(name: '11.毁单', id: 11, isSelected: false, all: true));
-      _distanceSortConditions.add(SortCondition(
-          name: '12.放弃并放入公海', id: 12, isSelected: false, all: true));
-      _distanceSortConditions.add(SortCondition(
-          name: '13.放弃并放入D级', id: 13, isSelected: false, all: true));
-    }
-
 
     return Container(
       child: Stack(

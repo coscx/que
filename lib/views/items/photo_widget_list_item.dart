@@ -528,6 +528,10 @@ class PhotoWidgetListItem extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 width: 140.w,
                                 height: 140.h,
+                          placeholder: (context, url) => Image.asset(
+                              'assets/packages/images/ic_user_none_round.png',
+                              fit: BoxFit.fill,
+                            ),
                               ),
                       ),
                     ),
