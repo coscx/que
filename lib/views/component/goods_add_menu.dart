@@ -100,6 +100,12 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
           height: 70.h,
           child: TextButton.icon(
             onPressed: () {
+              if(widget.args['role_id'] ==null){
+                showToastRed(context, "暂无权限", true);
+                Navigator.of(context).pop();
+                return;
+
+              }
               if (widget.args['role_id'] > 3) {
                 showToastRed(context, "暂无权限", true);
                 Navigator.of(context).pop();

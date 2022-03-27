@@ -43,7 +43,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   String call = "";
   String uuid = "";
   int status = 10;
-  int roleId = 0;
   bool showBaseControl = false;
   bool showEduControl = false;
   bool showMarriageControl = false;
@@ -156,7 +155,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         tooltip: '用户操作',
         key: _addKey,
         onPressed: () {
-          userDetail['role_id'] = roleId;
+
           showAddMenu(userDetail);
         },
         icon: Icon(
@@ -337,7 +336,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     return FeedbackWidget(
       onPressed: () async {
         if (canEdit == 1) {
-          var d = await commentDialog(context, connectStatus, userDetail,roleId);
+          var d = await commentDialog(context, connectStatus, userDetail);
           if (d != null) {
             if (d == true) {
               setState(() {
@@ -435,7 +434,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             e['connect_message'],
             e['subscribe_time'] == null ? "" : e['subscribe_time'],
             e['connect_status'].toString(),
-            e['connect_type'].toString(),roleId))
+            e['connect_type'].toString(),userDetail['role_id']))
         .toList();
   }
 
@@ -627,7 +626,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     var info = userDetails['info'];
     var demand = userDetails['demand'];
     canEdit = userDetails['can_edit'];
-    roleId = userDetails['role_id'];
     call = info['mobile'];
     uuid = info['uuid'];
     status = info['status'];

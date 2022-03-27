@@ -458,8 +458,8 @@ Future<bool> appointDialog(
 }
 
 Future<bool> commentDialog(BuildContext context, int connectStatus,
-    Map<String, dynamic> detail,int roleId) async {
-
+    Map<String, dynamic> detail) async {
+    var roleId =detail['role_id'];
     if (roleId==7 || roleId==9){
       goals = goalsAppoint;
       goalValue = getServeStatusIndex(connectStatus);

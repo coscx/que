@@ -112,10 +112,11 @@ Widget item_connect(
   bool isDark = false;
 
   return Container(
-    padding: EdgeInsets.only(top: 10.h, bottom: 0),
-    width: double.infinity,
+    height: 80.h,
+    padding: EdgeInsets.only(top: 10.h, bottom: 5.h),
+    //width: double.infinity,
     //height: 180.h,
-    child: Material(
+    child: Container(
         color: Colors.transparent,
         child: GestureDetector(
           onTap: () {
@@ -130,7 +131,7 @@ Widget item_connect(
           },
           child: Container(
 
-            margin: EdgeInsets.only(left: 15.w, right: 20.w),
+            padding: EdgeInsets.only(left: 15.w, right: 20.w),
             child: Column(
               children: [
                 Column(
@@ -192,13 +193,16 @@ Widget item_connect(
                         //Visibility是控制子组件隐藏/可见的组件
                         Visibility(
                           visible: true,
-                          child: Row(children: <Widget>[
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              size: 25.sp,
-                              color: Colors.black54,
-                            )
-                          ]),
+                          child: Container(
+                            margin: EdgeInsets.only(top: 3.w),
+                            child: Row(children: <Widget>[
+                              Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                size: 25.sp,
+                                color: Colors.black54,
+                              )
+                            ]),
+                          ),
                         )
                       ],
                     ),
