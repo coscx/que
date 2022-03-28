@@ -36,13 +36,15 @@ class AppStorage {
     int fontIndex = prefs.getInt(SP.fontFamily) ?? 1;
     int codeIndex = prefs.getInt(SP.codeStyleIndex) ?? 0;
     int itemStyleIndex = prefs.getInt(SP.itemStyleIndex) ?? 0;
-
+    bool animate = prefs.getBool(SP.animate) ?? true;
     return GlobalState(
         showBackGround: showBg,
         themeColor: Cons.themeColorSupport.keys.toList()[themeIndex],
         fontFamily: Cons.fontFamilySupport[fontIndex],
         itemStyleIndex: itemStyleIndex,
-        codeStyleIndex: codeIndex);
+        codeStyleIndex: codeIndex,
+        animate: animate
+    );
   }
 
   // 初始化数据库
@@ -72,7 +74,7 @@ class AppStorage {
       await File(dbPath).writeAsBytes(bytes, flush: true);
       //print("==== release ===== assets ======拷贝完成====");
     } else {
-      print("========= 数据库 ======已存在====");
+      //print("========= 数据库 ======已存在====");
     }
     return await openDatabase(dbPath, readOnly: false);
   }

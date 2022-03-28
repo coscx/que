@@ -19,7 +19,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({@required this.repository});
 
   @override
-  HomeState get initialState => WidgetsLoading();
+  HomeState get initialState => WidgetsInit();
 
   Color get activeHomeColor {
 
@@ -268,7 +268,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Stream<HomeState> _mapLoadWidgetToState() async* {
-    yield WidgetsLoading();
+   // yield WidgetsLoading();
     try {
       final app = AppStorage();
       var mode = await app.sp;
@@ -287,17 +287,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }else{
         if  (result['code']==200){
 
-
         } else{
 
         }
       }
 
-
       var total ="0";
-
       if (result['data'] is List){
-
         yield WidgetsLoaded(photos: result['data'],count: total);
       }else{
         total = result['data']['total'].toString();

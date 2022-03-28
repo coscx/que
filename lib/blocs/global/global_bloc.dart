@@ -51,7 +51,12 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
         ..setBool(SP.showBackground, event.show);
       yield state.copyWith(showBackGround: event.show);
     }
-
+    // 切换背景显示事件处理 : 固化数据 + 产出新状态
+    if (event is EventAnimate) {
+      await sp
+        ..setBool(SP.animate, event.show);
+      yield state.copyWith(animate: event.show);
+    }
     // 切换背景显示事件处理 : 产出新状态
     if (event is EventSwitchShowOver) {
       yield state.copyWith(showPerformanceOverlay: event.show);

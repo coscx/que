@@ -29,106 +29,117 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   var _scaffoldkey = new GlobalKey<ScaffoldState>();
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   Widget build(BuildContext context) {
     return Theme(
         data: ThemeData(
-        appBarTheme: AppBarTheme.of(context).copyWith(
-      brightness: Brightness.light,
-    ),
-    ),
-    child:Scaffold(
-      key: _scaffoldkey,
-      appBar:  AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0, //去掉Appbar底部阴影
-        leadingWidth: 150.w,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          appBarTheme: AppBarTheme.of(context).copyWith(
+            brightness: Brightness.light,
+          ),
         ),
-        title: Container(
-        padding: EdgeInsets.only(left: 0.w,top: 0.w,bottom: 0),
-        child:Text("用户搜索",
-                style:TextStyle(
-                  fontFamily: "Quicksand",
-                  fontWeight: FontWeight.w900,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 45.sp,
-                  decoration: TextDecoration.none,
-                  color: Colors.black,
-                )
-        )),
-        actions: <Widget>[
-
-        ],
-      ),
-      body:
-      WillPopScope(
-        onWillPop: () async {
-
-          return true;
-        },
-        child: ScrollConfiguration(
-            behavior: DyBehaviorNull(),
-            child:
-              SmartRefresher(
-                enablePullDown: false,
-                enablePullUp: true,
-                header: DYrefreshHeader(),
-                footer: DYrefreshFooter(),
-                controller: _refreshController,
-                onLoading: () async {
-                    List<dynamic> oldUsers = BlocProvider.of<SearchBloc>(context).state.props.elementAt(0);
-                    String word =BlocProvider.of<SearchBloc>(context).state.props.elementAt(1);
-                    var currentPage =BlocProvider.of<GlobalBloc>(context).state.indexSearchPage;
-                    BlocProvider.of<GlobalBloc>(context).add(EventSearchPhotoPage(currentPage));
-                    var result= await IssuesApi.searchPhoto(word, (++currentPage).toString());
-                    if  (result['code']==200){
-
-                    } else{
-
-                    }
-                    List<dynamic> newUsers =[];
-                    oldUsers.forEach((element) {
-                      newUsers.add(element);
-                    });
-                    newUsers.addAll(result['data']['data']);
-                    BlocProvider.of<SearchBloc>(context).add(EventLoadMoreUser(newUsers));
-                    _refreshController.loadComplete();
-
-                },
-                child:
-
-              CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                slivers: <Widget>[
-                _buildSliverAppBar(),
-                //SliverToBoxAdapter(child: _buildStarFilter()),
-                BlocListener<SearchBloc, SearchState>(
-                    listener: (ctx, state) {
-                      if (state is CheckUserSuccesses) {
-                        _scaffoldkey.currentState.showSnackBar(SnackBar(
-                          content: Text('审核成功' + state.Reason),
-                          backgroundColor: Colors.green,
-                        ));
-                      }
-                      if (state is DelImgSuccesses) {
-                        _scaffoldkey.currentState.showSnackBar(SnackBar(
-                          content: Text('删除成功'),
-                          backgroundColor: Colors.blue,
-                        ));
-                      }
+        child: Scaffold(
+          key: _scaffoldkey,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            //去掉Appbar底部阴影
+            leadingWidth: 150.w,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            title: Container(
+                padding: EdgeInsets.only(left: 0.w, top: 0.w, bottom: 0),
+                child: Text("用户搜索",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.w900,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 45.sp,
+                      decoration: TextDecoration.none,
+                      color: Colors.black,
+                    ))),
+            actions: <Widget>[],
+          ),
+          body: WillPopScope(
+            onWillPop: () async {
+              FocusScope.of(context).requestFocus(FocusNode());
+              return true;
+            },
+            child: ScrollConfiguration(
+                behavior: DyBehaviorNull(),
+                child: SmartRefresher(
+                    enablePullDown: false,
+                    enablePullUp: true,
+                    header: DYrefreshHeader(),
+                    footer: DYrefreshFooter(),
+                    controller: _refreshController,
+                    onLoading: () async {
+                      List<dynamic> oldUsers =
+                          BlocProvider.of<SearchBloc>(context)
+                              .state
+                              .props
+                              .elementAt(0);
+                      String word = BlocProvider.of<SearchBloc>(context)
+                          .state
+                          .props
+                          .elementAt(1);
+                      var currentPage = BlocProvider.of<GlobalBloc>(context)
+                          .state
+                          .indexSearchPage;
+                      BlocProvider.of<GlobalBloc>(context)
+                          .add(EventSearchPhotoPage(currentPage));
+                      var result = await IssuesApi.searchPhoto(
+                          word, (++currentPage).toString());
+                      if (result['code'] == 200) {
+                      } else {}
+                      List<dynamic> newUsers = [];
+                      oldUsers.forEach((element) {
+                        newUsers.add(element);
+                      });
+                      newUsers.addAll(result['data']['data']);
+                      BlocProvider.of<SearchBloc>(context)
+                          .add(EventLoadMoreUser(newUsers));
+                      _refreshController.loadComplete();
                     },
-                    child: BlocBuilder<SearchBloc, SearchState>(
-                        builder: _buildBodyByState)
-                )
-              ],
-            ))),
-      ),
-    ));
+                    child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          // 触摸收起键盘
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                        child: CustomScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          slivers: <Widget>[
+                            _buildSliverAppBar(),
+                            //SliverToBoxAdapter(child: _buildStarFilter()),
+                            BlocListener<SearchBloc, SearchState>(
+                                listener: (ctx, state) {
+                                  if (state is CheckUserSuccesses) {
+                                    _scaffoldkey.currentState
+                                        .showSnackBar(SnackBar(
+                                      content: Text('审核成功' + state.Reason),
+                                      backgroundColor: Colors.green,
+                                    ));
+                                  }
+                                  if (state is DelImgSuccesses) {
+                                    _scaffoldkey.currentState
+                                        .showSnackBar(SnackBar(
+                                      content: Text('删除成功'),
+                                      backgroundColor: Colors.blue,
+                                    ));
+                                  }
+                                },
+                                child: BlocBuilder<SearchBloc, SearchState>(
+                                    builder: _buildBodyByState))
+                          ],
+                        )))),
+          ),
+        ));
   }
 
   Widget _buildSliverAppBar() {
@@ -136,25 +147,17 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: Colors.white,
       elevation: 0,
       pinned: true,
-      leadingWidth: 20.w,
+      leadingWidth: 15.w,
       title: Container(
-        padding: EdgeInsets.only(left: 0.w,top: 0.w),
-    child:AppSearchBar()),
-      actions: <Widget>[
-        Padding(
-          padding:  EdgeInsets.only(right: 5.w,),
-          child: Icon(TolyIcon.icon_sound),
-        )
-      ],
+          padding: EdgeInsets.only(left: 0.w, top: 0.w), child: AppSearchBar()),
     );
   }
 
-  Widget _buildStarFilter() =>
-      Column(
+  Widget _buildStarFilter() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding:  EdgeInsets.only(top: 10.h, left: 35.w, bottom: 5.h),
+            padding: EdgeInsets.only(top: 10.h, left: 35.w, bottom: 5.h),
             child: Wrap(
               spacing: 5.w,
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -166,9 +169,7 @@ class _SearchPageState extends State<SearchPage> {
                 Text(
                   '筛选',
                   style: TextStyle(
-                      color: Theme
-                          .of(context)
-                          .primaryColor,
+                      color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
               ],
@@ -176,16 +177,13 @@ class _SearchPageState extends State<SearchPage> {
           ),
           MultiChipFilter<int>(
             data: [1, 2, 3, 4, 5],
-            avatarBuilder: (_, index) =>
-                CircleAvatar(child: _buildTxt(index)),
-            labelBuilder: (_, selected) =>
-                Container(
-                    child:
-                    Icon(
-                      Icons.star,
-                      color: selected ? Colors.blue : Colors.grey,
-                      size: 18.sp,
-                    )),
+            avatarBuilder: (_, index) => CircleAvatar(child: _buildTxt(index)),
+            labelBuilder: (_, selected) => Container(
+                child: Icon(
+              Icons.star,
+              color: selected ? Colors.blue : Colors.grey,
+              size: 18.sp,
+            )),
             onChange: _doSelectStart,
           ),
           Divider()
@@ -213,43 +211,41 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _buildBodyByState(BuildContext context, SearchState state) {
     if (state is SearchStateNoSearch)
-      return SliverToBoxAdapter(child: NotSearchPage(),);
+      return SliverToBoxAdapter(
+        child: NotSearchPage(),
+      );
     if (state is SearchStateLoading)
       return SliverToBoxAdapter(child: LoadingPage());
     if (state is SearchStateError)
       return SliverToBoxAdapter(child: ErrorPage());
-    if (state is SearchStateSuccess)
-      return _buildSliverList(state.photos);
+    if (state is SearchStateSuccess) return _buildSliverList(state.photos);
 
-    if (state is CheckUserSuccesses)
-      return _buildSliverList(state.photos);
-    if (state is DelImgSuccesses)
-      return _buildSliverList(state.photos);
-
+    if (state is CheckUserSuccesses) return _buildSliverList(state.photos);
+    if (state is DelImgSuccesses) return _buildSliverList(state.photos);
 
     if (state is SearchStateEmpty)
       return SliverToBoxAdapter(child: EmptyPage());
-    return SliverToBoxAdapter(child: NotSearchPage(),);
+    return SliverToBoxAdapter(
+      child: NotSearchPage(),
+    );
   }
 
   Widget _buildSliverList(List<dynamic> photos) {
-    return   SliverList(
-        delegate: SliverChildBuilderDelegate(
-                (_, int index) =>
-                Container(
-                    child: InkWell(
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+          (_, int index) => Container(
+                  child: InkWell(
                       //onTap: () => _toDetailPage(models[0],photos[index]),
-                        child: PhotoSearchWidgetListItem(
-                          isClip: false, photo: photos[index],)
-                    )),
-            childCount: photos.length),
-
-
+                      child: PhotoSearchWidgetListItem(
+                isClip: false,
+                photo: photos[index],
+              ))),
+          childCount: photos.length),
     );
-}
+  }
 
   _doSelectStart(List<int> select) {
-    List<int> temp = select.map((e)=>e+1).toList();
+    List<int> temp = select.map((e) => e + 1).toList();
     if (temp.length < 5) {
       temp.addAll(List.generate(5 - temp.length, (e) => -1));
     }
@@ -257,9 +253,9 @@ class _SearchPageState extends State<SearchPage> {
         .add(EventTextChanged(args: SearchArgs(name: '', stars: temp)));
   }
 
-  _toDetailPage(WidgetModel model,Map<String,dynamic>  photos) {
-   //Map<String,dynamic> photo;
+  _toDetailPage(WidgetModel model, Map<String, dynamic> photos) {
+    //Map<String,dynamic> photo;
     BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetail(photos));
-    Navigator.pushNamed(context, UnitRouter.widget_detail,arguments: model);
+    Navigator.pushNamed(context, UnitRouter.widget_detail, arguments: model);
   }
 }

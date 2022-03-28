@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:math' as math;
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/storage/app_storage.dart';
 import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
@@ -49,48 +50,52 @@ class _UnitNavigationState extends State<UnitNavigation>
   @override
   void initState() {
     super.initState();
+
     initNav();
   }
 
-  void initNav() {
+  Future<void> initNav() async {
     FltImPlugin()
         .init(host: "mm.3dsqq.com", apiURL: "http://mm.3dsqq.com:8000");
     _controller = PageController();
     tfSender = ValueUtil.toStr(2);
-    Future.delayed(Duration(milliseconds: 500)).then((e) async {
-      var ss = await LocalStorage.get("im_token");
-      var memberId = await LocalStorage.get("memberId");
-      if (memberId != "" && memberId != null) {
-        tfSender = memberId.toString();
-      }
-      if (ss == "" || ss == null) {
-        login(success: () {
-          listenNative();
-          BlocProvider.of<ChatBloc>(context).add(EventNewMessage());
-        });
-      } else {
-        loginByToken(ss, success: () {
-          listenNative();
-          BlocProvider.of<ChatBloc>(context).add(EventNewMessage());
-        });
-      }
-
-      BlocProvider.of<GlobalBloc>(context).add(EventSetMemberId(tfSender));
-
-      var count = 0;
-      // Map response = await im.getConversations();
-      // var conversions = response["data"];
-      // conversions.map((e) {
-      //   if (e['unreadCount'] > 0){
-      //     count=count+e['unreadCount'];
-      //   }
-      // }).toList();
-
-      BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
-    });
-
+    var ss = await LocalStorage.get("im_token");
+    var memberId = await LocalStorage.get("memberId");
+    if (memberId != "" && memberId != null) {
+      tfSender = memberId.toString();
+    }
+    if (ss == "" || ss == null) {
+      login(success: () {
+        listenNative();
+        BlocProvider.of<ChatBloc>(context).add(EventNewMessage());
+      });
+    } else {
+      loginByToken(ss, success: () {
+        listenNative();
+        BlocProvider.of<ChatBloc>(context).add(EventNewMessage());
+      });
+    }
+    var count = 0;
+    BlocProvider.of<GlobalBloc>(context).add(EventSetMemberId(tfSender));
+    BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(count));
+    // Map response = await im.getConversations();
+    // var conversions = response["data"];
+    // conversions.map((e) {
+    //   if (e['unreadCount'] > 0){
+    //     count=count+e['unreadCount'];
+    //   }
+    // }).toList();
     //BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(1));
-    initPlatformState();
+    //initPlatformState();
+
+    var saveMode = BlocProvider.of<GlobalBloc>(context).state.showBackGround;
+    if (saveMode) {
+      final sp = AppStorage().sp;
+      var mode = await sp;
+      int modes = mode.getInt("currentPhotoMode");
+      BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(modes));
+    }
+
     FlutterNfcReader.onTagDiscovered().listen((onData) {
       //(onData.id);
       //print(onData.content);
@@ -107,18 +112,6 @@ class _UnitNavigationState extends State<UnitNavigation>
     Future.delayed(Duration(seconds: 1)).then((e) async {
       _checkUpdateVersion();
     });
-
-    Future.delayed(Duration(milliseconds: 1)).then((e) async {
-      var saveMode = BlocProvider.of<GlobalBloc>(context).state.showBackGround;
-      if (saveMode) {
-        final sp = AppStorage().sp;
-       var mode = await sp;
-       int modes =mode.getInt("currentPhotoMode");
-        BlocProvider.of<GlobalBloc>(context).add(EventSetIndexMode(modes));
-      }
-    });
-
-
   }
 
   @override

@@ -617,7 +617,17 @@ class _HomePageState extends State<HomePage>
             'assets/packages/lottie_flutter/890-loading-animation.json'),
       ));
     }
-
+    if (state is WidgetsInit) {
+      return SliverToBoxAdapter(
+          child: Container(
+            margin: EdgeInsets.only(top: ScreenUtil().screenHeight/2-300.h),
+            height: 100.h,
+            width: 100.w,
+            alignment: FractionalOffset.center,
+            child: Lottie.asset(
+                'assets/packages/lottie_flutter/16379-an-ios-like-loading.json'),
+          ));
+    }
     if (state is WidgetsLoaded) {
       List<dynamic> photos = state.photos;
       if (photos==null) return SliverToBoxAdapter(child: EmptyPage());

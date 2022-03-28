@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -9,13 +8,17 @@ import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/dialogs/CustomDialog.dart';
 import 'package:fluwx/fluwx.dart';
 import 'unit_paint.dart';
+
 /// 说明: app 闪屏页
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:umeng_analytics_push/umeng_analytics_push.dart';
+
 class UnitSplash extends StatefulWidget {
   final double size;
+  @required
+  final bool animate;
 
-  UnitSplash({this.size = 200});
+  UnitSplash({this.size = 200, this.animate});
 
   @override
   _UnitSplashState createState() => _UnitSplashState();
@@ -25,102 +28,82 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
   AnimationController _controller;
   double _factor;
   Animation _curveAnim;
-
   bool _animEnd = false;
   bool _getPreLoginSuccess = false;
+
   /// 统一 key
   final String f_result_key = "result";
+
   /// 错误码
-  final  String  f_code_key = "code";
+  final String f_code_key = "code";
+
   /// 回调的提示信息，统一返回 flutter 为 message
-  final  String  f_msg_key  = "message";
+  final String f_msg_key = "message";
+
   /// 运营商信息
-  final  String  f_opr_key  = "operator";
-
-
+  final String f_opr_key = "operator";
   String _platformVersion = 'Unknown';
   String _result = "token=";
   var controllerPHone = new TextEditingController();
   bool _loading = false;
   String _token;
 
-
   @override
   void initState() {
     super.initState();
-    _initFluwx();
-    UmengAnalyticsPush.initUmeng(false, true);
-    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    _factor=0;
+    _factor = 0;
     _controller =
         AnimationController(duration: Duration(milliseconds: 1000), vsync: this)
-          ..addStatusListener(_listenStatus)..forward();
-
-    _curveAnim = CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn);
-
-   // initPlatformState();
+          ..addStatusListener(_listenStatus)
+          ..forward();
+    _curveAnim =
+        CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn);
   }
-
 
   @override
-   void dispose() {
-     _controller.dispose();
-     super.dispose();
+  void dispose() {
+    if (_controller != null) _controller.dispose();
+    super.dispose();
   }
-  _initFluwx() async {
-    await registerWxApi(
-        appId: "wx45bdf8edd00e99ef",
-        doOnAndroid: true,
-        doOnIOS: true,
-        universalLink: "https://your.univerallink.com/link/");
-    var result = await isWeChatInstalled;
-    print("is installed $result");
-  }
+
   void _listenStatus(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
       setState(() {
         _animEnd = true;
         Future.delayed(Duration(milliseconds: 1000)).then((e) async {
-
-          var ss = await LocalStorage.get("token");
-          var sss =ss.toString();
-          if(sss == "" || ss == null || ss == "null"){
-
-
-                Navigator.of(context).pushReplacementNamed(UnitRouter.login);
-
-
-          } else{
-            //LocalStorage.save("token", '');
-            var agree = await LocalStorage.get("agree");
-            var agrees =agree.toString();
-            if("1" == "1"){
-              Navigator.of(context).pushReplacementNamed(UnitRouter.nav);
-
-            } else{
-              //LocalStorage.save("token", '');
-              showDialog(context: context, builder: (ctx) => _buildDialog());
-            }
-
-          }
-
+          Navigator.of(context).pushReplacementNamed(UnitRouter.nav);
         });
+        // Future.delayed(Duration(milliseconds: 1000)).then((e) async {
+        //   var ss = await LocalStorage.get("token");
+        //   var sss =ss.toString();
+        //   if(sss == "" || ss == null || ss == "null"){
+        //      Navigator.of(context).pushReplacementNamed(UnitRouter.login);
+        //   } else{
+        //     //LocalStorage.save("token", '');
+        //     var agree = await LocalStorage.get("agree");
+        //     var agrees =agree.toString();
+        //     if("1" == "1"){
+        //       Navigator.of(context).pushReplacementNamed(UnitRouter.nav);
+        //     } else{
+        //       //LocalStorage.save("token", '');
+        //       showDialog(context: context, builder: (ctx) => _buildDialog());
+        //     }
+        //   }
+        // });
       });
     }
   }
 
-
   static Widget _buildDialog() => Dialog(
-    backgroundColor: Colors.white,
-    elevation: 5,
-    shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10))),
-    child: Container(
-      width: 50.w,
-      child: DeleteDialog(),
-    ),
-  );
+        backgroundColor: Colors.white,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: Container(
+          width: 50.w,
+          child: DeleteDialog(),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -214,7 +197,7 @@ class _UnitSplashState extends State<UnitSplash> with TickerProviderStateMixin {
         child: AnimatedOpacity(
             duration: const Duration(milliseconds: 300),
             opacity: _animEnd ? 1.0 : 0.0,
-            child:  Text("Power off QueQiao Group",
+            child: Text("Power off QueQiao Group",
                 style: TextStyle(
                     color: Colors.grey,
                     shadows: [

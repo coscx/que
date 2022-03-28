@@ -478,16 +478,13 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     if (state is DetailLoading) {}
     return Container(
       child: Container(
-          padding: EdgeInsets.only(top: ScreenUtil().screenHeight * 0.2),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 0.h,
-              ),
-              Lottie.asset(
-                  'assets/packages/lottie_flutter/890-loading-animation.json'),
-            ],
-          )),
+        margin: EdgeInsets.only(top: ScreenUtil().screenHeight/2-300.h),
+        height: 100.h,
+        width: 100.w,
+        alignment: FractionalOffset.center,
+        child: Lottie.asset(
+            'assets/packages/lottie_flutter/16379-an-ios-like-loading.json'),
+      ),
     );
   }
 

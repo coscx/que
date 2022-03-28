@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'arc_clipper.dart';
 import 'login_form.dart';
 
-
 /// 说明:
 
 class LoginPage extends StatelessWidget {
@@ -21,23 +20,23 @@ class LoginPage extends StatelessWidget {
 //      },
 //      child:
 
-      Scaffold(
-          body: SingleChildScrollView(
-            child: Wrap(children: [
+        Scaffold(
+            body: SingleChildScrollView(
+      child: Wrap(children: [
         arcBackground(),
         Container(
             width: MediaQuery.of(context).size.width,
-            padding:  EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
+            padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
             child:
 //
 //          BlocBuilder<LoginBloc, LoginState>(
 //            builder: (_, state) {
 //              return
 
-                  Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    LoginFrom(),
+                Stack(
+              alignment: Alignment.center,
+              children: [
+                LoginFrom(),
 //                  if (state is LoginFailure)
 //                    Positioned(
 //                        bottom: 0,
@@ -48,36 +47,34 @@ class LoginPage extends StatelessWidget {
 //                    LoadingView(
 //                      text: "登录中...",
 //                    )
-                  ],
-
-                  )
+              ],
+            )
 //              );
 //            },
 //          ),
 //        )
 //      ]
-                  )]
+            )
+      ]
 //        ),
-    ),
-          ));
+          ),
+    ));
   }
 
   Widget arcBackground() {
     return ArcBackground(
       image: AssetImage("assets/images/caver.webp"),
       child: Padding(
-        padding:  EdgeInsets.all(100.w),
+        padding: EdgeInsets.all(100.w),
         child: Container(
-          padding:  EdgeInsets.all(20.w),
-          decoration: BoxDecoration(
-              color: Colors.white.withAlpha(0), shape: BoxShape.rectangle),
-
-          child: Image.asset(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+                color: Colors.white.withAlpha(0), shape: BoxShape.rectangle),
+            child: Image.asset(
               "assets/images/login_top.png",
-               width: ScreenUtil().setWidth(400),
-               height: ScreenUtil().setWidth(200),
-          )
-        ),
+              width: ScreenUtil().setWidth(400),
+              height: ScreenUtil().setWidth(200),
+            )),
       ),
     );
   }

@@ -11,7 +11,12 @@ abstract class HomeState extends Equatable {
   @override
   List<Object> get props => [];
 }
+class WidgetsInit extends HomeState {
+  const WidgetsInit();
 
+  @override
+  List<Object> get props => [];
+}
 class WidgetsLoading extends HomeState {
   const WidgetsLoading();
 

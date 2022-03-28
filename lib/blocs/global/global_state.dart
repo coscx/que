@@ -12,7 +12,7 @@ class GlobalState extends Equatable {
 
   /// [showBackGround] 是否显示主页背景图
   final bool showBackGround;
-
+  final bool animate;
   /// [codeStyleIndex] 代码样式 索引
   final int codeStyleIndex;
 
@@ -56,7 +56,8 @@ class GlobalState extends Equatable {
     this.bar4 =0,
     this.creditId ="",
     this.indexFlowPage =1,
-    this.indexConnectPage =1
+    this.indexConnectPage =1,
+    this.animate =true
   });
 
   @override
@@ -79,7 +80,8 @@ class GlobalState extends Equatable {
         bar4,
         creditId,
         indexFlowPage,
-        indexConnectPage
+        indexConnectPage,
+        animate
       ];
 
   GlobalState copyWith({
@@ -103,6 +105,7 @@ class GlobalState extends Equatable {
     String  creditId,
     int  indexFlowPage,
     int indexConnectPage,
+    bool animate
   }) =>
       GlobalState(
         fontFamily: fontFamily ?? this.fontFamily,
@@ -123,7 +126,8 @@ class GlobalState extends Equatable {
           bar4:bar4??this.bar4,
           creditId:creditId??this.creditId,
           indexFlowPage:indexFlowPage??this.indexFlowPage,
-          indexConnectPage:indexConnectPage??this.indexConnectPage
+          indexConnectPage:indexConnectPage??this.indexConnectPage,
+          animate: animate??this.animate
       );
 
   @override

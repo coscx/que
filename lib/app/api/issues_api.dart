@@ -733,10 +733,11 @@ class IssuesApi {
   static Future<Map<String,dynamic>> searchPhoto( String keyWord, String page, ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
-    dio.options.headers['authorization']="Bearer "+token;
+    Dio dioA= Dio();
+    dioA.options.headers['authorization']="Bearer "+token;
     var data={'app':keyWord,'currentPage':page,'status':"all",'is_passive':"all","pageSize":20};
     try {
-      Response<dynamic> rep = await dio.get('/api/v1/customer/system/index',queryParameters:data );
+      Response<dynamic> rep = await dioA.get(NewBaseUrl+'/api/v1/customer/system/index',queryParameters:data );
       return rep.data;
 
     } on DioError catch(e){

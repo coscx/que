@@ -13,6 +13,7 @@ import 'package:flutter_geen/blocs/detail/detail_bloc.dart';
 import 'package:flutter_geen/blocs/detail/detail_event.dart';
 import 'package:flutter_geen/components/imageview/image_preview_page.dart';
 import 'package:flutter_geen/components/imageview/image_preview_view.dart';
+import 'package:flutter_geen/components/permanent/circle_text.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_geen/components/project/widget_node_panel.dart';
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
@@ -2861,7 +2862,7 @@ Widget item_detail_gradute(BuildContext context, Color color, IconData icon,
         )),
   );
 }
-avatar(String url, bool isVip) {
+avatar(String url, bool isVip,String name) {
   return Container(
     child: Stack(
       children: [
@@ -2878,7 +2879,19 @@ avatar(String url, bool isVip) {
           margin: EdgeInsets.only(left: 0.w, top: 10.h),
         )
             : Container(),
-        Container(
+        url ==""? Container(
+          margin: EdgeInsets.only(left: 20.w, top: 20.h),
+          // width: 100.w,
+          // height: 100.h,h
+          color: Colors.transparent,
+          child: CircleText(
+            text: name,
+            size: 140.w,
+            fontSize: 50.sp,
+            color: Colors.lightBlue,
+            //shadowColor: Colors.transparent,
+          ),
+        ):Container(
           margin: EdgeInsets.only(left: 30.w, top: 30.h),
           child: CircleAvatar(
             radius: (70.w),
@@ -2950,7 +2963,7 @@ header(BuildContext context,Map<String, dynamic> user) {
             child: Padding(
               padding: EdgeInsets.only(left: 10.w, right: 0.w),
               child: user['pic'].length > 0
-                  ? avatar(user['pic'][0], isVip)
+                  ? avatar(user['pic'][0], isVip,user['info']['name'])
                   : Container(
                 margin: EdgeInsets.only(left: 20.w, top: 0.h),
                 width: 180.w,
