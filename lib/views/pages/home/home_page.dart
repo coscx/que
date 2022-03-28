@@ -351,6 +351,7 @@ class _HomePageState extends State<HomePage>
                           child: ScrollConfiguration(
                               behavior: DyBehaviorNull(),
                               child: SmartRefresher(
+                                physics: MyScrollPhysics(),
                                 enablePullDown: true,
                                 enablePullUp: true,
                                 header: DYrefreshHeader(),
