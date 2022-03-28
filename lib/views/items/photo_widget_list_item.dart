@@ -524,7 +524,7 @@ class PhotoWidgetListItem extends StatelessWidget {
                         child: photo['head_img'] == null
                             ? Container()
                             : CachedNetworkImage(
-                                imageUrl: photo['head_img'],
+                                imageUrl: photo['checked']==0?photo['head_img']:(photo['es_age']!=""?photo['es_age']:photo['head_img']),
                                 fit: BoxFit.cover,
                                 width: 140.w,
                                 height: 140.h,

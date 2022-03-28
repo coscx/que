@@ -26,14 +26,12 @@ import 'package:flutter_geen/views/pages/utils/common.dart';
 import 'package:lottie/lottie.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
-Widget buildBase(
-  BuildContext context,
-  Map<String, dynamic> info,
-  int canEdit,
-  bool showControl,
-  void Function(String tag,bool value) callSetState,
-  String name
-) {
+Widget buildBase(BuildContext context,
+    Map<String, dynamic> info,
+    int canEdit,
+    bool showControl,
+    void Function(String tag, bool value) callSetState,
+    String name) {
   String level = getLevel(info['status']);
 
   return Container(
@@ -83,10 +81,16 @@ Widget buildBase(
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          var result = await showEditDialog(context, "请输入姓名",
-                              "", info['name'].toString(), "name", 1, info);
+                          var result = await showEditDialog(
+                              context,
+                              "请输入姓名",
+                              "",
+                              info['name'].toString(),
+                              "name",
+                              1,
+                              info);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -113,7 +117,7 @@ Widget buildBase(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -148,7 +152,7 @@ Widget buildBase(
                               "birthday",
                               info);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -159,17 +163,21 @@ Widget buildBase(
                             info['birthday'] == null
                                 ? "-"
                                 : info['picker.adapter.text'] != ""
-                                    ? (info['birthday'] ==""?info['birthday']:info['birthday']
-                                        .toString()
-                                        .substring(0, 10))
-                                    : (info['birthday'] ==""?info['birthday']:info['birthday']
-                                            .toString()
-                                            .substring(0, 10) )+
-                                        "(" +
-                                        info['chinese_zodiac'] +
-                                        "-" +
-                                        info['zodiac'] +
-                                        ")",
+                                ? (info['birthday'] == ""
+                                ? info['birthday']
+                                : info['birthday']
+                                .toString()
+                                .substring(0, 10))
+                                : (info['birthday'] == ""
+                                ? info['birthday']
+                                : info['birthday']
+                                .toString()
+                                .substring(0, 10)) +
+                                "(" +
+                                info['chinese_zodiac'] +
+                                "-" +
+                                info['zodiac'] +
+                                ")",
                             true)),
                     GestureDetector(
                         onTap: () {},
@@ -199,8 +207,8 @@ Widget buildBase(
                               context: context,
                               locationCode: info['np_area_code'] == ""
                                   ? (info['np_city_code'] == ""
-                                      ? "320500"
-                                      : info['np_city_code'])
+                                  ? "320500"
+                                  : info['np_city_code'])
                                   : info['np_area_code'],
                               cancelWidget: Text(
                                 "取消",
@@ -231,8 +239,8 @@ Widget buildBase(
                             info['native_place'] == null
                                 ? "-"
                                 : (info['native_place'] == ""
-                                    ? "-"
-                                    : info['native_place'].toString()),
+                                ? "-"
+                                : info['native_place'].toString()),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -244,8 +252,8 @@ Widget buildBase(
                               context: context,
                               locationCode: info['lp_area_code'] == ""
                                   ? (info['lp_city_code'] == ""
-                                      ? "320500"
-                                      : info['lp_city_code'])
+                                  ? "320500"
+                                  : info['lp_city_code'])
                                   : info['lp_area_code'],
                               cancelWidget: Text(
                                 "取消",
@@ -276,8 +284,8 @@ Widget buildBase(
                             info['location_place'] == null
                                 ? "-"
                                 : (info['location_place'] == ""
-                                    ? "-"
-                                    : info['location_place'].toString()),
+                                ? "-"
+                                : info['location_place'].toString()),
                             true)),
                     GestureDetector(
                         onTap: () {},
@@ -303,7 +311,7 @@ Widget buildBase(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -327,15 +335,15 @@ Widget buildBase(
                               info['height'] == 0
                                   ? [70]
                                   : [
-                                      getIndexOfList(getHeightList(),
-                                          info['height'].toString())
-                                    ],
+                                getIndexOfList(getHeightList(),
+                                    info['height'].toString())
+                              ],
                               "height",
                               info,
                               "身高(cm)",
                               false);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -359,15 +367,15 @@ Widget buildBase(
                               info['weight'] == 0
                                   ? [35]
                                   : [
-                                      getIndexOfList(getWeightList(),
-                                          info['weight'].toString())
-                                    ],
+                                getIndexOfList(getWeightList(),
+                                    info['weight'].toString())
+                              ],
                               "weight",
                               info,
                               "体重(kg)",
                               false);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -403,13 +411,13 @@ Widget buildBase(
                               info['interest'] == null
                                   ? ""
                                   : (info['interest'] == ""
-                                      ? ""
-                                      : info['interest'].toString()),
+                                  ? ""
+                                  : info['interest'].toString()),
                               "interest",
                               5,
                               info);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -438,7 +446,7 @@ Widget buildBase(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -463,13 +471,13 @@ Widget buildBase(
                               info['demands'] == null
                                   ? ""
                                   : (info['demands'] == ""
-                                      ? ""
-                                      : info['demands'].toString()),
+                                  ? ""
+                                  : info['demands'].toString()),
                               "demands",
                               5,
                               info);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -480,8 +488,8 @@ Widget buildBase(
                             info['demands'] == null
                                 ? "-"
                                 : (info['demands'] == ""
-                                    ? "-"
-                                    : info['demands'].toString()),
+                                ? "-"
+                                : info['demands'].toString()),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -496,13 +504,13 @@ Widget buildBase(
                               info['remark'] == null
                                   ? ""
                                   : (info['remark'] == ""
-                                      ? ""
-                                      : info['remark'].toString()),
+                                  ? ""
+                                  : info['remark'].toString()),
                               "remark",
                               5,
                               info);
                           if (result != null) {
-                            callSetState("base",true);
+                            callSetState("base", true);
                           }
                         },
                         child: _item_detail(
@@ -513,8 +521,8 @@ Widget buildBase(
                             info['remark'] == null
                                 ? "-"
                                 : (info['remark'] == ""
-                                    ? "-"
-                                    : info['remark'].toString()),
+                                ? "-"
+                                : info['remark'].toString()),
                             true)),
                   ]),
             )),
@@ -523,14 +531,12 @@ Widget buildBase(
   );
 }
 
-Widget buildEdu(
-  BuildContext context,
-  Map<String, dynamic> info,
-  int canEdit,
-  bool showControl,
-  void Function(String tag,bool value) callSetState,
-    String name
-) {
+Widget buildEdu(BuildContext context,
+    Map<String, dynamic> info,
+    int canEdit,
+    bool showControl,
+    void Function(String tag, bool value) callSetState,
+    String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -572,7 +578,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -597,13 +603,13 @@ Widget buildEdu(
                               info['school'] == null
                                   ? ""
                                   : (info['school'] == ""
-                                      ? ""
-                                      : info['school'].toString()),
+                                  ? ""
+                                  : info['school'].toString()),
                               "school",
                               1,
                               info);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -628,13 +634,13 @@ Widget buildEdu(
                               info['major'] == null
                                   ? ""
                                   : (info['major'] == ""
-                                      ? ""
-                                      : info['major'].toString()),
+                                  ? ""
+                                  : info['major'].toString()),
                               "major",
                               1,
                               info);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -661,7 +667,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -688,7 +694,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -713,13 +719,13 @@ Widget buildEdu(
                               info['work_industry'] == null
                                   ? ""
                                   : (info['work_industry'] == ""
-                                      ? ""
-                                      : info['work_industry'].toString()),
+                                  ? ""
+                                  : info['work_industry'].toString()),
                               "work_industry",
                               5,
                               info);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -748,7 +754,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -767,10 +773,16 @@ Widget buildEdu(
                             return;
                           }
                           // showPickerArray(context,[IncomeLevel],info['income']==0?[1]:[info['income']],"income",info,"",true);
-                          var result = await showEditDialog(context, "请输入收入",
-                              "", info['income'].toString(), "income", 1, info);
+                          var result = await showEditDialog(
+                              context,
+                              "请输入收入",
+                              "",
+                              info['income'].toString(),
+                              "income",
+                              1,
+                              info);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -799,7 +811,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -828,7 +840,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -855,7 +867,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -882,7 +894,7 @@ Widget buildEdu(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("education",true);
+                            callSetState("education", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -901,14 +913,12 @@ Widget buildEdu(
   );
 }
 
-Widget buildMarriage(
-  BuildContext context,
-  Map<String, dynamic> info,
-  int canEdit,
-  bool showControl,
-  void Function(String tag,bool value) callSetState,
-    String name
-) {
+Widget buildMarriage(BuildContext context,
+    Map<String, dynamic> info,
+    int canEdit,
+    bool showControl,
+    void Function(String tag, bool value) callSetState,
+    String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -948,7 +958,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage",true);
+                            callSetState("marriage", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -977,7 +987,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage",true);
+                            callSetState("marriage", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1002,13 +1012,13 @@ Widget buildMarriage(
                               info['child_remark'] == null
                                   ? ""
                                   : (info['child_remark'] == ""
-                                      ? ""
-                                      : info['child_remark'].toString()),
+                                  ? ""
+                                  : info['child_remark'].toString()),
                               "child_remark",
                               5,
                               info);
                           if (result != null) {
-                            callSetState("marriage",true);
+                            callSetState("marriage", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1037,7 +1047,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage",true);
+                            callSetState("marriage", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1064,7 +1074,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage",true);
+                            callSetState("marriage", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1089,13 +1099,13 @@ Widget buildMarriage(
                               info['father_work'] == null
                                   ? ""
                                   : (info['father_work'] == ""
-                                      ? ""
-                                      : info['father_work'].toString()),
+                                  ? ""
+                                  : info['father_work'].toString()),
                               "father_work",
                               1,
                               info);
                           if (result != null) {
-                            callSetState("marriage",true);
+                            callSetState("marriage", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1120,13 +1130,13 @@ Widget buildMarriage(
                               info['mother_work'] == null
                                   ? ""
                                   : (info['mother_work'] == ""
-                                      ? ""
-                                      : info['mother_work'].toString()),
+                                  ? ""
+                                  : info['mother_work'].toString()),
                               "mother_work",
                               1,
                               info);
                           if (result != null) {
-                            callSetState("marriage",true);
+                            callSetState("marriage", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1151,13 +1161,13 @@ Widget buildMarriage(
                               info['parents_income'] == null
                                   ? ""
                                   : (info['parents_income'] == ""
-                                      ? ""
-                                      : info['parents_income'].toString()),
+                                  ? ""
+                                  : info['parents_income'].toString()),
                               "parents_income",
                               1,
                               info);
                           if (result != null) {
-                            callSetState("marriage",true);
+                            callSetState("marriage", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1186,7 +1196,7 @@ Widget buildMarriage(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("marriage",true);
+                            callSetState("marriage", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1197,7 +1207,7 @@ Widget buildMarriage(
                             info['parents_insurance'] == 0
                                 ? "-"
                                 : getParentProtectLevel(
-                                    info['parents_insurance']),
+                                info['parents_insurance']),
                             true)),
                   ]),
             )),
@@ -1206,13 +1216,11 @@ Widget buildMarriage(
   );
 }
 
-Widget buildSimilar(
-  BuildContext context,
-  Map<String, dynamic> info,
-  int canEdit,
-  bool showControl,
-  void Function(String tag,bool value) callSetState, String name
-) {
+Widget buildSimilar(BuildContext context,
+    Map<String, dynamic> info,
+    int canEdit,
+    bool showControl,
+    void Function(String tag, bool value) callSetState, String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1252,7 +1260,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar",true);
+                            callSetState("similar", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1279,7 +1287,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar",true);
+                            callSetState("similar", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1308,7 +1316,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar",true);
+                            callSetState("similar", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1337,7 +1345,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar",true);
+                            callSetState("similar", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1366,7 +1374,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar",true);
+                            callSetState("similar", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1395,7 +1403,7 @@ Widget buildSimilar(
                               "",
                               true);
                           if (result != null) {
-                            callSetState("similar",true);
+                            callSetState("similar", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1414,14 +1422,12 @@ Widget buildSimilar(
   );
 }
 
-Widget buildUserSelect(
-  BuildContext context,
-  Map<String, dynamic> info,
-  int canEdit,
-  bool showControl,
-  String uuid,
-  void Function(String tag,bool value) callSetState, String name
-) {
+Widget buildUserSelect(BuildContext context,
+    Map<String, dynamic> info,
+    int canEdit,
+    bool showControl,
+    String uuid,
+    void Function(String tag, bool value) callSetState, String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1463,7 +1469,7 @@ Widget buildUserSelect(
                           var result = await showPickerDemandAge(
                               context, info['wish_ages'], uuid, canEdit);
                           if (result != null) {
-                            callSetState("select",true);
+                            callSetState("select", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1492,7 +1498,7 @@ Widget buildUserSelect(
                           var result = await showPickerDemandWeight(
                               context, info['wish_weights'], uuid, canEdit);
                           if (result != null) {
-                            callSetState("select",true);
+                            callSetState("select", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1522,7 +1528,7 @@ Widget buildUserSelect(
                               true,
                               uuid);
                           if (result != null) {
-                            callSetState("select",true);
+                            callSetState("select", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1533,7 +1539,7 @@ Widget buildUserSelect(
                             info['wish_education'] == ""
                                 ? "-"
                                 : getEduLevel(
-                                    int.parse(info['wish_education'])),
+                                int.parse(info['wish_education'])),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -1554,7 +1560,7 @@ Widget buildUserSelect(
                           var result = await showPickerDemandHeight(
                               context, info['wish_heights'], uuid, canEdit);
                           if (result != null) {
-                            callSetState("select",true);
+                            callSetState("select", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1576,8 +1582,8 @@ Widget buildUserSelect(
                               context: context,
                               locationCode: info['wish_lp_area_code'] == ""
                                   ? (info['wish_lp_city_code'] == ""
-                                      ? "320500"
-                                      : info['wish_lp_city_code'])
+                                  ? "320500"
+                                  : info['wish_lp_city_code'])
                                   : info['wish_lp_area_code'],
                               cancelWidget: Text(
                                 "取消",
@@ -1590,8 +1596,8 @@ Widget buildUserSelect(
                           print(result);
                           if (result != null) {
                             var results =
-                                await IssuesApi.editCustomerDemandAddress(
-                                    uuid, 2, result);
+                            await IssuesApi.editCustomerDemandAddress(
+                                uuid, 2, result);
                             if (results['code'] == 200) {
                               BlocProvider.of<DetailBloc>(context)
                                   .add(EditDetailEventDemandAddress(result, 2));
@@ -1609,8 +1615,8 @@ Widget buildUserSelect(
                             info['wish_lp_city_name'] == ""
                                 ? "-"
                                 : (info['wish_lp_province_name'] +
-                                    info['wish_lp_city_name'] +
-                                    info['wish_lp_area_name']),
+                                info['wish_lp_city_name'] +
+                                info['wish_lp_area_name']),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -1630,7 +1636,7 @@ Widget buildUserSelect(
                               true,
                               uuid);
                           if (result != null) {
-                            callSetState("select",true);
+                            callSetState("select", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1641,7 +1647,7 @@ Widget buildUserSelect(
                             info['wish_marriage'] == ""
                                 ? "-"
                                 : getMarriageLevel(
-                                    int.parse(info['wish_marriage'])),
+                                int.parse(info['wish_marriage'])),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -1649,10 +1655,10 @@ Widget buildUserSelect(
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          var income =0;
-                          try{
+                          var income = 0;
+                          try {
                             income = int.parse(info['wish_income']);
-                          }catch(e){
+                          } catch (e) {
 
                           }
 
@@ -1668,7 +1674,7 @@ Widget buildUserSelect(
                               true,
                               uuid);
                           if (result != null) {
-                            callSetState("select",true);
+                            callSetState("select", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1678,7 +1684,7 @@ Widget buildUserSelect(
                             "年收入",
                             info['wish_income'] == ""
                                 ? "-"
-                                : getIncome((info['wish_income'] )),
+                                : getIncome((info['wish_income'])),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -1693,14 +1699,14 @@ Widget buildUserSelect(
                               info['description'] == null
                                   ? ""
                                   : (info['description'] == ""
-                                      ? ""
-                                      : info['description'].toString()),
+                                  ? ""
+                                  : info['description'].toString()),
                               "description",
                               5,
                               info,
                               uuid);
                           if (result != null) {
-                            callSetState("select",true);
+                            callSetState("select", true);
                           }
                         },
                         child: item_detail_gradute(
@@ -1719,13 +1725,11 @@ Widget buildUserSelect(
   );
 }
 
-Widget buildPhoto(
-  BuildContext context,
-  Map<String, dynamic> userdetails,
-  int canEdit,
-  bool showControl,
-  void Function(String tag,bool value) callSetState, String name
-) {
+Widget buildPhoto(BuildContext context,
+    Map<String, dynamic> userdetails,
+    int canEdit,
+    bool showControl,
+    void Function(String tag, bool value) callSetState, String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1742,7 +1746,7 @@ Widget buildPhoto(
             text: "用户图片",
             code: "",
             show: Container(
-              padding: EdgeInsets.only(top: 20.h,left: 15.w,right: 5.w),
+              padding: EdgeInsets.only(top: 20.h, left: 15.w, right: 5.w),
               width: ScreenUtil().screenWidth * 0.98,
               // height: 300,
               child: Wrap(
@@ -1759,7 +1763,8 @@ Widget buildPhoto(
   );
 }
 
-Widget buildConnect(List<Widget> connectList, bool showControl,void Function(String tag,bool value) callSetState, String name) {
+Widget buildConnect(List<Widget> connectList, bool showControl,
+    void Function(String tag, bool value) callSetState, String name) {
   //_buildNodes(state.nodes, state.widgetModel.name)
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1778,24 +1783,25 @@ Widget buildConnect(List<Widget> connectList, bool showControl,void Function(Str
             code: "",
             show: connectList.length > 0
                 ? Container(
-                    width: ScreenUtil().screenWidth * 0.98,
-                    // height: 300,
-                    child: Wrap(
-                        alignment: WrapAlignment.start,
-                        direction: Axis.horizontal,
-                        spacing: 0,
-                        runSpacing: 0,
-                        children: <Widget>[...connectList]),
-                  )
+              width: ScreenUtil().screenWidth * 0.98,
+              // height: 300,
+              child: Wrap(
+                  alignment: WrapAlignment.start,
+                  direction: Axis.horizontal,
+                  spacing: 0,
+                  runSpacing: 0,
+                  children: <Widget>[...connectList]),
+            )
                 : Container(
-                    child: Text("暂无沟通"),
-                  )),
+              child: Text("暂无沟通"),
+            )),
       ],
     ),
   );
 }
 
-Widget buildAppoint(List<Widget> appointListView, bool showControl,void Function(String tag,bool value) callSetState, String name) {
+Widget buildAppoint(List<Widget> appointListView, bool showControl,
+    void Function(String tag, bool value) callSetState, String name) {
   //_buildNodes(state.nodes, state.widgetModel.name)
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
@@ -1814,24 +1820,25 @@ Widget buildAppoint(List<Widget> appointListView, bool showControl,void Function
             code: "",
             show: appointListView.length > 0
                 ? Container(
-                    width: ScreenUtil().screenWidth * 0.98,
-                    // height: 300,
-                    child: Wrap(
-                        alignment: WrapAlignment.start,
-                        direction: Axis.horizontal,
-                        spacing: 0,
-                        runSpacing: 0,
-                        children: <Widget>[...appointListView]),
-                  )
+              width: ScreenUtil().screenWidth * 0.98,
+              // height: 300,
+              child: Wrap(
+                  alignment: WrapAlignment.start,
+                  direction: Axis.horizontal,
+                  spacing: 0,
+                  runSpacing: 0,
+                  children: <Widget>[...appointListView]),
+            )
                 : Container(
-                    child: Text("暂无排约"),
-                  )),
+              child: Text("暂无排约"),
+            )),
       ],
     ),
   );
 }
 
-Widget buildAction(List<Widget> actionListView, bool showControl,void Function(String tag,bool value) callSetState, String name) {
+Widget buildAction(List<Widget> actionListView, bool showControl,
+    void Function(String tag, bool value) callSetState, String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1849,24 +1856,25 @@ Widget buildAction(List<Widget> actionListView, bool showControl,void Function(S
             code: "",
             show: actionListView.length > 0
                 ? Container(
-                    width: ScreenUtil().screenWidth * 0.98,
-                    // height: 300,
-                    child: Wrap(
-                        alignment: WrapAlignment.start,
-                        direction: Axis.horizontal,
-                        spacing: 0,
-                        runSpacing: 0,
-                        children: <Widget>[...actionListView]),
-                  )
+              width: ScreenUtil().screenWidth * 0.98,
+              // height: 300,
+              child: Wrap(
+                  alignment: WrapAlignment.start,
+                  direction: Axis.horizontal,
+                  spacing: 0,
+                  runSpacing: 0,
+                  children: <Widget>[...actionListView]),
+            )
                 : Container(
-                    child: Text("暂无记录"),
-                  )),
+              child: Text("暂无记录"),
+            )),
       ],
     ),
   );
 }
 
-Widget buildCall(List<Widget> callListView, bool showControl,void Function(String tag,bool value) callSetState, String name) {
+Widget buildCall(List<Widget> callListView, bool showControl,
+    void Function(String tag, bool value) callSetState, String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1884,18 +1892,18 @@ Widget buildCall(List<Widget> callListView, bool showControl,void Function(Strin
             code: "",
             show: callListView.length > 0
                 ? Container(
-                    width: ScreenUtil().screenWidth * 0.98,
-                    // height: 300,
-                    child: Wrap(
-                        alignment: WrapAlignment.start,
-                        direction: Axis.horizontal,
-                        spacing: 0,
-                        runSpacing: 0,
-                        children: <Widget>[...callListView]),
-                  )
+              width: ScreenUtil().screenWidth * 0.98,
+              // height: 300,
+              child: Wrap(
+                  alignment: WrapAlignment.start,
+                  direction: Axis.horizontal,
+                  spacing: 0,
+                  runSpacing: 0,
+                  children: <Widget>[...callListView]),
+            )
                 : Container(
-                    child: Text("暂无记录"),
-                  )),
+              child: Text("暂无记录"),
+            )),
       ],
     ),
   );
@@ -1917,18 +1925,18 @@ Widget buildSelect(List<Widget> selectListView, bool showControl) {
             code: "",
             show: selectListView.length > 0
                 ? Container(
-                    width: ScreenUtil().screenWidth * 0.98,
-                    // height: 300,
-                    child: Wrap(
-                        alignment: WrapAlignment.start,
-                        direction: Axis.horizontal,
-                        spacing: 0,
-                        runSpacing: 0,
-                        children: <Widget>[...selectListView]),
-                  )
+              width: ScreenUtil().screenWidth * 0.98,
+              // height: 300,
+              child: Wrap(
+                  alignment: WrapAlignment.start,
+                  direction: Axis.horizontal,
+                  spacing: 0,
+                  runSpacing: 0,
+                  children: <Widget>[...selectListView]),
+            )
                 : Container(
-                    child: Text("暂无记录"),
-                  )),
+              child: Text("暂无记录"),
+            )),
       ],
     ),
   );
@@ -2019,7 +2027,7 @@ Widget _item_detail(BuildContext context, Color color, IconData icon,
 showEditDialog(BuildContext context, String title, String hintText, String text,
     String type, int maxLine, Map<String, dynamic> info) {
   TextEditingController _controller =
-      TextEditingController.fromValue(TextEditingValue(
+  TextEditingController.fromValue(TextEditingValue(
     text: '${text == null ? "" : text}', //判断keyword是否为空
   ));
   showCupertinoDialog(
@@ -2078,7 +2086,7 @@ showEditDialog(BuildContext context, String title, String hintText, String text,
 showEditDialogDemand(BuildContext context, String title, String hintText,
     String text, String type, int maxLine, Map<String, dynamic> info, uuid) {
   TextEditingController _controller =
-      TextEditingController.fromValue(TextEditingValue(
+  TextEditingController.fromValue(TextEditingValue(
     text: '${text == null ? "" : text}', //判断keyword是否为空
   ));
   showCupertinoDialog(
@@ -2156,14 +2164,15 @@ String getLevel(int status) {
   return "";
 }
 
-Future<bool> showPickerDemandAge(
-    BuildContext context, String data, String uuid, int canEdit) async {
+Future<bool> showPickerDemandAge(BuildContext context, String data, String uuid,
+    int canEdit) async {
   if (canEdit == 0) {
     showToastRed(context, "暂无权限修改", false);
     return false;
   }
   var f = data.split(",");
-  var aa = 0, bb = 17;
+  var aa = 0,
+      bb = 17;
   try {
     var a = int.parse(f[0]) - 18;
     aa = a;
@@ -2198,10 +2207,10 @@ Future<bool> showPickerDemandAge(
       delimiter: [
         PickerDelimiter(
             child: Container(
-          width: 30.w,
-          alignment: Alignment.center,
-          child: Icon(Icons.more_vert),
-        ))
+              width: 30.w,
+              alignment: Alignment.center,
+              child: Icon(Icons.more_vert),
+            ))
       ],
       hideHeader: true,
       title: new Text("请选择年龄"),
@@ -2229,14 +2238,15 @@ Future<bool> showPickerDemandAge(
   return false;
 }
 
-Future<bool> showPickerDemandHeight(
-    BuildContext context, String data, String uuid, int canEdit) async {
+Future<bool> showPickerDemandHeight(BuildContext context, String data,
+    String uuid, int canEdit) async {
   if (canEdit == 0) {
     showToastRed(context, "暂无权限修改", false);
     return false;
   }
   var f = data.split(",");
-  var aa = 40, bb = 60;
+  var aa = 40,
+      bb = 60;
   try {
     var a = int.parse(f[0]) - 120;
     aa = a;
@@ -2271,10 +2281,10 @@ Future<bool> showPickerDemandHeight(
       delimiter: [
         PickerDelimiter(
             child: Container(
-          width: 30.w,
-          alignment: Alignment.center,
-          child: Icon(Icons.more_vert),
-        ))
+              width: 30.w,
+              alignment: Alignment.center,
+              child: Icon(Icons.more_vert),
+            ))
       ],
       hideHeader: true,
       title: new Text("请选择身高"),
@@ -2302,14 +2312,15 @@ Future<bool> showPickerDemandHeight(
   return false;
 }
 
-Future<bool> showPickerDemandWeight(
-    BuildContext context, String data, String uuid, int canEdit) async {
+Future<bool> showPickerDemandWeight(BuildContext context, String data,
+    String uuid, int canEdit) async {
   if (canEdit == 0) {
     showToastRed(context, "暂无权限修改", false);
     return false;
   }
   var f = data.split("-");
-  var aa = 25, bb = 30;
+  var aa = 25,
+      bb = 30;
   try {
     var a = int.parse(f[0]) - 40;
     aa = a;
@@ -2342,10 +2353,10 @@ Future<bool> showPickerDemandWeight(
       delimiter: [
         PickerDelimiter(
             child: Container(
-          width: 30.w,
-          alignment: Alignment.center,
-          child: Icon(Icons.more_vert),
-        ))
+              width: 30.w,
+              alignment: Alignment.center,
+              child: Icon(Icons.more_vert),
+            ))
       ],
       hideHeader: true,
       title: new Text("请选择体重"),
@@ -2373,8 +2384,7 @@ Future<bool> showPickerDemandWeight(
   return false;
 }
 
-Future<bool> showPickerArray(
-    BuildContext context,
+Future<bool> showPickerArray(BuildContext context,
     List<List<String>> pickerData,
     List<int> select,
     String type,
@@ -2409,11 +2419,13 @@ Future<bool> showPickerArray(
         if (isIndex) {
           values = value.first;
         } else {
-          values = int.parse(picker.getSelectedValues().first);
+          values = int.parse(picker
+              .getSelectedValues()
+              .first);
         }
 
         var result =
-            await IssuesApi.editCustomerOnce(info['uuid'], type, values);
+        await IssuesApi.editCustomerOnce(info['uuid'], type, values);
         if (result['code'] == 200) {
           BlocProvider.of<DetailBloc>(context)
               .add(EditDetailEvent(type, values));
@@ -2428,8 +2440,7 @@ Future<bool> showPickerArray(
   return false;
 }
 
-Future<bool> showPickerArrayDemand(
-    BuildContext context,
+Future<bool> showPickerArrayDemand(BuildContext context,
     List<List<String>> pickerData,
     List<int> select,
     String type,
@@ -2465,7 +2476,10 @@ Future<bool> showPickerArrayDemand(
         if (isIndex) {
           values = value.first.toString();
         } else {
-          values = (picker.getSelectedValues().first.toString());
+          values = (picker
+              .getSelectedValues()
+              .first
+              .toString());
         }
 
         var result = await IssuesApi.editCustomerDemandOnce(uuid, type, values);
@@ -2552,16 +2566,13 @@ Future<bool> showPickerDateTime(BuildContext context, String date, String type,
   return false;
 }
 
-Widget _buildLinkTo(
-  BuildContext context,
-  Map<String, dynamic> userdetail,
-  void Function(String tag,bool value) callSetState,int canEdit
-) {
+Widget _buildLinkTo(BuildContext context,
+    Map<String, dynamic> userdetail,
+    void Function(String tag, bool value) callSetState, int canEdit) {
   List<dynamic> imgList = userdetail['pics'];
   var imageListView = <ImageOptions>[];
-  for(int i=0;i<imgList.length;i++)
-  {
-    var e=imgList[i];
+  for (int i = 0; i < imgList.length; i++) {
+    var e = imgList[i];
     if (e == null) continue;
     imageListView.add(ImageOptions(
       url: e['file_url'],
@@ -2572,9 +2583,8 @@ Widget _buildLinkTo(
 
   List<Widget> list = [];
   if (imgList != null && imgList.length > 0) {
-    for(int i=0;i<imgList.length;i++)
-     {
-       var e=imgList[i];
+    for (int i = 0; i < imgList.length; i++) {
+      var e = imgList[i];
       if (e == null) continue;
       final String defaultImg =
           'https://img.bosszhipin.com/beijin/mcs/useravatar/20171211/4d147d8bb3e2a3478e20b50ad614f4d02062e3aec7ce2519b427d24a3f300d68_s.jpg';
@@ -2586,14 +2596,14 @@ Widget _buildLinkTo(
           onTap: () {
             ImagePreview.preview(
               context,
-              initialIndex:i,
+              initialIndex: i,
               images: imageListView,
             );
           },
           child: Padding(
             key: ObjectKey(e['id']),
             padding:
-                EdgeInsets.only(left: 10.w, right: 10.w, bottom: boxMargin * 2),
+            EdgeInsets.only(left: 10.w, right: 10.w, bottom: boxMargin * 2),
             child: Column(
               children: [
                 ClipRRect(
@@ -2607,58 +2617,62 @@ Widget _buildLinkTo(
                       children: <Widget>[
                         CachedNetworkImage(
                           imageUrl:
-                              e['file_url'] != "" ? e['file_url'] : defaultImg,
-                          imageBuilder: (context, imageProvider) => Container(
-                            height: imageHeight,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Stack(
-                              children: <Widget>[
-                                Positioned(
-                                  child: Container(
-                                    width: 50.w,
-                                    height: 50.h,
-                                    padding: EdgeInsets.only(
-                                      left: 10.w,
-                                      right: 10.w,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.withAlpha(70),
-                                      borderRadius: BorderRadius.only(
-                                       bottomLeft: Radius.circular(10.w),
-                                          // Radius.circular(10.w),
-
-                                      ),
-                                    ),
-                                    child: FeedbackWidget(
-                                      onPressed: () {
-                                        if (canEdit ==0) {
-                                          showToastRed(context, "暂无权限", true);
-                                          return;
-                                        }
-                                        _deletePhoto(context, e, userdetail);
-                                      },
-                                      child: const Icon(
-                                        CupertinoIcons.delete_solid,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                          e['file_url'] != "" ? e['file_url'] : defaultImg,
+                          imageBuilder: (context, imageProvider) =>
+                              Container(
+                                height: imageHeight,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
                                   ),
-                                  top: 0,
-                                  right: 0,
                                 ),
-                              ],
-                            ),
-                          ),
-                          placeholder: (context, url) => Image.asset(
-                            'assets/images/default/img_default.png',
-                            height: imageHeight,
-                            fit: BoxFit.fill,
-                          ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Positioned(
+                                      child: Container(
+                                        width: 50.w,
+                                        height: 50.h,
+                                        padding: EdgeInsets.only(
+                                          left: 10.w,
+                                          right: 10.w,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.withAlpha(70),
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10.w),
+                                            // Radius.circular(10.w),
+
+                                          ),
+                                        ),
+                                        child: FeedbackWidget(
+                                          onPressed: () {
+                                            if (canEdit == 0) {
+                                              showToastRed(
+                                                  context, "暂无权限", true);
+                                              return;
+                                            }
+                                            _deletePhoto(
+                                                context, e, userdetail);
+                                          },
+                                          child: const Icon(
+                                            CupertinoIcons.delete_solid,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      top: 0,
+                                      right: 0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          placeholder: (context, url) =>
+                              Image.asset(
+                                'assets/images/default/img_default.png',
+                                height: imageHeight,
+                                fit: BoxFit.fill,
+                              ),
                         ),
                       ],
                     ),
@@ -2677,14 +2691,13 @@ Widget _buildLinkTo(
         padding: EdgeInsets.only(left: 10.w, right: 10.w),
         child: Container(
             child: Image.asset(
-          "assets/images/add.png",
-          width: 200.w,
-          height: 200.h,
-        )),
+              "assets/images/add.png",
+              width: 200.w,
+              height: 200.h,
+            )),
       ),
       onTap: () async {
-
-        if (canEdit ==0) {
+        if (canEdit == 0) {
           showToastRed(context, "暂无权限", true);
           return;
         }
@@ -2700,7 +2713,7 @@ Widget _buildLinkTo(
             // 是否支持拍照
             enableCamera: true,
             materialOptions: MaterialOptions(
-                // 显示所有照片，值为 false 时显示相册
+              // 显示所有照片，值为 false 时显示相册
                 startInAllView: false,
                 allViewTitle: '所有照片',
                 actionBarColor: '#2196F3',
@@ -2719,16 +2732,17 @@ Widget _buildLinkTo(
           EasyLoading.show();
           try {
             var resultConnectList =
-                await IssuesApi.uploadPhoto("1", byteData, _loading);
+            await IssuesApi.uploadPhoto("1", byteData, _loading);
             // print(resultConnectList['data']);
 
             var result = await IssuesApi.editCustomer(
                 userdetail['info']['uuid'], "1", resultConnectList['data']);
             if (result['code'] == 200) {
               BlocProvider.of<DetailBloc>(context).add(
-                  UploadImgSuccessEvent(userdetail, resultConnectList['data'],result['data']));
+                  UploadImgSuccessEvent(
+                      userdetail, resultConnectList['data'], result['data']));
               showToast(context, "上传成功", false);
-              callSetState("photo",true);
+              callSetState("photo", true);
             } else {
               showToast(context, result['message'], false);
             }
@@ -2750,7 +2764,8 @@ _deletePhoto(BuildContext context, Map<String, dynamic> img,
     Map<String, dynamic> detail) {
   showDialog(
       context: context,
-      builder: (ctx) => Dialog(
+      builder: (ctx) =>
+          Dialog(
             elevation: 5,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -2862,7 +2877,8 @@ Widget item_detail_gradute(BuildContext context, Color color, IconData icon,
         )),
   );
 }
-avatar(String url, bool isVip,String name) {
+
+avatar(String url, bool isVip, String name) {
   return Container(
     child: Stack(
       children: [
@@ -2879,7 +2895,7 @@ avatar(String url, bool isVip,String name) {
           margin: EdgeInsets.only(left: 0.w, top: 10.h),
         )
             : Container(),
-        url ==""? Container(
+        url == "" ? Container(
           margin: EdgeInsets.only(left: 20.w, top: 20.h),
           // width: 100.w,
           // height: 100.h,h
@@ -2891,7 +2907,7 @@ avatar(String url, bool isVip,String name) {
             color: Colors.lightBlue,
             //shadowColor: Colors.transparent,
           ),
-        ):Container(
+        ) : Container(
           margin: EdgeInsets.only(left: 30.w, top: 30.h),
           child: CircleAvatar(
             radius: (70.w),
@@ -2901,10 +2917,11 @@ avatar(String url, bool isVip,String name) {
                   fit: BoxFit.cover,
                   width: 140.w,
                   height: 140.h,
-                  placeholder: (context, url) => Image.asset(
-                    'assets/images/default/img_default.png',
-                    fit: BoxFit.fill,
-                  )),
+                  placeholder: (context, url) =>
+                      Image.asset(
+                        'assets/images/default/img_default.png',
+                        fit: BoxFit.fill,
+                      )),
             ),
             backgroundColor: Colors.white,
           ),
@@ -2913,7 +2930,8 @@ avatar(String url, bool isVip,String name) {
     ),
   );
 }
-header(BuildContext context,Map<String, dynamic> user) {
+
+header(BuildContext context, Map<String, dynamic> user) {
   bool isVip = false;
   bool expire = false;
   String vipName = "";
@@ -2924,20 +2942,33 @@ header(BuildContext context,Map<String, dynamic> user) {
   } else {
     if (user['info']['status'] == 2) {
       if (user['info']['vip_id'] > 0 &&
-          DateTime.parse(user['info']['vip_expire_time'])
+          DateTime
+              .parse(user['info']['vip_expire_time'])
               .millisecondsSinceEpoch >
-              DateTime.now().millisecondsSinceEpoch) {
+              DateTime
+                  .now()
+                  .millisecondsSinceEpoch) {
         isVip = true;
-        vipName = user['info']['vip_name'] ;
-        vipName1 ="("+
-            user['info']['vip_expire_time'] +")";
-
+        vipName = user['info']['vip_name'];
+        vipName1 = "(" +
+            user['info']['vip_expire_time'] + ")";
       } else {
         expire = true;
         vipName1 = "(会员已过期)";
       }
     } else {}
   }
+  var headImg = "" ;
+     if(user['info']['head_img'] ==""){
+        headImg = user['info']['head_img'] ;
+     }else{
+       if(user['info']['checked'] == 0){
+          headImg = user['info']['head_img'];
+       }else{
+          headImg = user['info']['es_age'];
+       }
+     }
+
   return Container(
     height: 166.h,
     margin: EdgeInsets.only(top: 0.h, bottom: 0.h, left: 0.w),
@@ -2950,20 +2981,18 @@ header(BuildContext context,Map<String, dynamic> user) {
                 context,
                 images: List.generate(1, (index) {
                   return ImageOptions(
-                    url: user['pic'].length > 0
-                        ? (user['pic'][0])
-                        : ("assets/packages/images/ic_user_none_round.png"),
-                    tag: user['pic'].length > 0
-                        ? (user['pic'][0])
-                        : ("assets/packages/images/ic_user_none_round.png"),
+                    url: headImg != "" ?headImg:
+                        ("assets/packages/images/ic_user_none_round.png"),
+                    tag: headImg != "" ?headImg:
+                        ("assets/packages/images/ic_user_none_round.png"),
                   );
                 }),
               );
             },
             child: Padding(
               padding: EdgeInsets.only(left: 10.w, right: 0.w),
-              child: user['pic'].length > 0
-                  ? avatar(user['pic'][0], isVip,user['info']['name'])
+              child: headImg != ""
+                  ? avatar(headImg, isVip, user['info']['name'])
                   : Container(
                 margin: EdgeInsets.only(left: 20.w, top: 0.h),
                 width: 180.w,
@@ -3111,7 +3140,9 @@ header(BuildContext context,Map<String, dynamic> user) {
                     ? Container(
                     margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
                     child: Text(
-                      user['info']['serve_user']==null? "a":user['info']['serve_user'],
+                      user['info']['serve_user'] == null
+                          ? "a"
+                          : user['info']['serve_user'],
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
