@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -9,7 +7,6 @@ import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/views/app/splash/unit_splash.dart';
 import 'package:flutter_geen/views/pages/login/login_page.dart';
 import 'package:flutter_screenutil/screenutil_init.dart';
-
 import 'navigation/unit_navigation.dart';
 
 /// 说明: 主程序

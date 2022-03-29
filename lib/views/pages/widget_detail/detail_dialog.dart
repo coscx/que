@@ -9,6 +9,7 @@ import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:menu_button/menu_button.dart';
 
 import 'detail_common.dart';
 
@@ -20,7 +21,6 @@ FocusNode _connectFieldNode = FocusNode();
 final _usernameController = TextEditingController(text: '');
 FocusNode _textPlaceFieldNode = FocusNode();
 final _placeController = TextEditingController(text: '');
-
 
 String goalValue = '4.可继续沟通';
 String goalValueAppoint = '21.新分VIP';
@@ -457,16 +457,42 @@ Future<bool> appointDialog(
   return result;
 }
 
+Widget normalChildButton(String selectedKey) {
+  return SizedBox(
+    width: 140.w,
+    height: 60.h,
+    child: Padding(
+      padding: EdgeInsets.only(left: 16.w, right: 11.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Flexible(child: Text(selectedKey, overflow: TextOverflow.ellipsis)),
+          SizedBox(
+            width: 24.w,
+            height: 34.h,
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: Icon(
+                Icons.arrow_drop_down,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 Future<bool> commentDialog(BuildContext context, int connectStatus,
     Map<String, dynamic> detail) async {
-    var roleId =detail['role_id'];
-    if (roleId==7 || roleId==9){
-      goals = goalsAppoint;
-      goalValue = getServeStatusIndex(connectStatus);
-
-    }else{
-      goalValue = getStatusIndex(connectStatus);
-    }
+  var roleId = detail['role_id'];
+  if (roleId == 7 || roleId == 9) {
+    goals = goalsAppoint;
+    goalValue = getServeStatusIndex(connectStatus);
+  } else {
+    goalValue = getStatusIndex(connectStatus);
+  }
   var result = await showDialog(
       barrierDismissible: false,
       context: context,
@@ -587,52 +613,97 @@ Future<bool> commentDialog(BuildContext context, int connectStatus,
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
                                       children: [
-                                        Text("沟通状态: ",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey)),
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              left: 0.w, bottom: 10.h),
+                                          child: Text("沟通状态: ",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.grey)),
+                                        ),
                                         Padding(
-                                          padding: EdgeInsets.only(left: 0.w),
+                                          padding: EdgeInsets.only(
+                                              left: 0.w, bottom: 10.h),
                                           child: Container(
-                                            width:
-                                                ScreenUtil().screenWidth * 0.7,
-                                            child: DropdownButton<String>(
-                                              value: goalValue,
-                                              icon: Icon(Icons
-                                                  .keyboard_arrow_down_outlined),
-                                              iconSize: 30.sp,
-                                              elevation: 4,
-                                              underline: Container(
-                                                height: 3.h,
-                                                color: Colors.redAccent,
-                                              ),
-                                              onChanged: (String newValue) {
-                                                state(() {
-                                                  goalValue = newValue;
-                                                  connectStatus =
-                                                      getIndexOfList(
-                                                          goals, newValue);
-                                                   if (roleId==7 || roleId==9){
-                                                     connectStatus =connectStatus + 20;
-                                                   }
-                                                });
-                                              },
-                                              items: goals.map<
-                                                      DropdownMenuItem<String>>(
-                                                  (String value) {
-                                                return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Text(value,
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          fontSize: 32.sp,
-                                                          color: Colors.black)),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
+                                              width: ScreenUtil().screenWidth *
+                                                  0.6,
+                                              child:
+                                                  // child: DropdownButton<String>(
+                                                  //   value: goalValue,
+                                                  //   icon: Icon(Icons
+                                                  //       .keyboard_arrow_down_outlined),
+                                                  //   iconSize: 30.sp,
+                                                  //   elevation: 4,
+                                                  //   underline: Container(
+                                                  //     height: 3.h,
+                                                  //     color: Colors.redAccent,
+                                                  //   ),
+                                                  //   onChanged: (String newValue) {
+                                                  //     state(() {
+                                                  //       goalValue = newValue;
+                                                  //       connectStatus =
+                                                  //           getIndexOfList(
+                                                  //               goals, newValue);
+                                                  //        if (roleId==7 || roleId==9){
+                                                  //          connectStatus =connectStatus + 20;
+                                                  //        }
+                                                  //     });
+                                                  //   },
+                                                  //   items: goals.map<
+                                                  //           DropdownMenuItem<String>>(
+                                                  //       (String value) {
+                                                  //     return DropdownMenuItem<String>(
+                                                  //       value: value,
+                                                  //       child: Text(value,
+                                                  //           maxLines: 1,
+                                                  //           overflow:
+                                                  //               TextOverflow.ellipsis,
+                                                  //           style: TextStyle(
+                                                  //               fontSize: 32.sp,
+                                                  //               color: Colors.black)),
+                                                  //     );
+                                                  //   }).toList(),
+                                                  // ),
+
+                                                  MenuButton<String>(
+                                                scrollPhysics:
+                                                    AlwaysScrollableScrollPhysics(),
+                                                child: normalChildButton(
+                                                    goalValue),
+                                                items: goals,
+                                                itemBuilder: (String value) =>
+                                                    Container(
+                                                  height: 40,
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 0.0,
+                                                      horizontal: 16),
+                                                  child: Text(value),
+                                                ),
+                                                toggledChild: Container(
+                                                  child: normalChildButton(
+                                                      goalValue),
+                                                ),
+                                                onItemSelected: (String value) {
+                                                  state(() {
+                                                    goalValue = value;
+                                                    connectStatus =
+                                                        getIndexOfList(
+                                                            goals, value);
+                                                    if (roleId == 7 ||
+                                                        roleId == 9) {
+                                                      connectStatus =
+                                                          connectStatus + 20;
+                                                    }
+                                                  });
+                                                },
+                                                onMenuButtonToggle:
+                                                    (bool isToggle) {
+                                                  print(isToggle);
+                                                },
+                                              )),
                                         ),
                                       ],
                                     )),

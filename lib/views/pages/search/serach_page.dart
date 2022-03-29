@@ -112,32 +112,35 @@ class _SearchPageState extends State<SearchPage> {
                           // 触摸收起键盘
                           FocusScope.of(context).requestFocus(FocusNode());
                         },
-                        child: CustomScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          slivers: <Widget>[
-                            _buildSliverAppBar(),
-                            //SliverToBoxAdapter(child: _buildStarFilter()),
-                            BlocListener<SearchBloc, SearchState>(
-                                listener: (ctx, state) {
-                                  if (state is CheckUserSuccesses) {
-                                    _scaffoldkey.currentState
-                                        .showSnackBar(SnackBar(
-                                      content: Text('审核成功' + state.Reason),
-                                      backgroundColor: Colors.green,
-                                    ));
-                                  }
-                                  if (state is DelImgSuccesses) {
-                                    _scaffoldkey.currentState
-                                        .showSnackBar(SnackBar(
-                                      content: Text('删除成功'),
-                                      backgroundColor: Colors.blue,
-                                    ));
-                                  }
-                                },
-                                child: BlocBuilder<SearchBloc, SearchState>(
-                                    builder: _buildBodyByState))
-                          ],
+                        child: Container(
+                          color: Colors.white,
+                          child: CustomScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            slivers: <Widget>[
+                              _buildSliverAppBar(),
+                              //SliverToBoxAdapter(child: _buildStarFilter()),
+                              BlocListener<SearchBloc, SearchState>(
+                                  listener: (ctx, state) {
+                                    if (state is CheckUserSuccesses) {
+                                      _scaffoldkey.currentState
+                                          .showSnackBar(SnackBar(
+                                        content: Text('审核成功' + state.Reason),
+                                        backgroundColor: Colors.green,
+                                      ));
+                                    }
+                                    if (state is DelImgSuccesses) {
+                                      _scaffoldkey.currentState
+                                          .showSnackBar(SnackBar(
+                                        content: Text('删除成功'),
+                                        backgroundColor: Colors.blue,
+                                      ));
+                                    }
+                                  },
+                                  child: BlocBuilder<SearchBloc, SearchState>(
+                                      builder: _buildBodyByState))
+                            ],
+                          ),
                         )))),
           ),
         ));
@@ -148,7 +151,7 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: Colors.white,
       elevation: 0,
       pinned: true,
-      leadingWidth: 15.w,
+      leadingWidth: 10.w,
       title: Container(
           padding: EdgeInsets.only(left: 0.w, top: 0.w), child: AppSearchBar()),
     );

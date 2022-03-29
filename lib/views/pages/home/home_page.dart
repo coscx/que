@@ -91,10 +91,10 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((callback) {
-      OverlayToolWrapper.of(context).showFloating();
-    });
+    //
+    // WidgetsBinding.instance.addPostFrameCallback((callback) {
+    //   OverlayToolWrapper.of(context).showFloating();
+    // });
   }
 
   @override

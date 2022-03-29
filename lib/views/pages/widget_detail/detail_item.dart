@@ -1,12 +1,16 @@
-import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:city_pickers/city_pickers.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:io';
+
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/blocs/detail/detail_bloc.dart';
@@ -23,10 +27,12 @@ import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
-Widget buildBase(BuildContext context,
+Widget buildBase(
+    BuildContext context,
     Map<String, dynamic> info,
     int canEdit,
     bool showControl,
@@ -81,14 +87,8 @@ Widget buildBase(BuildContext context,
                             showToastRed(context, "暂无权限修改", false);
                             return;
                           }
-                          var result = await showEditDialog(
-                              context,
-                              "请输入姓名",
-                              "",
-                              info['name'].toString(),
-                              "name",
-                              1,
-                              info);
+                          var result = await showEditDialog(context, "请输入姓名",
+                              "", info['name'].toString(), "name", 1, info);
                           if (result != null) {
                             callSetState("base", true);
                           }
@@ -163,21 +163,21 @@ Widget buildBase(BuildContext context,
                             info['birthday'] == null
                                 ? "-"
                                 : info['picker.adapter.text'] != ""
-                                ? (info['birthday'] == ""
-                                ? info['birthday']
-                                : info['birthday']
-                                .toString()
-                                .substring(0, 10))
-                                : (info['birthday'] == ""
-                                ? info['birthday']
-                                : info['birthday']
-                                .toString()
-                                .substring(0, 10)) +
-                                "(" +
-                                info['chinese_zodiac'] +
-                                "-" +
-                                info['zodiac'] +
-                                ")",
+                                    ? (info['birthday'] == ""
+                                        ? info['birthday']
+                                        : info['birthday']
+                                            .toString()
+                                            .substring(0, 10))
+                                    : (info['birthday'] == ""
+                                            ? info['birthday']
+                                            : info['birthday']
+                                                .toString()
+                                                .substring(0, 10)) +
+                                        "(" +
+                                        info['chinese_zodiac'] +
+                                        "-" +
+                                        info['zodiac'] +
+                                        ")",
                             true)),
                     GestureDetector(
                         onTap: () {},
@@ -207,8 +207,8 @@ Widget buildBase(BuildContext context,
                               context: context,
                               locationCode: info['np_area_code'] == ""
                                   ? (info['np_city_code'] == ""
-                                  ? "320500"
-                                  : info['np_city_code'])
+                                      ? "320500"
+                                      : info['np_city_code'])
                                   : info['np_area_code'],
                               cancelWidget: Text(
                                 "取消",
@@ -239,8 +239,8 @@ Widget buildBase(BuildContext context,
                             info['native_place'] == null
                                 ? "-"
                                 : (info['native_place'] == ""
-                                ? "-"
-                                : info['native_place'].toString()),
+                                    ? "-"
+                                    : info['native_place'].toString()),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -252,8 +252,8 @@ Widget buildBase(BuildContext context,
                               context: context,
                               locationCode: info['lp_area_code'] == ""
                                   ? (info['lp_city_code'] == ""
-                                  ? "320500"
-                                  : info['lp_city_code'])
+                                      ? "320500"
+                                      : info['lp_city_code'])
                                   : info['lp_area_code'],
                               cancelWidget: Text(
                                 "取消",
@@ -284,8 +284,8 @@ Widget buildBase(BuildContext context,
                             info['location_place'] == null
                                 ? "-"
                                 : (info['location_place'] == ""
-                                ? "-"
-                                : info['location_place'].toString()),
+                                    ? "-"
+                                    : info['location_place'].toString()),
                             true)),
                     GestureDetector(
                         onTap: () {},
@@ -335,9 +335,9 @@ Widget buildBase(BuildContext context,
                               info['height'] == 0
                                   ? [70]
                                   : [
-                                getIndexOfList(getHeightList(),
-                                    info['height'].toString())
-                              ],
+                                      getIndexOfList(getHeightList(),
+                                          info['height'].toString())
+                                    ],
                               "height",
                               info,
                               "身高(cm)",
@@ -367,9 +367,9 @@ Widget buildBase(BuildContext context,
                               info['weight'] == 0
                                   ? [35]
                                   : [
-                                getIndexOfList(getWeightList(),
-                                    info['weight'].toString())
-                              ],
+                                      getIndexOfList(getWeightList(),
+                                          info['weight'].toString())
+                                    ],
                               "weight",
                               info,
                               "体重(kg)",
@@ -411,8 +411,8 @@ Widget buildBase(BuildContext context,
                               info['interest'] == null
                                   ? ""
                                   : (info['interest'] == ""
-                                  ? ""
-                                  : info['interest'].toString()),
+                                      ? ""
+                                      : info['interest'].toString()),
                               "interest",
                               5,
                               info);
@@ -471,8 +471,8 @@ Widget buildBase(BuildContext context,
                               info['demands'] == null
                                   ? ""
                                   : (info['demands'] == ""
-                                  ? ""
-                                  : info['demands'].toString()),
+                                      ? ""
+                                      : info['demands'].toString()),
                               "demands",
                               5,
                               info);
@@ -488,8 +488,8 @@ Widget buildBase(BuildContext context,
                             info['demands'] == null
                                 ? "-"
                                 : (info['demands'] == ""
-                                ? "-"
-                                : info['demands'].toString()),
+                                    ? "-"
+                                    : info['demands'].toString()),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -504,8 +504,8 @@ Widget buildBase(BuildContext context,
                               info['remark'] == null
                                   ? ""
                                   : (info['remark'] == ""
-                                  ? ""
-                                  : info['remark'].toString()),
+                                      ? ""
+                                      : info['remark'].toString()),
                               "remark",
                               5,
                               info);
@@ -521,8 +521,8 @@ Widget buildBase(BuildContext context,
                             info['remark'] == null
                                 ? "-"
                                 : (info['remark'] == ""
-                                ? "-"
-                                : info['remark'].toString()),
+                                    ? "-"
+                                    : info['remark'].toString()),
                             true)),
                   ]),
             )),
@@ -531,7 +531,8 @@ Widget buildBase(BuildContext context,
   );
 }
 
-Widget buildEdu(BuildContext context,
+Widget buildEdu(
+    BuildContext context,
     Map<String, dynamic> info,
     int canEdit,
     bool showControl,
@@ -603,8 +604,8 @@ Widget buildEdu(BuildContext context,
                               info['school'] == null
                                   ? ""
                                   : (info['school'] == ""
-                                  ? ""
-                                  : info['school'].toString()),
+                                      ? ""
+                                      : info['school'].toString()),
                               "school",
                               1,
                               info);
@@ -634,8 +635,8 @@ Widget buildEdu(BuildContext context,
                               info['major'] == null
                                   ? ""
                                   : (info['major'] == ""
-                                  ? ""
-                                  : info['major'].toString()),
+                                      ? ""
+                                      : info['major'].toString()),
                               "major",
                               1,
                               info);
@@ -719,8 +720,8 @@ Widget buildEdu(BuildContext context,
                               info['work_industry'] == null
                                   ? ""
                                   : (info['work_industry'] == ""
-                                  ? ""
-                                  : info['work_industry'].toString()),
+                                      ? ""
+                                      : info['work_industry'].toString()),
                               "work_industry",
                               5,
                               info);
@@ -773,14 +774,8 @@ Widget buildEdu(BuildContext context,
                             return;
                           }
                           // showPickerArray(context,[IncomeLevel],info['income']==0?[1]:[info['income']],"income",info,"",true);
-                          var result = await showEditDialog(
-                              context,
-                              "请输入收入",
-                              "",
-                              info['income'].toString(),
-                              "income",
-                              1,
-                              info);
+                          var result = await showEditDialog(context, "请输入收入",
+                              "", info['income'].toString(), "income", 1, info);
                           if (result != null) {
                             callSetState("education", true);
                           }
@@ -913,7 +908,8 @@ Widget buildEdu(BuildContext context,
   );
 }
 
-Widget buildMarriage(BuildContext context,
+Widget buildMarriage(
+    BuildContext context,
     Map<String, dynamic> info,
     int canEdit,
     bool showControl,
@@ -1012,8 +1008,8 @@ Widget buildMarriage(BuildContext context,
                               info['child_remark'] == null
                                   ? ""
                                   : (info['child_remark'] == ""
-                                  ? ""
-                                  : info['child_remark'].toString()),
+                                      ? ""
+                                      : info['child_remark'].toString()),
                               "child_remark",
                               5,
                               info);
@@ -1099,8 +1095,8 @@ Widget buildMarriage(BuildContext context,
                               info['father_work'] == null
                                   ? ""
                                   : (info['father_work'] == ""
-                                  ? ""
-                                  : info['father_work'].toString()),
+                                      ? ""
+                                      : info['father_work'].toString()),
                               "father_work",
                               1,
                               info);
@@ -1130,8 +1126,8 @@ Widget buildMarriage(BuildContext context,
                               info['mother_work'] == null
                                   ? ""
                                   : (info['mother_work'] == ""
-                                  ? ""
-                                  : info['mother_work'].toString()),
+                                      ? ""
+                                      : info['mother_work'].toString()),
                               "mother_work",
                               1,
                               info);
@@ -1161,8 +1157,8 @@ Widget buildMarriage(BuildContext context,
                               info['parents_income'] == null
                                   ? ""
                                   : (info['parents_income'] == ""
-                                  ? ""
-                                  : info['parents_income'].toString()),
+                                      ? ""
+                                      : info['parents_income'].toString()),
                               "parents_income",
                               1,
                               info);
@@ -1207,7 +1203,7 @@ Widget buildMarriage(BuildContext context,
                             info['parents_insurance'] == 0
                                 ? "-"
                                 : getParentProtectLevel(
-                                info['parents_insurance']),
+                                    info['parents_insurance']),
                             true)),
                   ]),
             )),
@@ -1216,11 +1212,13 @@ Widget buildMarriage(BuildContext context,
   );
 }
 
-Widget buildSimilar(BuildContext context,
+Widget buildSimilar(
+    BuildContext context,
     Map<String, dynamic> info,
     int canEdit,
     bool showControl,
-    void Function(String tag, bool value) callSetState, String name) {
+    void Function(String tag, bool value) callSetState,
+    String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1422,12 +1420,14 @@ Widget buildSimilar(BuildContext context,
   );
 }
 
-Widget buildUserSelect(BuildContext context,
+Widget buildUserSelect(
+    BuildContext context,
     Map<String, dynamic> info,
     int canEdit,
     bool showControl,
     String uuid,
-    void Function(String tag, bool value) callSetState, String name) {
+    void Function(String tag, bool value) callSetState,
+    String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1539,7 +1539,7 @@ Widget buildUserSelect(BuildContext context,
                             info['wish_education'] == ""
                                 ? "-"
                                 : getEduLevel(
-                                int.parse(info['wish_education'])),
+                                    int.parse(info['wish_education'])),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -1582,8 +1582,8 @@ Widget buildUserSelect(BuildContext context,
                               context: context,
                               locationCode: info['wish_lp_area_code'] == ""
                                   ? (info['wish_lp_city_code'] == ""
-                                  ? "320500"
-                                  : info['wish_lp_city_code'])
+                                      ? "320500"
+                                      : info['wish_lp_city_code'])
                                   : info['wish_lp_area_code'],
                               cancelWidget: Text(
                                 "取消",
@@ -1596,8 +1596,8 @@ Widget buildUserSelect(BuildContext context,
                           print(result);
                           if (result != null) {
                             var results =
-                            await IssuesApi.editCustomerDemandAddress(
-                                uuid, 2, result);
+                                await IssuesApi.editCustomerDemandAddress(
+                                    uuid, 2, result);
                             if (results['code'] == 200) {
                               BlocProvider.of<DetailBloc>(context)
                                   .add(EditDetailEventDemandAddress(result, 2));
@@ -1615,8 +1615,8 @@ Widget buildUserSelect(BuildContext context,
                             info['wish_lp_city_name'] == ""
                                 ? "-"
                                 : (info['wish_lp_province_name'] +
-                                info['wish_lp_city_name'] +
-                                info['wish_lp_area_name']),
+                                    info['wish_lp_city_name'] +
+                                    info['wish_lp_area_name']),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -1647,7 +1647,7 @@ Widget buildUserSelect(BuildContext context,
                             info['wish_marriage'] == ""
                                 ? "-"
                                 : getMarriageLevel(
-                                int.parse(info['wish_marriage'])),
+                                    int.parse(info['wish_marriage'])),
                             true)),
                     GestureDetector(
                         onTap: () async {
@@ -1658,16 +1658,12 @@ Widget buildUserSelect(BuildContext context,
                           var income = 0;
                           try {
                             income = int.parse(info['wish_income']);
-                          } catch (e) {
-
-                          }
+                          } catch (e) {}
 
                           var result = await showPickerArrayDemand(
                               context,
                               [IncomeLevel],
-                              info['wish_income'] == ""
-                                  ? [0]
-                                  : [income],
+                              info['wish_income'] == "" ? [0] : [income],
                               "wish_income",
                               info,
                               "",
@@ -1699,8 +1695,8 @@ Widget buildUserSelect(BuildContext context,
                               info['description'] == null
                                   ? ""
                                   : (info['description'] == ""
-                                  ? ""
-                                  : info['description'].toString()),
+                                      ? ""
+                                      : info['description'].toString()),
                               "description",
                               5,
                               info,
@@ -1725,11 +1721,13 @@ Widget buildUserSelect(BuildContext context,
   );
 }
 
-Widget buildPhoto(BuildContext context,
+Widget buildPhoto(
+    BuildContext context,
     Map<String, dynamic> userdetails,
     int canEdit,
     bool showControl,
-    void Function(String tag, bool value) callSetState, String name) {
+    void Function(String tag, bool value) callSetState,
+    String name) {
   return Container(
     margin: EdgeInsets.only(left: 15.w, right: 5.w, bottom: 0.h),
     child: Column(
@@ -1783,18 +1781,18 @@ Widget buildConnect(List<Widget> connectList, bool showControl,
             code: "",
             show: connectList.length > 0
                 ? Container(
-              width: ScreenUtil().screenWidth * 0.98,
-              // height: 300,
-              child: Wrap(
-                  alignment: WrapAlignment.start,
-                  direction: Axis.horizontal,
-                  spacing: 0,
-                  runSpacing: 0,
-                  children: <Widget>[...connectList]),
-            )
+                    width: ScreenUtil().screenWidth * 0.98,
+                    // height: 300,
+                    child: Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[...connectList]),
+                  )
                 : Container(
-              child: Text("暂无沟通"),
-            )),
+                    child: Text("暂无沟通"),
+                  )),
       ],
     ),
   );
@@ -1820,18 +1818,18 @@ Widget buildAppoint(List<Widget> appointListView, bool showControl,
             code: "",
             show: appointListView.length > 0
                 ? Container(
-              width: ScreenUtil().screenWidth * 0.98,
-              // height: 300,
-              child: Wrap(
-                  alignment: WrapAlignment.start,
-                  direction: Axis.horizontal,
-                  spacing: 0,
-                  runSpacing: 0,
-                  children: <Widget>[...appointListView]),
-            )
+                    width: ScreenUtil().screenWidth * 0.98,
+                    // height: 300,
+                    child: Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[...appointListView]),
+                  )
                 : Container(
-              child: Text("暂无排约"),
-            )),
+                    child: Text("暂无排约"),
+                  )),
       ],
     ),
   );
@@ -1856,18 +1854,18 @@ Widget buildAction(List<Widget> actionListView, bool showControl,
             code: "",
             show: actionListView.length > 0
                 ? Container(
-              width: ScreenUtil().screenWidth * 0.98,
-              // height: 300,
-              child: Wrap(
-                  alignment: WrapAlignment.start,
-                  direction: Axis.horizontal,
-                  spacing: 0,
-                  runSpacing: 0,
-                  children: <Widget>[...actionListView]),
-            )
+                    width: ScreenUtil().screenWidth * 0.98,
+                    // height: 300,
+                    child: Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[...actionListView]),
+                  )
                 : Container(
-              child: Text("暂无记录"),
-            )),
+                    child: Text("暂无记录"),
+                  )),
       ],
     ),
   );
@@ -1892,18 +1890,18 @@ Widget buildCall(List<Widget> callListView, bool showControl,
             code: "",
             show: callListView.length > 0
                 ? Container(
-              width: ScreenUtil().screenWidth * 0.98,
-              // height: 300,
-              child: Wrap(
-                  alignment: WrapAlignment.start,
-                  direction: Axis.horizontal,
-                  spacing: 0,
-                  runSpacing: 0,
-                  children: <Widget>[...callListView]),
-            )
+                    width: ScreenUtil().screenWidth * 0.98,
+                    // height: 300,
+                    child: Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[...callListView]),
+                  )
                 : Container(
-              child: Text("暂无记录"),
-            )),
+                    child: Text("暂无记录"),
+                  )),
       ],
     ),
   );
@@ -1925,18 +1923,18 @@ Widget buildSelect(List<Widget> selectListView, bool showControl) {
             code: "",
             show: selectListView.length > 0
                 ? Container(
-              width: ScreenUtil().screenWidth * 0.98,
-              // height: 300,
-              child: Wrap(
-                  alignment: WrapAlignment.start,
-                  direction: Axis.horizontal,
-                  spacing: 0,
-                  runSpacing: 0,
-                  children: <Widget>[...selectListView]),
-            )
+                    width: ScreenUtil().screenWidth * 0.98,
+                    // height: 300,
+                    child: Wrap(
+                        alignment: WrapAlignment.start,
+                        direction: Axis.horizontal,
+                        spacing: 0,
+                        runSpacing: 0,
+                        children: <Widget>[...selectListView]),
+                  )
                 : Container(
-              child: Text("暂无记录"),
-            )),
+                    child: Text("暂无记录"),
+                  )),
       ],
     ),
   );
@@ -2027,7 +2025,7 @@ Widget _item_detail(BuildContext context, Color color, IconData icon,
 showEditDialog(BuildContext context, String title, String hintText, String text,
     String type, int maxLine, Map<String, dynamic> info) {
   TextEditingController _controller =
-  TextEditingController.fromValue(TextEditingValue(
+      TextEditingController.fromValue(TextEditingValue(
     text: '${text == null ? "" : text}', //判断keyword是否为空
   ));
   showCupertinoDialog(
@@ -2086,7 +2084,7 @@ showEditDialog(BuildContext context, String title, String hintText, String text,
 showEditDialogDemand(BuildContext context, String title, String hintText,
     String text, String type, int maxLine, Map<String, dynamic> info, uuid) {
   TextEditingController _controller =
-  TextEditingController.fromValue(TextEditingValue(
+      TextEditingController.fromValue(TextEditingValue(
     text: '${text == null ? "" : text}', //判断keyword是否为空
   ));
   showCupertinoDialog(
@@ -2164,15 +2162,14 @@ String getLevel(int status) {
   return "";
 }
 
-Future<bool> showPickerDemandAge(BuildContext context, String data, String uuid,
-    int canEdit) async {
+Future<bool> showPickerDemandAge(
+    BuildContext context, String data, String uuid, int canEdit) async {
   if (canEdit == 0) {
     showToastRed(context, "暂无权限修改", false);
     return false;
   }
   var f = data.split(",");
-  var aa = 0,
-      bb = 17;
+  var aa = 0, bb = 17;
   try {
     var a = int.parse(f[0]) - 18;
     aa = a;
@@ -2207,10 +2204,10 @@ Future<bool> showPickerDemandAge(BuildContext context, String data, String uuid,
       delimiter: [
         PickerDelimiter(
             child: Container(
-              width: 30.w,
-              alignment: Alignment.center,
-              child: Icon(Icons.more_vert),
-            ))
+          width: 30.w,
+          alignment: Alignment.center,
+          child: Icon(Icons.more_vert),
+        ))
       ],
       hideHeader: true,
       title: new Text("请选择年龄"),
@@ -2238,15 +2235,14 @@ Future<bool> showPickerDemandAge(BuildContext context, String data, String uuid,
   return false;
 }
 
-Future<bool> showPickerDemandHeight(BuildContext context, String data,
-    String uuid, int canEdit) async {
+Future<bool> showPickerDemandHeight(
+    BuildContext context, String data, String uuid, int canEdit) async {
   if (canEdit == 0) {
     showToastRed(context, "暂无权限修改", false);
     return false;
   }
   var f = data.split(",");
-  var aa = 40,
-      bb = 60;
+  var aa = 40, bb = 60;
   try {
     var a = int.parse(f[0]) - 120;
     aa = a;
@@ -2281,10 +2277,10 @@ Future<bool> showPickerDemandHeight(BuildContext context, String data,
       delimiter: [
         PickerDelimiter(
             child: Container(
-              width: 30.w,
-              alignment: Alignment.center,
-              child: Icon(Icons.more_vert),
-            ))
+          width: 30.w,
+          alignment: Alignment.center,
+          child: Icon(Icons.more_vert),
+        ))
       ],
       hideHeader: true,
       title: new Text("请选择身高"),
@@ -2312,15 +2308,14 @@ Future<bool> showPickerDemandHeight(BuildContext context, String data,
   return false;
 }
 
-Future<bool> showPickerDemandWeight(BuildContext context, String data,
-    String uuid, int canEdit) async {
+Future<bool> showPickerDemandWeight(
+    BuildContext context, String data, String uuid, int canEdit) async {
   if (canEdit == 0) {
     showToastRed(context, "暂无权限修改", false);
     return false;
   }
   var f = data.split("-");
-  var aa = 25,
-      bb = 30;
+  var aa = 25, bb = 30;
   try {
     var a = int.parse(f[0]) - 40;
     aa = a;
@@ -2353,10 +2348,10 @@ Future<bool> showPickerDemandWeight(BuildContext context, String data,
       delimiter: [
         PickerDelimiter(
             child: Container(
-              width: 30.w,
-              alignment: Alignment.center,
-              child: Icon(Icons.more_vert),
-            ))
+          width: 30.w,
+          alignment: Alignment.center,
+          child: Icon(Icons.more_vert),
+        ))
       ],
       hideHeader: true,
       title: new Text("请选择体重"),
@@ -2384,7 +2379,8 @@ Future<bool> showPickerDemandWeight(BuildContext context, String data,
   return false;
 }
 
-Future<bool> showPickerArray(BuildContext context,
+Future<bool> showPickerArray(
+    BuildContext context,
     List<List<String>> pickerData,
     List<int> select,
     String type,
@@ -2419,13 +2415,11 @@ Future<bool> showPickerArray(BuildContext context,
         if (isIndex) {
           values = value.first;
         } else {
-          values = int.parse(picker
-              .getSelectedValues()
-              .first);
+          values = int.parse(picker.getSelectedValues().first);
         }
 
         var result =
-        await IssuesApi.editCustomerOnce(info['uuid'], type, values);
+            await IssuesApi.editCustomerOnce(info['uuid'], type, values);
         if (result['code'] == 200) {
           BlocProvider.of<DetailBloc>(context)
               .add(EditDetailEvent(type, values));
@@ -2440,7 +2434,8 @@ Future<bool> showPickerArray(BuildContext context,
   return false;
 }
 
-Future<bool> showPickerArrayDemand(BuildContext context,
+Future<bool> showPickerArrayDemand(
+    BuildContext context,
     List<List<String>> pickerData,
     List<int> select,
     String type,
@@ -2476,10 +2471,7 @@ Future<bool> showPickerArrayDemand(BuildContext context,
         if (isIndex) {
           values = value.first.toString();
         } else {
-          values = (picker
-              .getSelectedValues()
-              .first
-              .toString());
+          values = (picker.getSelectedValues().first.toString());
         }
 
         var result = await IssuesApi.editCustomerDemandOnce(uuid, type, values);
@@ -2566,8 +2558,7 @@ Future<bool> showPickerDateTime(BuildContext context, String date, String type,
   return false;
 }
 
-Widget _buildLinkTo(BuildContext context,
-    Map<String, dynamic> userdetail,
+Widget _buildLinkTo(BuildContext context, Map<String, dynamic> userdetail,
     void Function(String tag, bool value) callSetState, int canEdit) {
   List<dynamic> imgList = userdetail['pics'];
   var imageListView = <ImageOptions>[];
@@ -2580,7 +2571,6 @@ Widget _buildLinkTo(BuildContext context,
     ));
   }
 
-
   List<Widget> list = [];
   if (imgList != null && imgList.length > 0) {
     for (int i = 0; i < imgList.length; i++) {
@@ -2591,99 +2581,96 @@ Widget _buildLinkTo(BuildContext context,
       var boxWidth = ScreenUtil().screenWidth / 3 - 40.w;
       var imageHeight = 200.h;
       var boxMargin = 10.w;
-      list.add(
-        GestureDetector(
-          onTap: () {
-            ImagePreview.preview(
-              context,
-              initialIndex: i,
-              images: imageListView,
-            );
-          },
-          child: Padding(
-            key: ObjectKey(e['id']),
-            padding:
-            EdgeInsets.only(left: 10.w, right: 10.w, bottom: boxMargin * 2),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12.w),
-                  ),
-                  child: Container(
-                    width: boxWidth,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        CachedNetworkImage(
-                          imageUrl:
-                          e['file_url'] != "" ? e['file_url'] : defaultImg,
-                          imageBuilder: (context, imageProvider) =>
-                              Container(
-                                height: imageHeight,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
+
+      Widget adds = GestureDetector(
+        onTap: () {
+          ImagePreview.preview(
+            context,
+            initialIndex: i,
+            images: imageListView,
+          );
+        },
+        child: Padding(
+          key: ObjectKey(e['id']),
+          padding:
+              EdgeInsets.only(left: 10.w, right: 10.w, bottom: boxMargin * 2),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12.w),
+                ),
+                child: Container(
+                  width: boxWidth,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      CachedNetworkImage(
+                        imageUrl:
+                            e['file_url'] != "" ? e['file_url'] : defaultImg,
+                        imageBuilder: (context, imageProvider) => Container(
+                          height: imageHeight,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: Stack(
+                            children: <Widget>[
+                              Positioned(
+                                child: Container(
+                                  width: 50.w,
+                                  height: 50.h,
+                                  padding: EdgeInsets.only(
+                                    left: 10.w,
+                                    right: 10.w,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withAlpha(70),
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(10.w),
+                                      // Radius.circular(10.w),
+                                    ),
+                                  ),
+                                  child: FeedbackWidget(
+                                    onPressed: () {
+                                      if (canEdit == 0) {
+                                        showToastRed(context, "暂无权限", true);
+                                        return;
+                                      }
+                                      _deletePhoto(context, e, userdetail);
+                                    },
+                                    child: const Icon(
+                                      CupertinoIcons.delete_solid,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                                child: Stack(
-                                  children: <Widget>[
-                                    Positioned(
-                                      child: Container(
-                                        width: 50.w,
-                                        height: 50.h,
-                                        padding: EdgeInsets.only(
-                                          left: 10.w,
-                                          right: 10.w,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.withAlpha(70),
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(10.w),
-                                            // Radius.circular(10.w),
-
-                                          ),
-                                        ),
-                                        child: FeedbackWidget(
-                                          onPressed: () {
-                                            if (canEdit == 0) {
-                                              showToastRed(
-                                                  context, "暂无权限", true);
-                                              return;
-                                            }
-                                            _deletePhoto(
-                                                context, e, userdetail);
-                                          },
-                                          child: const Icon(
-                                            CupertinoIcons.delete_solid,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      top: 0,
-                                      right: 0,
-                                    ),
-                                  ],
-                                ),
+                                top: 0,
+                                right: 0,
                               ),
-                          placeholder: (context, url) =>
-                              Image.asset(
-                                'assets/images/default/img_default.png',
-                                height: imageHeight,
-                                fit: BoxFit.fill,
-                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                        placeholder: (context, url) => Image.asset(
+                          'assets/images/default/img_default.png',
+                          height: imageHeight,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
-    };
+      if (e['file_url'] != "") {
+        list.add(adds);
+      }
+    }
   }
 
   list.add(GestureDetector(
@@ -2691,10 +2678,10 @@ Widget _buildLinkTo(BuildContext context,
         padding: EdgeInsets.only(left: 10.w, right: 10.w),
         child: Container(
             child: Image.asset(
-              "assets/images/add.png",
-              width: 200.w,
-              height: 200.h,
-            )),
+          "assets/images/add.png",
+          width: 200.w,
+          height: 200.h,
+        )),
       ),
       onTap: () async {
         if (canEdit == 0) {
@@ -2702,57 +2689,122 @@ Widget _buildLinkTo(BuildContext context,
           return;
         }
         //_getPermission(context);
-        List<Asset> images = List<Asset>();
-        List<Asset> resultList = List<Asset>();
-        String error = 'No Error Dectected';
-        //Navigator.of(ctx).pop();
-        try {
-          resultList = await MultiImagePicker.pickImages(
-            // 选择图片的最大数量
-            maxImages: 1,
-            // 是否支持拍照
-            enableCamera: true,
-            materialOptions: MaterialOptions(
-              // 显示所有照片，值为 false 时显示相册
-                startInAllView: false,
-                allViewTitle: '所有照片',
-                actionBarColor: '#2196F3',
-                textOnNothingSelected: '没有选择照片'),
-          );
-        } on Exception catch (e) {
-          e.toString();
-        }
-        //if (!mounted) return;
-        images = (resultList == null) ? [] : resultList;
-        // 上传照片时一张一张上传
-        for (int i = 0; i < images.length; i++) {
-          // 获取 ByteData
+        // List<Asset> images = <Asset>[];
+        // List<Asset> resultList = <Asset>[];
+        //
+        // try {
+        //   resultList = await MultiImagePicker.pickImages(
+        //     // 选择图片的最大数量
+        //     maxImages: 1,
+        //     // 是否支持拍照
+        //     enableCamera: true,
+        //     materialOptions: MaterialOptions(
+        //         // 显示所有照片，值为 false 时显示相册
+        //         startInAllView: false,
+        //         allViewTitle: '所有照片',
+        //         actionBarColor: '#2196F3',
+        //         textOnNothingSelected: '没有选择照片'),
+        //   );
+        // } on Exception catch (e) {
+        //   e.toString();
+        // }
+        // //if (!mounted) return;
+        // images = (resultList == null) ? [] : resultList;
+        // // 上传照片时一张一张上传
+        // for (int i = 0; i < images.length; i++) {
+        //   // 获取 ByteData
+        //   ByteData byteData = await images[i].getByteData(quality: 100);
+        //
+        //   EasyLoading.show();
+        //   try {
+        //     var resultConnectList =
+        //         await IssuesApi.uploadPhoto("1", byteData, _loading);
+        //     // print(resultConnectList['data']);
+        //
+        //     var result = await IssuesApi.editCustomer(
+        //         userdetail['info']['uuid'], "1", resultConnectList['data']);
+        //     if (result['code'] == 200) {
+        //       BlocProvider.of<DetailBloc>(context).add(UploadImgSuccessEvent(
+        //           userdetail, resultConnectList['data'], result['data']));
+        //       showToast(context, "上传成功", false);
+        //       callSetState("photo", true);
+        //     } else {
+        //       showToast(context, result['message'], false);
+        //     }
+        //   } on DioError catch (e) {
+        //     var dd = e.response.data;
+        //     EasyLoading.showSuccess(dd['message']);
+        //     //showToast(context,dd['message'],false);
+        //   }
+        //   EasyLoading.dismiss();
+        // }
+        final pickedImage =
+        await ImagePicker().getImage(source: ImageSource.gallery,imageQuality: 50);
+        File imageFile = pickedImage != null ? File(pickedImage.path) : null;
+        if (imageFile != null) {
+          File croppedFile = await ImageCropper().cropImage(
 
-          ByteData byteData = await images[i].getByteData(quality: 60);
-          EasyLoading.show();
-          try {
-            var resultConnectList =
-            await IssuesApi.uploadPhoto("1", byteData, _loading);
-            // print(resultConnectList['data']);
+              aspectRatio:CropAspectRatio(ratioX: 1,ratioY: 2),
+              sourcePath: imageFile.path,
+              aspectRatioPresets: Platform.isAndroid
+                  ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+                  : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+              androidUiSettings: AndroidUiSettings(
+                  hideBottomControls:true ,
+                  toolbarTitle: '图片裁剪',
+                  toolbarColor: Colors.deepOrange,
+                  toolbarWidgetColor: Colors.white,
+                  initAspectRatio: CropAspectRatioPreset.original,
+                  lockAspectRatio: true),
+              iosUiSettings: IOSUiSettings(
+                title: '图片裁剪',
+              ));
+          if (croppedFile != null) {
+            imageFile = croppedFile;
+              EasyLoading.show();
+              try {
+                var resultConnectList =
+                    await IssuesApi.uploadPhotoFile("1", imageFile.path, _loading);
+                // print(resultConnectList['data']);
 
-            var result = await IssuesApi.editCustomer(
-                userdetail['info']['uuid'], "1", resultConnectList['data']);
-            if (result['code'] == 200) {
-              BlocProvider.of<DetailBloc>(context).add(
-                  UploadImgSuccessEvent(
+                var result = await IssuesApi.editCustomer(
+                    userdetail['info']['uuid'], "1", resultConnectList['data']);
+                if (result['code'] == 200) {
+                  EasyLoading.dismiss();
+                  showToast(context, "上传成功", false);
+                  BlocProvider.of<DetailBloc>(context).add(UploadImgSuccessEvent(
                       userdetail, resultConnectList['data'], result['data']));
-              showToast(context, "上传成功", false);
-              callSetState("photo", true);
-            } else {
-              showToast(context, result['message'], false);
-            }
-          } on DioError catch (e) {
-            var dd = e.response.data;
-            EasyLoading.showSuccess(dd['message']);
-            //showToast(context,dd['message'],false);
+
+                  callSetState("photo", true);
+                } else {
+                  EasyLoading.dismiss();
+                  showToast(context, result['message'], false);
+                }
+              } on DioError catch (e) {
+                EasyLoading.dismiss();
+                var dd = e.response.data;
+                EasyLoading.showSuccess(dd['message']);
+                //showToast(context,dd['message'],false);
+              }
+
           }
-          EasyLoading.dismiss();
         }
+
       }));
 
   return Wrap(
@@ -2764,8 +2816,7 @@ _deletePhoto(BuildContext context, Map<String, dynamic> img,
     Map<String, dynamic> detail) {
   showDialog(
       context: context,
-      builder: (ctx) =>
-          Dialog(
+      builder: (ctx) => Dialog(
             elevation: 5,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -2884,48 +2935,49 @@ avatar(String url, bool isVip, String name) {
       children: [
         isVip
             ? Container(
-          width: 200.w,
-          height: 200.h,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/radio_header_1.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
-          margin: EdgeInsets.only(left: 0.w, top: 10.h),
-        )
+                width: 200.w,
+                height: 200.h,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/radio_header_1.png"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                margin: EdgeInsets.only(left: 0.w, top: 10.h),
+              )
             : Container(),
-        url == "" ? Container(
-          margin: EdgeInsets.only(left: 20.w, top: 20.h),
-          // width: 100.w,
-          // height: 100.h,h
-          color: Colors.transparent,
-          child: CircleText(
-            text: name,
-            size: 140.w,
-            fontSize: 50.sp,
-            color: Colors.lightBlue,
-            //shadowColor: Colors.transparent,
-          ),
-        ) : Container(
-          margin: EdgeInsets.only(left: 30.w, top: 30.h),
-          child: CircleAvatar(
-            radius: (70.w),
-            child: ClipOval(
-              child: CachedNetworkImage(
-                  imageUrl: url,
-                  fit: BoxFit.cover,
-                  width: 140.w,
-                  height: 140.h,
-                  placeholder: (context, url) =>
-                      Image.asset(
-                        'assets/images/default/img_default.png',
-                        fit: BoxFit.fill,
-                      )),
-            ),
-            backgroundColor: Colors.white,
-          ),
-        ),
+        url == ""
+            ? Container(
+                margin: EdgeInsets.only(left: 20.w, top: 20.h),
+                // width: 100.w,
+                // height: 100.h,h
+                color: Colors.transparent,
+                child: CircleText(
+                  text: name,
+                  size: 140.w,
+                  fontSize: 50.sp,
+                  color: Colors.lightBlue,
+                  //shadowColor: Colors.transparent,
+                ),
+              )
+            : Container(
+                margin: EdgeInsets.only(left: 30.w, top: 30.h),
+                child: CircleAvatar(
+                  radius: (70.w),
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                        imageUrl: url,
+                        fit: BoxFit.cover,
+                        width: 140.w,
+                        height: 140.h,
+                        placeholder: (context, url) => Image.asset(
+                              'assets/images/default/img_default.png',
+                              fit: BoxFit.fill,
+                            )),
+                  ),
+                  backgroundColor: Colors.white,
+                ),
+              ),
       ],
     ),
   );
@@ -2942,32 +2994,28 @@ header(BuildContext context, Map<String, dynamic> user) {
   } else {
     if (user['info']['status'] == 2) {
       if (user['info']['vip_id'] > 0 &&
-          DateTime
-              .parse(user['info']['vip_expire_time'])
-              .millisecondsSinceEpoch >
-              DateTime
-                  .now()
-                  .millisecondsSinceEpoch) {
+          DateTime.parse(user['info']['vip_expire_time'])
+                  .millisecondsSinceEpoch >
+              DateTime.now().millisecondsSinceEpoch) {
         isVip = true;
         vipName = user['info']['vip_name'];
-        vipName1 = "(" +
-            user['info']['vip_expire_time'] + ")";
+        vipName1 = "(" + user['info']['vip_expire_time'] + ")";
       } else {
         expire = true;
         vipName1 = "(会员已过期)";
       }
     } else {}
   }
-  var headImg = "" ;
-     if(user['info']['head_img'] ==""){
-        headImg = user['info']['head_img'] ;
-     }else{
-       if(user['info']['checked'] == 0){
-          headImg = user['info']['head_img'];
-       }else{
-          headImg = user['info']['es_age'];
-       }
-     }
+  var headImg = "";
+  if (user['info']['head_img'] == "") {
+    headImg = user['info']['head_img'];
+  } else {
+    if (user['info']['checked'] == 0) {
+      headImg = user['info']['head_img'];
+    } else {
+      headImg = user['info']['es_age'];
+    }
+  }
 
   return Container(
     height: 166.h,
@@ -2981,10 +3029,12 @@ header(BuildContext context, Map<String, dynamic> user) {
                 context,
                 images: List.generate(1, (index) {
                   return ImageOptions(
-                    url: headImg != "" ?headImg:
-                        ("assets/packages/images/ic_user_none_round.png"),
-                    tag: headImg != "" ?headImg:
-                        ("assets/packages/images/ic_user_none_round.png"),
+                    url: headImg != ""
+                        ? headImg
+                        : ("assets/packages/images/ic_user_none_round.png"),
+                    tag: headImg != ""
+                        ? headImg
+                        : ("assets/packages/images/ic_user_none_round.png"),
                   );
                 }),
               );
@@ -2994,12 +3044,12 @@ header(BuildContext context, Map<String, dynamic> user) {
               child: headImg != ""
                   ? avatar(headImg, isVip, user['info']['name'])
                   : Container(
-                margin: EdgeInsets.only(left: 20.w, top: 0.h),
-                width: 180.w,
-                height: 180.h,
-                child: Image.asset(
-                    "assets/packages/images/ic_user_none_round.png"),
-              ),
+                      margin: EdgeInsets.only(left: 20.w, top: 0.h),
+                      width: 180.w,
+                      height: 180.h,
+                      child: Image.asset(
+                          "assets/packages/images/ic_user_none_round.png"),
+                    ),
             )),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -3025,7 +3075,7 @@ header(BuildContext context, Map<String, dynamic> user) {
                         overflow: TextOverflow.ellipsis,
                       )),
                   Container(
-                    //color: Colors.black12,
+                      //color: Colors.black12,
                       padding: EdgeInsets.fromLTRB(5.w, 0.h, 5.w, 0.h),
                       margin: EdgeInsets.fromLTRB(5.w, 10.h, 0.w, 0.h),
                       alignment: Alignment.centerLeft,
@@ -3039,17 +3089,16 @@ header(BuildContext context, Map<String, dynamic> user) {
                       ),
                       child: Text(
                         user['info']['age'].toString() + "岁",
-                        style:
-                        TextStyle(color: Colors.black, fontSize: 18.sp),
+                        style: TextStyle(color: Colors.black, fontSize: 18.sp),
                       )),
                   isVip == true
                       ? Container(
-                    width: 60.h,
-                    height: 60.h,
-                    margin: EdgeInsets.fromLTRB(0.w, 5.h, 0.w, 0.h),
-                    child: Lottie.asset(
-                        'assets/packages/lottie_flutter/vip-icon.json'),
-                  )
+                          width: 60.h,
+                          height: 60.h,
+                          margin: EdgeInsets.fromLTRB(0.w, 5.h, 0.w, 0.h),
+                          child: Lottie.asset(
+                              'assets/packages/lottie_flutter/vip-icon.json'),
+                        )
                       : Container(),
                   Container(
                       constraints: BoxConstraints(
@@ -3081,7 +3130,6 @@ header(BuildContext context, Map<String, dynamic> user) {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       )),
-
                 ],
               ),
             ),
@@ -3089,80 +3137,80 @@ header(BuildContext context, Map<String, dynamic> user) {
               children: <Widget>[
                 user['info']['location_place'] == ""
                     ? Container(
-                  margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
-                  height: 40.h,
-                )
+                        margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
+                        height: 40.h,
+                      )
                     : Container(
-                  width: 280.w,
-                  child: Tag(
-                    color: Color.fromRGBO(241, 241, 241, 100),
-                    borderColor: Color.fromRGBO(241, 241, 241, 100),
-                    borderWidth: 1,
-                    margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
-                    height: 40.h,
-                    radius: 10.w,
-                    text: Text(
-                      user['info']['location_place'].toString(),
-                      style: TextStyle(
-                        fontSize: 24.sp,
+                        width: 280.w,
+                        child: Tag(
+                          color: Color.fromRGBO(241, 241, 241, 100),
+                          borderColor: Color.fromRGBO(241, 241, 241, 100),
+                          borderWidth: 1,
+                          margin: EdgeInsets.fromLTRB(5.w, 10.h, 5.w, 0.h),
+                          height: 40.h,
+                          radius: 10.w,
+                          text: Text(
+                            user['info']['location_place'].toString(),
+                            style: TextStyle(
+                              fontSize: 24.sp,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
                 user['info']['serve_user'] != ""
                     ? Container(
-                    margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
-                    child: Text(
-                      user['info']['serve_user'] != "" ? "服务:" : "",
-                      style: TextStyle(
-                        color: Colors.deepOrangeAccent,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 25.sp,
-                      ),
-                    ))
+                        margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                        child: Text(
+                          user['info']['serve_user'] != "" ? "服务:" : "",
+                          style: TextStyle(
+                            color: Colors.deepOrangeAccent,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 25.sp,
+                          ),
+                        ))
                     : (user['info']['sale_user'] != ""
-                    ? Container(
-                    margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
-                    child: Text(
-                      user['info']['sale_user'] != "" ? "销售:" : "",
-                      style: TextStyle(
-                        color: Colors.deepOrangeAccent,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 25.sp,
-                      ),
-                    ))
-                    : Container(
-                  margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
-                )),
+                        ? Container(
+                            margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
+                            child: Text(
+                              user['info']['sale_user'] != "" ? "销售:" : "",
+                              style: TextStyle(
+                                color: Colors.deepOrangeAccent,
+                                fontWeight: FontWeight.w300,
+                                fontSize: 25.sp,
+                              ),
+                            ))
+                        : Container(
+                            margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
+                          )),
                 user['info']['serve_user'] != ""
                     ? Container(
-                    margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
-                    child: Text(
-                      user['info']['serve_user'] == null
-                          ? "a"
-                          : user['info']['serve_user'],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 25.sp,
-                      ),
-                    ))
+                        margin: EdgeInsets.fromLTRB(10.w, 5.h, 5.w, 0.h),
+                        child: Text(
+                          user['info']['serve_user'] == null
+                              ? "a"
+                              : user['info']['serve_user'],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 25.sp,
+                          ),
+                        ))
                     : (user['info']['sale_user'] == ""
-                    ? Container(
-                  margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
-                )
-                    : Container(
-                    margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
-                    child: Text(
-                      user['info']['sale_user'],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 25.sp,
-                      ),
-                    ))),
+                        ? Container(
+                            margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
+                          )
+                        : Container(
+                            margin: EdgeInsets.fromLTRB(0.w, 5.h, 5.w, 0.h),
+                            child: Text(
+                              user['info']['sale_user'],
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 25.sp,
+                              ),
+                            ))),
               ],
             ),
           ],

@@ -730,6 +730,30 @@ class IssuesApi {
     var datas = (rep.data);
     return datas;
   }
+  static Future<Map<String,dynamic>> uploadPhotoFile(  String type, String path,Function fd) async {
+    var ss = await LocalStorage.get("token");
+    var token =ss.toString();
+    dio.options.headers['authorization']="Bearer "+token;
+
+    MultipartFile multipartFile = MultipartFile.fromFileSync(
+      path,
+      // 文件名
+      filename: 'some-file-name.jpg',
+      // 文件类型
+      contentType: MediaType("image", "jpg"),
+    );
+    FormData formData = FormData.fromMap({
+      // 后端接口的参数名称
+      "resource": multipartFile
+    });
+    Map<String, dynamic> params = Map();
+    params['type']=type;
+    // 使用 dio 上传图片
+    Response<dynamic> rep = await dio.post('/api/v1/customer/uploadPic',data:formData,queryParameters:params,onSendProgress: fd );
+    var datas = (rep.data);
+    return datas;
+  }
+
   static Future<Map<String,dynamic>> searchPhoto( String keyWord, String page, ) async {
     var ss = await LocalStorage.get("token");
     var token =ss.toString();
