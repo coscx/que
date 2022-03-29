@@ -258,6 +258,7 @@ class _FlowPageState extends State<FlowPage>
                           child: ScrollConfiguration(
                               behavior: DyBehaviorNull(),
                               child: SmartRefresher(
+                                physics: MyScrollPhysics(),
                                 enablePullDown: true,
                                 enablePullUp: true,
                                 header: DYrefreshHeader(),

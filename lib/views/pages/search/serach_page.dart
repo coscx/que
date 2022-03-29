@@ -72,6 +72,7 @@ class _SearchPageState extends State<SearchPage> {
             child: ScrollConfiguration(
                 behavior: DyBehaviorNull(),
                 child: SmartRefresher(
+                    physics: MyScrollPhysics(),
                     enablePullDown: false,
                     enablePullUp: true,
                     header: DYrefreshHeader(),

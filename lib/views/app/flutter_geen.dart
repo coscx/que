@@ -42,10 +42,10 @@ class FlutterGeen extends StatelessWidget {
               fontFamily: state.fontFamily,
             ),
             home: animate == true
-                ? UnitSplash(
+                ? (jump == 0 ? LoginPage() :UnitSplash(
                     size: 200,
                     animate: animate,
-                  )
+                  ))
                 : (jump == 0 ? LoginPage() : UnitNavigation()),
             builder: (context, child) {
               child = EasyLoadingBuilder(context, child); //do something

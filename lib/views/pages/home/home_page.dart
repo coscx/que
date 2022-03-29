@@ -67,6 +67,8 @@ class _HomePageState extends State<HomePage>
   //QrReaderViewController _controller;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  ScrollController _scrollController = ScrollController();
+
   bool _showFilter = false;
   bool _showSort = false;
   bool _showAge = false;
@@ -121,37 +123,42 @@ class _HomePageState extends State<HomePage>
 
   // 上拉加载
   void _onLoading() async {
-    List<dynamic> oldUsers =
-        BlocProvider.of<HomeBloc>(context).state.props.elementAt(0);
-    var currentPage = BlocProvider.of<GlobalBloc>(context).state.indexPhotoPage;
-    var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
-    var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-    BlocProvider.of<GlobalBloc>(context).add(EventIndexPhotoPage(currentPage));
-    var result = await IssuesApi.searchErpUser(
-        '',
-        (++currentPage).toString(),
-        sex.toString(),
-        mode.toString(),
-        searchParamList,
-        _showAge,
-        _showAgeMax,
-        _showAgeMin,
-        serveType,
-        selectItems);
-    if (result['code'] == 200) {
-    } else {}
-    List<dynamic> newUsers = [];
-    oldUsers.forEach((element) {
-      newUsers.add(element);
-    });
-    if (result['data'] is List){
+    try{
+      List<dynamic> oldUsers =
+      BlocProvider.of<HomeBloc>(context).state.props.elementAt(0);
+      var currentPage = BlocProvider.of<GlobalBloc>(context).state.indexPhotoPage;
+      var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
+      var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
+      BlocProvider.of<GlobalBloc>(context).add(EventIndexPhotoPage(currentPage));
+      var result = await IssuesApi.searchErpUser(
+          '',
+          (++currentPage).toString(),
+          sex.toString(),
+          mode.toString(),
+          searchParamList,
+          _showAge,
+          _showAgeMax,
+          _showAgeMin,
+          serveType,
+          selectItems);
+      if (result['code'] == 200) {
+      } else {}
+      List<dynamic> newUsers = [];
+      oldUsers.forEach((element) {
+        newUsers.add(element);
+      });
+      if (result['data'] is List){
 
-    }else{
-      if (result['data']['data']!=null)
-      newUsers.addAll(result['data']['data']);
+      }else{
+        if (result['data']['data']!=null)
+          newUsers.addAll(result['data']['data']);
+      }
+
+      BlocProvider.of<HomeBloc>(context).add(EventLoadMore(newUsers));
+    }catch(e){
+      print(e);
     }
 
-    BlocProvider.of<HomeBloc>(context).add(EventLoadMore(newUsers));
     _refreshController.loadComplete();
   }
 
@@ -330,6 +337,14 @@ class _HomePageState extends State<HomePage>
                     //setState(() {
                     totalCount = state.count;
                     //});
+                    if (state.mode !=null){
+                      if (state.mode !=1){
+                        _scrollController.jumpTo(0);
+                      }
+                    }else{
+                      _scrollController.jumpTo(0);
+                    }
+
                   }
                 },
                 child: Container(
@@ -360,6 +375,7 @@ class _HomePageState extends State<HomePage>
                                 onRefresh: _onRefresh,
                                 onLoading: _onLoading,
                                 child: CustomScrollView(
+                                  controller:_scrollController,
                                   physics: BouncingScrollPhysics(),
                                   slivers: <Widget>[
                                     _buildContent(ctx, state),
@@ -385,7 +401,7 @@ class _HomePageState extends State<HomePage>
   void _onValueChanged(int value) {
     BlocProvider.of<GlobalBloc>(context).add(EventSetIndexSex(value));
     var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-
+    BlocProvider.of<GlobalBloc>(context).add(EventResetIndexPhotoPage());
       BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
           searchParamList,
           selectItems,
@@ -542,9 +558,11 @@ class _HomePageState extends State<HomePage>
               await sp
                 ..setInt("currentPhotoMode", ccMode);
             }
+            BlocProvider.of<GlobalBloc>(context).add(EventResetIndexPhotoPage());
             setState(() {
               roleId = ccMode;
             });
+
           },
           onCanceled: () => print('onCanceled'),
         )

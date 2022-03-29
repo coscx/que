@@ -101,6 +101,15 @@ getServeStatusIndex(info) {
     return "21.新分VIP";
   }
 }
+getAllStatusIndex(info) {
+  try {
+    return goalAll[info];
+  } catch (e) {
+    return "4.可继续沟通";
+  }
+}
+
+
 Widget item_connect(
     BuildContext context,
     String name,
@@ -120,17 +129,10 @@ Widget item_connect(
         color: Colors.transparent,
         child: GestureDetector(
           onTap: () {
-            if (roleId==7 || roleId==9){
               _showBottom(context, content,
-                  getServeStatusIndex(int.parse(connectStatus)), connectType);
-            }else{
-              _showBottom(context, content,
-                  getStatusIndex(int.parse(connectStatus)), connectType);
-            }
-
+                  getAllStatusIndex(int.parse(connectStatus)), connectType);
           },
           child: Container(
-
             padding: EdgeInsets.only(left: 15.w, right: 20.w),
             child: Column(
               children: [

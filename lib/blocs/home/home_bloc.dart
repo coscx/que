@@ -162,7 +162,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is EventLoadMore) {
        var data =event.user01;
        var count = state.props.elementAt(1);
-      yield WidgetsLoaded(photos: data,count: count);
+      yield WidgetsLoaded(photos: data,count: count,mode: 1);
 
     }
     if (event is EventFresh) {

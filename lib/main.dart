@@ -28,6 +28,9 @@ Future<void> main() async {
   final sp = AppStorage().sp;
   var mode = await sp;
   bool animate = mode.getBool("animate");
+  if(animate==null){
+    animate =true;
+  }
   var ss = await LocalStorage.get("token");
   var sss =ss.toString();
   var jump =0;
@@ -62,5 +65,5 @@ Future<void> _init() async {
       doOnIOS: true,
       universalLink: "https://your.univerallink.com/link/");
   var result = await isWeChatInstalled;
-  print("is installed $result");
+  print("wx is installed $result");
 }

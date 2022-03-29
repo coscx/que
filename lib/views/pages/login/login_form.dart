@@ -25,10 +25,10 @@ class LoginFrom extends StatefulWidget {
 class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
   final _usernameController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
-
+  FocusNode _textFieldNode = FocusNode();
   bool _showPwd = false;
   String _result = "无";
-
+  bool autoLogin =true;
   @override
   void initState() {
     super.initState();
@@ -111,14 +111,14 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
                 style: TextStyle(fontSize: 40.sp),
               ),
               SizedBox(
-                height: 15.h,
+                height: 10.h,
               ),
               Text(
                 "登录",
                 style: TextStyle(color: Colors.grey),
               ),
               SizedBox(
-                height: 30.h,
+                height: 10.h,
               ),
               buildUsernameInput(),
               Stack(
@@ -133,7 +133,11 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
               ),
               Row(
                 children: <Widget>[
-                  Checkbox(value: true, onChanged: (e) => {}),
+                  Checkbox(value: autoLogin, onChanged: (e) => {
+                  setState(() {
+                    autoLogin=!autoLogin;
+                      })
+                  }),
                   Text(
                     "自动登录",
                     style: TextStyle(color: Color(0xff444444), fontSize: 30.sp),
@@ -204,6 +208,7 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
           username: _usernameController.text,
           password: _passwordController.text),
     );
+    _textFieldNode.unfocus();
   }
 
   Widget _buildBtn(LoginState state) => Container(
@@ -294,6 +299,7 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
               ),
               Expanded(
                 child: TextField(
+                  focusNode: _textFieldNode,
                   obscureText: !_showPwd,
                   controller: _passwordController,
                   decoration: InputDecoration(
@@ -318,10 +324,10 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
           padding: const EdgeInsets.only(top: 30.0),
           child: Row(
             children: [
-              Expanded(
-                  child: Divider(
-                height: 20,
-              )),
+              // Expanded(
+              //     child: Divider(
+              //   height: 20,
+              // )),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -329,10 +335,10 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
-              Expanded(
-                  child: Divider(
-                height: 20,
-              )),
+              // Expanded(
+              //     child: Divider(
+              //   height: 20,
+              // )),
             ],
           ),
         ),

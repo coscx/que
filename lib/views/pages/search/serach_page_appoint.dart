@@ -78,6 +78,7 @@ class _SearchPageAppointState extends State<SearchPageAppoint> {
             behavior: DyBehaviorNull(),
             child:
               SmartRefresher(
+                physics: MyScrollPhysics(),
                 enablePullDown: false,
                 enablePullUp: true,
                 header: DYrefreshHeader(),
