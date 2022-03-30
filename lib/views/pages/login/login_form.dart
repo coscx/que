@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +10,13 @@ import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/blocs/login/login_bloc.dart';
 import 'package:flutter_geen/blocs/login/login_event.dart';
+import 'package:flutter_geen/storage/dao/local_storage.dart';
+
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:umeng_analytics_push/umeng_analytics_push.dart';
 
 class LoginFrom extends StatefulWidget {
   @override
@@ -55,6 +56,11 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
     _result = null;
   }
 
+  //初始化工具类
+  void initDataNext() async {
+
+
+  }
   _showToast(BuildContext ctx, String msg, bool collected) {
     Toasts.toast(
       ctx,

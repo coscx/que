@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 /// 说明:
 ///
 //    {
@@ -152,7 +154,8 @@ class DeleteDialog extends StatelessWidget {
             InkWell(
               onTap: () {
                 LocalStorage.save("agree", '1');
-                Navigator.of(context).pushReplacementNamed(UnitRouter.nav);
+                //Navigator.of(context).pushReplacementNamed(UnitRouter.nav);
+
               },
               child: Container(
                 alignment: Alignment.center,

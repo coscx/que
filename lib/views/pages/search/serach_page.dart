@@ -41,6 +41,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
         child: Scaffold(
+          backgroundColor: Colors.white,
           key: _scaffoldkey,
           appBar: AppBar(
             backgroundColor: Colors.white,

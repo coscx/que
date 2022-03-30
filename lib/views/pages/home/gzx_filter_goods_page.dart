@@ -42,7 +42,15 @@ class StoreItem {
 
   StoreItem({this.name, this.id, this.isSelect, this.index, this.type});
 }
+class UserItem {
+  String name;
+  String id;
+  bool isSelect;
+  int index;
+  int type;
 
+  UserItem({this.name, this.id, this.isSelect, this.index, this.type});
+}
 class GZXFilterGoodsPage extends StatefulWidget {
   final List<SelectItem> selectItems;
 
@@ -65,6 +73,10 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
   List<SelectItem> _valueMarriage = [];
   List<String> pickerStoreData = [];
   List<StoreItem> pickerStoreItem = [];
+  List<String> pickerUserData = [];
+  List<UserItem> pickerUserItem = [];
+
+
   List _value3 = ['65-5130', '5130-1.1万', '1.1万-1.5万'];
   List _value4 = ['10%的选择', '52%的选择', '23%的选择'];
   bool _isHideValue1 = true;
@@ -76,13 +88,16 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
   String endBirthDayValue = "";
   String store = "";
   String storeName = "选择门店";
-
+  String userName = "选择用户";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     minValue = 18;
     maxValue = 80;
+    _init();
+  }
+  _init() async {
     for (int i = 1; i < fromLevel.length; i++) {
       SelectItem ff = SelectItem();
       ff.id = i.toString();
@@ -125,14 +140,13 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
       _valueMarriage.add(ff);
     }
 
-    Future.delayed(Duration(milliseconds: 1)).then((e) async {
       var result = await IssuesApi.getOnlyStoreList();
       if (result['code'] == 200) {
         List<dynamic> da = result['data'];
         da.forEach((value) {
           StoreItem ff = StoreItem();
           ff.id = value['id'].toString();
-          ff.type = 600;
+          ff.type = 7;
           ff.name = value['name'];
           ff.index = 0;
           ff.isSelect = false;
@@ -140,9 +154,30 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
           pickerStoreData.add(value['name']);
         });
       } else {}
-    });
-  }
+      String storeId = "";
+      for (int j = 0; j < widget.selectItems.length; j++) {
+        if (widget.selectItems[j].type == 100) {
+          storeId = widget.selectItems[j].id;
+        }
+      }
+      var results = await IssuesApi.getErpUsers(storeId);
+      if (results['code'] == 200) {
+        List<dynamic> da = results['data'];
+        da.forEach((value) {
+          UserItem ff = UserItem();
+          ff.id = value['id'].toString();
+          ff.type = 8;
+          ff.name = value['relname'];
+          ff.index = 0;
+          ff.isSelect = false;
+          pickerUserItem.add(ff);
+          pickerUserData.add(value['relname']);
+        });
+      } else {}
+      setState(() {
 
+      });
+  }
   Widget _typeGridWidget(List<SelectItem> items, int type,
       {double childAspectRatio = 2.0}) {
     return MultiChipFilters(
@@ -227,11 +262,11 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
 
   Widget buildBirthday(String title) {
     for (int j = 0; j < widget.selectItems.length; j++) {
-      if (widget.selectItems[j].type == 500) {
+      if (widget.selectItems[j].type == 5) {
         startBirthDayTitle = widget.selectItems[j].id;
         startBirthDayValue = widget.selectItems[j].id;
       }
-      if (widget.selectItems[j].type == 501) {
+      if (widget.selectItems[j].type == 6) {
         endBirthDayTitle = widget.selectItems[j].id;
         endBirthDayValue = widget.selectItems[j].id;
       }
@@ -276,7 +311,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                             for (int i = 0;
                                 i < widget.selectItems.length;
                                 i++) {
-                              if (widget.selectItems[i].type == 500) {
+                              if (widget.selectItems[i].type == 5) {
                                 j = 1;
                                 widget.selectItems[i].id = startBirthDayValue;
                                 break;
@@ -285,7 +320,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
 
                             if (j == 0) {
                               SelectItem s = SelectItem();
-                              s.type = 500;
+                              s.type = 5;
                               s.id = startBirthDayValue;
                               widget.selectItems.add(s);
                             }
@@ -335,7 +370,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                             for (int i = 0;
                                 i < widget.selectItems.length;
                                 i++) {
-                              if (widget.selectItems[i].type == 501) {
+                              if (widget.selectItems[i].type == 6) {
                                 j = 1;
                                 widget.selectItems[i].id = endBirthDayValue;
                                 break;
@@ -344,7 +379,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
 
                             if (j == 0) {
                               SelectItem s = SelectItem();
-                              s.type = 501;
+                              s.type = 6;
                               s.id = endBirthDayValue;
                               widget.selectItems.add(s);
                             }
@@ -380,7 +415,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
   Widget buildStore(String title) {
     int storeId = 0;
     for (int j = 0; j < widget.selectItems.length; j++) {
-      if (widget.selectItems[j].type == 600) {
+      if (widget.selectItems[j].type == 7) {
         storeId = int.parse(widget.selectItems[j].id);
         storeName = widget.selectItems[j].name;
       }
@@ -437,7 +472,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                                 for (int i = 0;
                                     i < widget.selectItems.length;
                                     i++) {
-                                  if (widget.selectItems[i].type == 600) {
+                                  if (widget.selectItems[i].type == 7) {
                                     j = 1;
                                     widget.selectItems[i].id =
                                         pickerStoreItem[value[0]].id;
@@ -449,7 +484,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
 
                                 if (j == 0) {
                                   SelectItem s = SelectItem();
-                                  s.type = 600;
+                                  s.type = 7;
                                   s.name = pickerStoreItem[value[0]].name;
                                   s.id = pickerStoreItem[value[0]].id;
                                   widget.selectItems.add(s);
@@ -482,7 +517,121 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
       ],
     );
   }
+  Widget buildUser(String title) {
+    int userId = 0;
+    int selectUserId = 0;
+    for (int j = 0; j < widget.selectItems.length; j++) {
+      if (widget.selectItems[j].type == 8) {
+        selectUserId = int.parse(widget.selectItems[j].id);
+        userName = widget.selectItems[j].name;
+        break;
+      }
+    }
 
+    for (int j = 0; j < pickerUserItem.length; j++) {
+
+      if (pickerUserItem[j].id == selectUserId.toString()) {
+        break;
+      }
+      userId ++;
+    }
+    if (selectUserId ==0){
+      userId=0;
+    }
+    return Column(
+      children: [
+        Container(
+          padding:
+          EdgeInsets.only(left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
+          alignment: Alignment.centerLeft,
+          child: Text(title,
+              style: TextStyle(fontSize: 24.sp, color: Color(0xFF6a6a6a))),
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                    left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
+                child: ElevatedButton(
+                  onPressed: () {
+                    new Picker(
+                        squeeze: 1.45,
+                        magnification: 1.2,
+                        height: 500.h,
+                        selecteds: [userId],
+                        itemExtent: 40,
+                        selectionOverlay:
+                        CupertinoPickerDefaultSelectionOverlay(
+                          background: Colors.transparent,
+                        ),
+                        cancelText: "取消",
+                        confirmText: "确定",
+                        selectedTextStyle: TextStyle(
+                            fontSize: 40.sp, color: Colors.redAccent),
+                        textStyle:
+                        TextStyle(fontSize: 25.sp, color: Colors.black),
+                        adapter: PickerDataAdapter<String>(
+                            pickerdata: pickerUserData),
+                        changeToFirst: true,
+                        hideHeader: false,
+                        onConfirm: (Picker picker, List value) {
+                          print(value.toString());
+                          print(picker.adapter.text);
+                          setState(() {
+                            store = pickerUserItem[value[0]].id;
+                            storeName = pickerUserItem[value[0]].name;
+                            int j = 0, k = 0;
+                            for (int i = 0;
+                            i < widget.selectItems.length;
+                            i++) {
+                              if (widget.selectItems[i].type == 8) {
+                                j = 1;
+                                widget.selectItems[i].id =
+                                    pickerUserItem[value[0]].id;
+                                widget.selectItems[i].name =
+                                    pickerUserItem[value[0]].name;
+                                break;
+                              }
+                            }
+
+                            if (j == 0) {
+                              SelectItem s = SelectItem();
+                              s.type = 8;
+                              s.name = pickerUserItem[value[0]].name;
+                              s.id = pickerUserItem[value[0]].id;
+                              widget.selectItems.add(s);
+                            }
+                          });
+                        })
+                        .showModal(this.context); //_scaffoldKey.currentState);
+                  },
+                  child: Text(
+                    userName == "" ? " " : userName,
+                    style: TextStyle(
+                        fontSize: 30.sp,
+                        color:
+                        userName == "选择用户" ? Colors.black : Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.white,
+                      primary: userName == "选择用户"
+                          ? Colors.grey.withAlpha(33)
+                          : Colors.blue,
+                      shadowColor: Colors.black12,
+                      shape: StadiumBorder(),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 35.w, vertical: 10.h)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
   Widget _buildGroup1(String title, bool isShowExpansionIcon,
       List<SelectItem> items, List<SelectItem> sel) {
     for (int i = 0; i < items.length; i++) {
@@ -571,7 +720,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
               Container(
                 width: 20,
                 height: 1,
-                color: Colors.grey[500],
+                color: Colors.grey[5],
               ),
               Expanded(
                 child: Container(
@@ -662,6 +811,8 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                     _buildGroup1(
                         '客户婚姻状况', false, _valueMarriage, widget.selectItems),
                     buildBirthday("生日选择"),
+                    buildUser("红娘选择")
+
                     //buildStore("门店选择")
                     //buildRangerSlider("年龄选择")
                     // _buildGroup2(),
@@ -718,13 +869,15 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                           _valueMarriage[j].isSelect = false;
                         }
                         widget.selectItems
-                            .removeWhere((e) => e.type == 500 || e.type == 501);
+                            .removeWhere((e) => e.type == 5 || e.type == 6);
                         startBirthDayTitle = "开始日期";
                         endBirthDayTitle = "结束日期";
                         startBirthDayValue = "";
                         endBirthDayValue = "";
-                        widget.selectItems.removeWhere((e) => e.type == 600);
+                        widget.selectItems.removeWhere((e) => e.type == 7);
+                        widget.selectItems.removeWhere((e) => e.type == 8);
                         storeName = "选择门店";
+                        userName = "选择用户";
                         showToastBottom(context, "重置成功", true);
 
                         setState(() {});

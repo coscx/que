@@ -53,12 +53,17 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
 }
 Future<void> _init() async {
-  Flutter2dAMap.updatePrivacy(true);
-  await Flutter2dAMap.setApiKey(
-    iOSKey: '75f93121afcd226f0e822a19cf40e0ca',
-    webKey: 'a130ae881342a409182da1c28197bf8e',
-  );
-  UmengAnalyticsPush.initUmeng(false, true);
+  var agree = await LocalStorage.get("agree");
+  var agrees =agree.toString();
+  if(agrees == "4"){
+    Flutter2dAMap.updatePrivacy(true);
+    Flutter2dAMap.setApiKey(
+      iOSKey: '75f93121afcd226f0e822a19cf40e0ca',
+      webKey: 'a130ae881342a409182da1c28197bf8e',
+    );
+     UmengAnalyticsPush.initUmeng(false, true);
+    LocalStorage.save("UmengInit", 'push_init_ok');
+  }
   await registerWxApi(
       appId: "wx45bdf8edd00e99ef",
       doOnAndroid: true,

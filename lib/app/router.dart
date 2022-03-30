@@ -149,7 +149,7 @@ class UnitRouter {
       case point_detail:
         return Right2LeftRouter(child: IssuesDetailPage());
       case login_phone:
-        return Right2LeftRouter(child: LoginPhone());
+        return NoAnimRouter(child: LoginPhone());
       case create_user_page:
         return Right2LeftRouter(child: CreateUserPage());
       case person_page:

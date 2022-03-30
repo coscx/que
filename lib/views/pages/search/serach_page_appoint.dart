@@ -41,6 +41,7 @@ class _SearchPageAppointState extends State<SearchPageAppoint> {
     ),
     child:Scaffold(
       key: _scaffoldkey,
+      backgroundColor: Colors.white,
       appBar:  AppBar(
         backgroundColor: Colors.white,
         elevation: 0, //去掉Appbar底部阴影
@@ -140,16 +141,11 @@ class _SearchPageAppointState extends State<SearchPageAppoint> {
     return SliverAppBar(
       backgroundColor: Colors.white,
       pinned: true,
-      leadingWidth: 50.w,
+      leadingWidth: 10.w,
       title: Container(
         padding: EdgeInsets.only(left: 0.w,top: 0.w),
     child:AppSearchBar()),
-      actions: <Widget>[
-        Padding(
-          padding:  EdgeInsets.only(right: 5.w,),
-          child: Icon(TolyIcon.icon_sound),
-        )
-      ],
+
     );
   }
 

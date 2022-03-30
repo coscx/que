@@ -76,6 +76,7 @@ dependencies:
   image_picker: ^0.6.7+22
   image_gallery_saver: ^1.6.7
   image_cropper: ^1.5.0
+
   lottie: ^0.7.0+1
   left_scroll_actions: ^1.5.3
   logger: ^0.9.4
@@ -97,6 +98,7 @@ dependencies:
   video_thumbnail: ^0.2.4
   vibration: ^1.7.2
   w_popup_menu: ^1.0.0
+  webview_flutter: ^2.0.13
   adaptive_action_sheet: ^1.1.0
   overlay_support: ^0.0.4
   soundpool: ^1.0.1

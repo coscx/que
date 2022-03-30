@@ -123,13 +123,15 @@ class _HomePageState extends State<HomePage>
 
   // 上拉加载
   void _onLoading() async {
-    try{
+    try {
       List<dynamic> oldUsers =
-      BlocProvider.of<HomeBloc>(context).state.props.elementAt(0);
-      var currentPage = BlocProvider.of<GlobalBloc>(context).state.indexPhotoPage;
+          BlocProvider.of<HomeBloc>(context).state.props.elementAt(0);
+      var currentPage =
+          BlocProvider.of<GlobalBloc>(context).state.indexPhotoPage;
       var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
       var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
-      BlocProvider.of<GlobalBloc>(context).add(EventIndexPhotoPage(currentPage));
+      BlocProvider.of<GlobalBloc>(context)
+          .add(EventIndexPhotoPage(currentPage));
       var result = await IssuesApi.searchErpUser(
           '',
           (++currentPage).toString(),
@@ -147,15 +149,14 @@ class _HomePageState extends State<HomePage>
       oldUsers.forEach((element) {
         newUsers.add(element);
       });
-      if (result['data'] is List){
-
-      }else{
-        if (result['data']['data']!=null)
+      if (result['data'] is List) {
+      } else {
+        if (result['data']['data'] != null)
           newUsers.addAll(result['data']['data']);
       }
 
       BlocProvider.of<HomeBloc>(context).add(EventLoadMore(newUsers));
-    }catch(e){
+    } catch (e) {
       print(e);
     }
 
@@ -337,14 +338,13 @@ class _HomePageState extends State<HomePage>
                     //setState(() {
                     totalCount = state.count;
                     //});
-                    if (state.mode !=null){
-                      if (state.mode !=1){
+                    if (state.mode != null) {
+                      if (state.mode != 1) {
                         _scrollController.jumpTo(0);
                       }
-                    }else{
+                    } else {
                       _scrollController.jumpTo(0);
                     }
-
                   }
                 },
                 child: Container(
@@ -375,7 +375,7 @@ class _HomePageState extends State<HomePage>
                                 onRefresh: _onRefresh,
                                 onLoading: _onLoading,
                                 child: CustomScrollView(
-                                  controller:_scrollController,
+                                  controller: _scrollController,
                                   physics: BouncingScrollPhysics(),
                                   slivers: <Widget>[
                                     _buildContent(ctx, state),
@@ -402,16 +402,15 @@ class _HomePageState extends State<HomePage>
     BlocProvider.of<GlobalBloc>(context).add(EventSetIndexSex(value));
     var mode = BlocProvider.of<GlobalBloc>(context).state.currentPhotoMode;
     BlocProvider.of<GlobalBloc>(context).add(EventResetIndexPhotoPage());
-      BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
-          searchParamList,
-          selectItems,
-          value,
-          mode,
-          _showAge,
-          _showAgeMax,
-          _showAgeMin,
-          serveType));
-
+    BlocProvider.of<HomeBloc>(context).add(EventSearchErpUser(
+        searchParamList,
+        selectItems,
+        value,
+        mode,
+        _showAge,
+        _showAgeMax,
+        _showAgeMin,
+        serveType));
   }
 
   Widget _buildHead(BuildContext context, GlobalState state) {
@@ -481,7 +480,7 @@ class _HomePageState extends State<HomePage>
         PopupMenuButton<String>(
           itemBuilder: (context) => buildItems(),
           padding: EdgeInsets.only(right: 0.w),
-          offset: Offset(-45.w, 10.h),
+          offset: Offset(-15.w, 20.h),
           color: Colors.white,
           elevation: 1,
           shape: RoundedRectangleBorder(
@@ -558,11 +557,11 @@ class _HomePageState extends State<HomePage>
               await sp
                 ..setInt("currentPhotoMode", ccMode);
             }
-            BlocProvider.of<GlobalBloc>(context).add(EventResetIndexPhotoPage());
+            BlocProvider.of<GlobalBloc>(context)
+                .add(EventResetIndexPhotoPage());
             setState(() {
               roleId = ccMode;
             });
-
           },
           onCanceled: () => print('onCanceled'),
         )
@@ -639,17 +638,17 @@ class _HomePageState extends State<HomePage>
     if (state is WidgetsInit) {
       return SliverToBoxAdapter(
           child: Container(
-            margin: EdgeInsets.only(top: ScreenUtil().screenHeight/2-300.h),
-            height: 100.h,
-            width: 100.w,
-            alignment: FractionalOffset.center,
-            child: Lottie.asset(
-                'assets/packages/lottie_flutter/16379-an-ios-like-loading.json'),
-          ));
+        margin: EdgeInsets.only(top: ScreenUtil().screenHeight / 2 - 300.h),
+        height: 100.h,
+        width: 100.w,
+        alignment: FractionalOffset.center,
+        child: Lottie.asset(
+            'assets/packages/lottie_flutter/16379-an-ios-like-loading.json'),
+      ));
     }
     if (state is WidgetsLoaded) {
       List<dynamic> photos = state.photos;
-      if (photos==null) return SliverToBoxAdapter(child: EmptyPage());
+      if (photos == null) return SliverToBoxAdapter(child: EmptyPage());
       if (photos.isEmpty) return SliverToBoxAdapter(child: EmptyPage());
       return photos.isNotEmpty
           ? SliverList(

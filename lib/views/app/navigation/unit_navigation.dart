@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:flutter_2d_amap/flutter_2d_amap.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/storage/app_storage.dart';
 import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
@@ -86,8 +87,6 @@ class _UnitNavigationState extends State<UnitNavigation>
     //   }
     // }).toList();
     //BlocProvider.of<GlobalBloc>(context).add(EventSetBar3(1));
-    //initPlatformState();
-
     var saveMode = BlocProvider.of<GlobalBloc>(context).state.showBackGround;
     if (saveMode) {
       final sp = AppStorage().sp;
@@ -102,13 +101,30 @@ class _UnitNavigationState extends State<UnitNavigation>
       BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(onData.id));
       _userDetail(context);
     });
-    Future.delayed(Duration(seconds: 5)).then((e) async {
-      var token = await UmengAnalyticsPush.deviceToken();
-      print(token);
-      if (token != "" && token != null) {
-        IssuesApi.addToken(token);
+
+      var UmengInit = await LocalStorage.get("UmengInit");
+      var UmengInits = UmengInit.toString();
+      if (UmengInits != "push_init_ok") {
+        // await UmengAnalyticsPush.initUmeng(false, true);
+        // var token = await UmengAnalyticsPush.deviceToken();
+        // print("push_token:"+token);
+        // if (token != "" && token != null) {
+        //   IssuesApi.addToken(token);
+        // }
+        Flutter2dAMap.updatePrivacy(true);
+        Flutter2dAMap.setApiKey(
+          iOSKey: '75f93121afcd226f0e822a19cf40e0ca',
+          webKey: 'a130ae881342a409182da1c28197bf8e',
+        );
+      } else {
+        var token = await UmengAnalyticsPush.deviceToken();
+        print("push_token:"+token);
+        if (token != "" && token != null) {
+          IssuesApi.addToken(token);
+        }
       }
-    });
+
+
     Future.delayed(Duration(seconds: 1)).then((e) async {
       _checkUpdateVersion();
     });

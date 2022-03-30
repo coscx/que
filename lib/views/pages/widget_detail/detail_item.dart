@@ -2743,7 +2743,6 @@ Widget _buildLinkTo(BuildContext context, Map<String, dynamic> userdetail,
         File imageFile = pickedImage != null ? File(pickedImage.path) : null;
         if (imageFile != null) {
           File croppedFile = await ImageCropper().cropImage(
-
               aspectRatio:CropAspectRatio(ratioX: 1,ratioY: 2),
               sourcePath: imageFile.path,
               aspectRatioPresets: Platform.isAndroid
