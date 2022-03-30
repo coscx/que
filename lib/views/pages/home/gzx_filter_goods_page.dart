@@ -42,6 +42,7 @@ class StoreItem {
 
   StoreItem({this.name, this.id, this.isSelect, this.index, this.type});
 }
+
 class UserItem {
   String name;
   String id;
@@ -51,6 +52,7 @@ class UserItem {
 
   UserItem({this.name, this.id, this.isSelect, this.index, this.type});
 }
+
 class GZXFilterGoodsPage extends StatefulWidget {
   final List<SelectItem> selectItems;
 
@@ -76,7 +78,6 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
   List<String> pickerUserData = [];
   List<UserItem> pickerUserItem = [];
 
-
   List _value3 = ['65-5130', '5130-1.1万', '1.1万-1.5万'];
   List _value4 = ['10%的选择', '52%的选择', '23%的选择'];
   bool _isHideValue1 = true;
@@ -89,6 +90,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
   String store = "";
   String storeName = "选择门店";
   String userName = "选择用户";
+
   @override
   void initState() {
     // TODO: implement initState
@@ -97,6 +99,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
     maxValue = 80;
     _init();
   }
+
   _init() async {
     for (int i = 1; i < fromLevel.length; i++) {
       SelectItem ff = SelectItem();
@@ -140,44 +143,43 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
       _valueMarriage.add(ff);
     }
 
-      var result = await IssuesApi.getOnlyStoreList();
-      if (result['code'] == 200) {
-        List<dynamic> da = result['data'];
-        da.forEach((value) {
-          StoreItem ff = StoreItem();
-          ff.id = value['id'].toString();
-          ff.type = 7;
-          ff.name = value['name'];
-          ff.index = 0;
-          ff.isSelect = false;
-          pickerStoreItem.add(ff);
-          pickerStoreData.add(value['name']);
-        });
-      } else {}
-      String storeId = "";
-      for (int j = 0; j < widget.selectItems.length; j++) {
-        if (widget.selectItems[j].type == 100) {
-          storeId = widget.selectItems[j].id;
-        }
-      }
-      var results = await IssuesApi.getErpUsers(storeId);
-      if (results['code'] == 200) {
-        List<dynamic> da = results['data'];
-        da.forEach((value) {
-          UserItem ff = UserItem();
-          ff.id = value['id'].toString();
-          ff.type = 8;
-          ff.name = value['relname'];
-          ff.index = 0;
-          ff.isSelect = false;
-          pickerUserItem.add(ff);
-          pickerUserData.add(value['relname']);
-        });
-      } else {}
-      setState(() {
-
+    var result = await IssuesApi.getOnlyStoreList();
+    if (result['code'] == 200) {
+      List<dynamic> da = result['data'];
+      da.forEach((value) {
+        StoreItem ff = StoreItem();
+        ff.id = value['id'].toString();
+        ff.type = 7;
+        ff.name = value['name'];
+        ff.index = 0;
+        ff.isSelect = false;
+        pickerStoreItem.add(ff);
+        pickerStoreData.add(value['name']);
       });
+    } else {}
+    String storeId = "";
+    for (int j = 0; j < widget.selectItems.length; j++) {
+      if (widget.selectItems[j].type == 100) {
+        storeId = widget.selectItems[j].id;
+      }
+    }
+    var results = await IssuesApi.getErpUsers(storeId);
+    if (results['code'] == 200) {
+      List<dynamic> da = results['data'];
+      da.forEach((value) {
+        UserItem ff = UserItem();
+        ff.id = value['id'].toString();
+        ff.type = 8;
+        ff.name = value['relname'];
+        ff.index = 0;
+        ff.isSelect = false;
+        pickerUserItem.add(ff);
+        pickerUserData.add(value['relname']);
+      });
+    } else {}
+    setState(() {});
   }
+
   Widget _typeGridWidget(List<SelectItem> items, int type,
       {double childAspectRatio = 2.0}) {
     return MultiChipFilters(
@@ -248,11 +250,9 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
           ],
         ),
         _typeGridWidget(_value, 0),
-
         Container(
             margin: EdgeInsets.only(top: 6),
             decoration: BoxDecoration(
-
                 border: Border(
                     bottom: BorderSide(
                         width: 1, color: GZXColors.mainBackgroundColor)))),
@@ -517,6 +517,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
       ],
     );
   }
+
   Widget buildUser(String title) {
     int userId = 0;
     int selectUserId = 0;
@@ -529,20 +530,19 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
     }
 
     for (int j = 0; j < pickerUserItem.length; j++) {
-
       if (pickerUserItem[j].id == selectUserId.toString()) {
         break;
       }
-      userId ++;
+      userId++;
     }
-    if (selectUserId ==0){
-      userId=0;
+    if (selectUserId == 0) {
+      userId = 0;
     }
     return Column(
       children: [
         Container(
           padding:
-          EdgeInsets.only(left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
+              EdgeInsets.only(left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
           alignment: Alignment.centerLeft,
           child: Text(title,
               style: TextStyle(fontSize: 24.sp, color: Color(0xFF6a6a6a))),
@@ -553,78 +553,147 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.only(
-                    left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
-                child: ElevatedButton(
-                  onPressed: () {
-                    new Picker(
-                        squeeze: 1.45,
-                        magnification: 1.2,
-                        height: 500.h,
-                        selecteds: [userId],
-                        itemExtent: 40,
-                        selectionOverlay:
-                        CupertinoPickerDefaultSelectionOverlay(
-                          background: Colors.transparent,
-                        ),
-                        cancelText: "取消",
-                        confirmText: "确定",
-                        selectedTextStyle: TextStyle(
-                            fontSize: 40.sp, color: Colors.redAccent),
-                        textStyle:
-                        TextStyle(fontSize: 25.sp, color: Colors.black),
-                        adapter: PickerDataAdapter<String>(
-                            pickerdata: pickerUserData),
-                        changeToFirst: true,
-                        hideHeader: false,
-                        onConfirm: (Picker picker, List value) {
-                          print(value.toString());
-                          print(picker.adapter.text);
-                          setState(() {
-                            store = pickerUserItem[value[0]].id;
-                            storeName = pickerUserItem[value[0]].name;
-                            int j = 0, k = 0;
-                            for (int i = 0;
-                            i < widget.selectItems.length;
-                            i++) {
-                              if (widget.selectItems[i].type == 8) {
-                                j = 1;
-                                widget.selectItems[i].id =
-                                    pickerUserItem[value[0]].id;
-                                widget.selectItems[i].name =
-                                    pickerUserItem[value[0]].name;
-                                break;
+                  padding: EdgeInsets.only(
+                      left: 10.w, top: 0.h, right: 0.w, bottom: 0.h),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      new Picker(
+                          squeeze: 1.45,
+                          magnification: 1.2,
+                          height: 500.h,
+                          selecteds: [userId],
+                          itemExtent: 40,
+                          selectionOverlay:
+                          CupertinoPickerDefaultSelectionOverlay(
+                            background: Colors.transparent,
+                          ),
+                          cancelText: "取消",
+                          confirmText: "确定",
+                          selectedTextStyle: TextStyle(
+                              fontSize: 40.sp, color: Colors.redAccent),
+                          textStyle:
+                          TextStyle(fontSize: 25.sp, color: Colors.black),
+                          adapter: PickerDataAdapter<String>(
+                              pickerdata: pickerUserData),
+                          changeToFirst: true,
+                          hideHeader: false,
+                          onConfirm: (Picker picker, List value) {
+                            print(value.toString());
+                            print(picker.adapter.text);
+                            setState(() {
+                              store = pickerUserItem[value[0]].id;
+                              storeName = pickerUserItem[value[0]].name;
+                              int j = 0, k = 0;
+                              for (int i = 0;
+                              i < widget.selectItems.length;
+                              i++) {
+                                if (widget.selectItems[i].type == 8) {
+                                  j = 1;
+                                  widget.selectItems[i].id =
+                                      pickerUserItem[value[0]].id;
+                                  widget.selectItems[i].name =
+                                      pickerUserItem[value[0]].name;
+                                  break;
+                                }
                               }
-                            }
 
-                            if (j == 0) {
-                              SelectItem s = SelectItem();
-                              s.type = 8;
-                              s.name = pickerUserItem[value[0]].name;
-                              s.id = pickerUserItem[value[0]].id;
-                              widget.selectItems.add(s);
-                            }
-                          });
-                        })
-                        .showModal(this.context); //_scaffoldKey.currentState);
-                  },
-                  child: Text(
-                    userName == "" ? " " : userName,
-                    style: TextStyle(
-                        fontSize: 30.sp,
-                        color:
-                        userName == "选择用户" ? Colors.black : Colors.white),
+                              if (j == 0) {
+                                SelectItem s = SelectItem();
+                                s.type = 8;
+                                s.name = pickerUserItem[value[0]].name;
+                                s.id = pickerUserItem[value[0]].id;
+                                widget.selectItems.add(s);
+                              }
+                            });
+                          })
+                          .showModal(this.context); //_scaffoldKey.currentState);
+                    },
+                    child: Text(
+                      userName == "" ? " " : userName,
+                      style: TextStyle(
+                          fontSize: 30.sp,
+                          color:
+                          userName == "选择用户" ? Colors.black : Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        onPrimary: Colors.white,
+                        primary: userName == "选择用户"
+                            ? Colors.grey.withAlpha(33)
+                            : Colors.blue,
+                        shadowColor: Colors.black12,
+                        shape: StadiumBorder(),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 35.w, vertical: 10.h)),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      onPrimary: Colors.white,
-                      primary: userName == "选择用户"
-                          ? Colors.grey.withAlpha(33)
-                          : Colors.blue,
-                      shadowColor: Colors.black12,
-                      shape: StadiumBorder(),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 35.w, vertical: 10.h)),
-                ),
+                  // child: InputChip(
+                  //   backgroundColor: userName == "选择用户"
+                  //       ? Colors.grey.withAlpha(33)
+                  //       : Colors.blue,
+                  //   label: Text(
+                  //     userName == "" ? " " : userName,
+                  //     style: TextStyle(
+                  //         fontSize: 30.sp,
+                  //         color:
+                  //             userName == "选择用户" ? Colors.black : Colors.white),
+                  //   ),
+                  //   onDeleted: () {},
+                  //   onPressed: () {
+                  //     new Picker(
+                  //             squeeze: 1.45,
+                  //             magnification: 1.2,
+                  //             height: 500.h,
+                  //             selecteds: [userId],
+                  //             itemExtent: 40,
+                  //             selectionOverlay:
+                  //                 CupertinoPickerDefaultSelectionOverlay(
+                  //               background: Colors.transparent,
+                  //             ),
+                  //             cancelText: "取消",
+                  //             confirmText: "确定",
+                  //             selectedTextStyle: TextStyle(
+                  //                 fontSize: 40.sp, color: Colors.redAccent),
+                  //             textStyle: TextStyle(
+                  //                 fontSize: 25.sp, color: Colors.black),
+                  //             adapter: PickerDataAdapter<String>(
+                  //                 pickerdata: pickerUserData),
+                  //             changeToFirst: true,
+                  //             hideHeader: false,
+                  //             onConfirm: (Picker picker, List value) {
+                  //               print(value.toString());
+                  //               print(picker.adapter.text);
+                  //               setState(() {
+                  //                 store = pickerUserItem[value[0]].id;
+                  //                 storeName = pickerUserItem[value[0]].name;
+                  //                 int j = 0, k = 0;
+                  //                 for (int i = 0;
+                  //                     i < widget.selectItems.length;
+                  //                     i++) {
+                  //                   if (widget.selectItems[i].type == 8) {
+                  //                     j = 1;
+                  //                     widget.selectItems[i].id =
+                  //                         pickerUserItem[value[0]].id;
+                  //                     widget.selectItems[i].name =
+                  //                         pickerUserItem[value[0]].name;
+                  //                     break;
+                  //                   }
+                  //                 }
+                  //
+                  //                 if (j == 0) {
+                  //                   SelectItem s = SelectItem();
+                  //                   s.type = 8;
+                  //                   s.name = pickerUserItem[value[0]].name;
+                  //                   s.id = pickerUserItem[value[0]].id;
+                  //                   widget.selectItems.add(s);
+                  //                 }
+                  //               });
+                  //             })
+                  //         .showModal(
+                  //             this.context); //_scaffoldKey.currentState);
+                  //   },
+                  //   deleteIconColor:
+                  //       userId == 0 ? Colors.transparent : Colors.white,
+                  //   deleteButtonTooltipMessage: '删除选择的用户',
+                  // )
               ),
             ],
           ),
@@ -632,6 +701,7 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
       ],
     );
   }
+
   Widget _buildGroup1(String title, bool isShowExpansionIcon,
       List<SelectItem> items, List<SelectItem> sel) {
     for (int i = 0; i < items.length; i++) {
@@ -675,7 +745,6 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
         ],
       ),
       _typeGridWidget(items, 1),
-
       Container(
           margin: EdgeInsets.only(top: 6),
           decoration: BoxDecoration(
