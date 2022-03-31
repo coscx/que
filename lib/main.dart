@@ -49,8 +49,12 @@ Future<void> main() async {
     // }
   }
   runApp(BlocWrapper(child: FlutterGeen(isPad: isIPad, animate: animate,jump: jump,)));
-  SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-  SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  ///如果是安卓平台，将状态栏颜色设为透明
+  if (Platform.isAndroid) {
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }
+
 }
 Future<void> _init() async {
   var agree = await LocalStorage.get("agree");
