@@ -472,16 +472,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
   Widget _buildDetail(BuildContext context, DetailState state) {
     if (state is DetailWithData) {
-      return _buildStateDetail(context, state.userdetails, state.connectList,
-          state.appointList, state.actionList, state.callList);
+     return _buildStateDetail(context, state.userdetails, state.connectList,
+         state.appointList, state.actionList, state.callList);
     }
     if (state is DetailLoading) {}
     return Container(
       child: Container(
-        margin: EdgeInsets.only(top: ScreenUtil().screenHeight/2-300.h),
+        margin: EdgeInsets.only(top: 300.h,left: ScreenUtil().screenWidth/2-50.h,right:  ScreenUtil().screenWidth/2-50.h),
         height: 100.h,
         width: 100.w,
-        alignment: FractionalOffset.center,
+        alignment: Alignment.center,
         child: Lottie.asset(
             'assets/packages/lottie_flutter/16379-an-ios-like-loading.json'),
       ),

@@ -117,13 +117,33 @@ class _UnitNavigationState extends State<UnitNavigation>
           webKey: 'a130ae881342a409182da1c28197bf8e',
         );
       } else {
-        var token = await UmengAnalyticsPush.deviceToken();
-        print("push_token:"+token);
-        if (token != "" && token != null) {
-          IssuesApi.addToken(token);
+        try{
+          var token = await UmengAnalyticsPush.deviceToken();
+          print("push_token:"+token);
+          if (token != "" && token != null) {
+            IssuesApi.addToken(token);
+          }
+        }catch(e){
+          print(e);
         }
+
+
+      }
+    Future.delayed(Duration(seconds: 5)).then((e) async {
+      var result = await IssuesApi.getUserStatus();
+      if (result['code'] == 402) {
+        var ss = await LocalStorage.remove("im_token");
+        var memberId = await LocalStorage.remove("memberId");
+        var sss = await LocalStorage.remove("token");
+        Navigator.pushNamed(context, UnitRouter.login);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          'login',
+              (route) => route == null,
+        );
       }
 
+
+    });
 
     Future.delayed(Duration(seconds: 1)).then((e) async {
       _checkUpdateVersion();

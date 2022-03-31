@@ -16,12 +16,13 @@ import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
+
 bool select1 = false;
 bool select2 = false;
 bool select3 = false;
 
 class BuyVipPage extends StatefulWidget {
-  final Map<String,dynamic> args;
+  final Map<String, dynamic> args;
 
   BuyVipPage({
     @required this.args,
@@ -57,16 +58,16 @@ class StoreItem {
 class _BuyVipPagePageState extends State<BuyVipPage>
     with WidgetsBindingObserver {
   DateTime startBirthDay = DateTime.now();
-  String startBirthDayTitle = DateTime.now().toString().substring(0,19);
-  String startBirthDayValue = DateTime.now().toString().substring(0,19);
+  String startBirthDayTitle = DateTime.now().toString().substring(0, 19);
+  String startBirthDayValue = DateTime.now().toString().substring(0, 19);
   String store = "";
   String storeName = "选择会员套餐";
   String price = "";
   String month = "";
   String count = "";
   String tag = "";
-  int type =0;
-  int vipId=0;
+  int type = 0;
+  int vipId = 0;
   int minValue;
   int maxValue;
   int sexSelect = 0;
@@ -207,33 +208,33 @@ class _BuyVipPagePageState extends State<BuyVipPage>
           onPressed: () async {
             var data = Map<String, dynamic>();
             if (type == 9999) {
-              tag =_tagController.text;
-              price =_vipPriceController.text;
-              month =_vipMonthController.text;
-              count =_vipCountController.text;
+              tag = _tagController.text;
+              price = _vipPriceController.text;
+              month = _vipMonthController.text;
+              count = _vipCountController.text;
             }
-            if (vipId==0){
-              showToastRed(context, "请选择套餐" , true);
+            if (vipId == 0) {
+              showToastRed(context, "请选择套餐", true);
               return;
             }
-            if (price==""){
-              showToastRed(context, "请输入套餐价格" , true);
+            if (price == "") {
+              showToastRed(context, "请输入套餐价格", true);
               return;
             }
-            if (month==""){
-              showToastRed(context, "请输入套餐时长" , true);
+            if (month == "") {
+              showToastRed(context, "请输入套餐时长", true);
               return;
             }
-            if (count==""){
-              showToastRed(context, "请输入套餐次数" , true);
+            if (count == "") {
+              showToastRed(context, "请输入套餐次数", true);
               return;
             }
-            if (startBirthDayValue==""){
-              showToastRed(context, "请选择支付时间" , true);
+            if (startBirthDayValue == "") {
+              showToastRed(context, "请选择支付时间", true);
               return;
             }
-            if (tag==""){
-              showToastRed(context, "请输入支付备注" , true);
+            if (tag == "") {
+              showToastRed(context, "请输入支付备注", true);
               return;
             }
 
@@ -246,9 +247,9 @@ class _BuyVipPagePageState extends State<BuyVipPage>
             data['name'] = "自定义套餐";
             data['original'] = price;
             data['services[0]'] = "";
-            var results = await IssuesApi.addMealFree(widget.args['uuid'], data);
+            var results =
+                await IssuesApi.addMealFree(widget.args['uuid'], data);
             if (results['code'] == 200) {
-
               var id = results['data']['id'];
               var data1 = Map<String, dynamic>();
               data1['pay_price'] = price;
@@ -256,7 +257,7 @@ class _BuyVipPagePageState extends State<BuyVipPage>
               data1['pay_time'] = startBirthDayValue;
               data1['remark'] = tag;
               data1['vip_id'] = vipId;
-              if(type==9999){
+              if (type == 9999) {
                 data1['vip_id'] = id['id'];
                 data1['free'] = 1;
               }
@@ -264,18 +265,16 @@ class _BuyVipPagePageState extends State<BuyVipPage>
               var result = await IssuesApi.buyVip(widget.args['uuid'], data1);
               if (result['code'] == 200) {
                 //print(result['data'] );
-                showToast(context, "购买成功" , true);
+                showToast(context, "购买成功", true);
                 BlocProvider.of<DetailBloc>(context)
                     .add(FetchWidgetDetail(widget.args));
                 Navigator.of(context).pop();
-              }else{
-                showToastRed(context, result['message'] , true);
+              } else {
+                showToastRed(context, result['message'], true);
               }
-
             } else {
-              showToastRed(context, results['message'] , true);
+              showToastRed(context, results['message'], true);
             }
-
           },
           child: Text("提交",
               style: TextStyle(color: Colors.white, fontSize: 40.sp)),
@@ -328,7 +327,6 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                         hintText: '请输入套餐价格...',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
-
                       onChanged: (str) {
                         setState(() {});
                       },
@@ -539,6 +537,9 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                   child: ElevatedButton(
                     onPressed: () {
                       MyPicker.showPicker(
+                          squeeze: 1.45,
+                          magnification: 1.2,
+                          offAxisFraction: 0.2,
                           context: context,
                           current: startBirthDay,
                           mode: MyPickerMode.dateTime,
@@ -606,6 +607,9 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                   child: ElevatedButton(
                     onPressed: () {
                       new Picker(
+                              squeeze: 1.45,
+                              magnification: 1.2,
+                              height: 400.h,
                               selecteds: [storeId],
                               itemExtent: 40,
                               selectionOverlay:
@@ -636,8 +640,8 @@ class _BuyVipPagePageState extends State<BuyVipPage>
                                   _vipMonthController.text = month;
                                   _vipCountController.text = count;
                                   _isButton1Disabled = false;
-                                  type=pickerStoreItem[value[0]].type;
-                                  vipId=pickerStoreItem[value[0]].id;
+                                  type = pickerStoreItem[value[0]].type;
+                                  vipId = pickerStoreItem[value[0]].id;
                                   if (pickerStoreItem[value[0]].type == 9999) {
                                     _tagController.clear();
                                     _vipPriceController.clear();

@@ -637,7 +637,31 @@ class IssuesApi {
       return dd;
     }
   }
+  static Future<Map<String, dynamic>> getUserStatus() async {
+    var ss = await LocalStorage.get("token");
+    var token = ss.toString();
+    Map<String, dynamic> searchParm = {};
+    searchParm['pageSize'] = 50;
 
+    Dio dioA = Dio();
+    dioA.options.headers['authorization'] = "Bearer " + token;
+    try {
+      Response<dynamic> rep =
+      await dioA.post(NewBaseUrl + '/api/GetUserStatus', data: searchParm);
+      var dd = rep.data;
+      return dd;
+    } on DioError catch (e) {
+      var dd = e.response.data;
+      if( dd is String){
+       var  dds = Map<String, dynamic>();
+       dds['code'] =400;
+       dds['message'] =dd;
+       dds['data'] ={};
+       return dds;
+      }
+      return dd;
+    }
+  }
   static Future<Map<String, dynamic>> getStoreVips() async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();

@@ -106,6 +106,20 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
                 return;
 
               }
+              if(widget.args['status'] < 0){
+                showToastRed(context, "当前用户状态需认领后再划分", true);
+                Navigator.of(context).pop();
+                return;
+              }
+              if(widget.args['status'] ==5){
+                if (widget.args['role_id'] !=1){
+                  showToastRed(context, "暂无划分权限", true);
+                  Navigator.of(context).pop();
+                  return;
+                }
+              }
+
+
               if (widget.args['role_id'] > 3) {
                 showToastRed(context, "暂无权限", true);
                 Navigator.of(context).pop();
