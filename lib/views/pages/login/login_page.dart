@@ -41,8 +41,8 @@ class LoginPage extends StatelessWidget {
                 color: Colors.white.withAlpha(0), shape: BoxShape.rectangle),
             child: Image.asset(
               "assets/images/login_top.png",
-              width: ScreenUtil().setWidth(400),
-              height: ScreenUtil().setWidth(200),
+              width: 400.w,
+              height: 200.h,
             )),
       ),
     );

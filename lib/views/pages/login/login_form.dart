@@ -172,7 +172,7 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
                     padding: EdgeInsets.only(left: 0.w,  top:20.h),
                     child: CircularProgressIndicator()
                 )
-                    : null,
+                    : Container(),
               )
             ],
           ),
