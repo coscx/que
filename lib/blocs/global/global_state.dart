@@ -38,7 +38,7 @@ class GlobalState extends Equatable {
    final int indexFlowPage;
   final int indexConnectPage;
   const GlobalState({
-    this.fontFamily = 'ComicNeue',
+    this.fontFamily = 'Inconsolata',
     this.themeColor = Colors.blue,
     this.showBackGround = true,
     this.codeStyleIndex = 0,

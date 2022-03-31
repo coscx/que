@@ -212,11 +212,11 @@ Widget buildBase(
                                   : info['np_area_code'],
                               cancelWidget: Text(
                                 "取消",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.black ,fontSize: 40.sp,),
                               ),
                               confirmWidget: Text(
                                 "确定",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.blue, fontSize: 40.sp,),
                               ));
                           print(result);
                           if (result != null) {
@@ -257,11 +257,11 @@ Widget buildBase(
                                   : info['lp_area_code'],
                               cancelWidget: Text(
                                 "取消",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.black ,fontSize: 40.sp,),
                               ),
                               confirmWidget: Text(
                                 "确定",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.blue, fontSize: 40.sp,),
                               ));
                           print(result);
                           if (result != null) {
@@ -1587,11 +1587,11 @@ Widget buildUserSelect(
                                   : info['wish_lp_area_code'],
                               cancelWidget: Text(
                                 "取消",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.black,fontSize: 40.sp),
                               ),
                               confirmWidget: Text(
                                 "确定",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.blue,fontSize: 40.sp),
                               ));
                           print(result);
                           if (result != null) {
@@ -2080,7 +2080,65 @@ showEditDialog(BuildContext context, String title, String hintText, String text,
         );
       });
 }
+showBackDialog(BuildContext context, String title, String hintText, String text,
+    String type, int maxLine, int id,String uuid) {
+  TextEditingController _controller =
+  TextEditingController.fromValue(TextEditingValue(
+    text: '${text == null ? "" : text}', //判断keyword是否为空
+  ));
+  showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Container(
+            //elevation: 0.0,
+            child: Column(
+              children: <Widget>[
+                //Text(text),
+                TextField(
+                  minLines: maxLine,
+                  maxLines: maxLine,
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    hintText: hintText,
 
+                    //filled: true,
+                    //fillColor: Colors.white
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('取消'),
+            ),
+            Container(
+              child: CupertinoDialogAction(
+                onPressed: () async {
+                  var result = await IssuesApi.addAppointBack(
+                      id, _controller.text);
+                  if (result['code'] == 200) {
+                    showToast(context, "添加成功", false);
+                    Map<String, dynamic> photo = Map();
+                    photo['uuid'] = uuid;
+                    BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetailNoFresh(photo));
+                  } else {
+                    showToastRed(context, result['message'], false);
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text('确定'),
+              ),
+            ),
+          ],
+        );
+      });
+}
 showEditDialogDemand(BuildContext context, String title, String hintText,
     String text, String type, int maxLine, Map<String, dynamic> info, uuid) {
   TextEditingController _controller =
@@ -2189,6 +2247,12 @@ Future<bool> showPickerDemandAge(
       ),
       cancelText: "取消",
       confirmText: "确定",
+      cancelTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.grey),
+      confirmTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.blue),
       adapter: NumberPickerAdapter(data: [
         NumberPickerColumn(begin: 18, end: 80),
         NumberPickerColumn(begin: 18, end: 80),
@@ -2262,6 +2326,12 @@ Future<bool> showPickerDemandHeight(
       ),
       cancelText: "取消",
       confirmText: "确定",
+      cancelTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.grey),
+      confirmTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.blue),
       adapter: NumberPickerAdapter(data: [
         NumberPickerColumn(begin: 120, end: 200),
         NumberPickerColumn(begin: 120, end: 200),
@@ -2333,6 +2403,12 @@ Future<bool> showPickerDemandWeight(
       ),
       cancelText: "取消",
       confirmText: "确定",
+      cancelTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.grey),
+      confirmTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.blue),
       adapter: NumberPickerAdapter(data: [
         NumberPickerColumn(begin: 40, end: 200),
         NumberPickerColumn(begin: 40, end: 200),
@@ -2398,6 +2474,12 @@ Future<bool> showPickerArray(
       title: new Text("请选择" + title),
       cancelText: "取消",
       confirmText: "确定",
+      cancelTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.grey),
+      confirmTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.blue),
       selecteds: select,
       // columnPadding: EdgeInsets.only(top: 50.h,bottom: 50.h,left: 50.w,right: 50.w),
       selectedTextStyle: TextStyle(
@@ -2454,6 +2536,12 @@ Future<bool> showPickerArrayDemand(
       title: new Text("请选择" + title),
       cancelText: "取消",
       confirmText: "确定",
+      cancelTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.grey),
+      confirmTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.blue),
       selecteds: select,
       // columnPadding: EdgeInsets.only(top: 50.h,bottom: 50.h,left: 50.w,right: 50.w),
       selectedTextStyle: TextStyle(
@@ -2523,6 +2611,12 @@ Future<bool> showPickerDateTime(BuildContext context, String date, String type,
               color: Colors.black)),
       cancelText: "取消",
       confirmText: "确定",
+      cancelTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.grey),
+      confirmTextStyle: TextStyle(
+          fontSize: 40.sp,
+          color: Colors.blue),
       textAlign: TextAlign.center,
       selectedTextStyle: TextStyle(color: Colors.redAccent),
       delimiter: [

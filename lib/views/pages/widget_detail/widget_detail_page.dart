@@ -448,7 +448,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             e['appointment_time'] == null ? "" : e['appointment_time'],
             e['can_write'].toString(),
             e['remark'].toString(),
-            e['feedback1'].toString(),e["other_id"].toString()))
+            e['message'].toString(),e["other_id"].toString(),e['id'],userDetail['uuid'],canEdit))
         .toList();
   }
 
