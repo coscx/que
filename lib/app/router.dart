@@ -119,7 +119,7 @@ class UnitRouter {
       case issues_point:
         return Right2LeftRouter(child: IssuesPointPage());
       case login:
-        return Right2LeftRouter(child: LoginPage());
+        return NoAnimRouter(child: LoginPage());
       case baidu_map:
         return Right2LeftRouter(child: AMaps());
       case galley:

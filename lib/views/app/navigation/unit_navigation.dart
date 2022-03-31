@@ -137,7 +137,7 @@ class _UnitNavigationState extends State<UnitNavigation>
         var sss = await LocalStorage.remove("token");
         Navigator.pushNamed(context, UnitRouter.login);
         Navigator.of(context).pushNamedAndRemoveUntil(
-          'login',
+          UnitRouter.login,
               (route) => route == null,
         );
       }
