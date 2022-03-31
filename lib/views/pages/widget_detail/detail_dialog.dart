@@ -666,6 +666,7 @@ Future<bool> commentDialog(BuildContext context, int connectStatus,
                                                   // ),
 
                                                   MenuButton<String>(
+                                                    popupHeight: ScreenUtil().screenHeight/2-50.h,
                                                 scrollPhysics:
                                                     AlwaysScrollableScrollPhysics(),
                                                 child: normalChildButton(
