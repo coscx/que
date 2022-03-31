@@ -135,6 +135,7 @@ class _UnitNavigationState extends State<UnitNavigation>
         var ss = await LocalStorage.remove("im_token");
         var memberId = await LocalStorage.remove("memberId");
         var sss = await LocalStorage.remove("token");
+        if (!mounted) return;
         Navigator.pushNamed(context, UnitRouter.login);
         Navigator.of(context).pushNamedAndRemoveUntil(
           UnitRouter.login,

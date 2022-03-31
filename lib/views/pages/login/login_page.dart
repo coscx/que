@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/res/toly_icon.dart';
+import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'arc_clipper.dart';
@@ -11,7 +12,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
+        body: ScrollConfiguration(
+        behavior: DyBehaviorNull(),
+    child:SingleChildScrollView(
       child: Wrap(children: [
         arcBackground(),
         Container(
@@ -24,7 +27,7 @@ class LoginPage extends StatelessWidget {
               ],
             ))
       ]),
-    ));
+    )));
   }
 
   Widget arcBackground() {

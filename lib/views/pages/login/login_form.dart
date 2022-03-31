@@ -80,8 +80,10 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
     return BlocListener<LoginBloc, LoginState>(
         listener: (ctx, state) {
           if (state is LoginFailed) {
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text('${state.reason}'),
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('${state.reason}', style: TextStyle(
+                  fontSize: 30.sp,
+                  color: Colors.white,)),
               backgroundColor: Colors.red,
             ));
             BlocProvider.of<LoginBloc>(context).add(
@@ -113,16 +115,16 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                "ERP系统",
+                "ERP系统登录",
                 style: TextStyle(fontSize: 40.sp),
               ),
               SizedBox(
                 height: 10.h,
               ),
-              Text(
-                "登录",
-                style: TextStyle(color: Colors.grey),
-              ),
+              // Text(
+              //   "登录",
+              //   style: TextStyle(color: Colors.grey),
+              // ),
               SizedBox(
                 height: 10.h,
               ),
@@ -261,6 +263,10 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
               ),
               Expanded(
                 child: TextField(
+                  style: TextStyle(
+                      fontSize: 35.sp,
+                      color: Colors.black,
+                     ),
                   controller: _usernameController,
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -305,6 +311,10 @@ class _LoginFromState extends State<LoginFrom> with WidgetsBindingObserver {
               ),
               Expanded(
                 child: TextField(
+                  style: TextStyle(
+                    fontSize: 35.sp,
+                    color: Colors.black,
+                  ),
                   focusNode: _textFieldNode,
                   obscureText: !_showPwd,
                   controller: _passwordController,
