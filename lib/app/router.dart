@@ -31,6 +31,7 @@ import 'package:flutter_geen/views/component/catetory_two_list.dart';
 import 'package:flutter_geen/views/component/buy_vip_page.dart';
 import 'package:flutter_geen/views/pages/setting/setting_page.dart';
 import 'package:flutter_geen/views/pages/home/connect_page.dart';
+import 'package:flutter_geen/views/component/fin_page.dart';
 import 'utils/router_utils.dart';
 
 class UnitRouter {
@@ -79,6 +80,7 @@ class UnitRouter {
   static const String buy_vip = 'BuyVip';
   static const String game = 'Game';
   static const String connect = 'Connect';
+  static const String fin = 'Fin';
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       //根据名称跳转相应页面
@@ -136,6 +138,8 @@ class UnitRouter {
         return Right2LeftRouter(child: BuyVipPage(args:settings.arguments));
       case connect:
         return Right2LeftRouter(child: ConnectPage());
+      case fin:
+        return Right2LeftRouter(child: FinPage());
       case to_chats:
         return Right2LeftRouter(
             child: ChatsPage(

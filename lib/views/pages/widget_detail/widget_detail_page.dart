@@ -1,32 +1,30 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_geen/components/imageview/image_preview_page.dart';
-import 'package:flutter_geen/components/imageview/image_preview_view.dart';
-import 'package:flutter_geen/views/component/goods_add_menu.dart';
-import 'package:flutter_geen/views/dialogs/popup_window.dart';
-import 'package:flutter_geen/views/dialogs/ww_dialog.dart';
-import 'package:flutter_geen/views/items/bottom_sheet.dart';
-import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
-import 'package:flutter_geen/views/pages/widget_detail/detail_dialog.dart';
+import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/app/res/cons.dart';
 import 'package:flutter_geen/blocs/bloc_exp.dart';
 import 'package:flutter_geen/components/permanent/feedback_widget.dart';
-import 'package:flutter_geen/views/items/tag.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
-import 'package:flutter_geen/app/api/issues_api.dart';
-import 'package:fluwx/fluwx.dart' as fluwx;
-import 'package:flutter_geen/views/items/share.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_geen/views/component/goods_add_menu.dart';
+import 'package:flutter_geen/views/component/refresh.dart';
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
+import 'package:flutter_geen/views/dialogs/popup_window.dart';
+import 'package:flutter_geen/views/dialogs/ww_dialog.dart';
+import 'package:flutter_geen/views/items/bottom_sheet.dart';
+import 'package:flutter_geen/views/items/share.dart';
+import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
+import 'package:flutter_geen/views/pages/widget_detail/detail_dialog.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
+import 'package:lottie/lottie.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'detail_common.dart';
 import 'detail_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:flutter_geen/views/component/refresh.dart';
 
 class WidgetDetailPage extends StatefulWidget {
   WidgetDetailPage();
@@ -86,7 +84,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       photo['uuid'] = userDetail['uuid'];
       BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetailNoFresh(photo));
     });
-
 
     super.initState();
   }
@@ -155,7 +152,6 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
         tooltip: '用户操作',
         key: _addKey,
         onPressed: () {
-
           showAddMenu(userDetail);
         },
         icon: Icon(
@@ -252,6 +248,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
       builder: (ctx) => GestureDetector(
           onLongPress: () => Scaffold.of(ctx).openEndDrawer(),
           child: Padding(
+
             padding: EdgeInsets.only(top: 10.h),
             child: Container(
               width: 60.h,
@@ -434,7 +431,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             e['connect_message'],
             e['subscribe_time'] == null ? "" : e['subscribe_time'],
             e['connect_status'].toString(),
-            e['connect_type'].toString(),userDetail['role_id']))
+            e['connect_type'].toString(),
+            userDetail['role_id']))
         .toList();
   }
 
@@ -448,7 +446,11 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
             e['appointment_time'] == null ? "" : e['appointment_time'],
             e['can_write'].toString(),
             e['remark'].toString(),
-            e['message'].toString(),e["other_id"].toString(),e['id'],userDetail['uuid'],canEdit))
+            e['message'].toString(),
+            e["other_id"].toString(),
+            e['id'],
+            userDetail['uuid'],
+            canEdit))
         .toList();
   }
 
@@ -472,13 +474,16 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
   Widget _buildDetail(BuildContext context, DetailState state) {
     if (state is DetailWithData) {
-     return _buildStateDetail(context, state.userdetails, state.connectList,
-         state.appointList, state.actionList, state.callList);
+      return _buildStateDetail(context, state.userdetails, state.connectList,
+          state.appointList, state.actionList, state.callList);
     }
     if (state is DetailLoading) {}
     return Container(
       child: Container(
-        margin: EdgeInsets.only(top: 300.h,left: ScreenUtil().screenWidth/2-50.h,right:  ScreenUtil().screenWidth/2-50.h),
+        margin: EdgeInsets.only(
+            top: 300.h,
+            left: ScreenUtil().screenWidth / 2 - 50.h,
+            right: ScreenUtil().screenWidth / 2 - 50.h),
         height: 100.h,
         width: 100.w,
         alignment: Alignment.center,
@@ -628,10 +633,12 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
     status = info['status'];
 
     userDetail = info;
-    List<dynamic> connectList =connectLists==null?[]: connectLists['data'];
-    List<dynamic> appointList = appointLists==null?[]:appointLists['data'];
-    List<dynamic> actionList = actionLists==null?[]:actionLists['data'];
-    List<dynamic> callList = callLists==null?[]:callLists['data'];
+    List<dynamic> connectList =
+        connectLists == null ? [] : connectLists['data'];
+    List<dynamic> appointList =
+        appointLists == null ? [] : appointLists['data'];
+    List<dynamic> actionList = actionLists == null ? [] : actionLists['data'];
+    List<dynamic> callList = callLists == null ? [] : callLists['data'];
     if (connectList.length > 0) {
       Map<String, dynamic> e = connectList.first;
       if (e != null) connectStatus = e['connect_status'];
@@ -670,12 +677,8 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
 
   Widget _buildTitle(BuildContext context, DetailState state) {
     if (state is DetailWithData) {
-      return header(context,state.userdetails);
+      return header(context, state.userdetails);
     }
     return Container();
   }
-
-
-
-
 }

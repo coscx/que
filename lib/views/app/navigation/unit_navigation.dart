@@ -1,11 +1,8 @@
 import 'dart:math';
 import 'dart:math' as math;
-import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:flutter_2d_amap/flutter_2d_amap.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
-import 'package:flutter_geen/app/utils/sp_utils.dart';
 import 'package:flutter_geen/storage/app_storage.dart';
 import 'package:flutter_geen/views/pages/about/bottom_sheet.dart';
 import 'package:flutter_geen/views/pages/about/person_center_page.dart';
@@ -32,7 +29,6 @@ import 'package:umeng_analytics_push/umeng_analytics_push.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// 说明: 主题结构 左右滑页 + 底部导航栏
-
 class UnitNavigation extends StatefulWidget {
   @override
   _UnitNavigationState createState() => _UnitNavigationState();
@@ -97,8 +93,8 @@ class _UnitNavigationState extends State<UnitNavigation>
     }
 
     FlutterNfcReader.onTagDiscovered().listen((onData) {
-      //(onData.id);
-      //print(onData.content);
+      (onData.id);
+      // print(onData.content);
       BlocProvider.of<GlobalBloc>(context).add(EventSetCreditId(onData.id));
       _userDetail(context);
     });

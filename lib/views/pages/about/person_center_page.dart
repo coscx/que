@@ -349,12 +349,17 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                           content: lost,
                           colorStart:  Color(0xff0CDAC5),
                           colorEnd: Color(0xff3BBFF9),
-                        ),TopCard(
-                          url: 'assets/images/default/join.png',
-                          title: '昨日入库',
-                          content: join,
-                          colorStart:  Color(0xffF6A681),
-                          colorEnd: Color(0xffF86CA0),
+                        ),GestureDetector(
+                          onTap: (){
+                            Navigator.pushNamed(context, UnitRouter.fin);
+                          },
+                          child: TopCard(
+                            url: 'assets/images/default/join.png',
+                            title: '昨日入库',
+                            content: join,
+                            colorStart:  Color(0xffF6A681),
+                            colorEnd: Color(0xffF86CA0),
+                          ),
                         ),
                         GestureDetector(
                           onTap: (){
@@ -676,7 +681,6 @@ class TopCard extends StatelessWidget {
                 colorEnd
               ],
             ),
-
         ),
         child: Container(
           child: Stack(

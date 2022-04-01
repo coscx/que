@@ -1,7 +1,4 @@
 import 'dart:io';
-
-// import 'package:amap_map_fluttify/amap_map_fluttify.dart';
-//import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

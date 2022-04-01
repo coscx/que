@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/blocs/global/global_bloc.dart';
+import 'package:flutter_geen/blocs/global/global_event.dart';
 import 'package:flutter_geen/storage/app_storage.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
 import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
@@ -281,6 +282,7 @@ bool getSelect(){
                       s.id = selectValue.id.toString();
                       widget.selectItems.add(s);
                     }
+                    BlocProvider.of<GlobalBloc>(context).add(EventResetIndexPhotoPage());
                     var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
                     var mode = BlocProvider.of<GlobalBloc>(context)
                         .state
@@ -312,6 +314,7 @@ bool getSelect(){
                       s.id = value.id.toString();
                       widget.selectItems.add(s);
                     }
+                    BlocProvider.of<GlobalBloc>(context).add(EventResetIndexPhotoPage());
                     var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
                     var mode = BlocProvider.of<GlobalBloc>(context)
                         .state
@@ -343,6 +346,7 @@ bool getSelect(){
                       s.id = value.id.toString();
                       widget.selectItems.add(s);
                     }
+                    BlocProvider.of<GlobalBloc>(context).add(EventResetIndexPhotoPage());
                     var sex = BlocProvider.of<GlobalBloc>(context).state.sex;
                     var mode = BlocProvider.of<GlobalBloc>(context)
                         .state

@@ -10,14 +10,10 @@ import 'package:flutter_geen/components/permanent/feedback_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/blocs/login/login_bloc.dart';
 import 'package:flutter_geen/blocs/login/login_event.dart';
-import 'package:flutter_geen/storage/dao/local_storage.dart';
-
 import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:umeng_analytics_push/umeng_analytics_push.dart';
-
 class LoginFrom extends StatefulWidget {
   @override
   _LoginFromState createState() => _LoginFromState();
