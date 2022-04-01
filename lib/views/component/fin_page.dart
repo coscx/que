@@ -167,10 +167,11 @@ class _FinPageState extends State<FinPage> {
                           setState(() {
                             show = !show;
                             if (show) {
-                              heights = 280.0;
+                              heights = 450.h;
                               cc = Colors.white;
                               opacity= 0.1;
                             } else {
+                              heights = 80.h;
                               cc = Colors.transparent;
                               opacity= 1.0;
                             }
@@ -205,10 +206,11 @@ class _FinPageState extends State<FinPage> {
                                       setState(() {
                                         show = !show;
                                         if (show) {
-                                          heights = 280.0;
+                                          heights = 450.h;
                                           cc = Colors.white;
                                           opacity= 0.1;
                                         } else {
+                                          heights = 80.h;
                                           cc = Colors.transparent;
                                           opacity= 1.0;
                                         }
@@ -255,10 +257,11 @@ class _FinPageState extends State<FinPage> {
                                       setState(() {
                                         show = !show;
                                         if (show) {
-                                          heights = 280.0;
+                                          heights = 450.h;
                                           cc = Colors.white;
                                           opacity= 0.1;
                                         } else {
+                                          heights = 80.h;
                                           cc = Colors.transparent;
                                           opacity= 1.0;
                                         }
@@ -485,32 +488,43 @@ class MyContent extends StatefulWidget {
 class _MyContentState extends State<MyContent> {
   @override
   Widget build(BuildContext context) {
-    return   Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 20.h, left: 30.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return   Container(
+      margin: EdgeInsets.only(top: 10.h, left: 40.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Column(
             children: [
               Container(
-                  margin: EdgeInsets.only(bottom: 10.h),
-                  child: Text("哈哈哈哈哈",
-                      style: TextStyle(
-                          color: Colors.black, fontSize: 30.sp))),
-              Container(
-                  child: Text("20",
-                      style: TextStyle(
-                          color: Colors.black, fontSize: 30.sp))),
+                  width: 110.w,
+                  height: 110.h,
+                  child: Image.asset("assets/images/default/select.png"))
             ],
           ),
-        ),
-        Column(
-          children: [
-            Container(),
-          ],
-        ),
-      ],
+          Container(
+            margin: EdgeInsets.only(top: 20.h, left: 30.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    margin: EdgeInsets.only(bottom: 10.h),
+                    child: Text("哈哈哈哈哈",
+                        style: TextStyle(
+                            color: Colors.black, fontSize: 30.sp))),
+                Container(
+                    child: Text("20",
+                        style: TextStyle(
+                            color: Colors.black, fontSize: 30.sp))),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              Container(),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
