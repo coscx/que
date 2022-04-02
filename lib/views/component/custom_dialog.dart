@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:ai_barcode/ai_barcode.dart';
 import 'package:flutter/material.dart';
@@ -7,20 +9,16 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_geen/views/items/share.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
-import 'dart:ui' as ui;
-import 'dart:async';
-
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
 class LoginDialog extends Dialog {
   LoginDialog({Key key}) : super(key: key);
   CreatorController _creatorController = CreatorController();
   GlobalKey repaintWidgetKey = GlobalKey(); // 绘图key值
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-        key: repaintWidgetKey,
-        child:Material(
+    return Material(
       type: MaterialType.transparency,
       child: Container(
         color: Colors.transparent,
@@ -60,21 +58,26 @@ class LoginDialog extends Dialog {
                             ),
                             alignment: Alignment.center,
                           ),
-                           Container(
-                             alignment: Alignment.center,
-                              //width: 400.w,
-                              //height: 400.h,
-                              //color: Colors.white,
-                              // child: PlatformAiBarcodeCreatorWidget(
-                              //   creatorController: _creatorController,
-                              //   initialValue: "http://baidu.com",
-                              // ),
-                             child: QrImage(
-                               data: "http://baidu.com/s",
-                               version: QrVersions.auto,
-                               size: 250,
-                             ),
-                            ),
+                          RepaintBoundary(
+                              key: repaintWidgetKey,
+                              child: Container(
+                                alignment: Alignment.center,
+                                //width: 400.w,
+                                //height: 400.h,
+                                color: Colors.white,
+                                // child: PlatformAiBarcodeCreatorWidget(
+                                //   creatorController: _creatorController,
+                                //   initialValue: "http://baidu.com",
+                                // ),
+                                child: Container(
+                                  padding: EdgeInsets.all(25.w),
+                                  child: QrImage(
+                                    data: "http://baidu.com/s",
+                                    version: QrVersions.auto,
+                                    size: 250,
+                                  ),
+                                ),
+                              )),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[buildSubmit(context)],
@@ -101,8 +104,9 @@ class LoginDialog extends Dialog {
           ],
         ),
       ),
-    ));
+    );
   }
+
   final List<ShareOpt> list = [
     ShareOpt(
         title: '微信',
@@ -110,6 +114,7 @@ class LoginDialog extends Dialog {
         shareType: ShareType.SESSION,
         doAction: (shareType, shareInfo) async {
           if (shareInfo == null) return;
+
           /// 分享到好友
           var model = fluwx.WeChatShareWebPageModel(
             shareInfo.url,
@@ -120,11 +125,11 @@ class LoginDialog extends Dialog {
           fluwx.shareToWeChat(model);
         })
   ];
+
   /// 把图片ByteData写入File，并触发微信分享
   Future<String> _shareUiImage() async {
-
     ByteData sourceByteData = await _capturePngToByteData();
-    if (sourceByteData ==null){
+    if (sourceByteData == null) {
       return "";
     }
     Uint8List sourceBytes = sourceByteData.buffer.asUint8List();
@@ -137,17 +142,19 @@ class LoginDialog extends Dialog {
       file.createSync();
     }
     file.writeAsBytesSync(sourceBytes);
-    ShareImage(title:"图片分享",file:  file.path);
+    //ShareImage(title: "图片分享", file: file.path);
     return file.path;
   }
+
   /// 截屏图片生成图片流ByteData
   Future<ByteData> _capturePngToByteData() async {
     try {
-      RenderRepaintBoundary boundary = repaintWidgetKey.currentContext
-          .findRenderObject();
+      RenderRepaintBoundary boundary =
+          repaintWidgetKey.currentContext.findRenderObject();
       double dpr = ui.window.devicePixelRatio; // 获取当前设备的像素比
       ui.Image image = await boundary.toImage(pixelRatio: dpr);
-      ByteData _byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData _byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
       return _byteData;
     } catch (e) {
       print(e);
@@ -155,19 +162,18 @@ class LoginDialog extends Dialog {
     return null;
   }
 
-
   /// 分享图片到微信，
   /// file=本地路径
   /// url=网络地址
   /// asset=内置在app的资源图片
   /// scene=分享场景，1好友会话，2朋友圈，3收藏
-   void ShareImage(
+  void ShareImage(
       {String title,
-        String decs,
-        String file,
-        String url,
-        String asset,
-        int scene = 1}) async {
+      String decs,
+      String file,
+      String url,
+      String asset,
+      int scene = 1}) async {
     fluwx.WeChatScene wxScene = fluwx.WeChatScene.SESSION;
     if (scene == 2) {
       wxScene = fluwx.WeChatScene.TIMELINE;
@@ -194,7 +200,7 @@ class LoginDialog extends Dialog {
   /// 分享文本
   /// content=分享内容
   /// scene=分享场景，1好友会话，2朋友圈，3收藏
-   void ShareText(String content, {String title, int scene = 1}) {
+  void ShareText(String content, {String title, int scene = 1}) {
     fluwx.WeChatScene wxScene = fluwx.WeChatScene.SESSION;
     if (scene == 2) {
       wxScene = fluwx.WeChatScene.TIMELINE;
@@ -202,7 +208,7 @@ class LoginDialog extends Dialog {
       wxScene = fluwx.WeChatScene.FAVORITE;
     }
     fluwx.WeChatShareTextModel model =
-    fluwx.WeChatShareTextModel(content, title: title, scene: wxScene);
+        fluwx.WeChatShareTextModel(content, title: title, scene: wxScene);
     fluwx.shareToWeChat(model);
   }
 
@@ -211,7 +217,7 @@ class LoginDialog extends Dialog {
   /// videoUrl=视频网上地址
   /// thumbFile=缩略图本地路径
   /// scene=分享场景，1好友会话，2朋友圈，3收藏
-   void ShareVideo(String videoUrl,
+  void ShareVideo(String videoUrl,
       {String thumbFile, String title, String desc, int scene = 1}) {
     fluwx.WeChatScene wxScene = fluwx.WeChatScene.SESSION;
     if (scene == 2) {
@@ -236,14 +242,14 @@ class LoginDialog extends Dialog {
   /// url=链接
   /// thumbFile=缩略图本地路径
   /// scene=分享场景，1好友会话，2朋友圈，3收藏
-   void ShareUrl(String url,
+  void ShareUrl(String url,
       {String thumbFile,
-        Uint8List thumbBytes,
-        String title,
-        String desc,
-        int scene = 1,
-        String networkThumb,
-        String assetThumb}) {
+      Uint8List thumbBytes,
+      String title,
+      String desc,
+      int scene = 1,
+      String networkThumb,
+      String assetThumb}) {
     desc = desc ?? "";
     title = title ?? "";
     if (desc.length > 54) {
@@ -277,6 +283,7 @@ class LoginDialog extends Dialog {
     );
     fluwx.shareToWeChat(model);
   }
+
   /// 字符串不为空
   bool strNoEmpty(String value) {
     if (value == null) return false;
@@ -299,7 +306,6 @@ class LoginDialog extends Dialog {
     return true;
   }
 
-
   Widget buildSubmit(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 20.h, bottom: 0.h, left: 30.h, right: 30.h),
@@ -313,15 +319,16 @@ class LoginDialog extends Dialog {
           color: Colors.lightBlue,
           onPressed: () async {
             var d = await _shareUiImage();
-            // showDialog(
-            //     context: context,
-            //     barrierDismissible: false,
-            //     builder: (BuildContext context) {
-            //       return Container(
-            //         child: Image.file(File(d)),
-            //       );
-            //     }
-            // );
+
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return Container(
+                    child: Image.file(File(d)),
+                  );
+                }
+            );
             // showModalBottomSheet(
             //     backgroundColor: Colors.transparent,
             //     context: context,
