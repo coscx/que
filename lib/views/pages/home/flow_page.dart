@@ -289,6 +289,7 @@ class _FlowPageState extends State<FlowPage>
 
     if (state is FlowWidgetsLoaded) {
       List<dynamic> photos = state.photos;
+      if (photos==null) return SliverToBoxAdapter(child: EmptyPage());
       if (photos.isEmpty) return SliverToBoxAdapter(child: EmptyPage());
       return photos.isNotEmpty
           ? SliverToBoxAdapter(

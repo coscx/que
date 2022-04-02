@@ -43,8 +43,7 @@ class IssuesApi {
       //var datas = json.decode(rep.data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -66,8 +65,7 @@ class IssuesApi {
           .get('/api/v1/customer/personal/connectApp', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -87,8 +85,7 @@ class IssuesApi {
           await dio.get('/api/v1/system/user/list', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -108,8 +105,7 @@ class IssuesApi {
           queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -261,8 +257,7 @@ class IssuesApi {
           await dioA.get(NewBaseUrl + url, queryParameters: searchParm);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -283,8 +278,7 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -304,8 +298,7 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -335,11 +328,28 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
+  static Map<String, dynamic> resSet(DioError e){
+    if( e.response ==null){
+      var  dds = Map<String, dynamic>();
+      dds['code'] =500;
+      dds['message'] ="server not reach";
+      dds['data'] ={};
+      return dds;
+    }
+    var dd = e.response.data;
 
+    if( dd is String){
+      var  dds = Map<String, dynamic>();
+      dds['code'] =400;
+      dds['message'] =dd;
+      dds['data'] ={};
+      return dds;
+    }
+    return Map<String, dynamic>();
+  }
   static Future<Map<String, dynamic>> addConnect(
       String uuid, Map<String, dynamic> data) async {
     var ss = await LocalStorage.get("token");
@@ -351,8 +361,7 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -367,8 +376,7 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -383,8 +391,7 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -399,8 +406,7 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -416,8 +422,7 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -433,8 +438,7 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -452,8 +456,7 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
     }
   }
 
@@ -471,8 +474,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -490,8 +493,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -527,8 +530,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -561,8 +564,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -595,8 +598,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -614,8 +617,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
   static Future<Map<String, dynamic>> addAppointBack(int id ,String msg) async {
@@ -632,15 +635,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      if( dd is String){
-        var  dds = Map<String, dynamic>();
-        dds['code'] =400;
-        dds['message'] =dd;
-        dds['data'] ={};
-        return dds;
-      }
-      return dd;
+      return resSet(e);
+
     }
   }
   static Future<Map<String, dynamic>> getDashBord() async {
@@ -657,8 +653,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
   static Future<Map<String, dynamic>> getUserStatus() async {
@@ -675,15 +671,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      if( dd is String){
-       var  dds = Map<String, dynamic>();
-       dds['code'] =400;
-       dds['message'] =dd;
-       dds['data'] ={};
-       return dds;
-      }
-      return dd;
+      return resSet(e);
+
     }
   }
   static Future<Map<String, dynamic>> getStoreVips() async {
@@ -700,8 +689,8 @@ class IssuesApi {
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -719,8 +708,8 @@ class IssuesApi {
           queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -735,8 +724,8 @@ class IssuesApi {
           await dio.get('/api/v1/store/select', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -752,8 +741,8 @@ class IssuesApi {
           await dioA.post(NewBaseUrl + '/api/GetErpUserByStoreId', data: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -771,8 +760,8 @@ class IssuesApi {
           queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -789,8 +778,8 @@ class IssuesApi {
           .get(NewBaseUrl + '/api/v1/customer/callLogs', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -808,8 +797,8 @@ class IssuesApi {
           queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -823,8 +812,8 @@ class IssuesApi {
           .get('http://mm.3dsqq.com:8000/addtoken', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -838,8 +827,8 @@ class IssuesApi {
           .get('/api/v1/auth/getCustomerMobile/' + uuid, queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -854,8 +843,8 @@ class IssuesApi {
           queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -878,8 +867,8 @@ class IssuesApi {
           .post('/api/v1/customer/system/distribute', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -957,8 +946,8 @@ class IssuesApi {
           queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -974,8 +963,8 @@ class IssuesApi {
           queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 
@@ -1046,8 +1035,8 @@ class IssuesApi {
       //var datas = json.decode(rep.data);
       return rep.data;
     } on DioError catch (e) {
-      var dd = e.response.data;
-      return dd;
+      return resSet(e);
+
     }
   }
 

@@ -192,7 +192,7 @@ class _FinPageState extends State<FinPage> {
                               cc = Colors.white;
                               opacity= 0.1;
                             } else {
-                              heights = 80.h;
+                              heights = 85.h;
                               cc = Colors.transparent;
                               opacity= 1.0;
                             }
@@ -231,7 +231,7 @@ class _FinPageState extends State<FinPage> {
                                           cc = Colors.white;
                                           opacity= 0.1;
                                         } else {
-                                          heights = 80.h;
+                                          heights = 85.h;
                                           cc = Colors.transparent;
                                           opacity= 1.0;
                                         }
@@ -282,7 +282,7 @@ class _FinPageState extends State<FinPage> {
                                           cc = Colors.white;
                                           opacity= 0.1;
                                         } else {
-                                          heights = 80.h;
+                                          heights = 85.h;
                                           cc = Colors.transparent;
                                           opacity= 1.0;
                                         }
@@ -330,7 +330,7 @@ Widget buildButton(BuildContext context) {
   return Container(
     padding: EdgeInsets.only(left: 0.w, right: 0.w),
     alignment: Alignment.centerLeft,
-    child: Wrap(runSpacing: 30.w, spacing: 20.w, children: [
+    child: Wrap(runSpacing: 30.w, spacing: 30.w, children: [
       MButton(),
       MButton(),
       MButton(),
@@ -356,7 +356,7 @@ class _MButtonState extends State<MButton> {
       side: BorderSide(
           width: 2.w, color: selected ? Colors.blue : Colors.transparent),
       padding:
-          EdgeInsets.only(left: 50.w, right: 50.w, top: 20.h, bottom: 20.h),
+          EdgeInsets.only(left: 40.w, right: 40.w, top: 15.h, bottom: 15.h),
       labelPadding: EdgeInsets.only(left: 0.w, right: 0.w),
       selectedShadowColor: Colors.transparent,
       shadowColor: Colors.transparent,

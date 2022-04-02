@@ -81,7 +81,7 @@ class _WidgetDetailPageState extends State<WidgetDetailPage> {
   void initState() {
     Future.delayed(Duration(seconds: 1)).then((e) async {
       Map<String, dynamic> photo = Map();
-      photo['uuid'] = userDetail['uuid'];
+      photo['uuid'] = userDetail==null?"":userDetail['uuid'];
       BlocProvider.of<DetailBloc>(context).add(FetchWidgetDetailNoFresh(photo));
     });
 

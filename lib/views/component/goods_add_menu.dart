@@ -6,10 +6,13 @@ import 'package:flutter_geen/blocs/detail/detail_bloc.dart';
 import 'package:flutter_geen/blocs/detail/detail_event.dart';
 import 'package:flutter_geen/views/dialogs/common_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class GoodsAddMenu extends StatefulWidget {
-  final Map<String,dynamic> args;
+  final Map<String, dynamic> args;
+
   const GoodsAddMenu({
-    Key key, this.args,
+    Key key,
+    this.args,
   }) : super(key: key);
 
   @override
@@ -48,8 +51,11 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         Padding(
-          padding:  EdgeInsets.only(right: 24.w),
-          child: Image.asset('assets/images/jt.png', width: 32.w, height: 16.h,
+          padding: EdgeInsets.only(right: 24.w),
+          child: Image.asset(
+            'assets/images/jt.png',
+            width: 32.w,
+            height: 16.h,
             color: Colors.white,
           ),
         ),
@@ -58,20 +64,23 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
           height: 70.h,
           child: TextButton.icon(
             onPressed: () async {
-                                var actionList =
-                                    await IssuesApi.claimCustomer(widget.args['uuid']);
-                                if (actionList['code'] == 200) {
-                                  showToast(context, '认领成功', true);
+              if (widget.args == null) {
+                Navigator.of(context).pop();
+                return;
+              }
+              var actionList =
+                  await IssuesApi.claimCustomer(widget.args['uuid']);
+              if (actionList['code'] == 200) {
+                showToast(context, '认领成功', true);
 
-                                  Map<String, dynamic> photo = Map();
-                                  photo['uuid'] = widget.args['uuid'];
-                                  BlocProvider.of<DetailBloc>(context)
-                                      .add(FetchWidgetDetailNoFresh(photo));
-                                } else {
-                                  showToastRed(
-                                      context, actionList['message'], true);
-                                }
-                                Navigator.of(context).pop();
+                Map<String, dynamic> photo = Map();
+                photo['uuid'] = widget.args['uuid'];
+                BlocProvider.of<DetailBloc>(context)
+                    .add(FetchWidgetDetailNoFresh(photo));
+              } else {
+                showToastRed(context, actionList['message'], true);
+              }
+              Navigator.of(context).pop();
             },
             icon: Icon(
               Icons.assignment_ind_outlined,
@@ -100,25 +109,27 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
           height: 70.h,
           child: TextButton.icon(
             onPressed: () {
-              if(widget.args['role_id'] ==null){
+              if (widget.args == null) {
+                Navigator.of(context).pop();
+                return;
+              }
+              if (widget.args['role_id'] == null) {
                 showToastRed(context, "暂无权限", true);
                 Navigator.of(context).pop();
                 return;
-
               }
-              if(widget.args['status'] < 0){
+              if (widget.args['status'] < 0) {
                 showToastRed(context, "当前用户状态需认领后再划分", true);
                 Navigator.of(context).pop();
                 return;
               }
-              if(widget.args['status'] ==5){
-                if (widget.args['role_id'] !=1){
+              if (widget.args['status'] == 5) {
+                if (widget.args['role_id'] != 1) {
                   showToastRed(context, "暂无划分权限", true);
                   Navigator.of(context).pop();
                   return;
                 }
               }
-
 
               if (widget.args['role_id'] > 3) {
                 showToastRed(context, "暂无权限", true);
@@ -126,7 +137,9 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
                 return;
               }
               Navigator.of(context).pop();
-              Navigator.pushNamed(context, UnitRouter.erp_user,arguments: widget.args['uuid']).then((value) {
+              Navigator.pushNamed(context, UnitRouter.erp_user,
+                      arguments: widget.args['uuid'])
+                  .then((value) {
                 print(value);
               });
             },
@@ -157,13 +170,20 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
           height: 70.h,
           child: TextButton.icon(
             onPressed: () {
-
-              Navigator.of(context).pop();
-              if(widget.args['status']!=0 && widget.args['status']!=1 && widget.args['status']!=30){
-                showToastRed(context, "当前用户状态不可购买会员套餐" , true);
+              if (widget.args == null) {
+                Navigator.of(context).pop();
                 return;
               }
-              Navigator.pushNamed(context, UnitRouter.buy_vip,arguments: widget.args).then((value) {
+              Navigator.of(context).pop();
+              if (widget.args['status'] != 0 &&
+                  widget.args['status'] != 1 &&
+                  widget.args['status'] != 30) {
+                showToastRed(context, "当前用户状态不可购买会员套餐", true);
+                return;
+              }
+              Navigator.pushNamed(context, UnitRouter.buy_vip,
+                      arguments: widget.args)
+                  .then((value) {
                 print(value);
               });
             },
@@ -188,8 +208,6 @@ class _GoodsAddMenuState extends State<GoodsAddMenu>
             ),
           ),
         ),
-
-
       ],
     );
 

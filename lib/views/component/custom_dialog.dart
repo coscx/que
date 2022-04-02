@@ -70,11 +70,12 @@ class LoginDialog extends Dialog {
                                 //   initialValue: "http://baidu.com",
                                 // ),
                                 child: Container(
-                                  padding: EdgeInsets.all(25.w),
+                                  padding: EdgeInsets.all(20.w),
                                   child: QrImage(
                                     data: "http://baidu.com/s",
                                     version: QrVersions.auto,
-                                    size: 250,
+                                    size: 460.w,
+
                                   ),
                                 ),
                               )),
@@ -142,7 +143,7 @@ class LoginDialog extends Dialog {
       file.createSync();
     }
     file.writeAsBytesSync(sourceBytes);
-    //ShareImage(title: "图片分享", file: file.path);
+    ShareImage(title: "图片分享", file: file.path);
     return file.path;
   }
 
@@ -308,7 +309,7 @@ class LoginDialog extends Dialog {
 
   Widget buildSubmit(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 20.h, bottom: 0.h, left: 30.h, right: 30.h),
+      padding: EdgeInsets.only(top: 10.h, bottom: 0.h, left: 30.h, right: 30.h),
       child: Container(
         width: ScreenUtil().screenWidth * 0.6,
         height: 70.h,
@@ -320,15 +321,15 @@ class LoginDialog extends Dialog {
           onPressed: () async {
             var d = await _shareUiImage();
 
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return Container(
-                    child: Image.file(File(d)),
-                  );
-                }
-            );
+            // showDialog(
+            //     context: context,
+            //     barrierDismissible: false,
+            //     builder: (BuildContext context) {
+            //       return Container(
+            //         child: Image.file(File(d)),
+            //       );
+            //     }
+            // );
             // showModalBottomSheet(
             //     backgroundColor: Colors.transparent,
             //     context: context,

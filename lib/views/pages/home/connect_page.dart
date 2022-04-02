@@ -247,6 +247,7 @@ class _ConnectPageState extends State<ConnectPage>
 
     if (state is ConnectWidgetsLoaded) {
       List<dynamic> photos = state.photos;
+      if (photos==null) return SliverToBoxAdapter(child: EmptyPage());
       if (photos.isEmpty) return SliverToBoxAdapter(child: EmptyPage());
       return photos.isNotEmpty
           ? SliverList(

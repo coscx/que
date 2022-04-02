@@ -243,14 +243,14 @@ class _HomePageState extends State<HomePage>
                           color: Theme.of(context).primaryColor,
                           fontSize: 48.sp,
                           fontWeight: FontWeight.bold)),
-                  totalCount == ""
+                  totalCount == null|| totalCount == ""
                       ? Container()
                       : Text('      共:',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 30.sp,
                               fontWeight: FontWeight.w200)),
-                  Text(totalCount,
+                  Text(totalCount==null ?"":totalCount,
                       style: TextStyle(
                           color: Colors.redAccent,
                           fontSize: 30.sp,
