@@ -293,6 +293,9 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     MyPicker.showPicker(
+                        squeeze: 1.45,
+                        magnification: 1.3,
+                        offAxisFraction: 0.2,
                         context: context,
                         current: startBirthDay,
                         mode: MyPickerMode.date,
@@ -353,6 +356,9 @@ class _GZXFilterGoodsPageState extends State<GZXFilterGoodsPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     MyPicker.showPicker(
+                        squeeze: 1.45,
+                        magnification: 1.3,
+                        offAxisFraction: 0.2,
                         context: context,
                         current: endBirthDay,
                         mode: MyPickerMode.date,

@@ -5,6 +5,8 @@ import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'custom_dialog.dart';
+
 class FinPage extends StatefulWidget {
   @override
   _FinPageState createState() => _FinPageState();
@@ -35,16 +37,35 @@ class _FinPageState extends State<FinPage> {
                 icon: Icon(Icons.arrow_back, color: Colors.black),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              title: Text("",
+                titleSpacing:170.w,
+              title: Text("我的客户",
                   style: TextStyle(
-                    fontFamily: "Quicksand",
-                    fontWeight: FontWeight.w900,
-                    fontStyle: FontStyle.italic,
                     fontSize: 38.sp,
                     decoration: TextDecoration.none,
                     color: Colors.black,
                   )),
-              actions: <Widget>[],
+              actions: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return LoginDialog();
+                        }
+                    );
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(right: 40.w),
+                    child: Image.asset(
+                      'assets/images/default/qrcode.png',
+                      color: Colors.blue,
+                      width: 40.w,
+                      height: 40.h,
+                    ),
+                  ),
+                ),
+              ],
             ),
             body: Container(
               height: ScreenUtil().screenHeight,
@@ -82,7 +103,7 @@ class _FinPageState extends State<FinPage> {
   }
 
   Future<bool> _whenPop(BuildContext context) async {
-    if (Scaffold.of(context).isEndDrawerOpen) return true;
+
     return true;
   }
 

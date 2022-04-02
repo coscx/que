@@ -2,6 +2,7 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/router.dart';
+import 'package:flutter_geen/views/component/custom_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_geen/views/dialogs/user_detail.dart';
@@ -343,12 +344,17 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin<
                     child:  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        TopCard(
-                          url: 'assets/images/default/lost.png',
-                          title: '昨日流失',
-                          content: lost,
-                          colorStart:  Color(0xff0CDAC5),
-                          colorEnd: Color(0xff3BBFF9),
+                        GestureDetector(
+                          onTap: (){
+
+                          },
+                          child: TopCard(
+                            url: 'assets/images/default/lost.png',
+                            title: '昨日流失',
+                            content: lost,
+                            colorStart:  Color(0xff0CDAC5),
+                            colorEnd: Color(0xff3BBFF9),
+                          ),
                         ),GestureDetector(
                           onTap: (){
                             Navigator.pushNamed(context, UnitRouter.fin);
