@@ -37,15 +37,16 @@ class _FinPageState extends State<FinPage> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   bool show = false;
-  double heights = 70;
+  double heights = 140.h;
   Color cc = Colors.transparent;
   double opacity = 1.0;
   int groupValue = -1;
   String title = "请选择当前状态";
   var dm = <MyItem>[];
   var dm1 = <MyItem>[];
-  String myName="";
-  bool myValue =false;
+  String myName = "";
+  bool myValue = false;
+
   @override
   void initState() {
     var de = MyItem(
@@ -506,17 +507,22 @@ class _FinPageState extends State<FinPage> {
       color: Color(0xffFF6666),
     );
     dm.add(de);
-    dm1=dm;
+    dm1 = dm;
     super.initState();
   }
-  List<MyContent> _buildMyItem(){
-    return dm.map((e) =>
 
-    MyContent(icon: e.icon,name: e.name,money: e.money,count: e.count,status: e.status,time: e.time,color: e.color,)
-
-    ).toList();
-
-
+  List<MyContent> _buildMyItem() {
+    return dm
+        .map((e) => MyContent(
+              icon: e.icon,
+              name: e.name,
+              money: e.money,
+              count: e.count,
+              status: e.status,
+              time: e.time,
+              color: e.color,
+            ))
+        .toList();
   }
 
   @override
@@ -579,39 +585,43 @@ class _FinPageState extends State<FinPage> {
                 begin: Alignment(2, 1),
                 end: Alignment(-2, -1),
               )),
-              child: Stack(
-                children: [
-                  _buildContent(context),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      MyCard(),
-                      MyCard1(),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                    ],
-                  ),
-                  _buildHeader(context, groupValue,
-                      (int index, bool value, String name) {
-                    print(index);
-                    print(value);
-                    print(name);
-                    setState(() {
+              child: Container(
+                margin: EdgeInsets.only(top: 30.h),
+                child: Stack(
+                  children: [
+                    _buildContent(context),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        MyCard(),
+                        MyCard1(),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                      ],
+                    ),
+                    _buildHeader(context, groupValue,
+                        (int index, bool value, String name) {
+                      print(index);
+                      print(value);
+                      print(name);
                       title = name;
-                       myName =   name;
-                      myValue =value;
-                      groupValue = index;
-                      if (!value) {
-                        title = "请选择当前状态";
-                        groupValue = -1;
-                      }
-                    });
-                  }, title),
-                ],
+                      setState(() {
+
+                        myName = name;
+                        myValue = value;
+                        groupValue = index;
+                        if (!value) {
+                          title = "请选择当前状态";
+                          groupValue = -1;
+                        }
+                      });
+                    }, title),
+                  ],
+                ),
               ),
             )));
   }
@@ -622,16 +632,13 @@ class _FinPageState extends State<FinPage> {
 
 // 下拉刷新
   void _onRefresh() async {
-    dm=dm1.reversed.toList();
+    dm = dm1.reversed.toList();
     _refreshController.refreshCompleted();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
 // 上拉加载
   void _onLoading() async {
-
     var result = await IssuesApi.getErpUser();
 
     var de = MyItem(
@@ -706,9 +713,7 @@ class _FinPageState extends State<FinPage> {
     );
 
     _refreshController.loadComplete();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   Widget _buildContent(BuildContext context) => WillPopScope(
@@ -723,7 +728,7 @@ class _FinPageState extends State<FinPage> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40.w),
                       topRight: Radius.circular(40.w))),
-              margin: EdgeInsets.only(top: 160.h),
+              margin: EdgeInsets.only(top: 200.h),
               child: Container(
                 margin: EdgeInsets.only(top: 60.h),
                 child: SmartRefresher(
@@ -739,9 +744,7 @@ class _FinPageState extends State<FinPage> {
                       child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            ..._buildMyItem()
-                          ],
+                          children: <Widget>[..._buildMyItem()],
                         ),
                       ),
                     )),
@@ -751,185 +754,220 @@ class _FinPageState extends State<FinPage> {
 
   Widget _buildHeader(BuildContext context, int groupValues,
           ChangeCallback callback, titles) =>
-      Container(
-        margin: EdgeInsets.only(top: 160.h),
-        child: Container(
-          height: heights,
-          decoration: BoxDecoration(
-              color: cc,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40.w),
-                  topRight: Radius.circular(40.w))),
-          child: Container(
-            padding: EdgeInsets.only(left: 40.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Row(
-                  children: [
+      Stack(
+        children: [
+          Container(
+            decoration: show?BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(218, 218, 218, 0.4),
+                //阴影默认颜色,不能与父容器同时设置color
+                offset: Offset(0, 470.h),
+                //延伸的阴影，向右下偏移的距离
+                blurRadius: 0.h, //延伸距离,会有模糊效果
+              )
+            ],
+            ):null,
+            margin: EdgeInsets.only(top: 200.h),
+            child: Container(
+              height: heights,
+              decoration: BoxDecoration(
+                  color: cc,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40.w),
+                      topRight: Radius.circular(40.w))),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
                     Container(
-                      child: Text(
-                        titles,
-                        style: TextStyle(fontSize: 30.sp, color: Colors.black),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(left: 40.h),
+                            child: Text(
+                              titles,
+                              style:
+                                  TextStyle(fontSize: 30.sp, color: Colors.black),
+                            ),
+                          ),
+                          Container(
+                            child: IconButton(
+                              icon: Icon(show
+                                  ? Icons.keyboard_arrow_up_outlined
+                                  : Icons.keyboard_arrow_down_outlined),
+                              onPressed: () {
+                                print(1);
+                                setState(() {
+                                  show = !show;
+                                  if (show) {
+                                    heights = 486.h;
+                                    cc = Colors.white;
+                                    opacity = 1;
+                                  } else {
+                                    heights = 140.h;
+                                    cc = Colors.transparent;
+                                    opacity = 1.0;
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(
-                      child: IconButton(
-                        icon: Icon(show
-                            ? Icons.keyboard_arrow_up_outlined
-                            : Icons.keyboard_arrow_down_outlined),
-                        onPressed: () {
-                          print(1);
-                          setState(() {
-                            show = !show;
-                            if (show) {
-                              heights = 450.h;
-                              cc = Colors.white;
-                              opacity = 0.1;
-                            } else {
-                              heights = 85.h;
-                              cc = Colors.transparent;
-                              opacity = 1.0;
-                            }
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Visibility(
-                  visible: show,
-                  child: Column(
-                    children: [
-                      buildButton(context, groupValues, callback),
-                      Container(
-                        padding: EdgeInsets.only(top: 60.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(
-                                  left: 0.w,
-                                  top: 6.h,
-                                  right: 25.w,
-                                  bottom: 16.h),
-                              height: 88.h,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        show = !show;
-                                        if (show) {
-                                          heights = 450.h;
-                                          cc = Colors.white;
-                                          opacity = 0.1;
-                                        } else {
-                                          heights = 85.h;
-                                          cc = Colors.transparent;
-                                          opacity = 1.0;
-                                        }
-                                        dm = dm1.reversed.toList();
-                                        groupValue =-1;
-                                        myValue =false;
-                                        myName ="";
-                                        title = "请选择当前状态";
-                                      });
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                          left: 100.w,
-                                          top: 6.h,
-                                          right: 100.w,
-                                          bottom: 6.h),
-                                      height: 68.h,
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          left: BorderSide(
-                                              color: Colors.grey, width: 2.w),
-                                          top: BorderSide(
-                                              color: Colors.grey, width: 2.w),
-                                          right: BorderSide(
-                                              color: Colors.grey, width: 2.w),
-                                          bottom: BorderSide(
-                                              color: Colors.grey, width: 2.w),
-                                        ),
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(34.w),
-                                          bottomLeft: Radius.circular(34.w),
-                                        ),
-                                      ),
-                                      child: Container(
-                                        child: Text(
-                                          '重置',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 30.sp),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      alignment: Alignment.centerLeft,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        show = !show;
-                                        if (show) {
-                                          heights = 450.h;
-                                          cc = Colors.white;
-                                          opacity = 0.1;
-                                        } else {
-                                          heights = 85.h;
-                                          cc = Colors.transparent;
-                                          opacity = 1.0;
-                                        }
-                                        var fg = dm1.reversed.toList();
-                                        fg.removeWhere((e) => e.status != myName);
-                                        dm= fg;
-                                         if (groupValue ==-1) {
-                                           dm = dm1.reversed.toList();
-                                         }
+                    Visibility(
+                      visible: show,
+                      child: Stack(
+                        children: [
 
-                                      });
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                          left: 98.w,
-                                          top: 6.h,
-                                          right: 100.w,
-                                          bottom: 6.h),
-                                      height: 68.h,
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius: BorderRadius.horizontal(
-                                            right: Radius.circular(34.w)),
-                                      ),
-                                      child: Container(
-                                        child: Text('确定',
-                                            style: TextStyle(
-                                                fontSize: 30.sp,
-                                                color: Colors.white)),
-                                      ),
-                                      alignment: Alignment.centerLeft,
+                          Container(
+                            child: Container(
+                              padding: EdgeInsets.only(left: 40.h,top: 20.h),
+                              child: Column(
+                                children: [
+                                  buildButton(context, groupValues, callback),
+                                  Container(
+                                    padding: EdgeInsets.only(top: 60.h),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              left: 0.w,
+                                              top: 6.h,
+                                              right: 25.w,
+                                              bottom: 16.h),
+                                          height: 88.h,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    show = !show;
+                                                    if (show) {
+                                                      heights = 450.h;
+                                                      cc = Colors.white;
+                                                      opacity = 0.1;
+                                                    } else {
+                                                      heights = 140.h;
+                                                      cc = Colors.transparent;
+                                                      opacity = 1.0;
+                                                    }
+                                                    dm = dm1.reversed.toList();
+                                                    groupValue = -1;
+                                                    myValue = false;
+                                                    myName = "";
+                                                    title = "请选择当前状态";
+                                                  });
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 130.w,
+                                                      top: 6.h,
+                                                      right: 130.w,
+                                                      bottom: 6.h),
+                                                  height: 80.h,
+                                                  decoration: BoxDecoration(
+                                                    border: Border(
+                                                      left: BorderSide(
+                                                          color: Colors.grey,
+                                                          width: 2.w),
+                                                      top: BorderSide(
+                                                          color: Colors.grey,
+                                                          width: 2.w),
+                                                      right: BorderSide(
+                                                          color: Colors.grey,
+                                                          width: 2.w),
+                                                      bottom: BorderSide(
+                                                          color: Colors.grey,
+                                                          width: 2.w),
+                                                    ),
+                                                    color: Colors.white,
+                                                    borderRadius: BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(34.w),
+                                                      bottomLeft:
+                                                          Radius.circular(34.w),
+                                                    ),
+                                                  ),
+                                                  child: Container(
+                                                    child: Text(
+                                                      '重置',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 30.sp),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  alignment: Alignment.centerLeft,
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    show = !show;
+                                                    if (show) {
+                                                      heights = 450.h;
+                                                      cc = Colors.white;
+                                                      opacity = 0.1;
+                                                    } else {
+                                                      heights = 140.h;
+                                                      cc = Colors.transparent;
+                                                      opacity = 1.0;
+                                                    }
+                                                    var fg = dm1.reversed.toList();
+                                                    fg.removeWhere(
+                                                        (e) => e.status != myName);
+                                                    dm = fg;
+                                                    if (groupValue == -1) {
+                                                      dm = dm1.reversed.toList();
+                                                    }
+                                                  });
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 130.w,
+                                                      top: 12.h,
+                                                      right: 130.w,
+                                                      bottom: 12.h),
+                                                  height: 80.h,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.blue,
+                                                    borderRadius:
+                                                        BorderRadius.horizontal(
+                                                            right: Radius.circular(
+                                                                34.w)),
+                                                  ),
+                                                  child: Container(
+                                                    child: Text('确定',
+                                                        style: TextStyle(
+                                                            fontSize: 30.sp,
+                                                            color: Colors.white)),
+                                                  ),
+                                                  alignment: Alignment.centerLeft,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-              ],
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       );
 }
 
