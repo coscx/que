@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/views/component/refresh.dart';
 import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
+import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -621,12 +623,93 @@ class _FinPageState extends State<FinPage> {
 
 // 下拉刷新
   void _onRefresh() async {
+    dm=dm1.reversed.toList();
     _refreshController.refreshCompleted();
+    setState(() {
+
+    });
   }
 
 // 上拉加载
   void _onLoading() async {
+
+    var result = await IssuesApi.getErpUser();
+
+    var de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+
+    de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+
     _refreshController.loadComplete();
+    setState(() {
+
+    });
   }
 
   Widget _buildContent(BuildContext context) => WillPopScope(
@@ -645,6 +728,7 @@ class _FinPageState extends State<FinPage> {
               child: Container(
                 margin: EdgeInsets.only(top: 60.h),
                 child: SmartRefresher(
+                    physics: MyScrollPhysics(),
                     enablePullDown: true,
                     enablePullUp: true,
                     header: DYrefreshHeader(),
