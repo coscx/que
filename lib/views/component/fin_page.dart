@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_geen/app/api/issues_api.dart';
 import 'package:flutter_geen/views/component/refresh.dart';
 import 'package:flutter_geen/views/pages/chat/utils/DyBehaviorNull.dart';
-import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
+import 'package:flutter_geen/views/component/MyScrollPhysics.dart';
 import 'custom_dialog.dart';
 
 class MyItem {

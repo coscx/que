@@ -25,7 +25,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'flow.dart';
-
+import 'package:flutter_geen/views/component/MyScrollPhysics.dart';
 class SortCondition {
   String name;
   bool isSelected;
