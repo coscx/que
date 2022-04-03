@@ -7,6 +7,26 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'custom_dialog.dart';
 
+class MyItem {
+  final String icon;
+  final String name;
+  final String money;
+  final String count;
+  final String status;
+  final String time;
+  final Color color;
+
+  const MyItem(
+      {Key key,
+      @required this.icon,
+      @required this.name,
+      @required this.money,
+      @required this.count,
+      @required this.status,
+      @required this.time,
+      @required this.color});
+}
+
 class FinPage extends StatefulWidget {
   @override
   _FinPageState createState() => _FinPageState();
@@ -18,7 +38,486 @@ class _FinPageState extends State<FinPage> {
   bool show = false;
   double heights = 70;
   Color cc = Colors.transparent;
-  double opacity =1.0;
+  double opacity = 1.0;
+  int groupValue = -1;
+  String title = "请选择当前状态";
+  var dm = <MyItem>[];
+  var dm1 = <MyItem>[];
+  String myName="";
+  bool myValue =false;
+  @override
+  void initState() {
+    var de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+
+    de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+
+    de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+
+    de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+
+    de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+
+    de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+
+    de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+
+    de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+
+    de = MyItem(
+      icon: 'assets/images/default/fine_success.png',
+      name: '张庭耀',
+      status: '已放款',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffD8AA0F),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_call.png',
+      name: '张庭耀',
+      status: '联系中',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4DA1EE),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_lost.png',
+      name: '张庭耀',
+      status: '客户放弃',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff6360CA),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_no.png',
+      name: '张庭耀',
+      status: '资质不符',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xff4CD070),
+    );
+    dm.add(de);
+    de = MyItem(
+      icon: 'assets/images/default/fine_fail.png',
+      name: '张庭耀',
+      status: '放款失败',
+      money: '100',
+      time: '2022-04-04 10:12:23',
+      count: '60',
+      color: Color(0xffFF6666),
+    );
+    dm.add(de);
+    dm1=dm;
+    super.initState();
+  }
+  List<MyContent> _buildMyItem(){
+    return dm.map((e) =>
+
+    MyContent(icon: e.icon,name: e.name,money: e.money,count: e.count,status: e.status,time: e.time,color: e.color,)
+
+    ).toList();
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -37,7 +536,7 @@ class _FinPageState extends State<FinPage> {
                 icon: Icon(Icons.arrow_back, color: Colors.black),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-                titleSpacing:170.w,
+              titleSpacing: 170.w,
               title: Text("我的客户",
                   style: TextStyle(
                     fontSize: 38.sp,
@@ -52,8 +551,7 @@ class _FinPageState extends State<FinPage> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return LoginDialog();
-                        }
-                    );
+                        });
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: 40.w),
@@ -96,14 +594,28 @@ class _FinPageState extends State<FinPage> {
                       ),
                     ],
                   ),
-                  _buildHeader(context),
+                  _buildHeader(context, groupValue,
+                      (int index, bool value, String name) {
+                    print(index);
+                    print(value);
+                    print(name);
+                    setState(() {
+                      title = name;
+                       myName =   name;
+                      myValue =value;
+                      groupValue = index;
+                      if (!value) {
+                        title = "请选择当前状态";
+                        groupValue = -1;
+                      }
+                    });
+                  }, title),
                 ],
               ),
             )));
   }
 
   Future<bool> _whenPop(BuildContext context) async {
-
     return true;
   }
 
@@ -134,7 +646,7 @@ class _FinPageState extends State<FinPage> {
                 margin: EdgeInsets.only(top: 60.h),
                 child: SmartRefresher(
                     enablePullDown: true,
-                    enablePullUp: false,
+                    enablePullUp: true,
                     header: DYrefreshHeader(),
                     footer: DYrefreshFooter(),
                     controller: _refreshController,
@@ -145,11 +657,7 @@ class _FinPageState extends State<FinPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            MyContent(),
-                            MyContent(),
-                            MyContent(),
-                            MyContent(),
-                            MyContent(),
+                            ..._buildMyItem()
                           ],
                         ),
                       ),
@@ -158,7 +666,9 @@ class _FinPageState extends State<FinPage> {
             ),
           )));
 
-  Widget _buildHeader(BuildContext context) => Container(
+  Widget _buildHeader(BuildContext context, int groupValues,
+          ChangeCallback callback, titles) =>
+      Container(
         margin: EdgeInsets.only(top: 160.h),
         child: Container(
           height: heights,
@@ -176,13 +686,15 @@ class _FinPageState extends State<FinPage> {
                   children: [
                     Container(
                       child: Text(
-                        "请选择当前状态",
+                        titles,
                         style: TextStyle(fontSize: 30.sp, color: Colors.black),
                       ),
                     ),
                     Container(
                       child: IconButton(
-                        icon: Icon(show?Icons.keyboard_arrow_up_outlined:Icons.keyboard_arrow_down_outlined),
+                        icon: Icon(show
+                            ? Icons.keyboard_arrow_up_outlined
+                            : Icons.keyboard_arrow_down_outlined),
                         onPressed: () {
                           print(1);
                           setState(() {
@@ -190,11 +702,11 @@ class _FinPageState extends State<FinPage> {
                             if (show) {
                               heights = 450.h;
                               cc = Colors.white;
-                              opacity= 0.1;
+                              opacity = 0.1;
                             } else {
                               heights = 85.h;
                               cc = Colors.transparent;
-                              opacity= 1.0;
+                              opacity = 1.0;
                             }
                           });
                         },
@@ -206,7 +718,7 @@ class _FinPageState extends State<FinPage> {
                   visible: show,
                   child: Column(
                     children: [
-                      buildButton(context),
+                      buildButton(context, groupValues, callback),
                       Container(
                         padding: EdgeInsets.only(top: 60.h),
                         child: Row(
@@ -220,7 +732,8 @@ class _FinPageState extends State<FinPage> {
                                   bottom: 16.h),
                               height: 88.h,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   GestureDetector(
                                     onTap: () {
@@ -229,12 +742,17 @@ class _FinPageState extends State<FinPage> {
                                         if (show) {
                                           heights = 450.h;
                                           cc = Colors.white;
-                                          opacity= 0.1;
+                                          opacity = 0.1;
                                         } else {
                                           heights = 85.h;
                                           cc = Colors.transparent;
-                                          opacity= 1.0;
+                                          opacity = 1.0;
                                         }
+                                        dm = dm1.reversed.toList();
+                                        groupValue =-1;
+                                        myValue =false;
+                                        myName ="";
+                                        title = "请选择当前状态";
                                       });
                                     },
                                     child: Container(
@@ -280,12 +798,19 @@ class _FinPageState extends State<FinPage> {
                                         if (show) {
                                           heights = 450.h;
                                           cc = Colors.white;
-                                          opacity= 0.1;
+                                          opacity = 0.1;
                                         } else {
                                           heights = 85.h;
                                           cc = Colors.transparent;
-                                          opacity= 1.0;
+                                          opacity = 1.0;
                                         }
+                                        var fg = dm1.reversed.toList();
+                                        fg.removeWhere((e) => e.status != myName);
+                                        dm= fg;
+                                         if (groupValue ==-1) {
+                                           dm = dm1.reversed.toList();
+                                         }
+
                                       });
                                     },
                                     child: Container(
@@ -325,34 +850,76 @@ class _FinPageState extends State<FinPage> {
       );
 }
 
-Widget buildButton(BuildContext context) {
+Widget buildButton(
+    BuildContext context, int groupValue, ChangeCallback callback) {
   bool v1 = false;
+
   return Container(
     padding: EdgeInsets.only(left: 0.w, right: 0.w),
     alignment: Alignment.centerLeft,
     child: Wrap(runSpacing: 30.w, spacing: 30.w, children: [
-      MButton(),
-      MButton(),
-      MButton(),
-      MButton(),
-      MButton(),
+      MButton(
+        name: "已放款",
+        index: 0,
+        groupValue: groupValue,
+        callback: callback,
+      ),
+      MButton(
+        name: "放款失败",
+        index: 1,
+        groupValue: groupValue,
+        callback: callback,
+      ),
+      MButton(
+        name: "客户放弃",
+        index: 2,
+        groupValue: groupValue,
+        callback: callback,
+      ),
+      MButton(
+        name: "资质不符",
+        index: 3,
+        groupValue: groupValue,
+        callback: callback,
+      ),
+      MButton(
+        name: "联系中",
+        index: 4,
+        groupValue: groupValue,
+        callback: callback,
+      ),
     ]),
   );
 }
 
+typedef ChangeCallback = void Function(int index, bool value, String name);
+
 class MButton extends StatefulWidget {
+  final String name;
+  final int index;
+
+  final int groupValue;
+  final ChangeCallback callback;
+
+  const MButton(
+      {Key key,
+      @required this.name,
+      @required this.index,
+      @required this.groupValue,
+      @required this.callback})
+      : super(key: key);
+
   @override
   _MButtonState createState() => _MButtonState();
 }
 
 class _MButtonState extends State<MButton> {
-  bool selected = false;
-
   @override
   Widget build(BuildContext context) {
+    bool selected = widget.groupValue == widget.index;
     return ChoiceChip(
-      backgroundColor: selected ? Colors.white : Colors.grey.withAlpha(33),
-      selectedColor: selected ? Colors.transparent : Colors.grey.withAlpha(33),
+      backgroundColor: selected ? Colors.white : Color(0xffF5F6F9),
+      selectedColor: selected ? Colors.transparent : Color(0xffF5F6F9),
       side: BorderSide(
           width: 2.w, color: selected ? Colors.blue : Colors.transparent),
       padding:
@@ -363,17 +930,17 @@ class _MButtonState extends State<MButton> {
       pressElevation: 0,
       elevation: 0,
       label: Text(
-        "中国话",
+        widget.name,
         style: TextStyle(
             color: selected ? Colors.blue : Colors.black,
-            fontSize: 35.sp,
+            fontSize: 30.sp,
             fontWeight: FontWeight.normal),
         overflow: TextOverflow.ellipsis,
       ),
       selected: selected,
       onSelected: (bool value) {
         setState(() {
-          selected = value;
+          widget.callback(widget.index, !selected, widget.name);
         });
       },
     );
@@ -411,11 +978,11 @@ class _MyCardState extends State<MyCard> {
                   children: [
                     Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: Text("哈哈哈哈哈",
+                        child: Text("共获取客户",
                             style: TextStyle(
                                 color: Colors.white, fontSize: 30.sp))),
                     Container(
-                        child: Text("20",
+                        child: Text("4人",
                             style: TextStyle(
                                 color: Colors.white, fontSize: 30.sp))),
                   ],
@@ -472,11 +1039,11 @@ class _MyCard1State extends State<MyCard1> {
                   children: [
                     Container(
                         margin: EdgeInsets.only(bottom: 10.h),
-                        child: Text("哈哈哈哈哈",
+                        child: Text("已放款",
                             style: TextStyle(
                                 color: Colors.white, fontSize: 30.sp))),
                     Container(
-                        child: Text("20",
+                        child: Text("8人",
                             style: TextStyle(
                                 color: Colors.white, fontSize: 30.sp))),
                   ],
@@ -501,7 +1068,27 @@ class _MyCard1State extends State<MyCard1> {
     );
   }
 }
+
 class MyContent extends StatefulWidget {
+  final String icon;
+  final String name;
+  final String money;
+  final String count;
+  final String status;
+  final String time;
+  final Color color;
+
+  const MyContent(
+      {Key key,
+      @required this.icon,
+      @required this.name,
+      @required this.money,
+      @required this.count,
+      @required this.status,
+      @required this.time,
+      @required this.color})
+      : super(key: key);
+
   @override
   _MyContentState createState() => _MyContentState();
 }
@@ -509,39 +1096,61 @@ class MyContent extends StatefulWidget {
 class _MyContentState extends State<MyContent> {
   @override
   Widget build(BuildContext context) {
-    return   Container(
-      margin: EdgeInsets.only(top: 10.h, left: 40.w),
+    return Container(
+      margin: EdgeInsets.only(top: 20.h, left: 40.w),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Container(
+                      width: 90.w,
+                      height: 90.h,
+                      child: Image.asset(widget.icon))
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 0.h, left: 30.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(bottom: 0.h),
+                        child: Text(widget.name,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 30.sp,
+                                fontWeight: FontWeight.w600))),
+                    Container(
+                        child: Text(
+                            "贷款金额:  " +
+                                widget.money +
+                                "万 期数:  " +
+                                widget.count +
+                                "期",
+                            style: TextStyle(
+                                color: Colors.black, fontSize: 30.sp))),
+                    Container(
+                        child: Text(widget.time,
+                            style: TextStyle(
+                                color: Colors.grey, fontSize: 25.sp))),
+                  ],
+                ),
+              ),
+            ],
+          ),
           Column(
             children: [
               Container(
-                  width: 110.w,
-                  height: 110.h,
-                  child: Image.asset("assets/images/default/select.png"))
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 20.h, left: 30.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                    margin: EdgeInsets.only(bottom: 10.h),
-                    child: Text("哈哈哈哈哈",
-                        style: TextStyle(
-                            color: Colors.black, fontSize: 30.sp))),
-                Container(
-                    child: Text("20",
-                        style: TextStyle(
-                            color: Colors.black, fontSize: 30.sp))),
-              ],
-            ),
-          ),
-          Column(
-            children: [
-              Container(),
+                  margin: EdgeInsets.only(
+                    right: 40.w,
+                  ),
+                  child: Text(widget.status,
+                      style: TextStyle(color: widget.color, fontSize: 26.sp))),
             ],
           ),
         ],

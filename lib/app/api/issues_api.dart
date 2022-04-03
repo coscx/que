@@ -348,7 +348,7 @@ class IssuesApi {
       dds['data'] ={};
       return dds;
     }
-    return Map<String, dynamic>();
+    return dd;
   }
   static Future<Map<String, dynamic>> addConnect(
       String uuid, Map<String, dynamic> data) async {
