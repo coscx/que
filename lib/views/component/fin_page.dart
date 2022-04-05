@@ -36,6 +36,7 @@ class FinPage extends StatefulWidget {
 class _FinPageState extends State<FinPage> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  ScrollController _scrollControl = ScrollController();
   bool show = false;
   double heights = 140.h;
   Color cc = Colors.transparent;
@@ -632,7 +633,9 @@ class _FinPageState extends State<FinPage> {
 
 // 下拉刷新
   void _onRefresh() async {
+    var result = await IssuesApi.getErpUser();
     dm = dm1.reversed.toList();
+
     _refreshController.refreshCompleted();
     setState(() {});
   }
@@ -742,6 +745,7 @@ class _FinPageState extends State<FinPage> {
                     onLoading: _onLoading,
                     child: Container(
                       child: SingleChildScrollView(
+                        controller: _scrollControl,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[..._buildMyItem()],
@@ -905,8 +909,9 @@ class _FinPageState extends State<FinPage> {
                                                 ),
                                               ),
                                               GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
+                                                onTap: () async {
+                                                  var result = await IssuesApi.getErpUser();
+                                                  setState(()  {
                                                     show = !show;
                                                     if (show) {
                                                       heights = 450.h;
@@ -924,7 +929,11 @@ class _FinPageState extends State<FinPage> {
                                                     if (groupValue == -1) {
                                                       dm = dm1.reversed.toList();
                                                     }
+
+
+
                                                   });
+                                                  _scrollControl.jumpTo(0);
                                                 },
                                                 child: Container(
                                                   padding: EdgeInsets.only(
