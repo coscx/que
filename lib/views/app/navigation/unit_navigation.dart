@@ -170,9 +170,9 @@ class _UnitNavigationState extends State<UnitNavigation>
             return Scaffold(
                 //drawer: HomeDrawer(),
                 //endDrawer: HomeRightDrawer(),
-                floatingActionButtonLocation:
-                    const _CenterDockedFloatingActionButtonLocation(offset),
-                floatingActionButton: _buildSearchButton(color),
+                // floatingActionButtonLocation:
+                //     const _CenterDockedFloatingActionButtonLocation(offset),
+                // floatingActionButton: _buildSearchButton(color),
                 body: wrapOverlayTool(
                   child: PageView(
                     physics: const NeverScrollableScrollPhysics(),

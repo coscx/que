@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
+
+import 'package:city_pickers/modal/result.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_geen/model/github/issue_comment.dart';
 import 'package:flutter_geen/model/github/issue.dart';
+import 'package:flutter_geen/model/github/issue_comment.dart';
 import 'package:flutter_geen/model/github/repository.dart';
 import 'package:flutter_geen/storage/dao/local_storage.dart';
+import 'package:flutter_geen/views/items/SearchParamModel.dart';
 import 'package:flutter_geen/views/pages/home/gzx_filter_goods_page.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:flutter_geen/views/items/SearchParamModel.dart';
-import 'package:city_pickers/modal/result.dart';
-
-import '../router.dart';
 
 const kBaseUrl = 'https://cores.queqiaochina.com';
 const NewBaseUrl = 'https://erp.queqiaochina.com';
@@ -23,6 +22,7 @@ class IssuesApi {
     'authorization': ""
   };
   static Dio dio = Dio(BaseOptions(baseUrl: kBaseUrl, headers: httpHeaders));
+  static Dio dioA = Dio(BaseOptions(baseUrl: NewBaseUrl, headers: httpHeaders));
 
   // static Dio dio=addInterceptors(dios);
   // static Dio addInterceptors(Dio dio) {
@@ -122,7 +122,7 @@ class IssuesApi {
       final List<SelectItem> selectItems) async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
-    Dio dioA = Dio();
+
     dioA.options.headers['authorization'] = "Bearer " + token;
     Map<String, dynamic> searchParm = {};
     var channel = <String>[];
@@ -214,7 +214,7 @@ class IssuesApi {
     if (userId != "") {
       searchParm['user_id'] = userId;
     }
-    String is_passive = "all";
+    String isPassive = "all";
     if (_showAge) {
       searchParm['startAge'] = _showAgeMin;
       searchParm['endAge'] = _showAgeMax;
@@ -228,7 +228,7 @@ class IssuesApi {
       'keywords': keyWord,
       'currentPage': page,
       'status': "all",
-      'is_passive': is_passive,
+      'is_passive': isPassive,
       "store_id": 1,
       "pageSize": 20,
       'gender': sex
@@ -253,8 +253,7 @@ class IssuesApi {
     }
 
     try {
-      Response<dynamic> rep =
-          await dioA.get(NewBaseUrl + url, queryParameters: searchParm);
+      Response<dynamic> rep = await dioA.get(url, queryParameters: searchParm);
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
@@ -331,25 +330,27 @@ class IssuesApi {
       return resSet(e);
     }
   }
-  static Map<String, dynamic> resSet(DioError e){
-    if( e.response ==null){
-      var  dds = Map<String, dynamic>();
-      dds['code'] =500;
-      dds['message'] ="server not reach";
-      dds['data'] ={};
+
+  static Map<String, dynamic> resSet(DioError e) {
+    if (e.response == null) {
+      var dds = Map<String, dynamic>();
+      dds['code'] = 500;
+      dds['message'] = "server not reach";
+      dds['data'] = {};
       return dds;
     }
     var dd = e.response.data;
 
-    if( dd is String){
-      var  dds = Map<String, dynamic>();
-      dds['code'] =400;
-      dds['message'] =dd;
-      dds['data'] ={};
+    if (dd is String) {
+      var dds = Map<String, dynamic>();
+      dds['code'] = 400;
+      dds['message'] = dd;
+      dds['data'] = {};
       return dds;
     }
     return dd;
   }
+
   static Future<Map<String, dynamic>> addConnect(
       String uuid, Map<String, dynamic> data) async {
     var ss = await LocalStorage.get("token");
@@ -475,7 +476,6 @@ class IssuesApi {
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -494,7 +494,6 @@ class IssuesApi {
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -522,16 +521,14 @@ class IssuesApi {
       }
     }).toList();
 
-    Dio dioA = Dio();
     dioA.options.headers['authorization'] = "Bearer " + token;
     try {
-      Response<dynamic> rep = await dioA
-          .post(NewBaseUrl + '/api/IPadCommonArticle', data: searchParm);
+      Response<dynamic> rep =
+          await dioA.post('/api/IPadCommonArticle', data: searchParm);
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -565,7 +562,6 @@ class IssuesApi {
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -599,7 +595,6 @@ class IssuesApi {
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -609,88 +604,83 @@ class IssuesApi {
     Map<String, dynamic> searchParm = {};
     searchParm['pageSize'] = 1000;
 
-    Dio dioA = Dio();
     dioA.options.headers['authorization'] = "Bearer " + token;
     try {
       Response<dynamic> rep =
-          await dioA.post(NewBaseUrl + '/api/UserList', data: searchParm);
+          await dioA.post('/api/UserList', data: searchParm);
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
-  static Future<Map<String, dynamic>> addAppointBack(int id ,String msg) async {
+
+  static Future<Map<String, dynamic>> addAppointBack(int id, String msg) async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
     Map<String, dynamic> searchParm = {};
     searchParm['id'] = id;
     searchParm['msg'] = msg;
-    Dio dioA = Dio();
+
     dioA.options.headers['authorization'] = "Bearer " + token;
     try {
       Response<dynamic> rep =
-      await dioA.post(NewBaseUrl + '/api/AddAppointBack', data: searchParm);
+          await dioA.post('/api/AddAppointBack', data: searchParm);
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
+
   static Future<Map<String, dynamic>> getDashBord() async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
     Map<String, dynamic> searchParm = {};
     searchParm['pageSize'] = 1000;
 
-    Dio dioA = Dio();
     dioA.options.headers['authorization'] = "Bearer " + token;
     try {
       Response<dynamic> rep =
-          await dioA.post(NewBaseUrl + '/api/DashBord', data: searchParm);
+          await dioA.post('/api/DashBord', data: searchParm);
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
+
   static Future<Map<String, dynamic>> getUserStatus() async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
     Map<String, dynamic> searchParm = {};
     searchParm['pageSize'] = 50;
 
-    Dio dioA = Dio();
     dioA.options.headers['authorization'] = "Bearer " + token;
     try {
       Response<dynamic> rep =
-      await dioA.post(NewBaseUrl + '/api/GetUserStatus', data: searchParm);
+          await dioA.post('/api/GetUserStatus', data: searchParm);
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
+
   static Future<Map<String, dynamic>> getStoreVips() async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
     Map<String, dynamic> searchParm = {};
     searchParm['pageSize'] = 50;
 
-    Dio dioA = Dio();
     dioA.options.headers['authorization'] = "Bearer " + token;
     try {
       Response<dynamic> rep =
-          await dioA.post(NewBaseUrl + '/api/GetStoreVips', data: searchParm);
+          await dioA.post('/api/GetStoreVips', data: searchParm);
       var dd = rep.data;
       return dd;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -698,18 +688,16 @@ class IssuesApi {
       String uuid, String page) async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
-    Dio dioA = Dio();
+
     dioA.options.headers['authorization'] = "Bearer " + token;
     var data = {'customer_uuid': uuid, 'currentPage': page, "pageSize": 20};
 
     try {
-      Response<dynamic> rep = await dioA.get(
-          NewBaseUrl + '/api/v1/customer/connectList',
-          queryParameters: data);
+      Response<dynamic> rep =
+          await dioA.get('/api/v1/customer/connectList', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -725,24 +713,22 @@ class IssuesApi {
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
   static Future<Map<String, dynamic>> getErpUsers(String storeId) async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
-    Dio dioA = Dio();
+
     dioA.options.headers['authorization'] = "Bearer " + token;
     var data = {'store_id': storeId};
 
     try {
       Response<dynamic> rep =
-          await dioA.post(NewBaseUrl + '/api/GetErpUserByStoreId', data: data);
+          await dioA.post('/api/GetErpUserByStoreId', data: data);
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -750,18 +736,16 @@ class IssuesApi {
       String uuid, String page) async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
-    Dio dioA = Dio();
+
     dioA.options.headers['authorization'] = "Bearer " + token;
     var data = {'customer_uuid': uuid, 'currentPage': page, "pageSize": 20};
 
     try {
-      Response<dynamic> rep = await dioA.get(
-          NewBaseUrl + '/api/v1/customer/actionList',
-          queryParameters: data);
+      Response<dynamic> rep =
+          await dioA.get('/api/v1/customer/actionList', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -769,17 +753,16 @@ class IssuesApi {
       String uuid, String page) async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
-    Dio dioA = Dio();
+
     dioA.options.headers['authorization'] = "Bearer " + token;
     var data = {'customer_uuid': uuid, 'currentPage': page, "pageSize": 20};
 
     try {
-      Response<dynamic> rep = await dioA
-          .get(NewBaseUrl + '/api/v1/customer/callLogs', queryParameters: data);
+      Response<dynamic> rep =
+          await dioA.get('/api/v1/customer/callLogs', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -787,18 +770,16 @@ class IssuesApi {
       String uuid, String page) async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
-    Dio dioA = Dio();
+
     dioA.options.headers['authorization'] = "Bearer " + token;
     var data = {'customer_uuid': uuid, 'currentPage': page, "pageSize": 20};
 
     try {
-      Response<dynamic> rep = await dioA.get(
-          NewBaseUrl + '/api/v1/customer/appointmentList',
+      Response<dynamic> rep = await dioA.get('/api/v1/customer/appointmentList',
           queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -806,14 +787,13 @@ class IssuesApi {
     var ss = await LocalStorage.get("memberId");
     var memberId = ss.toString();
     var data = {'memberId': memberId, 'token': token, "pageSize": 20};
-    Dio dioA = Dio();
+
     try {
       Response<dynamic> rep = await dioA
           .get('http://mm.3dsqq.com:8000/addtoken', queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -828,7 +808,6 @@ class IssuesApi {
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -844,7 +823,6 @@ class IssuesApi {
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -868,7 +846,6 @@ class IssuesApi {
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -931,7 +908,7 @@ class IssuesApi {
   ) async {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
-    Dio dioA = Dio();
+
     dioA.options.headers['authorization'] = "Bearer " + token;
     var data = {
       'app': keyWord,
@@ -941,13 +918,11 @@ class IssuesApi {
       "pageSize": 20
     };
     try {
-      Response<dynamic> rep = await dioA.get(
-          NewBaseUrl + '/api/v1/customer/system/index',
+      Response<dynamic> rep = await dioA.get('/api/v1/customer/system/index',
           queryParameters: data);
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -964,7 +939,6 @@ class IssuesApi {
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 
@@ -972,7 +946,7 @@ class IssuesApi {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
     var data = {'token': token};
-    Dio dioA = Dio();
+
     Response<dynamic> rep = await dioA.post(
         'http://bigd.gugu2019.com/admin/data/infoflu.html',
         queryParameters: data);
@@ -984,7 +958,7 @@ class IssuesApi {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
     var data = {'token': token};
-    Dio dioA = Dio();
+
     Response<dynamic> rep = await dioA.post(
         'http://bigd.gugu2019.com/admin/data/datamenuflu.html',
         queryParameters: data);
@@ -1026,17 +1000,15 @@ class IssuesApi {
     var ss = await LocalStorage.get("token");
     var token = ss.toString();
 
-    Dio dioA = Dio();
     dioA.options.headers['authorization'] = "Bearer " + token;
     var data = {};
     try {
       Response<dynamic> rep =
-          await dioA.post(NewBaseUrl + '/api/v1/customer/detail/' + memberId);
+          await dioA.post('/api/v1/customer/detail/' + memberId);
       //var datas = json.decode(rep.data);
       return rep.data;
     } on DioError catch (e) {
       return resSet(e);
-
     }
   }
 

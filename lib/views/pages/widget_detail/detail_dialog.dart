@@ -1,4 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_geen/app/router.dart';
 import 'package:flutter_geen/blocs/detail/detail_bloc.dart';
@@ -7,8 +9,6 @@ import 'package:flutter_geen/views/dialogs/common_dialog.dart';
 import 'package:flutter_geen/views/pages/utils/common.dart';
 import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:menu_button/menu_button.dart';
 
 import 'detail_common.dart';
@@ -572,13 +572,10 @@ Future<bool> commentDialog(BuildContext context, int connectStatus,
                                             color: Colors.black)),
                                     Radio(
                                       activeColor: Colors.deepOrangeAccent,
-
                                       ///此单选框绑定的值 必选参数
                                       value: 1,
-
                                       ///当前组中这选定的值  必选参数
                                       groupValue: connect_type,
-
                                       ///点击状态改变时的回调 必选参数
                                       onChanged: (v) {
                                         state(() {
@@ -592,13 +589,10 @@ Future<bool> commentDialog(BuildContext context, int connectStatus,
                                             color: Colors.black)),
                                     Radio(
                                       activeColor: Colors.deepOrangeAccent,
-
                                       ///此单选框绑定的值 必选参数
                                       value: 2,
-
                                       ///当前组中这选定的值  必选参数
                                       groupValue: connect_type,
-
                                       ///点击状态改变时的回调 必选参数
                                       onChanged: (v) {
                                         state(() {
@@ -627,46 +621,11 @@ Future<bool> commentDialog(BuildContext context, int connectStatus,
                                           child: Container(
                                               width: ScreenUtil().screenWidth *
                                                   0.6,
-                                              child:
-                                                  // child: DropdownButton<String>(
-                                                  //   value: goalValue,
-                                                  //   icon: Icon(Icons
-                                                  //       .keyboard_arrow_down_outlined),
-                                                  //   iconSize: 30.sp,
-                                                  //   elevation: 4,
-                                                  //   underline: Container(
-                                                  //     height: 3.h,
-                                                  //     color: Colors.redAccent,
-                                                  //   ),
-                                                  //   onChanged: (String newValue) {
-                                                  //     state(() {
-                                                  //       goalValue = newValue;
-                                                  //       connectStatus =
-                                                  //           getIndexOfList(
-                                                  //               goals, newValue);
-                                                  //        if (roleId==7 || roleId==9){
-                                                  //          connectStatus =connectStatus + 20;
-                                                  //        }
-                                                  //     });
-                                                  //   },
-                                                  //   items: goals.map<
-                                                  //           DropdownMenuItem<String>>(
-                                                  //       (String value) {
-                                                  //     return DropdownMenuItem<String>(
-                                                  //       value: value,
-                                                  //       child: Text(value,
-                                                  //           maxLines: 1,
-                                                  //           overflow:
-                                                  //               TextOverflow.ellipsis,
-                                                  //           style: TextStyle(
-                                                  //               fontSize: 32.sp,
-                                                  //               color: Colors.black)),
-                                                  //     );
-                                                  //   }).toList(),
-                                                  // ),
-
-                                                  MenuButton<String>(
-                                                    popupHeight: ScreenUtil().screenHeight/2-50.h,
+                                              child: MenuButton<String>(
+                                                popupHeight:
+                                                    ScreenUtil().screenHeight /
+                                                            2 -
+                                                        50.h,
                                                 scrollPhysics:
                                                     AlwaysScrollableScrollPhysics(),
                                                 child: normalChildButton(

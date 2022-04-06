@@ -81,7 +81,7 @@ class AboutMePage extends StatelessWidget {
           Spacer(),
           FeedbackWidget(
             onPressed: () =>
-                _launchURL("https://github.com/coscx/gold"),
+                _launchURL("https://github.com"),
             child: Icon(
               TolyIcon.icon_email,
               size: 20,
@@ -157,7 +157,7 @@ class AboutMePage extends StatelessWidget {
 
         FeedbackWidget(
             onPressed: () =>
-                _launchURL("https://github.com/coscx/gold"),
+                _launchURL("https://github.com"),
             child: Wrap(
               direction: Axis.vertical,
               crossAxisAlignment: WrapCrossAlignment.center,

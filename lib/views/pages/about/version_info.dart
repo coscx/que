@@ -32,11 +32,11 @@ class VersionInfo extends StatelessWidget {
               ),
 
               _buildCenter(context),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom:8.0),
-                child: buildBottom(),
-              )
+              Spacer(), // Padding(
+              //   padding: const EdgeInsets.only(bottom:8.0),
+              //   child: buildBottom(),
+              // )
+
 
             ],
           ),
@@ -68,12 +68,12 @@ class VersionInfo extends StatelessWidget {
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            Divider(height: 1,),
-            ListTile(
-              title: Text('应用详情',style: labelStyle,),
-              trailing: _nextIcon(context),
-              onTap: () => Navigator.of(context).pushNamed(UnitRouter.about_app),
-            ),
+            // Divider(height: 1,),
+            // ListTile(
+            //   title: Text('应用详情',style: labelStyle,),
+            //   trailing: _nextIcon(context),
+            //   onTap: () => Navigator.of(context).pushNamed(UnitRouter.about_app),
+            // ),
             Divider(height: 1,indent: 10),
             ListTile(
               title: Text('检查新版本',style: labelStyle),
@@ -108,11 +108,11 @@ class VersionInfo extends StatelessWidget {
       children: <Widget>[
         FeedbackWidget(
             onPressed: (){
-              _launchURL("https://github.com/coscx/gold");
+              _launchURL("https://github.com");
             },
             child: Text('《查看本项目Github仓库》',style: TextStyle(fontSize: 12,color: Color(0xff616C84),),)),
         Text('Power By QueQiao Team',style: TextStyle(fontSize: 12,color: Colors.grey),),
-        Text('Copyright © 2008-2020 ',style: TextStyle(fontSize: 12,color: Colors.grey),),
+        Text('Copyright © 2018-2022 ',style: TextStyle(fontSize: 12,color: Colors.grey),),
       ],
     );
   }

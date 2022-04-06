@@ -75,7 +75,6 @@ class LoginDialog extends Dialog {
                                     data: "http://baidu.com/s",
                                     version: QrVersions.auto,
                                     size: 460.w,
-
                                   ),
                                 ),
                               )),
@@ -143,7 +142,7 @@ class LoginDialog extends Dialog {
       file.createSync();
     }
     file.writeAsBytesSync(sourceBytes);
-    ShareImage(title: "图片分享", file: file.path);
+    shareImage(title: "图片分享", file: file.path);
     return file.path;
   }
 
@@ -168,7 +167,7 @@ class LoginDialog extends Dialog {
   /// url=网络地址
   /// asset=内置在app的资源图片
   /// scene=分享场景，1好友会话，2朋友圈，3收藏
-  void ShareImage(
+  void shareImage(
       {String title,
       String decs,
       String file,
@@ -201,7 +200,7 @@ class LoginDialog extends Dialog {
   /// 分享文本
   /// content=分享内容
   /// scene=分享场景，1好友会话，2朋友圈，3收藏
-  void ShareText(String content, {String title, int scene = 1}) {
+  void shareText(String content, {String title, int scene = 1}) {
     fluwx.WeChatScene wxScene = fluwx.WeChatScene.SESSION;
     if (scene == 2) {
       wxScene = fluwx.WeChatScene.TIMELINE;
@@ -218,7 +217,7 @@ class LoginDialog extends Dialog {
   /// videoUrl=视频网上地址
   /// thumbFile=缩略图本地路径
   /// scene=分享场景，1好友会话，2朋友圈，3收藏
-  void ShareVideo(String videoUrl,
+  void shareVideo(String videoUrl,
       {String thumbFile, String title, String desc, int scene = 1}) {
     fluwx.WeChatScene wxScene = fluwx.WeChatScene.SESSION;
     if (scene == 2) {
@@ -243,7 +242,7 @@ class LoginDialog extends Dialog {
   /// url=链接
   /// thumbFile=缩略图本地路径
   /// scene=分享场景，1好友会话，2朋友圈，3收藏
-  void ShareUrl(String url,
+  void shareUrl(String url,
       {String thumbFile,
       Uint8List thumbBytes,
       String title,
@@ -288,7 +287,6 @@ class LoginDialog extends Dialog {
   /// 字符串不为空
   bool strNoEmpty(String value) {
     if (value == null) return false;
-
     return value.trim().isNotEmpty;
   }
 

@@ -1,48 +1,49 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
-import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
-import 'package:flutter_geen/views/pages/chat/utils/common_util.dart';
-import 'package:flutter_geen/views/pages/chat/utils/event_bus.dart';
-import 'package:flutter_geen/views/pages/chat/utils/time_util.dart';
-import 'package:flutter_geen/views/pages/chat/utils/dialog_util.dart';
-import 'package:flutter_geen/views/pages/chat/utils/file_util.dart';
-import 'package:flutter_geen/views/pages/chat/utils/functions.dart';
-import 'package:flutter_geen/views/pages/chat/utils/image_util.dart';
-import 'package:flutter_geen/views/pages/chat/utils/object_util.dart';
-import 'package:flutter_geen/views/pages/chat/view/util/bottom_dialog.dart';
-import 'package:flutter_geen/views/pages/chat/view/emoji/emoji_picker.dart';
-import 'package:flutter_geen/views/pages/chat/view/voice/peer_chat_item.dart';
-import 'package:flutter_geen/views/pages/chat/widget/Swipers.dart';
-import 'package:flutter_geen/views/pages/chat/widget/more_widgets.dart';
-import 'package:flutter_geen/views/pages/chat/widget/popupwindow_widget.dart';
-import 'package:flutter_geen/views/pages/resource/colors.dart';
-import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
-import 'package:flutter_geen/blocs/peer/peer_bloc.dart';
-import 'package:flutter_geen/blocs/peer/peer_event.dart';
-import 'package:flutter_geen/blocs/peer/peer_state.dart';
+import 'dart:io';
+
 import 'package:flt_im_plugin/conversion.dart';
 import 'package:flt_im_plugin/flt_im_plugin.dart';
 import 'package:flt_im_plugin/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_geen/blocs/peer/peer_bloc.dart';
+import 'package:flutter_geen/blocs/peer/peer_event.dart';
+import 'package:flutter_geen/blocs/peer/peer_state.dart';
+import 'package:flutter_geen/views/dialogs/delete_category_dialog.dart';
+import 'package:flutter_geen/views/pages/chat/utils/common_util.dart';
+import 'package:flutter_geen/views/pages/chat/utils/dialog_util.dart';
+import 'package:flutter_geen/views/pages/chat/utils/event_bus.dart';
+import 'package:flutter_geen/views/pages/chat/utils/file_util.dart';
+import 'package:flutter_geen/views/pages/chat/utils/functions.dart';
+import 'package:flutter_geen/views/pages/chat/utils/image_util.dart';
+import 'package:flutter_geen/views/pages/chat/utils/object_util.dart';
+import 'package:flutter_geen/views/pages/chat/utils/time_util.dart';
+import 'package:flutter_geen/views/pages/chat/view/emoji/emoji_picker.dart';
+import 'package:flutter_geen/views/pages/chat/view/util/bottom_dialog.dart';
+import 'package:flutter_geen/views/pages/chat/view/voice/peer_chat_item.dart';
+import 'package:flutter_geen/views/pages/chat/widget/Swipers.dart';
+import 'package:flutter_geen/views/pages/chat/widget/more_widgets.dart';
+import 'package:flutter_geen/views/pages/chat/widget/popupwindow_widget.dart';
+import 'package:flutter_geen/views/pages/resource/colors.dart';
+import 'package:flutter_geen/views/pages/utils/DyBehaviorNull.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:frefresh/frefresh.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vibration/vibration.dart';
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:w_popup_menu/w_popup_menu.dart';
+
 /*
 *  发送聊天信息
 */
 class ChatsPage extends StatefulWidget {
-
   final Conversion model;
-  final String memId ;
-  ChatsPage({this.model,this.memId});
+  final String memId;
+
+  ChatsPage({this.model, this.memId});
 
   @override
   State<StatefulWidget> createState() {
@@ -69,7 +70,8 @@ class ChatsState extends State<ChatsPage> {
   bool _alive = false;
   String _audioIconPath = '';
   String _voiceFilePath = '';
-  String tfSender="0" ;
+  String tfSender = "0";
+
   FltImPlugin im = FltImPlugin();
   FRefreshController controller3;
   bool _isLoading = false;
@@ -78,6 +80,7 @@ class ChatsState extends State<ChatsPage> {
   int voiceCount = 0;
   StreamSubscription _recorderSubscription;
   StreamSubscription _playerSubscription;
+
   // StreamSubscription _dbPeakSubscription;
   FlutterSoundRecorder flutterSound;
   TextEditingController _controller = new TextEditingController();
@@ -86,7 +89,7 @@ class ChatsState extends State<ChatsPage> {
   FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
   FlutterSoundPlayer playerModule = FlutterSoundPlayer();
   double progress = 0;
-  Map<String ,GlobalKey<PeerChatItemWidgetState>> globalKeyMap = Map();
+  Map<String, GlobalKey<PeerChatItemWidgetState>> globalKeyMap = Map();
   StreamSubscription<PeerRecAckEvent> _peerAckSubscription;
 
   @override
@@ -94,7 +97,7 @@ class ChatsState extends State<ChatsPage> {
     // TODO: implement initState
     super.initState();
     _alive = true;
-    tfSender =widget.model.memId;
+    tfSender = widget.model.memId;
     controller3 = FRefreshController();
     _textFieldNode.addListener(_focusNodeListener); // 初始化一个listener
     _getLocalMessage();
@@ -105,8 +108,8 @@ class ChatsState extends State<ChatsPage> {
       if (!mounted) {
         return;
       }
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent+100.h) {
-
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent + 100.h) {
         if (_isLoading) {
           return;
         }
@@ -116,8 +119,6 @@ class ChatsState extends State<ChatsPage> {
             _isLoading = true;
           });
         }
-
-
 
         BlocProvider.of<PeerBloc>(context).add(EventLoadMoreMessage());
         Future.delayed(Duration(milliseconds: 150), () {
@@ -131,25 +132,20 @@ class ChatsState extends State<ChatsPage> {
       }
     });
     init();
-    _peerAckSubscription=EventBusUtil.listen((event) {
-      if (event is PeerRecAckEvent){
+    _peerAckSubscription = EventBusUtil.listen((event) {
+      if (event is PeerRecAckEvent) {
         print(event.uuid);
-        Map<String , dynamic> uuid =json.decode(event.uuid);
+        Map<String, dynamic> uuid = json.decode(event.uuid);
         globalKeyMap.forEach((key, value) {
-          if(uuid['uuid'] == key){
+          if (uuid['uuid'] == key) {
             value.currentState.freshChatAck(status: 1);
           }
-
         });
-
       }
-
     });
-
-
   }
-  Future<void> _initializeExample(bool withUI) async {
 
+  Future<void> _initializeExample(bool withUI) async {
     await playerModule.closeAudioSession();
 
     await playerModule.openAudioSession(
@@ -186,6 +182,7 @@ class ChatsState extends State<ChatsPage> {
     _releaseFlauto();
     _peerAckSubscription.cancel();
   }
+
   /// 取消录音监听
   /// 结束录音
   _stopRecorder() async {
@@ -196,7 +193,6 @@ class ChatsState extends State<ChatsPage> {
     } catch (err) {
       print('stopRecorder error: $err');
     }
-
   }
 
   /// 取消录音监听
@@ -226,7 +222,6 @@ class ChatsState extends State<ChatsPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -238,20 +233,18 @@ class ChatsState extends State<ChatsPage> {
         ),
         home: Scaffold(
           appBar: _appBar(),
-          body: BlocListener<PeerBloc, PeerState>(
-              listener: (ctx, state) {
-                if (state is PeerMessageSuccess) {
-                  //_scrollToBottom();
-                  if(mounted)
-                    _scrollController.position.jumpTo(0);
-                }
-              },
-              child:BlocBuilder<PeerBloc, PeerState>(builder: (ctx, state) {
-                return _body(ctx, state);
-              })),
+          body: BlocListener<PeerBloc, PeerState>(listener: (ctx, state) {
+            if (state is PeerMessageSuccess) {
+              //_scrollToBottom();
+              if (mounted) _scrollController.position.jumpTo(0);
+            }
+          }, child: BlocBuilder<PeerBloc, PeerState>(builder: (ctx, state) {
+            return _body(ctx, state);
+          })),
         ));
     return widgets;
   }
+
   Future<Null> _focusNodeListener() async {
     if (_textFieldNode.hasFocus) {
       Future.delayed(Duration(milliseconds: 5), () {
@@ -260,16 +253,17 @@ class ChatsState extends State<ChatsPage> {
           _isShowFace = false;
           _isShowVoice = false;
           try {
-            if(mounted)
-              _scrollController.position.jumpTo(0);
+            if (mounted) _scrollController.position.jumpTo(0);
           } catch (e) {}
         });
       });
     }
   }
+
   _getPermission() {
     requestPermiss(_permission);
   }
+
   void requestPermiss(Permission permission) async {
     //多个权限申请
     Map<Permission, PermissionStatus> statuses = await [
@@ -277,13 +271,11 @@ class ChatsState extends State<ChatsPage> {
       Permission.storage,
       Permission.location,
       Permission.speech,
-
     ].request();
     print(statuses);
   }
-  _getLocalMessage() async {
 
-  }
+  _getLocalMessage() async {}
 
   _initData() {
     _popString.add('清空记录');
@@ -309,9 +301,7 @@ class ChatsState extends State<ChatsPage> {
     // });
   }
 
-  _checkBlackList() {
-
-  }
+  _checkBlackList() {}
 
   _initFaceList() {
     if (_guideFaceList.length > 0) {
@@ -323,7 +313,7 @@ class ChatsState extends State<ChatsPage> {
     //添加表情图
     List<String> _faceList = new List();
     String faceDeletePath =
-    FileUtil.getImagePath('face_delete', dir: 'face', format: 'png');
+        FileUtil.getImagePath('face_delete', dir: 'face', format: 'png');
     String facePath;
     for (int i = 0; i < 100; i++) {
       if (i < 90) {
@@ -345,11 +335,11 @@ class ChatsState extends State<ChatsPage> {
     for (int i = 0; i < 96; i++) {
       if (i == 70 || i == 74) {
         String facePath =
-        FileUtil.getImagePath(i.toString(), dir: 'figure', format: 'png');
+            FileUtil.getImagePath(i.toString(), dir: 'figure', format: 'png');
         _figureList.add(facePath);
       } else {
         String facePath =
-        FileUtil.getImagePath(i.toString(), dir: 'figure', format: 'gif');
+            FileUtil.getImagePath(i.toString(), dir: 'figure', format: 'gif');
         _figureList.add(facePath);
       }
       if (i == 9 ||
@@ -370,7 +360,8 @@ class ChatsState extends State<ChatsPage> {
 
   _appBar() {
     return MoreWidgets.buildAppBar(
-      context, widget.model.name,
+      context,
+      widget.model.name,
       centerTitle: true,
       elevation: 0.0,
       leading: IconButton(
@@ -393,142 +384,130 @@ class ChatsState extends State<ChatsPage> {
             onTap: () {
               MoreWidgets.buildDefaultMessagePop(context, _popString,
                   onItemClick: (res) {
-                    switch (res) {
-                      case 'one':
-                        DialogUtil.showBaseDialog(context, '即将删除该对话的全部聊天记录',
-                            right: '删除', left: '再想想', rightClick: (res) {
-                              _deleteAll();
-                            });
-                        break;
-                      case 'two':
-                        DialogUtil.showBaseDialog(context, '确定删除好友吗？',
-                            right: '删除', left: '再想想', rightClick: (res) {
-
-                            });
-                        break;
-                      case 'three':
-                        if (_isBlackName) {
-                          DialogUtil.showBaseDialog(context, '确定把好友移出黑名单吗？',
-                              right: '移出', left: '再想想', rightClick: (res) {
-
-                              });
-                        } else {
-                          DialogUtil.showBaseDialog(context, '确定把好友加入黑名单吗？',
-                              right: '赶紧', left: '再想想', rightClick: (res) {
-                                DialogUtil.showBaseDialog(
-                                    context, '即将将好友加入黑名单，是否需要支持发消息给TA？',
-                                    right: '需要',
-                                    left: '不需要',
-                                    title: '', rightClick: (res) {
-
-                                }, leftClick: (res) {
-
-                                });
-                              });
-                        }
-                        break;
+                switch (res) {
+                  case 'one':
+                    DialogUtil.showBaseDialog(context, '即将删除该对话的全部聊天记录',
+                        right: '删除', left: '再想想', rightClick: (res) {
+                      _deleteAll();
+                    });
+                    break;
+                  case 'two':
+                    DialogUtil.showBaseDialog(context, '确定删除好友吗？',
+                        right: '删除', left: '再想想', rightClick: (res) {});
+                    break;
+                  case 'three':
+                    if (_isBlackName) {
+                      DialogUtil.showBaseDialog(context, '确定把好友移出黑名单吗？',
+                          right: '移出', left: '再想想', rightClick: (res) {});
+                    } else {
+                      DialogUtil.showBaseDialog(context, '确定把好友加入黑名单吗？',
+                          right: '赶紧', left: '再想想', rightClick: (res) {
+                        DialogUtil.showBaseDialog(
+                            context, '即将将好友加入黑名单，是否需要支持发消息给TA？',
+                            right: '需要',
+                            left: '不需要',
+                            title: '',
+                            rightClick: (res) {},
+                            leftClick: (res) {});
+                      });
                     }
-                  });
+                    break;
+                }
+              });
             })
       ],
     );
   }
 
-  Future _deleteAll() async {
-
-
-  }
+  Future _deleteAll() async {}
 
   _body(BuildContext context, PeerState groupState) {
-    return Column(
-        children: <Widget>[
-          Flexible(
-              child: InkWell(
-                child: _messageListView(context, groupState),
-                onTap: () {
-                  _hideKeyBoard();
-                  if(_isShowVoice == true ||_isShowFace == true||_isShowTools == true){
+    return Column(children: <Widget>[
+      Flexible(
+          child: InkWell(
+        child: _messageListView(context, groupState),
+        onTap: () {
+          _hideKeyBoard();
+          if (_isShowVoice == true ||
+              _isShowFace == true ||
+              _isShowTools == true) {
+            setState(() {
+              _isShowVoice = false;
+              _isShowFace = false;
+              _isShowTools = false;
+            });
+          }
+        },
+      )),
+      Divider(height: 1.h),
+      Container(
+        decoration: new BoxDecoration(
+          color: Theme.of(context).cardColor,
+        ),
+        child: Container(
+          height: 88.h,
+          child: Row(
+            children: <Widget>[
+              IconButton(
+                  icon: _isShowVoice
+                      ? Icon(Icons.keyboard)
+                      : Icon(Icons.play_circle_outline),
+                  iconSize: 55.sp,
+                  onPressed: () {
                     setState(() {
-                      _isShowVoice = false;
-                      _isShowFace = false;
-                      _isShowTools = false;
-                    });
-                  }
-
-                },
-              )),
-          Divider(height: 1.h),
-          Container(
-            decoration: new BoxDecoration(
-              color: Theme.of(context).cardColor,
-            ),
-            child: Container(
-              height: 88.h,
-              child: Row(
-                children: <Widget>[
-                  IconButton(
-                      icon: _isShowVoice
-                          ? Icon(Icons.keyboard)
-                          : Icon(Icons.play_circle_outline),
-                      iconSize: 55.sp,
-                      onPressed: () {
-                        setState(() {
-                          _hideKeyBoard();
-                          if (_isShowVoice) {
-                            _isShowVoice = false;
-                          } else {
-                            _isShowVoice = true;
-                            _isShowFace = false;
-                            _isShowTools = false;
-                          }
-                        });
-                      }),
-                  new Flexible(
-
-                      child: _enterWidget()
-                  ),
-                  IconButton(
-                      icon: _isShowFace
-                          ? Icon(Icons.keyboard)
-                          : Icon(Icons.sentiment_very_satisfied),
-                      iconSize: 55.sp,
-                      onPressed: () {
-                        _hideKeyBoard();
-                        setState(() {
-                          if (_isShowFace) {
-                            _isShowFace = false;
-                          } else {
-                            _isShowFace = true;
-                            _isShowVoice = false;
-                            _isShowTools = false;
-                          }
-                        });
-                      }),
-                  _isShowSend
-                      ? InkWell(
-                    onTap: () {
-                      if (_controller.text.isEmpty) {
-                        return;
+                      _hideKeyBoard();
+                      if (_isShowVoice) {
+                        _isShowVoice = false;
+                      } else {
+                        _isShowVoice = true;
+                        _isShowFace = false;
+                        _isShowTools = false;
                       }
-                      _buildTextMessage(_controller.text);
-                    },
-                    child: new Container(
-                      alignment: Alignment.center,
-                      width: 90.w,
-                      height: 32.h,
-                      margin: EdgeInsets.only(right: 8.w),
-                      child: new Text(
-                        '发送',
-                        style: new TextStyle(
-                            fontSize: 28.sp, color: Colors.red),
+                    });
+                  }),
+              new Flexible(child: _enterWidget()),
+              IconButton(
+                  icon: _isShowFace
+                      ? Icon(Icons.keyboard)
+                      : Icon(Icons.sentiment_very_satisfied),
+                  iconSize: 55.sp,
+                  onPressed: () {
+                    _hideKeyBoard();
+                    setState(() {
+                      if (_isShowFace) {
+                        _isShowFace = false;
+                      } else {
+                        _isShowFace = true;
+                        _isShowVoice = false;
+                        _isShowTools = false;
+                      }
+                    });
+                  }),
+              _isShowSend
+                  ? InkWell(
+                      onTap: () {
+                        if (_controller.text.isEmpty) {
+                          return;
+                        }
+                        _buildTextMessage(_controller.text);
+                      },
+                      child: new Container(
+                        alignment: Alignment.center,
+                        width: 90.w,
+                        height: 32.h,
+                        margin: EdgeInsets.only(right: 8.w),
+                        child: new Text(
+                          '发送',
+                          style:
+                              new TextStyle(fontSize: 28.sp, color: Colors.red),
+                        ),
+                        decoration: new BoxDecoration(
+                          color: ObjectUtil.getThemeSwatchColor(),
+                          borderRadius: BorderRadius.all(Radius.circular(8.w)),
+                        ),
                       ),
-                      decoration: new BoxDecoration(
-                        color: ObjectUtil.getThemeSwatchColor(),
-                        borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                      ),
-                    ),
-                  )
-                      : IconButton(
+                    )
+                  : IconButton(
                       icon: Icon(Icons.add_circle_outline),
                       iconSize: 55.sp,
                       onPressed: () {
@@ -543,19 +522,19 @@ class ChatsState extends State<ChatsPage> {
                           }
                         });
                       }),
-                ],
-              ),
-            ),
+            ],
           ),
-          (_isShowTools || _isShowFace || _isShowVoice)
-              ? Container(
-            height: 418.h,
-            child: _bottomWidget(),
-          )
-              : SizedBox(
-            height: 0,
-          )
-        ]);
+        ),
+      ),
+      (_isShowTools || _isShowFace || _isShowVoice)
+          ? Container(
+              height: 418.h,
+              child: _bottomWidget(),
+            )
+          : SizedBox(
+              height: 0,
+            )
+    ]);
   }
 
   _hideKeyBoard() {
@@ -597,46 +576,43 @@ class ChatsState extends State<ChatsPage> {
                         padding: EdgeInsets.only(top: 10.h),
                         child: _audioIconPath == ''
                             ? SizedBox(
-                          width: 60.w,
-                          height: 60.h,
-                        )
+                                width: 60.w,
+                                height: 60.h,
+                              )
                             : Image.asset(
-                          FileUtil.getImagePath(_audioIconPath,
-                              dir: 'icon', format: 'png'),
-                          width: 60.w,
-                          height: 60.h,
-                          color: ObjectUtil.getThemeSwatchColor(),
-                        )),
-
-                    Text(voiceCount.toString() +"S")
+                                FileUtil.getImagePath(_audioIconPath,
+                                    dir: 'icon', format: 'png'),
+                                width: 60.w,
+                                height: 60.h,
+                                color: ObjectUtil.getThemeSwatchColor(),
+                              )),
+                    Text(voiceCount.toString() + "S")
                   ],
                 ),
                 Container(
                     padding: EdgeInsets.all(10.w),
                     child: GestureDetector(
                       onScaleStart: (res) async {
-                        if(_timer != null){
+                        if (_timer != null) {
                           _timer.cancel();
-                          _timer =Timer.periodic(
-                              Duration(milliseconds: 1000), (t){
+                          _timer =
+                              Timer.periodic(Duration(milliseconds: 1000), (t) {
                             //print(voiceCount);
                             setState(() {
-                              voiceCount= voiceCount+1;
+                              voiceCount = voiceCount + 1;
                             });
-                          }
-                          );
-                        }else{
-                          _timer =Timer.periodic(
-                              Duration(milliseconds: 1000), (t){
+                          });
+                        } else {
+                          _timer =
+                              Timer.periodic(Duration(milliseconds: 1000), (t) {
                             //print(voiceCount);
                             setState(() {
-                              voiceCount= voiceCount+1;
+                              voiceCount = voiceCount + 1;
                             });
-                          }
-                          );
+                          });
                         }
 
-                        if(recorderModule.isRecording ){
+                        if (recorderModule.isRecording) {
                           await _stopRecorder();
                         }
                         _startRecord();
@@ -657,22 +633,21 @@ class ChatsState extends State<ChatsPage> {
                         } else {
                           if (recorderModule.isRecording) {
                             _stopRecorder();
-                            var  length = await CommonUtil.getDuration(_voiceFilePath);
+                            var length =
+                                await CommonUtil.getDuration(_voiceFilePath);
                             File file = File(_voiceFilePath);
-                            if (length*1000 < 1000) {
+                            if (length * 1000 < 1000) {
                               //小于1s不发送
                               file.delete();
                               DialogUtil.buildToast('你说话时间太短啦~');
                             } else {
-                              Future.delayed(const Duration(milliseconds: 500), () {
-
+                              Future.delayed(const Duration(milliseconds: 500),
+                                  () {
                                 //发送语音
                                 _buildVoiceMessage(file, length.floor());
-
                               });
-
                             }
-                            voiceCount= 0;
+                            voiceCount = 0;
                             _timer.cancel();
                           }
                         }
@@ -740,20 +715,18 @@ class ChatsState extends State<ChatsPage> {
   }
 
   _startRecord() async {
-
     Vibration.vibrate(duration: 50);
     setState(() {
       voiceText = '松开 结束';
       voiceBackground = ColorT.divider;
       _stopRecorder();
     });
-    try{
+    try {
       requestPermiss(_permission);
       print('===>  获取了权限');
       Directory tempDir = await getTemporaryDirectory();
       var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      _voiceFilePath =
-      '${tempDir.path}/s-$time${ext[Codec.aacADTS.index]}';
+      _voiceFilePath = '${tempDir.path}/s-$time${ext[Codec.aacADTS.index]}';
       print('===>  准备开始录音');
       await recorderModule.startRecorder(
         toFile: _voiceFilePath,
@@ -765,7 +738,7 @@ class ChatsState extends State<ChatsPage> {
       /// 监听录音
       _recorderSubscription = recorderModule.onProgress.listen((e) {
         if (e != null && e.duration != null) {
-          var volume=e.decibels;
+          var volume = e.decibels;
           setState(() {
             if (volume <= 0) {
               _audioIconPath = '';
@@ -779,7 +752,6 @@ class ChatsState extends State<ChatsPage> {
           });
         }
       });
-
     } catch (err) {
       setState(() {
         _stopRecorder();
@@ -787,11 +759,12 @@ class ChatsState extends State<ChatsPage> {
       });
     }
   }
+
   /// 开始播放
-  Future<void> _startPlayer(String _path ) async {
+  Future<void> _startPlayer(String _path) async {
     try {
-      var p=await _fileExists(_path);
-      if (p !="") {
+      var p = await _fileExists(_path);
+      if (p != "") {
         await playerModule.startPlayer(
             fromURI: p,
             codec: Codec.aacADTS,
@@ -819,9 +792,7 @@ class ChatsState extends State<ChatsPage> {
     } catch (err) {
       print('==> 错误: $err');
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   /// 结束播放
@@ -833,7 +804,6 @@ class ChatsState extends State<ChatsPage> {
     } catch (err) {
       print('==> 错误: $err');
     }
-
   }
 
   /// 暂停/继续播放
@@ -852,13 +822,10 @@ class ChatsState extends State<ChatsPage> {
 
   /// 判断文件是否存在
   Future<String> _fileExists(String paths) async {
-
     if (paths.startsWith("http://localhost")) {
-
       //File f =   await _getLocalFile(path.basename(paths));
       return _voiceFilePath;
-
-    } else if(paths.startsWith("http")){
+    } else if (paths.startsWith("http")) {
       return paths;
     }
 
@@ -871,49 +838,45 @@ class ChatsState extends State<ChatsPage> {
       children: <Widget>[
         Flexible(
             child: Stack(
-              children: <Widget>[
-                Offstage(
-                  offstage: _isFaceFirstList,
-                  child: Swiper(
-                      autoStart: false,
-                      circular: false,
-                      indicator: CircleSwiperIndicator(
-                          radius: 3.0,
-                          padding: EdgeInsets.only(top: 10.w),
-                          itemColor: ColorT.gray_99,
-                          itemActiveColor: ObjectUtil.getThemeSwatchColor()),
-                      children: _guideFigureList),
-                ),
-                Offstage(
-                  offstage: !_isFaceFirstList,
-                  child: EmojiPicker(
-                    rows: 3,
-                    columns: 7,
-                    //recommendKeywords: ["racing", "horse"],
-                    numRecommended: 10,
-                    onEmojiSelected: (emoji, category) {
-                      _controller.text = _controller.text + emoji.emoji;
-                      _controller.selection =
-                          TextSelection.fromPosition(
-                              TextPosition(offset: _controller.text.length));
+          children: <Widget>[
+            Offstage(
+              offstage: _isFaceFirstList,
+              child: Swiper(
+                  autoStart: false,
+                  circular: false,
+                  indicator: CircleSwiperIndicator(
+                      radius: 3.0,
+                      padding: EdgeInsets.only(top: 10.w),
+                      itemColor: ColorT.gray_99,
+                      itemActiveColor: ObjectUtil.getThemeSwatchColor()),
+                  children: _guideFigureList),
+            ),
+            Offstage(
+              offstage: !_isFaceFirstList,
+              child: EmojiPicker(
+                rows: 3,
+                columns: 7,
+                //recommendKeywords: ["racing", "horse"],
+                numRecommended: 10,
+                onEmojiSelected: (emoji, category) {
+                  _controller.text = _controller.text + emoji.emoji;
+                  _controller.selection = TextSelection.fromPosition(
+                      TextPosition(offset: _controller.text.length));
 
-                      if (_isShowSend == false){
-
-                        setState(() {
-                          if (_controller.text.isNotEmpty) {
-                            _isShowSend = true;
-                          } else {
-                            _isShowSend = false;
-                          }
-                        });
-
+                  if (_isShowSend == false) {
+                    setState(() {
+                      if (_controller.text.isNotEmpty) {
+                        _isShowSend = true;
+                      } else {
+                        _isShowSend = false;
                       }
-                    },
-                  ),
-                )
-
-              ],
-            )),
+                    });
+                  }
+                },
+              ),
+            )
+          ],
+        )),
         SizedBox(
           height: 4.h,
         ),
@@ -987,42 +950,39 @@ class ChatsState extends State<ChatsPage> {
         }
       });
     }));
-    _widgets.add(MoreWidgets.buildIcon(Icons.videocam, '在线通话', o: (res) {
-      showDialog(
-          barrierDismissible: true,//是否点击空白区域关闭对话框,默认为true，可以关闭
-          context: context,
-          builder: (BuildContext context) {
-            var list = List();
-            list.add('语音聊天');
-            list.add('视频聊天');
-            return BottomSheetWidget(
-              list: list,
-              onItemClickListener: (index) async {
-                if(index == 0){
-                  im.voiceCall(widget.model.cid);
-                  Navigator.pop(context);
-                }
-                if(index == 1){
-                  FltImPlugin im = FltImPlugin();
-                  im.videoCall(widget.model.cid);
-                  Navigator.pop(context);
-                }
-
-              },
-            );
-          });
-
-    }));
-    _widgets.add(MoreWidgets.buildIcon(Icons.location_on, '位置'));
-    _widgets.add(MoreWidgets.buildIcon(Icons.view_agenda, '红包'));
-    _widgets.add(MoreWidgets.buildIcon(Icons.swap_horiz, '转账'));
-    _widgets.add(MoreWidgets.buildIcon(Icons.mic, '语音输入'));
-    _widgets.add(MoreWidgets.buildIcon(Icons.favorite, '我的收藏'));
+    _widgets.add(MoreWidgets.buildIcon(Icons.videocam, '在线通话',
+        o: (res) => showDialog(
+            barrierDismissible: true, //是否点击空白区域关闭对话框,默认为true，可以关闭
+            context: context,
+            builder: (BuildContext context) {
+              var list = [];
+              list.add('语音聊天');
+              list.add('视频聊天');
+              return BottomSheetWidget(
+                list: list,
+                onItemClickListener: (index) async {
+                  if (index == 0) {
+                    im.voiceCall(widget.model.cid);
+                    Navigator.pop(context);
+                  }
+                  if (index == 1) {
+                    FltImPlugin im = FltImPlugin();
+                    im.videoCall(widget.model.cid);
+                    Navigator.pop(context);
+                  }
+                },
+              );
+            })));
+    // _widgets.add(MoreWidgets.buildIcon(Icons.location_on, '位置'));
+    // _widgets.add(MoreWidgets.buildIcon(Icons.view_agenda, '红包'));
+    // _widgets.add(MoreWidgets.buildIcon(Icons.swap_horiz, '转账'));
+    // _widgets.add(MoreWidgets.buildIcon(Icons.mic, '语音输入'));
+    // _widgets.add(MoreWidgets.buildIcon(Icons.favorite, '我的收藏'));
     _guideToolsList.add(GridView.count(
         crossAxisCount: 4, padding: EdgeInsets.all(5.0), children: _widgets));
     List<Widget> _widgets1 = new List();
-    _widgets1.add(MoreWidgets.buildIcon(Icons.person, '名片'));
-    _widgets1.add(MoreWidgets.buildIcon(Icons.folder, '文件'));
+    // _widgets1.add(MoreWidgets.buildIcon(Icons.person, '名片'));
+    // _widgets1.add(MoreWidgets.buildIcon(Icons.folder, '文件'));
     _guideToolsList.add(GridView.count(
         crossAxisCount: 4, padding: EdgeInsets.all(0.0), children: _widgets1));
     return Swiper(
@@ -1064,9 +1024,10 @@ class ChatsState extends State<ChatsPage> {
       color: ColorT.gray_f0,
       elevation: 0,
       child: Container(
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6.w)),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(6.w)),
           constraints: BoxConstraints(minHeight: 60.h, maxHeight: 250.h),
-          child:new TextField(
+          child: new TextField(
               maxLines: null,
               keyboardType: TextInputType.multiline,
               focusNode: _textFieldNode,
@@ -1074,7 +1035,8 @@ class ChatsState extends State<ChatsPage> {
               controller: _controller,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(150), //长度限制11
-              ], //只能输入整数
+              ],
+              //只能输入整数
               style: TextStyle(color: Colors.black, fontSize: 32.sp),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(10.w),
@@ -1096,15 +1058,12 @@ class ChatsState extends State<ChatsPage> {
                   return;
                 }
                 _buildTextMessage(_controller.text);
-              }
-          )
-      ),
+              })),
     );
   }
 
   _messageListView(BuildContext context, PeerState groupState) {
     if (groupState is PeerMessageSuccess) {
-
       return Container(
           color: ColorT.gray_f0,
           child: Column(
@@ -1114,10 +1073,11 @@ class ChatsState extends State<ChatsPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 0,bottom: 0),
-                    child: Text('',
-                      style:
-                      TextStyle(
+                    padding: EdgeInsets.only(
+                        left: 10.w, right: 10.w, top: 0, bottom: 0),
+                    child: Text(
+                      '',
+                      style: TextStyle(
                         fontSize: 24.sp,
                         color: Theme.of(context).disabledColor,
                       ),
@@ -1126,13 +1086,13 @@ class ChatsState extends State<ChatsPage> {
                 ],
               ),
               Flexible(
-                //外层是Column，所以在Column和ListView之间需要有个灵活变动的控件
+                  //外层是Column，所以在Column和ListView之间需要有个灵活变动的控件
                   child: _buildContent(context, groupState))
             ],
           ));
     }
     if (groupState is LoadMorePeerMessageSuccess) {
-      bool isLastPage=groupState.noMore;
+      bool isLastPage = groupState.noMore;
       return Container(
           color: ColorT.gray_f0,
           child: Column(
@@ -1142,57 +1102,55 @@ class ChatsState extends State<ChatsPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: 10,right: 10,top: 0,bottom: 0),
-                    child: _isLoading
-                        ? CupertinoActivityIndicator()
-                        : Container(),
+                    padding:
+                        EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
+                    child:
+                        _isLoading ? CupertinoActivityIndicator() : Container(),
                   )
                 ],
               ),
-
               Flexible(
-                //外层是Column，所以在Column和ListView之间需要有个灵活变动的控件
+                  //外层是Column，所以在Column和ListView之间需要有个灵活变动的控件
                   child: _buildContent(context, groupState))
             ],
           ));
     }
     return Container();
-
   }
-  Widget _buildContent(BuildContext context, PeerState state) {
 
+  Widget _buildContent(BuildContext context, PeerState state) {
     if (state is PeerMessageSuccess) {
       return ScrollConfiguration(
           behavior: DyBehaviorNull(),
-          child:ListView.builder(
-              padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 0,bottom: 0),
+          child: ListView.builder(
+              padding:
+                  EdgeInsets.only(left: 10.w, right: 10.w, top: 0, bottom: 0),
               itemBuilder: (BuildContext context, int index) {
-                String uuid=  state.messageList[index].content['uUID'];
-                if (index == state.messageList.length  -1) {
-                  GlobalKey<PeerChatItemWidgetState> key =  GlobalKey();
+                String uuid = state.messageList[index].content['uUID'];
+                if (index == state.messageList.length - 1) {
+                  GlobalKey<PeerChatItemWidgetState> key = GlobalKey();
                   globalKeyMap[uuid] = key;
                   return Column(
                     children: <Widget>[
                       Visibility(
                         visible: !_isLoading,
-                        child:  _loadMoreWidget(state.messageList.length % 20 ==0),
+                        child:
+                            _loadMoreWidget(state.messageList.length % 20 == 0),
                       ),
-
-                      _messageListViewItem(key,state.messageList,index,tfSender),
-
+                      _messageListViewItem(
+                          key, state.messageList, index, tfSender),
                     ],
                   );
                 } else {
-                  GlobalKey<PeerChatItemWidgetState> key =  GlobalKey();
+                  GlobalKey<PeerChatItemWidgetState> key = GlobalKey();
                   globalKeyMap[uuid] = key;
                   return Column(
                     children: <Widget>[
-                      _messageListViewItem(key,state.messageList,index,tfSender),
+                      _messageListViewItem(
+                          key, state.messageList, index, tfSender),
                     ],
                   );
                 }
-
-
               },
               //倒置过来的ListView，这样数据多的时候也会显示“底部”（其实是顶部），
               //因为正常的listView数据多的时候，没有办法显示在顶部最后一条
@@ -1208,34 +1166,33 @@ class ChatsState extends State<ChatsPage> {
       return ScrollConfiguration(
           behavior: DyBehaviorNull(),
           child: ListView.builder(
-              padding: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 0),
+              padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 0),
               itemBuilder: (BuildContext context, int index) {
-                String uuid=  state.messageList[index].content['uUID'];
-                if (index == state.messageList.length  -1) {
-                  GlobalKey<PeerChatItemWidgetState> key =  GlobalKey();
+                String uuid = state.messageList[index].content['uUID'];
+                if (index == state.messageList.length - 1) {
+                  GlobalKey<PeerChatItemWidgetState> key = GlobalKey();
                   globalKeyMap[uuid] = key;
                   return Column(
                     children: <Widget>[
                       Visibility(
                         visible: !_isLoading,
-                        child:  _loadMoreWidget(state.messageList.length % 20 ==0),
+                        child:
+                            _loadMoreWidget(state.messageList.length % 20 == 0),
                       ),
-
-                      _messageListViewItem(key,state.messageList,index,tfSender),
-
+                      _messageListViewItem(
+                          key, state.messageList, index, tfSender),
                     ],
                   );
                 } else {
-                  GlobalKey<PeerChatItemWidgetState> key =  GlobalKey();
+                  GlobalKey<PeerChatItemWidgetState> key = GlobalKey();
                   globalKeyMap[uuid] = key;
                   return Column(
                     children: <Widget>[
-                      _messageListViewItem(key,state.messageList,index,tfSender),
+                      _messageListViewItem(
+                          key, state.messageList, index, tfSender),
                     ],
                   );
                 }
-
-
               },
               //倒置过来的ListView，这样数据多的时候也会显示“底部”（其实是顶部），
               //因为正常的listView数据多的时候，没有办法显示在顶部最后一条
@@ -1249,10 +1206,9 @@ class ChatsState extends State<ChatsPage> {
     }
     return Container();
   }
-  Future<Null> _onRefresh() async {
 
+  Future<Null> _onRefresh() async {}
 
-  }
 //加载中的圈圈
   Widget _loadMoreWidget(bool haveMore) {
     if (haveMore) {
@@ -1276,169 +1232,184 @@ class ChatsState extends State<ChatsPage> {
     } else {
       //当没有更多数据可以加载的时候，
       return Center(
-        child:   Text(
+        child: Text(
           "没有更多数据了",
           style: new TextStyle(color: Colors.black54, fontSize: 26.sp),
         ),
       );
     }
   }
-  Widget _messageListViewItem(Key key,List<Message>messageList, int index,String tfSender) {
+
+  Widget _messageListViewItem(
+      Key key, List<Message> messageList, int index, String tfSender) {
     //list最后一条消息（时间上是最老的），是没有下一条了
-    Message _nextEntity = (index == messageList.length - 1) ? null : messageList[index + 1];
+    Message _nextEntity =
+        (index == messageList.length - 1) ? null : messageList[index + 1];
     Message _entity = messageList[index];
-     return buildChatListItem(key, _nextEntity, _entity,tfSender,
-              onResend: (reSendEntity) {
-                _onResend(reSendEntity);
-              },
-              onItemLongClick: (entity) {
-                DialogUtil.buildToast('长按了消息');
-                _deletePeerMessage(context,entity);
-
-              },
-
-              onItemClick: (onClickEntity) async {
-                Message entity = onClickEntity;
-                if (entity.type == MessageType.MESSAGE_AUDIO){
-                  //点击了语音
-                  if (_entity.playing == 1) {
-                    //正在播放，就停止播放
-                    await _stopPlayer();
-                    setState(() {
-                      _entity.playing = 0;
-                    });
-                  } else {
-                    setState(()  {
-                      for (Message other in messageList) {
-                        other.playing = 0;
-                        //停止其他正在播放的
-                      }
-                    });
-                    _entity.playing = 1;
-                    await _startPlayer(_entity.content['url']);
-                    Future.delayed(Duration(milliseconds: _entity.content['duration']*1000), () async {
-                      if (_alive) {
-                        setState(()  {
-                          _entity.playing = 0;
-                        });
-                        await  _stopPlayer();
-                      }
-                    });
-                  }
-                }
+    return buildChatListItem(key, _nextEntity, _entity, tfSender,
+        onResend: (reSendEntity) {
+      _onResend(reSendEntity);
+    }, onItemLongClick: (entity) {
+      DialogUtil.buildToast('长按了消息');
+      _deletePeerMessage(context, entity);
+    }, onItemClick: (onClickEntity) async {
+      Message entity = onClickEntity;
+      if (entity.type == MessageType.MESSAGE_AUDIO) {
+        //点击了语音
+        if (_entity.playing == 1) {
+          //正在播放，就停止播放
+          await _stopPlayer();
+          setState(() {
+            _entity.playing = 0;
+          });
+        } else {
+          setState(() {
+            for (Message other in messageList) {
+              other.playing = 0;
+              //停止其他正在播放的
+            }
+          });
+          _entity.playing = 1;
+          await _startPlayer(_entity.content['url']);
+          Future.delayed(
+              Duration(milliseconds: _entity.content['duration'] * 1000),
+              () async {
+            if (_alive) {
+              setState(() {
+                _entity.playing = 0;
               });
-
+              await _stopPlayer();
+            }
+          });
+        }
+      }
+    });
   }
-  _deletePeerMessage(BuildContext context,Message entity ) {
+
+  _deletePeerMessage(BuildContext context, Message entity) {
     showDialog(
         context: context,
         builder: (ctx) => Dialog(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: Container(
-            width: 50.w,
-            child: DeleteCategoryDialog(
-              title: '撤回消息',
-              content: '是否确定继续执行?',
-              onSubmit: () {
-                FltImPlugin im = FltImPlugin();
-                if (Platform.isAndroid == true) {
-                  //im.deletePeerMessage(id:entity.content['uUID']);
-                  BlocProvider.of<PeerBloc>(context).add(EventSendPeerRevokeMessage(tfSender,widget.model.cid,entity.content['uUID']));
-                }else{
-                  im.deletePeerMessage(id:entity.content['uuid']);
-                }
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: Container(
+                width: 50.w,
+                child: DeleteCategoryDialog(
+                  title: '撤回消息',
+                  content: '是否确定继续执行?',
+                  onSubmit: () {
+                    FltImPlugin im = FltImPlugin();
+                    if (Platform.isAndroid == true) {
+                      //im.deletePeerMessage(id:entity.content['uUID']);
+                      BlocProvider.of<PeerBloc>(context).add(
+                          EventSendPeerRevokeMessage(tfSender, widget.model.cid,
+                              entity.content['uUID']));
+                    } else {
+                      im.deletePeerMessage(id: entity.content['uuid']);
+                    }
 
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-        ));
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ));
   }
-  Widget buildChatListItem(Key key,Message nextEntity, Message entity,String tfSender,
-      {OnItemClick onResend, OnItemClick onItemClick, OnItemClick onItemLongClick}) {
+
+  Widget buildChatListItem(
+      Key key, Message nextEntity, Message entity, String tfSender,
+      {OnItemClick onResend,
+      OnItemClick onItemClick,
+      OnItemClick onItemLongClick}) {
     bool _isShowTime = true;
     var showTime; //最终显示的时间
     if (null == nextEntity) {
       //_isShowTime = true;
     } else {
       //如果当前消息的时间和上条消息的时间相差，大于3分钟，则要显示当前消息的时间，否则不显示
-      if ((entity.timestamp*1000 - nextEntity.timestamp*1000).abs() > 3 * 60 * 1000) {
+      if ((entity.timestamp * 1000 - nextEntity.timestamp * 1000).abs() >
+          3 * 60 * 1000) {
         _isShowTime = true;
       } else {
         _isShowTime = false;
       }
     }
-    showTime=TimeUtil.chatTimeFormat(entity.timestamp);
+    showTime = TimeUtil.chatTimeFormat(entity.timestamp);
 
     return Container(
       child: Column(
         children: <Widget>[
           _isShowTime
               ? Center(
-              heightFactor: 2,
-              child: Text(
-                showTime,
-                style: TextStyle(color: ColorT.transparent_80),
-              ))
+                  heightFactor: 2,
+                  child: Text(
+                    showTime,
+                    style: TextStyle(color: ColorT.transparent_80),
+                  ))
               : SizedBox(height: 0),
-          PeerChatItemWidget(key: key  , entity: entity, onResend: onResend, onItemClick:onItemClick,onItemLongClick:onItemLongClick,tfSender: tfSender)
+          PeerChatItemWidget(
+              key: key,
+              entity: entity,
+              onResend: onResend,
+              onItemClick: onItemClick,
+              onItemLongClick: onItemLongClick,
+              tfSender: tfSender)
         ],
       ),
     );
   }
 
-  Widget buildVideoWidget(MessageEntity entity) {
-  }
+  Widget buildVideoWidget(MessageEntity entity) {}
+
   /*删除好友*/
-  _deleteContact(String username) {
-  }
+  _deleteContact(String username) {}
 
   /*加入黑名单*/
-  _addToBlackList(String isNeed, String username) {
-  }
+  _addToBlackList(String isNeed, String username) {}
 
   /*移出黑名单*/
-  _removeUserFromBlackList(String username) {
-  }
+  _removeUserFromBlackList(String username) {}
+
   Future<File> _getLocalFile(String filename) async {
     String dir = (await getTemporaryDirectory()).path;
     File f = new File('$dir/$filename');
     return f;
   }
-  //重发
-  _onResend(Message entity) {
 
-  }
+  //重发
+  _onResend(Message entity) {}
 
   _buildTextMessage(String content) {
-    BlocProvider.of<PeerBloc>(context).add(EventSendNewMessage(tfSender,widget.model.cid,content));
+    BlocProvider.of<PeerBloc>(context)
+        .add(EventSendNewMessage(tfSender, widget.model.cid, content));
     _controller.clear();
     _isShowSend = false;
   }
+
   sendTextMessage(String text) async {
     if (text == null || text.length == 0) {
       return;
     }
   }
+
   _willBuildImageMessage(File imageFile) {
     if (imageFile == null || imageFile.path.isEmpty) {
       return;
     }
-    _buildImageMessage(imageFile, false);return;
+    _buildImageMessage(imageFile, false);
+    return;
   }
 
-  _buildImageMessage(File file, bool sendOriginalImage)  {
-    file.readAsBytes().then((content) =>
-        BlocProvider.of<PeerBloc>(context).add(EventSendNewImageMessage(tfSender,widget.model.cid,content))
-    );
+  _buildImageMessage(File file, bool sendOriginalImage) {
+    file.readAsBytes().then((content) => BlocProvider.of<PeerBloc>(context)
+        .add(EventSendNewImageMessage(tfSender, widget.model.cid, content)));
     _isShowTools = false;
     _controller.clear();
   }
 
   _buildVoiceMessage(File file, int length) {
-    BlocProvider.of<PeerBloc>(context).add(EventSendNewVoiceMessage(tfSender,widget.model.cid,file.path,length.floor()));
+    BlocProvider.of<PeerBloc>(context).add(EventSendNewVoiceMessage(
+        tfSender, widget.model.cid, file.path, length.floor()));
     _controller.clear();
   }
 
@@ -1446,13 +1417,9 @@ class ChatsState extends State<ChatsPage> {
     setState(() {
       _controller.clear();
     });
-
   }
 
   void updateData(Message entity) {
     // TODO: implement updateData
   }
 }
-
-
-
