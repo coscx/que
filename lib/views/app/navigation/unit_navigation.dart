@@ -27,7 +27,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:package_info/package_info.dart';
 import 'package:umeng_analytics_push/umeng_analytics_push.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:flutter_geen/app/utils/key_utils.dart';
 /// 说明: 主题结构 左右滑页 + 底部导航栏
 class UnitNavigation extends StatefulWidget {
   @override
@@ -110,8 +110,8 @@ class _UnitNavigationState extends State<UnitNavigation>
         // }
         Flutter2dAMap.updatePrivacy(true);
         Flutter2dAMap.setApiKey(
-          iOSKey: '75f93121afcd226f0e822a19cf40e0ca',
-          webKey: 'a130ae881342a409182da1c28197bf8e',
+          iOSKey: flutter2dAMapIOSKey,
+          webKey: flutter2dAMapWebKey,
         );
       } else {
         try{

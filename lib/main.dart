@@ -10,7 +10,7 @@ import 'package:fluwx/fluwx.dart';
 import 'package:umeng_analytics_push/umeng_analytics_push.dart';
 import 'views/app/flutter_geen.dart';
 import 'package:device_info/device_info.dart';
-
+import 'package:flutter_geen/app/utils/key_utils.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GestureBinding.instance.resamplingEnabled = true;
@@ -60,16 +60,16 @@ Future<void> _init() async {
     UmengAnalyticsPush.initUmeng(false, true);
     Flutter2dAMap.updatePrivacy(true);
     Flutter2dAMap.setApiKey(
-      iOSKey: '75f93121afcd226f0e822a19cf40e0ca',
-      webKey: 'a130ae881342a409182da1c28197bf8e',
+      iOSKey: flutter2dAMapIOSKey,
+      webKey: flutter2dAMapWebKey,
     );
     LocalStorage.save("UmengInit", 'push_init_ok');
   }
   registerWxApi(
-      appId: "wx45bdf8edd00e99ef",
+      appId: wxKey,
       doOnAndroid: true,
       doOnIOS: true,
-      universalLink: "https://your.univerallink.com/link/");
+      universalLink: universalLink);
   var result = await isWeChatInstalled;
   print("wx is installed $result");
 }
