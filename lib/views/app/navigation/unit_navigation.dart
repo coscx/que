@@ -170,9 +170,9 @@ class _UnitNavigationState extends State<UnitNavigation>
             return Scaffold(
                 //drawer: HomeDrawer(),
                 //endDrawer: HomeRightDrawer(),
-                // floatingActionButtonLocation:
-                //     const _CenterDockedFloatingActionButtonLocation(offset),
-                // floatingActionButton: _buildSearchButton(color),
+                floatingActionButtonLocation:
+                    const _CenterDockedFloatingActionButtonLocation(offset),
+                floatingActionButton: _buildSearchButton(color),
                 body: wrapOverlayTool(
                   child: PageView(
                     physics: const NeverScrollableScrollPhysics(),
@@ -439,8 +439,12 @@ class _UnitNavigationState extends State<UnitNavigation>
         var targetVersion = response["data"]['versionCode'].replaceAll(
             '.', ''); //response["data"]["versionCode"].replaceAll('.', '');
         var version = "120";
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        String versions = packageInfo.version;//版本号
+        var appVersion = versions.replaceAll(
+            '.', '');
         // 当前App运行版本
-        var currentVersion = version; //.replaceAll('.', '');
+        var currentVersion = appVersion; //.replaceAll('.', '');
         if (int.parse(targetVersion) > int.parse(currentVersion)) {
           if (Platform.isAndroid) {
             // 安卓弹窗提示本地下载， 交由flutter_xupdate 处理，不用我们干嘛。
